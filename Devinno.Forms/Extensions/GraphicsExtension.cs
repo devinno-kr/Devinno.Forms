@@ -6,10 +6,10 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using Devinno.Forms.Tools;
-using Devinno.Forms.Enums;
 using System.Globalization;
 using Devinno.Forms.Icons;
 using System.Linq;
+using Devinno.Tools;
 
 namespace Devinno.Forms.Extensions
 {
@@ -49,6 +49,11 @@ namespace Devinno.Forms.Extensions
         #endregion
 
         #region Method
+        #region Tool
+        private static int INTR(float v) => Convert.ToInt32(Math.Round(v));
+        private static int INTC(float v) => Convert.ToInt32(Math.Ceiling(v));
+        #endregion
+
         #region DrawRectangle
         public static void DrawRectangle(this Graphics g, Pen p, RectangleF rt) => g.DrawRectangle(p, rt.X, rt.Y, rt.Width, rt.Height);
         #endregion
@@ -102,8 +107,31 @@ namespace Devinno.Forms.Extensions
         #endregion
 
         #region DrawText
-        public static void DrawText(this Graphics g, string Text, Font Font, Brush br, Rectangle Bounds, DvContentAlignment Align, StringFormat strfrm = null) => DrawText(g, Text, Font, br, new RectangleF(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height), Align, strfrm);
-        public static void DrawText(this Graphics g, string Text, Font Font, Brush br, RectangleF Bounds, DvContentAlignment Align, StringFormat strfrm = null)
+        public static void DrawText(this Graphics g, string Text, Font Font, Brush br, Rectangle Bounds, DvContentAlignment Align)
+        {
+            if (!string.IsNullOrWhiteSpace(Text))
+            {
+                var sz = g.MeasureString(Text, Font);
+                int x = Bounds.X, y = Bounds.Y, w = INTC(sz.Width), h = INTC(sz.Height);
+                switch (Align)
+                {
+                    case DvContentAlignment.TopLeft:        /**/    x = Bounds.X;                                                   /**/    y = Bounds.Y;                                                   /**/    break;
+                    case DvContentAlignment.TopCenter:      /**/    x = Bounds.X + INTR(Bounds.Width / 2F - w / 2F);                 /**/    y = Bounds.Y;                                                   /**/    break;
+                    case DvContentAlignment.TopRight:       /**/    x = Bounds.Right - w;                                           /**/    y = Bounds.Y;                                                   /**/    break;
+                    case DvContentAlignment.MiddleLeft:     /**/    x = Bounds.X;                                                   /**/    y = Bounds.Y + INTR(Bounds.Height / 2F - h / 2F);    /**/    break;
+                    case DvContentAlignment.MiddleCenter:   /**/    x = Bounds.X + INTR(Bounds.Width / 2F - w / 2F);                 /**/    y = Bounds.Y + INTR(Bounds.Height / 2F - h / 2F);    /**/    break;
+                    case DvContentAlignment.MiddleRight:    /**/    x = Bounds.Right - w;                                           /**/    y = Bounds.Y + INTR(Bounds.Height / 2F - h / 2F);    /**/    break;
+                    case DvContentAlignment.BottomLeft:     /**/    x = Bounds.X;                                                   /**/    y = Bounds.Bottom - h;                                          /**/    break;
+                    case DvContentAlignment.BottomCenter:   /**/    x = Bounds.X + INTR(Bounds.Width / 2F - w / 2F);                 /**/    y = Bounds.Bottom - h;                                          /**/    break;
+                    case DvContentAlignment.BottomRight:    /**/    x = Bounds.Right - w;                                           /**/    y = Bounds.Bottom - h;                                          /**/    break;
+                }
+
+                var rt = new Rectangle(x, y, w, h);
+                g.DrawString(Text, Font, br, rt);
+            }
+        }
+
+        public static void DrawText(this Graphics g, string Text, Font Font, Brush br, RectangleF Bounds, DvContentAlignment Align)
         {
             if (!string.IsNullOrWhiteSpace(Text))
             {
@@ -122,8 +150,8 @@ namespace Devinno.Forms.Extensions
                     case DvContentAlignment.BottomRight:    /**/    x = Bounds.Right - w;                           /**/    y = Bounds.Bottom - h;                          /**/    break;
                 }
 
-                if (strfrm != null) g.DrawString(Text, Font, br, new RectangleF(x, y, w, h));
-                else g.DrawString(Text, Font, br, new RectangleF(x, y, w, h), strfrm);
+                var rt = new RectangleF(x, y, w, h);
+                g.DrawString(Text, Font, br, rt);
             }
         }
         #endregion
@@ -134,100 +162,162 @@ namespace Devinno.Forms.Extensions
             return char.ConvertFromUtf32(icon.ToInt32(formatProvider ?? CultureInfo.InvariantCulture)).Single();
         }
         #endregion
-        #region DrawIconFA
-        public static void DrawIconFA(this Graphics g, DvIcon icon, Brush br, Rectangle bounds, StringFormat strfrm = null)
-        {
-            using (var ft = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
-            {
-                var text = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
 
-                if (strfrm == null) g.DrawString(text, ft, br, bounds);
-                else g.DrawString(text, ft, br, bounds, strfrm);
+        #region MessureIconFA
+        public static SizeF MessureIconFA(this Graphics g, DvIcon icon)
+        {
+            SizeF ret = new SizeF(0F, 0F);
+            if (icon != null)
+            {
+                using (var FontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
+                {
+                    var fa = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
+                    ret = g.MeasureString(fa, FontFA);
+                }
             }
+            return ret;
+        }
+        #endregion
+        #region DrawIconFA
+        public static void DrawIconFA(this Graphics g, DvIcon icon, Brush br, Rectangle bounds, DvContentAlignment align)
+        {
+            if (icon != null)
+            {
+                using (var ft = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
+                {
+                    var text = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
+                    var sz = g.MessureIconFA(icon);
+                    var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
+                    rt.Offset(INTR(icon.IconSize / 30f), INTR(icon.IconSize / 4.8f));
+                    g.DrawString(text, ft, br, rt);
+                }
+            }
+        }
+        public static void DrawIconFA(this Graphics g, DvIcon icon, Brush br, RectangleF bounds, DvContentAlignment align)
+        {
+            if (icon != null)
+            {
+                using (var ft = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
+                {
+                    var text = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
+                    var sz = g.MessureIconFA(icon);
+                    var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
+                    rt.Offset(icon.IconSize / 30f, icon.IconSize / 4.8f);
+                    g.DrawString(text, ft, br, rt);
+                }
+            }
+        }
+        #endregion
+
+        #region MessureIconFA
+        public static SizeF MessureTextIconFA(this Graphics g, DvIcon icon, string text, Font font)
+        {
+            SizeF ret;
+            using (var fontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
+            {
+                var textFA = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
+                var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
+                var sz = g.MeasureString(text, font);
+                var szFA = g.MeasureString(textFA, fontFA);
+
+                if (icon.Alignment == DvTextIconAlignment.LeftRight)
+                {
+                    ret = new SizeF(szFA.Width + icon.Gap + sz.Width, Math.Max(sz.Height, szFA.Height));
+                }
+                else
+                {
+                    ret = new SizeF(Math.Max(sz.Width, szFA.Width), szFA.Height + icon.Gap + sz.Height);
+                }
+            }
+            return ret;
         }
         #endregion
         #region DrawTextIconFA
-        public static void DrawTextIconFA(this Graphics g, DvIcon Icon, string Text, Font Font, Brush br, Rectangle Bounds, DvContentAlignment Align, StringFormat strfrm = null)
+        public static void DrawTextIconFA(this Graphics g, DvIcon icon, string text, Font font, Brush br, Rectangle bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
         {
-            using (var FontFA = new Font(FontAwesome.Families[(int)Icon.StyleFA], Icon.IconSize, FontStyle.Regular))
+            if (icon == null)
             {
-                var TextFA = Icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
-
-                if (Icon.Alignment == DvTextIconAlignment.LeftRight)
+                var rt = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                rt.Offset(TextOffsetX, TextOffsetY);
+                DrawText(g, text, font, br, rt, align);
+            }
+            else
+            {
+                using (var fontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
                 {
-                    float gap = string.IsNullOrWhiteSpace(Text) ? 0 : Icon.Gap;
-                    SizeF sz = g.MeasureString(Text, Font);
-                    SizeF szFA = g.MeasureString(TextFA, FontFA);
-                    float tx = Bounds.X, ty = Bounds.Y, tw = sz.Width, th = sz.Height;
-                    float ix = Bounds.X, iy = Bounds.Y, iw = szFA.Width, ih = szFA.Height;
+                    var textFA = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
+                    var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
+                    var szTX = g.MeasureString(text, font);
+                    var szFA = g.MeasureString(textFA, fontFA);
+                    var szv = MessureTextIconFA(g, icon, text, font);
+                    var rt = DrawingTool.MakeRectangleAlign(bounds, szv, align);
 
-                    switch (Align)
+                    if (icon.Alignment == DvTextIconAlignment.LeftRight)
                     {
-                        case DvContentAlignment.TopLeft:        /**/    ix = Bounds.X;                                                      /**/    iy = Bounds.Y;                                  /**/    break;
-                        case DvContentAlignment.TopCenter:      /**/    ix = Bounds.X + ((Bounds.Width / 2F) - ((iw + gap + tw) / 2F));     /**/    iy = Bounds.Y;                                  /**/    break;
-                        case DvContentAlignment.TopRight:       /**/    ix = Bounds.Right - (iw + gap + tw);                                /**/    iy = Bounds.Y;                                  /**/    break;
-                        case DvContentAlignment.MiddleLeft:     /**/    ix = Bounds.X;                                                      /**/    iy = Bounds.Y + (Bounds.Height / 2F - ih / 2F); /**/    break;
-                        case DvContentAlignment.MiddleCenter:   /**/    ix = Bounds.X + ((Bounds.Width / 2F) - ((iw + gap + tw) / 2F));     /**/    iy = Bounds.Y + (Bounds.Height / 2F - ih / 2F); /**/    break;
-                        case DvContentAlignment.MiddleRight:    /**/    ix = Bounds.Right - (iw + gap + tw);                                /**/    iy = Bounds.Y + (Bounds.Height / 2F - ih / 2F); /**/    break;
-                        case DvContentAlignment.BottomLeft:     /**/    ix = Bounds.X;                                                      /**/    iy = Bounds.Bottom - ih;                        /**/    break;
-                        case DvContentAlignment.BottomCenter:   /**/    ix = Bounds.X + ((Bounds.Width / 2F) - ((iw + gap + tw) / 2F));     /**/    iy = Bounds.Bottom - ih;                        /**/    break;
-                        case DvContentAlignment.BottomRight:    /**/    ix = Bounds.Right - (iw + gap + tw);                                /**/    iy = Bounds.Bottom - ih;                        /**/    break;
-                    }
+                        var rtFA = new Rectangle(rt.X, INTC(DrawingTool.CenterY(rt, szFA)), INTC(szFA.Width), INTC(szFA.Height));
+                        var rtTX = new Rectangle(rt.Right - INTC(szTX.Width), INTC(DrawingTool.CenterY(rt, szTX)), INTC(szTX.Width), INTC(szTX.Height));
+                        
+                        if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
 
-                    tx = (ix + iw) + gap;
-                    ty = iy + ((ih / 2) - (th / 2F));
-
-                    if (strfrm == null)
-                    {
-                        g.DrawString(Text, Font, br, new RectangleF(tx, ty, tw, th));
-                        g.DrawString(TextFA, FontFA, br, new RectangleF(ix + Icon.Gap, iy + Icon.Gap, iw, ih));
+                        g.DrawIconFA(icon, br, rtFA, DvContentAlignment.MiddleCenter);
+                        g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleCenter);
                     }
                     else
                     {
-                        g.DrawString(Text, Font, br, new RectangleF(tx, ty, tw, th), strfrm);
-                        g.DrawString(TextFA, FontFA, br, new RectangleF(ix + Icon.Gap, iy + Icon.Gap, iw, ih), strfrm);
+                        var rtFA = new Rectangle(INTC(DrawingTool.CenterX(rt, szFA)), rt.Y, INTC(szFA.Width), INTC(szFA.Height));
+                        var rtTX = new Rectangle(INTC(DrawingTool.CenterX(rt, szTX)), rt.Bottom - INTC(szTX.Height), INTC(szTX.Width), INTC(szTX.Height));
+                        if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                        g.DrawIconFA(icon, br, rtFA, DvContentAlignment.MiddleCenter);
+                        g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleCenter);
                     }
                 }
-                else if (Icon.Alignment == DvTextIconAlignment.TopBottom)
+            }
+        }
+
+        public static void DrawTextIconFA(this Graphics g, DvIcon icon, string text, Font font, Brush br, RectangleF bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
+        {
+            if (icon == null)
+            {
+                var rt = new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                rt.Offset(TextOffsetX, TextOffsetY);
+                DrawText(g, text, font, br, bounds, align);
+            }
+            else
+            {
+                using (var fontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
                 {
-                    int gap = string.IsNullOrWhiteSpace(Text) ? 0 : Icon.Gap;
-                    SizeF sz = g.MeasureString(Text, Font);
-                    SizeF szFA = g.MeasureString(TextFA, FontFA);
-                    float tx = Bounds.X, ty = Bounds.Y, tw = sz.Width, th = sz.Height;
-                    float ix = Bounds.X, iy = Bounds.Y, iw = szFA.Width, ih = szFA.Height;
+                    var textFA = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
+                    var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
+                    var szTX = g.MeasureString(text, font);
+                    var szFA = g.MeasureString(textFA, fontFA);
+                    var szv = MessureTextIconFA(g, icon, text, font);
+                    var rt = DrawingTool.MakeRectangleAlign(bounds, szv, align);
 
-                    float mw = Math.Max(tw, iw);
-                    switch (Align)
+                    if (icon.Alignment == DvTextIconAlignment.LeftRight)
                     {
-                        case DvContentAlignment.TopLeft:        /**/    ix = Bounds.X + ((mw / 2F) - (iw / 2F));                            /**/    iy = Bounds.Y;                                                  /**/    break;
-                        case DvContentAlignment.TopCenter:      /**/    ix = Bounds.X + ((Bounds.Width / 2F) - (iw / 2F));                  /**/    iy = Bounds.Y;                                                  /**/    break;
-                        case DvContentAlignment.TopRight:       /**/    ix = Bounds.Right - mw + ((mw / 2F) - (iw / 2F));                   /**/    iy = Bounds.Y;                                                  /**/    break;
-                        case DvContentAlignment.MiddleLeft:     /**/    ix = Bounds.X + ((mw / 2F) - (iw / 2F));                            /**/    iy = Bounds.Y + (Bounds.Height / 2F - (ih + gap + th) / 2F);    /**/    break;
-                        case DvContentAlignment.MiddleCenter:   /**/    ix = Bounds.X + ((Bounds.Width / 2F) - (iw / 2F));                  /**/    iy = Bounds.Y + (Bounds.Height / 2F - (ih + gap + th) / 2F);    /**/    break;
-                        case DvContentAlignment.MiddleRight:    /**/    ix = Bounds.Right - mw + ((mw / 2F) - (iw / 2F));                   /**/    iy = Bounds.Y + (Bounds.Height / 2F - (ih + gap + th) / 2F);    /**/    break;
-                        case DvContentAlignment.BottomLeft:     /**/    ix = Bounds.X + ((mw / 2F) - (iw / 2F));                            /**/    iy = Bounds.Bottom - (th + ih + gap);                           /**/    break;
-                        case DvContentAlignment.BottomCenter:   /**/    ix = Bounds.X + ((Bounds.Width / 2F) - (iw / 2F));                  /**/    iy = Bounds.Bottom - (th + ih + gap);                           /**/    break;
-                        case DvContentAlignment.BottomRight:    /**/    ix = Bounds.Right - mw + ((mw / 2F) - (iw / 2F));                   /**/    iy = Bounds.Bottom - (th + ih + gap);                           /**/    break;
-                    }
+                        var rtFA = new RectangleF(rt.X, DrawingTool.CenterY(rt, szFA), szFA.Width, szFA.Height); 
+                        var rtTX = new RectangleF(rt.Right - szTX.Width, DrawingTool.CenterY(rt, szTX), szTX.Width, szTX.Height);
+                        
+                        if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
 
-                    tx = ix + ((iw / 2F) - (tw / 2F));
-                    ty = (iy + ih) + gap;
-                    
-                    if (strfrm == null)
-                    {
-                        g.DrawString(Text, Font, br, new RectangleF(tx, ty, tw, th));
-                        g.DrawString(TextFA, FontFA, br, new RectangleF(ix + Icon.IconOffsetX, iy + Icon.IconOffsetY, iw, ih));
+                        g.DrawIconFA(icon, br, rtFA, DvContentAlignment.MiddleLeft);
+                        g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
                     }
                     else
                     {
-                        g.DrawString(Text, Font, br, new RectangleF(tx, ty, tw, th), strfrm);
-                        g.DrawString(TextFA, FontFA, br, new RectangleF(ix + Icon.IconOffsetX, iy + Icon.IconOffsetY, iw, ih), strfrm);
+                        var rtFA = new RectangleF(DrawingTool.CenterX(rt, szFA), rt.Y, szFA.Width, szFA.Height); 
+                        var rtTX = new RectangleF(DrawingTool.CenterX(rt, szTX), rt.Bottom - szTX.Height, szTX.Width, szTX.Height);
+                        
+                        if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                        g.DrawIconFA(icon, br, rtFA, DvContentAlignment.MiddleLeft);
+                        g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
                     }
                 }
             }
         }
         #endregion
-
         #endregion
     }
 }
