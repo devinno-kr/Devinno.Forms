@@ -8,12 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Devinno.Forms.Controls
+namespace Devinno.Forms.Containers
 {
-    public class DvControl : Control
+    public class DvContainer : ContainerControl
     {
+        #region Properties
+        #endregion
+
         #region Constructor
-        public DvControl()
+        public DvContainer()
         {
             this.SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
@@ -25,7 +28,6 @@ namespace Devinno.Forms.Controls
 
         #region Override
         protected override void OnEnabledChanged(EventArgs e) { Invalidate(); base.OnEnabledChanged(e); }
-        
         protected override void OnPaint(PaintEventArgs e)
         {
             var Theme = GetTheme();
@@ -35,9 +37,7 @@ namespace Devinno.Forms.Controls
 
             if (Theme != null) OnThemeEnableDraw(e, Theme);
         }
-        
         protected virtual void OnThemeDraw(PaintEventArgs e, DvTheme Theme) { }
-        
         protected virtual void OnThemeEnableDraw(PaintEventArgs e, DvTheme Theme)
         {
             var bgColor = this.BackColor;
@@ -56,27 +56,6 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Method
-        #region GetTheme
-        public DvTheme GetTheme()
-        {
-            DvTheme ret = null;
-            try
-            {
-                var o = this.FindForm();
-                if (o != null)
-                {
-                    var pi = o.GetType().GetProperty("Theme");
-                    if (pi != null)
-                    {
-                        var thm = pi.GetValue(o);
-                        ret = thm as DvTheme;
-                    }
-                }
-            }
-            catch (Exception) { }
-            return ret;
-        }
-        #endregion
         #region GetBounds
         public virtual Dictionary<string, Rectangle> GetBounds(Graphics g)
         {
@@ -90,7 +69,22 @@ namespace Devinno.Forms.Controls
             var o = this.FindForm();
             var v = o as DvForm;
             if (v != null && v.Theme != null) return new Rectangle(0, 0, Width - 1 - v.Theme.ShadowGap, Height - 1 - v.Theme.ShadowGap);
-            else return new Rectangle(0, 0, Width - 2, Height - 2);
+            else return new Rectangle(0, 0, Width - 1, Height - 1);
+        }
+        #endregion
+        #region GetTheme
+        public DvTheme GetTheme()
+        {
+            DvTheme ret = null;
+            try
+            {
+                var o = this.FindForm();
+                var pi = o.GetType().GetProperty("Theme");
+                var thm = pi.GetValue(o);
+                ret = thm as DvTheme;
+            }
+            catch (Exception) { }
+            return ret;
         }
         #endregion
         #endregion

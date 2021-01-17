@@ -694,5 +694,7 @@ namespace Devinno.Forms.Tools
             }
         }
         #endregion
+
+        public static float PtToPixel(int pt) => (float)pt * 1.3281472327365F;
     }
 }

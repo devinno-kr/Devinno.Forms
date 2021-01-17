@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30709.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devinno.Forms", "Devinno.Forms.csproj", "{490E38DF-62CD-4FF6-B1C6-80687DAB61FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "..\Sample\Sample.csproj", "{4CE0FBA7-31AF-48C3-A313-E67AD7CB8D34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "..\Sample\Sample.csproj", "{791007C7-A101-4938-8479-69EFF2AF7D02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{490E38DF-62CD-4FF6-B1C6-80687DAB61FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{490E38DF-62CD-4FF6-B1C6-80687DAB61FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{490E38DF-62CD-4FF6-B1C6-80687DAB61FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4CE0FBA7-31AF-48C3-A313-E67AD7CB8D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4CE0FBA7-31AF-48C3-A313-E67AD7CB8D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4CE0FBA7-31AF-48C3-A313-E67AD7CB8D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4CE0FBA7-31AF-48C3-A313-E67AD7CB8D34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{791007C7-A101-4938-8479-69EFF2AF7D02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{791007C7-A101-4938-8479-69EFF2AF7D02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{791007C7-A101-4938-8479-69EFF2AF7D02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{791007C7-A101-4938-8479-69EFF2AF7D02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

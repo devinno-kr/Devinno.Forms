@@ -157,68 +157,98 @@ namespace Devinno.Forms.Extensions
         #endregion
 
         #region ToChar
-        internal static char ToChar<TEnum>(this TEnum icon, IFormatProvider formatProvider = null) where TEnum : struct, IConvertible, IComparable, IFormattable
-        {
-            return char.ConvertFromUtf32(icon.ToInt32(formatProvider ?? CultureInfo.InvariantCulture)).Single();
-        }
+        //internal static char ToChar<TEnum>(this TEnum icon, IFormatProvider formatProvider = null) where TEnum : struct, IConvertible, IComparable, IFormattable
+        //{
+        //    return char.ConvertFromUtf32(icon.ToInt32(formatProvider ?? CultureInfo.InvariantCulture)).Single();
+        //}
         #endregion
 
-        #region MessureIconFA
-        public static SizeF MessureIconFA(this Graphics g, DvIcon icon)
+        #region MeasureIcon
+        public static SizeF MeasureIcon(this Graphics g, DvIcon icon)
         {
             SizeF ret = new SizeF(0F, 0F);
             if (icon != null)
             {
-                using (var FontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
+                if (icon.IconImage != null)
                 {
-                    var fa = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
-                    ret = g.MeasureString(fa, FontFA);
+                    ret = new SizeF(Convert.ToSingle(icon.IconImage.Width), Convert.ToSingle(icon.IconImage.Height));
+                }
+                else if(icon.IconFA != IconFA._None)
+                {
+                    using (var FontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconFASize, FontStyle.Regular))
+                    {
+                        var fa = char.ConvertFromUtf32(FA.IconValue(icon.IconFA));
+                        ret = g.MeasureString(fa, FontFA);
+                    }
                 }
             }
             return ret;
         }
         #endregion
-        #region DrawIconFA
-        public static void DrawIconFA(this Graphics g, DvIcon icon, Brush br, Rectangle bounds, DvContentAlignment align)
+        #region DrawIcon
+        public static void DrawIcon(this Graphics g, DvIcon icon, Brush br, Rectangle bounds, DvContentAlignment align)
         {
             if (icon != null)
             {
-                using (var ft = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
+                if (icon.IconImage != null)
                 {
-                    var text = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
-                    var sz = g.MessureIconFA(icon);
+                    var sz = g.MeasureIcon(icon);
                     var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
-                    rt.Offset(INTR(icon.IconSize / 30f), INTR(icon.IconSize / 4.8f));
-                    g.DrawString(text, ft, br, rt);
+                    g.DrawImage(icon.IconImage, rt);
+                }
+                else if (icon.IconFA != IconFA._None)
+                { 
+                    var old = g.TextRenderingHint;
+                    g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                    using (var ft = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconFASize, FontStyle.Regular))
+                    {
+                        var text = char.ConvertFromUtf32(FA.IconValue(icon.IconFA));
+                        var sz = g.MeasureIcon(icon);
+                        var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
+                        rt.Offset(INTR(icon.IconFASize / 30f), INTR(icon.IconFASize / 4.8f));
+                        g.DrawString(text, ft, br, rt);
+                    }
+                    g.TextRenderingHint = old;
                 }
             }
         }
-        public static void DrawIconFA(this Graphics g, DvIcon icon, Brush br, RectangleF bounds, DvContentAlignment align)
+        public static void DrawIcon(this Graphics g, DvIcon icon, Brush br, RectangleF bounds, DvContentAlignment align)
         {
             if (icon != null)
             {
-                using (var ft = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
+                if (icon.IconImage != null)
                 {
-                    var text = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
-                    var sz = g.MessureIconFA(icon);
+                    var sz = g.MeasureIcon(icon);
                     var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
-                    rt.Offset(icon.IconSize / 30f, icon.IconSize / 4.8f);
-                    g.DrawString(text, ft, br, rt);
+                    g.DrawImage(icon.IconImage, rt);
+                }
+                else if (icon.IconFA != IconFA._None)
+                {
+                    var old = g.TextRenderingHint;
+                    g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                    using (var ft = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconFASize, FontStyle.Regular))
+                    {
+                        var text = char.ConvertFromUtf32(FA.IconValue(icon.IconFA));
+                        var sz = g.MeasureIcon(icon);
+                        var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
+                        rt.Offset(icon.IconFASize / 30f, icon.IconFASize / 4.8f);
+                        g.DrawString(text, ft, br, rt);
+                    }
+                    g.TextRenderingHint = old;
                 }
             }
         }
         #endregion
 
-        #region MessureIconFA
-        public static SizeF MessureTextIconFA(this Graphics g, DvIcon icon, string text, Font font)
+        #region MeasureTextIcon
+        public static SizeF MeasureTextIcon(this Graphics g, DvIcon icon, string text, Font font)
         {
-            SizeF ret;
-            using (var fontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
+            SizeF ret = new SizeF(0F, 0F);
+
+            if (icon != null)
             {
-                var textFA = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
-                var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
                 var sz = g.MeasureString(text, font);
-                var szFA = g.MeasureString(textFA, fontFA);
+                var szFA = g.MeasureIcon(icon);
 
                 if (icon.Alignment == DvTextIconAlignment.LeftRight)
                 {
@@ -232,10 +262,10 @@ namespace Devinno.Forms.Extensions
             return ret;
         }
         #endregion
-        #region DrawTextIconFA
-        public static void DrawTextIconFA(this Graphics g, DvIcon icon, string text, Font font, Brush br, Rectangle bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
+        #region DrawTextIcon
+        public static void DrawTextIcon(this Graphics g, DvIcon icon, string text, Font font, Brush br, Rectangle bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
         {
-            if (icon == null)
+            if (icon == null || (icon != null && icon.IconImage == null && icon.IconFA == IconFA._None))
             {
                 var rt = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
                 rt.Offset(TextOffsetX, TextOffsetY);
@@ -243,23 +273,22 @@ namespace Devinno.Forms.Extensions
             }
             else
             {
-                using (var fontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
+                if (icon.IconImage != null)
                 {
-                    var textFA = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
                     var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
                     var szTX = g.MeasureString(text, font);
-                    var szFA = g.MeasureString(textFA, fontFA);
-                    var szv = MessureTextIconFA(g, icon, text, font);
+                    var szFA = g.MeasureIcon(icon);
+                    var szv = g.MeasureTextIcon(icon, text, font);
                     var rt = DrawingTool.MakeRectangleAlign(bounds, szv, align);
 
                     if (icon.Alignment == DvTextIconAlignment.LeftRight)
                     {
                         var rtFA = new Rectangle(rt.X, INTC(DrawingTool.CenterY(rt, szFA)), INTC(szFA.Width), INTC(szFA.Height));
                         var rtTX = new Rectangle(rt.Right - INTC(szTX.Width), INTC(DrawingTool.CenterY(rt, szTX)), INTC(szTX.Width), INTC(szTX.Height));
-                        
+
                         if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
 
-                        g.DrawIconFA(icon, br, rtFA, DvContentAlignment.MiddleCenter);
+                        g.DrawIcon(icon, br, rtFA, DvContentAlignment.MiddleCenter);
                         g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleCenter);
                     }
                     else
@@ -268,16 +297,48 @@ namespace Devinno.Forms.Extensions
                         var rtTX = new Rectangle(INTC(DrawingTool.CenterX(rt, szTX)), rt.Bottom - INTC(szTX.Height), INTC(szTX.Width), INTC(szTX.Height));
                         if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
 
-                        g.DrawIconFA(icon, br, rtFA, DvContentAlignment.MiddleCenter);
+                        g.DrawIcon(icon, br, rtFA, DvContentAlignment.MiddleCenter);
                         g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleCenter);
+                    }
+                }
+                else
+                {
+                    using (var fontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconFASize, FontStyle.Regular))
+                    {
+                        var textFA = char.ConvertFromUtf32(FA.IconValue(icon.IconFA));
+                        var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
+                        var szTX = g.MeasureString(text, font);
+                        var szFA = g.MeasureIcon(icon);
+                        var szv = g.MeasureTextIcon(icon, text, font);
+                        var rt = DrawingTool.MakeRectangleAlign(bounds, szv, align);
+
+                        if (icon.Alignment == DvTextIconAlignment.LeftRight)
+                        {
+                            var rtFA = new Rectangle(rt.X, INTC(DrawingTool.CenterY(rt, szFA)), INTC(szFA.Width), INTC(szFA.Height));
+                            var rtTX = new Rectangle(rt.Right - INTC(szTX.Width), INTC(DrawingTool.CenterY(rt, szTX)), INTC(szTX.Width), INTC(szTX.Height));
+
+                            if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                            g.DrawIcon(icon, br, rtFA, DvContentAlignment.MiddleCenter);
+                            g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleCenter);
+                        }
+                        else
+                        {
+                            var rtFA = new Rectangle(INTC(DrawingTool.CenterX(rt, szFA)), rt.Y, INTC(szFA.Width), INTC(szFA.Height));
+                            var rtTX = new Rectangle(INTC(DrawingTool.CenterX(rt, szTX)), rt.Bottom - INTC(szTX.Height), INTC(szTX.Width), INTC(szTX.Height));
+                            if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                            g.DrawIcon(icon, br, rtFA, DvContentAlignment.MiddleCenter);
+                            g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleCenter);
+                        }
                     }
                 }
             }
         }
 
-        public static void DrawTextIconFA(this Graphics g, DvIcon icon, string text, Font font, Brush br, RectangleF bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
+        public static void DrawTextIcon(this Graphics g, DvIcon icon, string text, Font font, Brush br, RectangleF bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
         {
-            if (icon == null)
+            if (icon == null || (icon != null && icon.IconImage == null && icon.IconFA == IconFA._None))
             {
                 var rt = new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
                 rt.Offset(TextOffsetX, TextOffsetY);
@@ -285,34 +346,66 @@ namespace Devinno.Forms.Extensions
             }
             else
             {
-                using (var fontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconSize, FontStyle.Regular))
+                if (icon.IconImage != null)
                 {
-                    var textFA = icon.IconFA.ToChar(CultureInfo.InvariantCulture).ToString();
                     var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
                     var szTX = g.MeasureString(text, font);
-                    var szFA = g.MeasureString(textFA, fontFA);
-                    var szv = MessureTextIconFA(g, icon, text, font);
+                    var szFA = g.MeasureIcon(icon);
+                    var szv = g.MeasureTextIcon(icon, text, font);
                     var rt = DrawingTool.MakeRectangleAlign(bounds, szv, align);
 
                     if (icon.Alignment == DvTextIconAlignment.LeftRight)
                     {
-                        var rtFA = new RectangleF(rt.X, DrawingTool.CenterY(rt, szFA), szFA.Width, szFA.Height); 
+                        var rtFA = new RectangleF(rt.X, DrawingTool.CenterY(rt, szFA), szFA.Width, szFA.Height);
                         var rtTX = new RectangleF(rt.Right - szTX.Width, DrawingTool.CenterY(rt, szTX), szTX.Width, szTX.Height);
-                        
+
                         if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
 
-                        g.DrawIconFA(icon, br, rtFA, DvContentAlignment.MiddleLeft);
+                        g.DrawIcon(icon, br, rtFA, DvContentAlignment.MiddleLeft);
                         g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
                     }
                     else
                     {
-                        var rtFA = new RectangleF(DrawingTool.CenterX(rt, szFA), rt.Y, szFA.Width, szFA.Height); 
+                        var rtFA = new RectangleF(DrawingTool.CenterX(rt, szFA), rt.Y, szFA.Width, szFA.Height);
                         var rtTX = new RectangleF(DrawingTool.CenterX(rt, szTX), rt.Bottom - szTX.Height, szTX.Width, szTX.Height);
-                        
+
                         if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
 
-                        g.DrawIconFA(icon, br, rtFA, DvContentAlignment.MiddleLeft);
+                        g.DrawIcon(icon, br, rtFA, DvContentAlignment.MiddleLeft);
                         g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
+                    }
+                }
+                else
+                {
+                    using (var fontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconFASize, FontStyle.Regular))
+                    {
+                        var textFA = char.ConvertFromUtf32(FA.IconValue(icon.IconFA));
+                        var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
+                        var szTX = g.MeasureString(text, font);
+                        var szFA = g.MeasureIcon(icon);
+                        var szv = g.MeasureTextIcon(icon, text, font);
+                        var rt = DrawingTool.MakeRectangleAlign(bounds, szv, align);
+
+                        if (icon.Alignment == DvTextIconAlignment.LeftRight)
+                        {
+                            var rtFA = new RectangleF(rt.X, DrawingTool.CenterY(rt, szFA), szFA.Width, szFA.Height);
+                            var rtTX = new RectangleF(rt.Right - szTX.Width, DrawingTool.CenterY(rt, szTX), szTX.Width, szTX.Height);
+
+                            if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                            g.DrawIcon(icon, br, rtFA, DvContentAlignment.MiddleLeft);
+                            g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
+                        }
+                        else
+                        {
+                            var rtFA = new RectangleF(DrawingTool.CenterX(rt, szFA), rt.Y, szFA.Width, szFA.Height);
+                            var rtTX = new RectangleF(DrawingTool.CenterX(rt, szTX), rt.Bottom - szTX.Height, szTX.Width, szTX.Height);
+
+                            if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                            g.DrawIcon(icon, br, rtFA, DvContentAlignment.MiddleLeft);
+                            g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
+                        }
                     }
                 }
             }
