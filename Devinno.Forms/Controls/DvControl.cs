@@ -19,6 +19,8 @@ namespace Devinno.Forms.Controls
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.UpdateStyles();
 
+            DoubleBuffered = true;
+
             this.TabStop = false;
         }
         #endregion

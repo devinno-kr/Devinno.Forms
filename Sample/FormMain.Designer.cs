@@ -29,6 +29,7 @@ namespace Sample
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.blackTheme1 = new Devinno.Forms.Themes.BlackTheme();
             this.dvButton2 = new Devinno.Forms.Controls.DvButton();
             this.dvLabel1 = new Devinno.Forms.Controls.DvLabel();
@@ -68,12 +69,10 @@ namespace Sample
             this.dvButton2.Clickable = true;
             this.dvButton2.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvButton2.Gradient = true;
-            this.dvButton2.Icon = Devinno.Forms.Icons.IconFA.LayerGroup;
             this.dvButton2.IconAlignment = Devinno.Forms.DvTextIconAlignment.TopBottom;
-            this.dvButton2.IconGap = 0;
             this.dvButton2.IconImage = null;
             this.dvButton2.IconSize = 18F;
-            this.dvButton2.IconStyle = Devinno.Forms.Icons.StyleFA.Solid;
+            this.dvButton2.IconString = "fa-layer-group";
             this.dvButton2.Location = new System.Drawing.Point(233, 143);
             this.dvButton2.Name = "dvButton2";
             this.dvButton2.Size = new System.Drawing.Size(128, 108);
@@ -86,12 +85,10 @@ namespace Sample
             // 
             this.dvLabel1.BackgroundDraw = true;
             this.dvLabel1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.dvLabel1.Icon = Devinno.Forms.Icons.IconFA.AddressCard;
             this.dvLabel1.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
-            this.dvLabel1.IconGap = 0;
             this.dvLabel1.IconImage = null;
             this.dvLabel1.IconSize = 10F;
-            this.dvLabel1.IconStyle = Devinno.Forms.Icons.StyleFA.Solid;
+            this.dvLabel1.IconString = "far fa-address-card";
             this.dvLabel1.InShadow = true;
             this.dvLabel1.LabelColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvLabel1.Location = new System.Drawing.Point(502, 173);
@@ -106,12 +103,10 @@ namespace Sample
             // 
             this.dvLabel2.BackgroundDraw = true;
             this.dvLabel2.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.dvLabel2.Icon = Devinno.Forms.Icons.IconFA._None;
             this.dvLabel2.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
-            this.dvLabel2.IconGap = 0;
-            this.dvLabel2.IconImage = null;
+            this.dvLabel2.IconImage = ((System.Drawing.Bitmap)(resources.GetObject("dvLabel2.IconImage")));
             this.dvLabel2.IconSize = 10F;
-            this.dvLabel2.IconStyle = Devinno.Forms.Icons.StyleFA.Solid;
+            this.dvLabel2.IconString = "fa-address-book";
             this.dvLabel2.InShadow = true;
             this.dvLabel2.LabelColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvLabel2.Location = new System.Drawing.Point(435, 263);

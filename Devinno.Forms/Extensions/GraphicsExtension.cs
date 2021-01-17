@@ -16,35 +16,12 @@ namespace Devinno.Forms.Extensions
     public static class GraphicsExtension
     {
         #region Properties
-        internal static PrivateFontCollection FontAwesome { get; private set; }
         #endregion
 
         #region Constructor
         static GraphicsExtension()
         {
-            #region FontAwesome
-            FontAwesome = new PrivateFontCollection();
-
-            var baBrands = Properties.Resources.fa_5_Brands_Regular_400;
-            var baRegular = Properties.Resources.fa_5_Free_Regular_400;
-            var baSolid = Properties.Resources.fa_Free_Solid_900;
-
-            IntPtr pBrands = Marshal.AllocHGlobal(baBrands.Length);
-            IntPtr pRegular = Marshal.AllocHGlobal(baRegular.Length);
-            IntPtr pSolid = Marshal.AllocHGlobal(baSolid.Length);
-
-            Marshal.Copy(baBrands, 0, pBrands, baBrands.Length);
-            Marshal.Copy(baRegular, 0, pRegular, baRegular.Length);
-            Marshal.Copy(baSolid, 0, pSolid, baSolid.Length);
-
-            FontAwesome.AddMemoryFont(pBrands, baBrands.Length);
-            FontAwesome.AddMemoryFont(pRegular, baRegular.Length);
-            FontAwesome.AddMemoryFont(pSolid, baSolid.Length);
-
-            Marshal.FreeHGlobal(pBrands);
-            Marshal.FreeHGlobal(pRegular);
-            Marshal.FreeHGlobal(pSolid);
-            #endregion
+            
         }
         #endregion
 
@@ -173,12 +150,12 @@ namespace Devinno.Forms.Extensions
                 {
                     ret = new SizeF(Convert.ToSingle(icon.IconImage.Width), Convert.ToSingle(icon.IconImage.Height));
                 }
-                else if(icon.IconFA != IconFA._None)
+                else if(FA.Valid(icon.IconString))
                 {
-                    using (var FontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconFASize, FontStyle.Regular))
+                    var r = FA.GetFAI(icon.IconString);
+                    using (var FontFA = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
                     {
-                        var fa = char.ConvertFromUtf32(FA.IconValue(icon.IconFA));
-                        ret = g.MeasureString(fa, FontFA);
+                        ret = g.MeasureString(r.IconText, FontFA);
                     }
                 }
             }
@@ -196,16 +173,18 @@ namespace Devinno.Forms.Extensions
                     var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
                     g.DrawImage(icon.IconImage, rt);
                 }
-                else if (icon.IconFA != IconFA._None)
-                { 
+                else if (FA.Valid(icon.IconString))
+                {
+                    var r = FA.GetFAI(icon.IconString);
+
                     var old = g.TextRenderingHint;
                     g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-                    using (var ft = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconFASize, FontStyle.Regular))
+                    using (var ft = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
                     {
-                        var text = char.ConvertFromUtf32(FA.IconValue(icon.IconFA));
+                        var text = r.IconText;
                         var sz = g.MeasureIcon(icon);
                         var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
-                        rt.Offset(INTR(icon.IconFASize / 30f), INTR(icon.IconFASize / 4.8f));
+                        rt.Offset(INTR(icon.IconSize / 30f), INTR(icon.IconSize / 4.8f));
                         g.DrawString(text, ft, br, rt);
                     }
                     g.TextRenderingHint = old;
@@ -222,16 +201,18 @@ namespace Devinno.Forms.Extensions
                     var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
                     g.DrawImage(icon.IconImage, rt);
                 }
-                else if (icon.IconFA != IconFA._None)
+                else if (FA.Valid(icon.IconString))
                 {
+                    var r = FA.GetFAI(icon.IconString);
+
                     var old = g.TextRenderingHint;
                     g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-                    using (var ft = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconFASize, FontStyle.Regular))
+                    using (var ft = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
                     {
-                        var text = char.ConvertFromUtf32(FA.IconValue(icon.IconFA));
+                        var text = r.IconText;
                         var sz = g.MeasureIcon(icon);
                         var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
-                        rt.Offset(icon.IconFASize / 30f, icon.IconFASize / 4.8f);
+                        rt.Offset(icon.IconSize / 30f, icon.IconSize / 4.8f);
                         g.DrawString(text, ft, br, rt);
                     }
                     g.TextRenderingHint = old;
@@ -265,7 +246,7 @@ namespace Devinno.Forms.Extensions
         #region DrawTextIcon
         public static void DrawTextIcon(this Graphics g, DvIcon icon, string text, Font font, Brush br, Rectangle bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
         {
-            if (icon == null || (icon != null && icon.IconImage == null && icon.IconFA == IconFA._None))
+            if (icon == null || (icon != null && icon.IconImage == null && !FA.Valid(icon.IconString)))
             {
                 var rt = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
                 rt.Offset(TextOffsetX, TextOffsetY);
@@ -303,9 +284,11 @@ namespace Devinno.Forms.Extensions
                 }
                 else
                 {
-                    using (var fontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconFASize, FontStyle.Regular))
+                    var r = FA.GetFAI(icon.IconString);
+
+                    using (var fontFA = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
                     {
-                        var textFA = char.ConvertFromUtf32(FA.IconValue(icon.IconFA));
+                        var textFA = r.IconText;
                         var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
                         var szTX = g.MeasureString(text, font);
                         var szFA = g.MeasureIcon(icon);
@@ -338,7 +321,7 @@ namespace Devinno.Forms.Extensions
 
         public static void DrawTextIcon(this Graphics g, DvIcon icon, string text, Font font, Brush br, RectangleF bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
         {
-            if (icon == null || (icon != null && icon.IconImage == null && icon.IconFA == IconFA._None))
+            if (icon == null || (icon != null && icon.IconImage == null && !FA.Valid(icon.IconString)))
             {
                 var rt = new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
                 rt.Offset(TextOffsetX, TextOffsetY);
@@ -377,9 +360,11 @@ namespace Devinno.Forms.Extensions
                 }
                 else
                 {
-                    using (var fontFA = new Font(FontAwesome.Families[(int)icon.StyleFA], icon.IconFASize, FontStyle.Regular))
+                    var r = FA.GetFAI(icon.IconString);
+
+                    using (var fontFA = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
                     {
-                        var textFA = char.ConvertFromUtf32(FA.IconValue(icon.IconFA));
+                        var textFA = r.IconText;
                         var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
                         var szTX = g.MeasureString(text, font);
                         var szFA = g.MeasureIcon(icon);

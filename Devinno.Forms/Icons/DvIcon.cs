@@ -11,18 +11,13 @@ namespace Devinno.Forms.Icons
     {
         public Bitmap IconImage { get; set; } = null;
 
-        public IconFA IconFA { get; set; } = IconFA._None;
-        public StyleFA StyleFA { get; set; } = StyleFA.Solid;
-        public float IconFASize { get; set; } = 10;
+        public string IconString { get; set; } = null;
+        public float IconSize { get; set; } = 10;
 
         public DvTextIconAlignment Alignment { get; set; } = DvTextIconAlignment.LeftRight;
         public int Gap { get; set; } = 0;
-        
+
         public DvIcon() { }
-        public DvIcon(IconFA icon, StyleFA style)
-        {
-            this.IconFA = icon;
-            this.StyleFA = style;
-        }
+        public DvIcon(string iconString) => this.IconString = iconString;
     }
 }

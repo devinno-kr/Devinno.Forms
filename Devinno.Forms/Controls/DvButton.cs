@@ -28,16 +28,10 @@ namespace Devinno.Forms.Controls
             set { if (ico.IconImage != value) { ico.IconImage = value; Invalidate(); } }
         }
         [Category("- 아이콘")]
-        public IconFA Icon
+        public string IconString
         {
-            get => ico.IconFA;
-            set { if (ico.IconFA != value) { ico.IconFA = value; Invalidate(); } }
-        }
-        [Category("- 아이콘")]
-        public StyleFA IconStyle
-        {
-            get => ico.StyleFA;
-            set { if (ico.StyleFA != value) { ico.StyleFA = value; Invalidate(); } }
+            get => ico.IconString;
+            set { if (ico.IconString != value) { ico.IconString = value; Invalidate(); } }
         }
         [Category("- 아이콘")]
         public int IconGap
@@ -54,8 +48,8 @@ namespace Devinno.Forms.Controls
         [Category("- 아이콘")]
         public float IconSize
         {
-            get => ico.IconFASize;
-            set { if (ico.IconFASize != value) { ico.IconFASize = value; Invalidate(); } }
+            get => ico.IconSize;
+            set { if (ico.IconSize != value) { ico.IconSize = value; Invalidate(); } }
         }
         #endregion
         #region ContentAlignment
@@ -183,9 +177,6 @@ namespace Devinno.Forms.Controls
         #region OnThemeDraw
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
-            #region Color
-            var ButtonColor = UseThemeColor ? Theme.Color3 : this.ButtonColor;
-            #endregion
             #region Set
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
@@ -216,6 +207,7 @@ namespace Devinno.Forms.Controls
             br.Dispose();
             p.Dispose();
             #endregion
+         
             base.OnThemeDraw(e, Theme);
         }
         #endregion

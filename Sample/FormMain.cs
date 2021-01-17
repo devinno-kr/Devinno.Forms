@@ -16,9 +16,6 @@ namespace Sample
         public FormMain()
         {
             InitializeComponent();
-
-            var v = typeof(Devinno.Forms.Icons.IconFAEditor).AssemblyQualifiedName;
         }
-
     }
 }
