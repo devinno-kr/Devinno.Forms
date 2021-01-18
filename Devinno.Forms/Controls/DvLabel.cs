@@ -1,4 +1,5 @@
-﻿using Devinno.Forms.Icons;
+﻿using Devinno.Extensions;
+using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
 using System;
 using System.Collections.Generic;
@@ -76,24 +77,8 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region UseThemeColor
-        private bool bUseThemeColor = true;
-        [Category("- 색상")]
-        public bool UseThemeColor
-        {
-            get => bUseThemeColor;
-            set
-            {
-                if (bUseThemeColor != value)
-                {
-                    bUseThemeColor = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
         #region LabelColor
-        private Color cLabelColor = Color.FromArgb(30, 30, 30);
+        private Color cLabelColor = DvTheme.DefaultTheme.Color2;
         [Category("- 색상")]
         public Color LabelColor
         {
@@ -133,6 +118,7 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+
         #region InShadow
         private bool bInShadow = true;
         public bool InShadow
@@ -156,7 +142,7 @@ namespace Devinno.Forms.Controls
             SetStyle(ControlStyles.Selectable, true);
             UpdateStyles();
 
-            Size = new Size(70, 36);
+            Size = new Size(80, 36);
 
             TabStop = true;
         }

@@ -2,6 +2,7 @@
 using Devinno.Forms.Themes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,25 @@ namespace Devinno.Forms.Controls
 {
     public class DvControl : Control
     {
+        #region Properties
+        #region UseThemeColor
+        private bool bUseThemeColor = true;
+        [Category("- 색상")]
+        public bool UseThemeColor
+        {
+            get => bUseThemeColor;
+            set
+            {
+                if (bUseThemeColor != value)
+                {
+                    bUseThemeColor = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #endregion
+
         #region Constructor
         public DvControl()
         {
@@ -36,6 +56,7 @@ namespace Devinno.Forms.Controls
             base.OnPaint(e);
 
             if (Theme != null) OnThemeEnableDraw(e, Theme);
+            if (Theme != null) BlockDraw(e, Theme); 
         }
         
         protected virtual void OnThemeDraw(PaintEventArgs e, DvTheme Theme) { }
@@ -48,6 +69,23 @@ namespace Devinno.Forms.Controls
                 if (Parent != null) bgColor = Parent.BackColor;
             }
             if (!Enabled)
+            {
+                using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
+                {
+                    e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
+                }
+            }
+        }
+
+        private void BlockDraw(PaintEventArgs e, DvTheme Theme)
+        {
+            var Wnd = this.FindForm() as DvForm;
+            var bgColor = this.BackColor;
+            if (this.BackColor == Color.Transparent)
+            {
+                if (Parent != null) bgColor = Parent.BackColor;
+            }
+            if (Wnd != null && Wnd.Block)
             {
                 using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
                 {

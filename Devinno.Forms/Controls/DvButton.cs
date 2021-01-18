@@ -75,26 +75,10 @@ namespace Devinno.Forms.Controls
                     Invalidate();
                 }
             }
-        } 
-        #endregion
-        #region UseThemeColor
-        private bool bUseThemeColor = true;
-        [Category("- 색상")]
-        public bool UseThemeColor
-        {
-            get => bUseThemeColor;
-            set
-            {
-                if (bUseThemeColor != value)
-                {
-                    bUseThemeColor = value;
-                    Invalidate();
-                }
-            }
         }
         #endregion
         #region ButtonColor
-        private Color cButtonColor = Color.FromArgb(90, 90, 90);
+        private Color cButtonColor = DvTheme.DefaultTheme.Color3;
         [Category("- 색상")]
         public Color ButtonColor 
         {
@@ -118,22 +102,6 @@ namespace Devinno.Forms.Controls
             set { if (base.Text != value) { base.Text = value; Invalidate(); } }
         }
         #endregion
-        #region Gradient
-        private bool bGradient = true;
-        [Category("- 색상")]
-        public bool Gradient
-        {
-            get => bGradient;
-            set
-            {
-                if (bGradient != value)
-                {
-                    bGradient = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
         #region TextPadding
         private Padding padText = new Padding(0, 0, 0, 0);
         [Category("- 모양")]
@@ -151,6 +119,22 @@ namespace Devinno.Forms.Controls
         }
         #endregion
 
+        #region Gradient
+        private bool bGradient = true;
+        [Category("- 색상")]
+        public bool Gradient
+        {
+            get => bGradient;
+            set
+            {
+                if (bGradient != value)
+                {
+                    bGradient = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
         #region Clickable
         [Category("- 기능")]
         public bool Clickable { get; set; } = true;
@@ -167,7 +151,7 @@ namespace Devinno.Forms.Controls
             SetStyle(ControlStyles.Selectable, true);
             UpdateStyles();
 
-            Size = new Size(70, 36);
+            Size = new Size(80, 36);
 
             TabStop = true;
         }
@@ -177,6 +161,9 @@ namespace Devinno.Forms.Controls
         #region OnThemeDraw
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
+            #region Color
+            var ButtonColor = UseThemeColor ? Theme.Color3 : this.ButtonColor;
+            #endregion
             #region Set
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
@@ -207,7 +194,7 @@ namespace Devinno.Forms.Controls
             br.Dispose();
             p.Dispose();
             #endregion
-         
+
             base.OnThemeDraw(e, Theme);
         }
         #endregion

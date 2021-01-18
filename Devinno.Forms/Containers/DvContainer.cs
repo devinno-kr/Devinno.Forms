@@ -2,6 +2,7 @@
 using Devinno.Forms.Themes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,22 @@ namespace Devinno.Forms.Containers
     public class DvContainer : ContainerControl
     {
         #region Properties
+        #region UseThemeColor
+        private bool bUseThemeColor = true;
+        [Category("- 색상")]
+        public bool UseThemeColor
+        {
+            get => bUseThemeColor;
+            set
+            {
+                if (bUseThemeColor != value)
+                {
+                    bUseThemeColor = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
         #endregion
 
         #region Constructor
@@ -28,6 +45,7 @@ namespace Devinno.Forms.Containers
 
         #region Override
         protected override void OnEnabledChanged(EventArgs e) { Invalidate(); base.OnEnabledChanged(e); }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             var Theme = GetTheme();
@@ -36,8 +54,11 @@ namespace Devinno.Forms.Containers
             base.OnPaint(e);
 
             if (Theme != null) OnThemeEnableDraw(e, Theme);
+            if (Theme != null) BlockDraw(e, Theme);
         }
+
         protected virtual void OnThemeDraw(PaintEventArgs e, DvTheme Theme) { }
+
         protected virtual void OnThemeEnableDraw(PaintEventArgs e, DvTheme Theme)
         {
             var bgColor = this.BackColor;
@@ -46,6 +67,23 @@ namespace Devinno.Forms.Containers
                 if (Parent != null) bgColor = Parent.BackColor;
             }
             if (!Enabled)
+            {
+                using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
+                {
+                    e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
+                }
+            }
+        }
+
+        private void BlockDraw(PaintEventArgs e, DvTheme Theme)
+        {
+            var Wnd = this.FindForm() as DvForm;
+            var bgColor = this.BackColor;
+            if (this.BackColor == Color.Transparent)
+            {
+                if (Parent != null) bgColor = Parent.BackColor;
+            }
+            if (Wnd != null && Wnd.Block)
             {
                 using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
                 {

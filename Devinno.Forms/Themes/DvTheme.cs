@@ -17,6 +17,8 @@ namespace Devinno.Forms.Themes
 
         public abstract string ThemeName { get; }
 
+        public abstract Color ForeColor { get; set; }
+        public abstract Color BackColor { get; set; }
         public abstract Color Color0 { get; set; }
         public abstract Color Color1 { get; set; }
         public abstract Color Color2 { get; set; }
@@ -25,8 +27,6 @@ namespace Devinno.Forms.Themes
         public abstract Color Color5 { get; set; }
         public abstract Color PointColor { get; set; }
         public abstract Color FrameColor { get; set; }
-        public abstract Color TitleBarColor { get; set; }
-        public abstract Color ColumnColor { get; set; }
 
         public abstract int Corner { get; set; }
         public abstract int TextOffsetX { get; set; }
@@ -53,6 +53,26 @@ namespace Devinno.Forms.Themes
         public abstract void DrawText(Graphics g, DvIcon icon, string Text, Font ft, Color c, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);
         public abstract void DrawTextShadow(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);
         public abstract void DrawTextBevel(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);
+        #endregion
+        #region Static Method
+        internal static void SetTheme(Control control, DvTheme theme)
+        {
+            control.ForeColor = theme.ForeColor;
+            control.BackColor = theme.BackColor;
+
+            foreach (var c in control.Controls)
+                if (c is Control)
+                    SetTheme((Control)c, theme);
+        }
+
+        public static void LoopControl(Control control, Action<Control> Func)
+        {
+            Func(control);
+
+            foreach (var c in control.Controls)
+                if (c is Control)
+                    LoopControl((Control)c, Func);
+        }
         #endregion
     }
 

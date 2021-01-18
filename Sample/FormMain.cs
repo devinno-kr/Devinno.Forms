@@ -1,4 +1,6 @@
-﻿using Devinno.Forms.Dialogs;
+﻿using Devinno.Forms.Controls;
+using Devinno.Forms.Dialogs;
+using Devinno.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +18,37 @@ namespace Sample
         public FormMain()
         {
             InitializeComponent();
+
+            
+            grpH.Series.Add(new DvGraphSeries() { Name = "Math", SeriesColor = Color.Red });
+            grpH.Series.Add(new DvGraphSeries() { Name = "Science", SeriesColor = Color.Green });
+            grpH.Series.Add(new DvGraphSeries() { Name = "Programming", SeriesColor = Color.Blue });
+
+
+            var ls = new List<BGraphValue>();
+            var rnd = new Random();
+            int ngp = 30;
+            int A = rnd.Next(0, 100), B = rnd.Next(0, 100), C = rnd.Next(0, 100);
+            for (int i = 1; i <= 12; i++)
+            {
+                A = (int)MathTool.Constrain(A + rnd.Next(-ngp, ngp), 0, 100);
+                B = (int)MathTool.Constrain(B + rnd.Next(-ngp, ngp), 0, 100);
+                C = (int)MathTool.Constrain(C + rnd.Next(-ngp, ngp), 0, 100);
+
+                ls.Add(new BGraphValue() { Name = i.ToString("0월"), Math = A, Science = B, Programming = C });
+            }
+            grpH.SetDataSource<BGraphValue>(ls);
+            
         }
+
+        #region class : BGraphValue
+        public class BGraphValue : GraphData
+        {
+            public override string Name { get; set; }
+            public double Math { get; set; }
+            public double Science { get; set; }
+            public double Programming { get; set; }
+        }
+        #endregion
     }
 }

@@ -242,6 +242,23 @@ namespace Devinno.Forms.Extensions
             }
             return ret;
         }
+        public static SizeF MeasureTextIcon(this Graphics g, DvTextIconAlignment icoAlign, Size icoSize, int icoGap, string text, Font font)
+        {
+            SizeF ret = new SizeF(0F, 0F);
+
+            var sz = g.MeasureString(text, font);
+            var szFA = icoSize;
+
+            if (icoAlign == DvTextIconAlignment.LeftRight)
+            {
+                ret = new SizeF(szFA.Width + icoGap + sz.Width, Math.Max(sz.Height, szFA.Height));
+            }
+            else
+            {
+                ret = new SizeF(Math.Max(sz.Width, szFA.Width), szFA.Height + icoGap + sz.Height);
+            }
+            return ret;
+        }
         #endregion
         #region DrawTextIcon
         public static void DrawTextIcon(this Graphics g, DvIcon icon, string text, Font font, Brush br, Rectangle bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)

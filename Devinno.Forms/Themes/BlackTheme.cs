@@ -15,22 +15,22 @@ namespace Devinno.Forms.Themes
     {
         #region Static Properteis
         public static Color StaticForeColor { get; } = Color.White;
-        public static Color StaticBackColor { get; } = Color.FromArgb(47, 47, 47);
+        public static Color StaticBackColor { get; } = Color.FromArgb(50, 50, 50);
         public static Color StaticColor0 { get; } = Color.FromArgb(20, 20, 20);
         public static Color StaticColor1 { get; } = Color.FromArgb(30, 30, 30);
         public static Color StaticColor2 { get; } = Color.FromArgb(60, 60, 60);
         public static Color StaticColor3 { get; } = Color.FromArgb(90, 90, 90);
         public static Color StaticColor4 { get; } = Color.FromArgb(120, 120, 120);
-        public static Color StaticColor5 { get; } = Color.FromArgb(180, 180, 180);
+        public static Color StaticColor5 { get; } = Color.FromArgb(150, 150, 150);
         public static Color StaticPointColor { get; } = Color.Red;
-        public static Color StaticFrameColor { get; } = Color.Black;
-        public static Color StaticTitleBarColor { get; } = Color.FromArgb(41, 41, 41);
-        public static Color StaticColumnColor { get; } = Color.FromArgb(25, 30, 35);
+        public static Color StaticFrameColor { get; } = Color.FromArgb(40, 40, 40);
         #endregion
 
         #region Properties
         public override string ThemeName { get; } = "BlackTheme";
 
+        public override Color ForeColor { get; set; } = BlackTheme.StaticForeColor;
+        public override Color BackColor { get; set; } = BlackTheme.StaticBackColor;
         public override Color Color0 { get; set; } = BlackTheme.StaticColor0;
         public override Color Color1 { get; set; } = BlackTheme.StaticColor1;
         public override Color Color2 { get; set; } = BlackTheme.StaticColor2;
@@ -39,8 +39,6 @@ namespace Devinno.Forms.Themes
         public override Color Color5 { get; set; } = BlackTheme.StaticColor5;
         public override Color PointColor { get; set; } = BlackTheme.StaticPointColor;
         public override Color FrameColor { get; set; } = BlackTheme.StaticFrameColor;
-        public override Color TitleBarColor { get; set; } = BlackTheme.StaticTitleBarColor;
-        public override Color ColumnColor { get; set; } = BlackTheme.StaticColumnColor;
 
         public override int Corner { get; set; } = 5;
         public override int TextOffsetX { get; set; } = 0;
