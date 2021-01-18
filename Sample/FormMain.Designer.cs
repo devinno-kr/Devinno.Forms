@@ -65,10 +65,10 @@ namespace Sample
             // 
             this.dvContainer1.Controls.Add(this.grpH);
             this.dvContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dvContainer1.Location = new System.Drawing.Point(0, 70);
+            this.dvContainer1.Location = new System.Drawing.Point(5, 70);
             this.dvContainer1.Name = "dvContainer1";
             this.dvContainer1.Padding = new System.Windows.Forms.Padding(20);
-            this.dvContainer1.Size = new System.Drawing.Size(1097, 730);
+            this.dvContainer1.Size = new System.Drawing.Size(1087, 725);
             this.dvContainer1.TabIndex = 0;
             this.dvContainer1.TabStop = false;
             this.dvContainer1.Text = "dvContainer1";
@@ -77,7 +77,7 @@ namespace Sample
             // grpH
             // 
             this.grpH.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpH.Graduation = 20D;
+            this.grpH.Graduation = 10D;
             this.grpH.GraphBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.grpH.GraphMode = Devinno.Forms.Controls.DvBarGraphMode.LIST;
             this.grpH.GridColor = System.Drawing.Color.White;
@@ -85,7 +85,7 @@ namespace Sample
             this.grpH.Maximum = 100D;
             this.grpH.Minimum = 0D;
             this.grpH.Name = "grpH";
-            this.grpH.Size = new System.Drawing.Size(1057, 690);
+            this.grpH.Size = new System.Drawing.Size(1047, 685);
             this.grpH.TabIndex = 0;
             this.grpH.TabStop = false;
             this.grpH.Text = "dvBarGraphh1";
@@ -102,7 +102,7 @@ namespace Sample
             this.ForeColor = System.Drawing.Color.White;
             this.MinimumSize = new System.Drawing.Size(800, 800);
             this.Name = "FormMain";
-            this.Padding = new System.Windows.Forms.Padding(0, 70, 0, 0);
+            this.Padding = new System.Windows.Forms.Padding(5, 70, 5, 5);
             this.Text = "Sample";
             this.Theme = this.blackTheme1;
             this.Title = "Sample";

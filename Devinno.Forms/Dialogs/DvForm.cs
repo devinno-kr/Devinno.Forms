@@ -272,6 +272,7 @@ namespace Devinno.Forms.Dialogs
             #region Timer
             var th = new System.Threading.Thread(new System.Threading.ThreadStart(() =>
             {
+                Size sz = new Size(0, 0);
                 while (true)
                 {
                     if (this.IsHandleCreated && !this.IsDisposed && !DesignMode)
@@ -310,6 +311,11 @@ namespace Devinno.Forms.Dialogs
                                     }
                                 }
                                 #endregion
+                                if(sz != this.Size)
+                                {
+                                    sz = this.Size;
+                                    Invalidate();
+                                }
 
                             }));
                         }
@@ -571,6 +577,20 @@ namespace Devinno.Forms.Dialogs
                 #endregion
             }
             base.OnMouseDoubleClick(e);
+        }
+        #endregion
+        #region OnResize
+        protected override void OnResize(EventArgs e)
+        {
+            Invalidate();
+            base.OnResize(e);
+        }
+        #endregion
+        #region OnSizeChanged
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            Invalidate();
+            base.OnSizeChanged(e);
         }
         #endregion
         #region WndProc
