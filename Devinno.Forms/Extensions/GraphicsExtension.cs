@@ -88,23 +88,25 @@ namespace Devinno.Forms.Extensions
         {
             if (!string.IsNullOrWhiteSpace(Text))
             {
+                var strfrm = new StringFormat() { LineAlignment = StringAlignment.Center };
                 var sz = g.MeasureString(Text, Font);
                 int x = Bounds.X, y = Bounds.Y, w = INTC(sz.Width), h = INTC(sz.Height);
                 switch (Align)
                 {
-                    case DvContentAlignment.TopLeft:        /**/    x = Bounds.X;                                                   /**/    y = Bounds.Y;                                                   /**/    break;
-                    case DvContentAlignment.TopCenter:      /**/    x = Bounds.X + INTR(Bounds.Width / 2F - w / 2F);                 /**/    y = Bounds.Y;                                                   /**/    break;
-                    case DvContentAlignment.TopRight:       /**/    x = Bounds.Right - w;                                           /**/    y = Bounds.Y;                                                   /**/    break;
-                    case DvContentAlignment.MiddleLeft:     /**/    x = Bounds.X;                                                   /**/    y = Bounds.Y + INTR(Bounds.Height / 2F - h / 2F);    /**/    break;
-                    case DvContentAlignment.MiddleCenter:   /**/    x = Bounds.X + INTR(Bounds.Width / 2F - w / 2F);                 /**/    y = Bounds.Y + INTR(Bounds.Height / 2F - h / 2F);    /**/    break;
-                    case DvContentAlignment.MiddleRight:    /**/    x = Bounds.Right - w;                                           /**/    y = Bounds.Y + INTR(Bounds.Height / 2F - h / 2F);    /**/    break;
-                    case DvContentAlignment.BottomLeft:     /**/    x = Bounds.X;                                                   /**/    y = Bounds.Bottom - h;                                          /**/    break;
-                    case DvContentAlignment.BottomCenter:   /**/    x = Bounds.X + INTR(Bounds.Width / 2F - w / 2F);                 /**/    y = Bounds.Bottom - h;                                          /**/    break;
-                    case DvContentAlignment.BottomRight:    /**/    x = Bounds.Right - w;                                           /**/    y = Bounds.Bottom - h;                                          /**/    break;
+                    case DvContentAlignment.TopLeft:        /**/    x = Bounds.X;                                                   /**/    y = Bounds.Y;                                        /**/  strfrm.Alignment = StringAlignment.Near;  break;
+                    case DvContentAlignment.TopCenter:      /**/    x = Bounds.X + INTR(Bounds.Width / 2F - w / 2F);                /**/    y = Bounds.Y;                                        /**/  strfrm.Alignment = StringAlignment.Center; break;
+                    case DvContentAlignment.TopRight:       /**/    x = Bounds.Right - w;                                           /**/    y = Bounds.Y;                                        /**/  strfrm.Alignment = StringAlignment.Far; break;
+                    case DvContentAlignment.MiddleLeft:     /**/    x = Bounds.X;                                                   /**/    y = Bounds.Y + INTR(Bounds.Height / 2F - h / 2F);    /**/  strfrm.Alignment = StringAlignment.Near; break;
+                    case DvContentAlignment.MiddleCenter:   /**/    x = Bounds.X + INTR(Bounds.Width / 2F - w / 2F);                /**/    y = Bounds.Y + INTR(Bounds.Height / 2F - h / 2F);    /**/  strfrm.Alignment = StringAlignment.Center; break;
+                    case DvContentAlignment.MiddleRight:    /**/    x = Bounds.Right - w;                                           /**/    y = Bounds.Y + INTR(Bounds.Height / 2F - h / 2F);    /**/  strfrm.Alignment = StringAlignment.Far; break;
+                    case DvContentAlignment.BottomLeft:     /**/    x = Bounds.X;                                                   /**/    y = Bounds.Bottom - h;                               /**/  strfrm.Alignment = StringAlignment.Near; break;
+                    case DvContentAlignment.BottomCenter:   /**/    x = Bounds.X + INTR(Bounds.Width / 2F - w / 2F);                /**/    y = Bounds.Bottom - h;                               /**/  strfrm.Alignment = StringAlignment.Center; break;
+                    case DvContentAlignment.BottomRight:    /**/    x = Bounds.Right - w;                                           /**/    y = Bounds.Bottom - h;                               /**/  strfrm.Alignment = StringAlignment.Far; break;
                 }
 
                 var rt = new Rectangle(x, y, w, h);
-                g.DrawString(Text, Font, br, rt);
+                g.DrawString(Text, Font, br, rt, strfrm);
+                strfrm.Dispose();
             }
         }
 
@@ -112,23 +114,25 @@ namespace Devinno.Forms.Extensions
         {
             if (!string.IsNullOrWhiteSpace(Text))
             {
+                var strfrm = new StringFormat() { LineAlignment = StringAlignment.Center };
                 var sz = g.MeasureString(Text, Font);
                 float x = Bounds.X, y = Bounds.Y, w = sz.Width, h = sz.Height;
                 switch (Align)
                 {
-                    case DvContentAlignment.TopLeft:        /**/    x = Bounds.X;                                   /**/    y = Bounds.Y;                                   /**/    break;
-                    case DvContentAlignment.TopCenter:      /**/    x = Bounds.X + (Bounds.Width / 2F - w / 2F);    /**/    y = Bounds.Y;                                   /**/    break;
-                    case DvContentAlignment.TopRight:       /**/    x = Bounds.Right - w;                           /**/    y = Bounds.Y;                                   /**/    break;
-                    case DvContentAlignment.MiddleLeft:     /**/    x = Bounds.X;                                   /**/    y = Bounds.Y + (Bounds.Height / 2F - h / 2F);   /**/    break;
-                    case DvContentAlignment.MiddleCenter:   /**/    x = Bounds.X + (Bounds.Width / 2F - w / 2F);    /**/    y = Bounds.Y + (Bounds.Height / 2F - h / 2F);   /**/    break;
-                    case DvContentAlignment.MiddleRight:    /**/    x = Bounds.Right - w;                           /**/    y = Bounds.Y + (Bounds.Height / 2F - h / 2F);   /**/    break;
-                    case DvContentAlignment.BottomLeft:     /**/    x = Bounds.X;                                   /**/    y = Bounds.Bottom - h;                          /**/    break;
-                    case DvContentAlignment.BottomCenter:   /**/    x = Bounds.X + (Bounds.Width / 2F - w / 2F);    /**/    y = Bounds.Bottom - h;                          /**/    break;
-                    case DvContentAlignment.BottomRight:    /**/    x = Bounds.Right - w;                           /**/    y = Bounds.Bottom - h;                          /**/    break;
+                    case DvContentAlignment.TopLeft:        /**/    x = Bounds.X;                                   /**/    y = Bounds.Y;                                   /**/    strfrm.Alignment = StringAlignment.Near; break;
+                    case DvContentAlignment.TopCenter:      /**/    x = Bounds.X + (Bounds.Width / 2F - w / 2F);    /**/    y = Bounds.Y;                                   /**/    strfrm.Alignment = StringAlignment.Center; break;
+                    case DvContentAlignment.TopRight:       /**/    x = Bounds.Right - w;                           /**/    y = Bounds.Y;                                   /**/    strfrm.Alignment = StringAlignment.Far; break;
+                    case DvContentAlignment.MiddleLeft:     /**/    x = Bounds.X;                                   /**/    y = Bounds.Y + (Bounds.Height / 2F - h / 2F);   /**/    strfrm.Alignment = StringAlignment.Near; break;
+                    case DvContentAlignment.MiddleCenter:   /**/    x = Bounds.X + (Bounds.Width / 2F - w / 2F);    /**/    y = Bounds.Y + (Bounds.Height / 2F - h / 2F);   /**/    strfrm.Alignment = StringAlignment.Center; break;
+                    case DvContentAlignment.MiddleRight:    /**/    x = Bounds.Right - w;                           /**/    y = Bounds.Y + (Bounds.Height / 2F - h / 2F);   /**/    strfrm.Alignment = StringAlignment.Far; break;
+                    case DvContentAlignment.BottomLeft:     /**/    x = Bounds.X;                                   /**/    y = Bounds.Bottom - h;                          /**/    strfrm.Alignment = StringAlignment.Near; break;
+                    case DvContentAlignment.BottomCenter:   /**/    x = Bounds.X + (Bounds.Width / 2F - w / 2F);    /**/    y = Bounds.Bottom - h;                          /**/    strfrm.Alignment = StringAlignment.Center; break;
+                    case DvContentAlignment.BottomRight:    /**/    x = Bounds.Right - w;                           /**/    y = Bounds.Bottom - h;                          /**/    strfrm.Alignment = StringAlignment.Far; break;
                 }
 
                 var rt = new RectangleF(x, y, w, h);
-                g.DrawString(Text, Font, br, rt);
+                g.DrawString(Text, Font, br, rt, strfrm);
+                strfrm.Dispose();
             }
         }
         #endregion

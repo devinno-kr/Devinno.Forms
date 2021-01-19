@@ -24,6 +24,8 @@ namespace Devinno.Forms.Themes
         public static Color StaticColor5 { get; } = Color.FromArgb(150, 150, 150);
         public static Color StaticPointColor { get; } = Color.Red;
         public static Color StaticFrameColor { get; } = Color.FromArgb(40, 40, 40);
+        public static Color StaticScrollBarColor { get; } = Color.FromArgb(20, 20, 20);
+        public static Color StaticScrollCursorColor { get; } = Color.FromArgb(180, 180, 180);
         #endregion
 
         #region Properties
@@ -39,6 +41,8 @@ namespace Devinno.Forms.Themes
         public override Color Color5 { get; set; } = BlackTheme.StaticColor5;
         public override Color PointColor { get; set; } = BlackTheme.StaticPointColor;
         public override Color FrameColor { get; set; } = BlackTheme.StaticFrameColor;
+        public override Color ScrollBarColor { get; set; } = BlackTheme.StaticScrollBarColor;
+        public override Color ScrollCursorColor { get; set; } = BlackTheme.StaticScrollCursorColor;
 
         public override int Corner { get; set; } = 5;
         public override int TextOffsetX { get; set; } = 0;
@@ -295,9 +299,10 @@ namespace Devinno.Forms.Themes
             #region IN BEVEL LT
             if ((option & BoxDrawOption.IN_BEVEL_LT) == BoxDrawOption.IN_BEVEL_LT)
             {
-                var oldclip = g.Clip;
+                var oldclip = g.Clip.GetBounds(g);
                 var rt = new Rectangle(bounds.X + 1, bounds.Y + 1, bounds.Width - 1, bounds.Height - 1);
-                g.SetClip(new Rectangle(rt.X, rt.Y, rt.Width - 1, rt.Height - 1));
+                var rtex = new Rectangle(rt.X, rt.Y, rt.Width - 1, rt.Height - 1);
+                g.SetClip(rtex, CombineMode.Intersect);
                 p.Color = c.BrightnessTransmit(InBevelBright);
                 switch (round)
                 {

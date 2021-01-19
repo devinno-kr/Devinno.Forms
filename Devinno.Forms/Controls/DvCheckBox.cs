@@ -78,13 +78,14 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Override
-        #region GetBounds
-        public override Dictionary<string, Rectangle> GetBounds(Graphics g)
+        #region LoadAreas
+        protected override void LoadAreas(Graphics g)
         {
-            var ret = base.GetBounds(g);
+            base.LoadAreas(g);
 
-            var f = (float)this.LogicalToDeviceUnits(1000) / 1000F;
-            var rtContent = GetContentBounds();
+            var rtContent = Areas["rtContent"];
+            
+            var f = DpiRatio;
             var gap = Convert.ToInt32(5 * f);
             var nsz = Convert.ToInt32(18 * f);
             var npt = MathTool.MakeRectangle(rtContent, new Size(nsz, nsz)); //npt.Offset(0, GetTheme().TextOffsetY);
@@ -93,10 +94,9 @@ namespace Devinno.Forms.Controls
             var rtText = new Rectangle(rtBox.Right + gap, rtBox.Y, rtContent.Width - gap - rtBox.Width, rtBox.Height);
             var rtCheck = new Rectangle(rtBox.X, rtBox.Y, rtBox.Width, rtBox.Height); rtCheck.Inflate(-Convert.ToInt32(4 * f), -Convert.ToInt32(4 * f));
             
-            ret.Add("rtBox", rtBox);
-            ret.Add("rtText", rtText);
-            ret.Add("rtCheck", rtCheck);
-            return ret;
+            SetArea("rtBox", rtBox);
+            SetArea("rtText", rtText);
+            SetArea("rtCheck", rtCheck);
         }
         #endregion
         #region OnThemeDraw
@@ -118,10 +118,9 @@ namespace Devinno.Forms.Controls
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             #endregion
             #region Draw
-            var rts = GetBounds(e.Graphics);
-            var rtBox = rts["rtBox"];
-            var rtText = rts["rtText"];
-            var rtCheck = rts["rtCheck"];
+            var rtBox = Areas["rtBox"];
+            var rtText = Areas["rtText"];
+            var rtCheck = Areas["rtCheck"];
             Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtBox, RoundType.NONE, BoxDrawOption.OUT_BEVEL | BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW);
             #region Check
             if (Checked)
@@ -145,9 +144,8 @@ namespace Devinno.Forms.Controls
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            var rts = GetBounds(null);
-            var rtBox = rts["rtBox"];
-            var rtText = rts["rtText"];
+            var rtBox = Areas["rtBox"];
+            var rtText = Areas["rtText"];
             if (CollisionTool.Check(rtBox, e.Location) || CollisionTool.Check(rtText, e.Location))
             {
                 Checked = !Checked;

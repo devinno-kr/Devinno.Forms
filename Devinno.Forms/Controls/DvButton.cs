@@ -158,6 +158,15 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Override
+        #region LoadAreas
+        protected override void LoadAreas(Graphics g)
+        {
+            base.LoadAreas(g);
+            var rtContent = Areas["rtContent"];
+            var rtText = new Rectangle(rtContent.X + TextPadding.Left, rtContent.Y + TextPadding.Top, rtContent.Width - (TextPadding.Left + TextPadding.Right), rtContent.Height - (TextPadding.Top + TextPadding.Bottom));
+            SetArea("rtText", rtText);
+        }
+        #endregion
         #region OnThemeDraw
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
@@ -169,8 +178,8 @@ namespace Devinno.Forms.Controls
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             #endregion
             #region Bounds
-            var rtContent = GetContentBounds();
-            var rtText = new Rectangle(rtContent.X + TextPadding.Left, rtContent.Y + TextPadding.Top, rtContent.Width - (TextPadding.Left + TextPadding.Right), rtContent.Height - (TextPadding.Top + TextPadding.Bottom));
+            var rtContent = Areas["rtContent"];
+            var rtText = Areas["rtText"];
             #endregion
             #region Init
             var p = new Pen(ButtonColor, 1);

@@ -206,11 +206,12 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Override
-        #region GetBounds
-        public override Dictionary<string, Rectangle> GetBounds(Graphics g)
+        #region LoadAreas
+        protected override void LoadAreas(Graphics g)
         {
-            var ret = base.GetBounds(g);
-            var rtContent = GetContentBounds();
+            base.LoadAreas(g);
+         
+            var rtContent = Areas["rtContent"];
 
             if (string.IsNullOrWhiteSpace(Text))
             {
@@ -220,17 +221,18 @@ namespace Devinno.Forms.Controls
                 var rtFA = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
                 var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
 
-                ret.Add("rtLampBack", rtFA);
-                ret.Add("rtLamp", rtFAIN);
+                SetArea("rtLampBack", rtFA);
+                SetArea("rtLamp", rtFAIN);
             }
             else
             {
                 var ng = LampSize / 7;
                 var gap = LampGap;
-                var f = (float)this.LogicalToDeviceUnits(1000) / 1000F;
-                var szTX = g.MeasureString(Text, Font);
+                var f = DpiRatio;
                 var szFA = new Size(LampSize, LampSize);
+                var szTX = g.MeasureString(Text, Font);
                 var szv = g.MeasureTextIcon(eLampAlignment, szFA, gap, Text, Font);
+
                 var rt = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
 
                 if (LampAlignment == DvTextIconAlignment.LeftRight)
@@ -239,9 +241,9 @@ namespace Devinno.Forms.Controls
                     var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
                     var rtTX = new Rectangle(rt.Right - INTC(szTX.Width), INTC(DrawingTool.CenterY(rt, szTX)), INTC(szTX.Width), INTC(szTX.Height));
 
-                    ret.Add("rtLampBack", rtFA);
-                    ret.Add("rtLamp", rtFAIN);
-                    ret.Add("rtText", rtTX);
+                    SetArea("rtLampBack", rtFA);
+                    SetArea("rtLamp", rtFAIN);
+                    SetArea("rtText", rtTX);
                 }
                 else
                 {
@@ -249,12 +251,11 @@ namespace Devinno.Forms.Controls
                     var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
                     var rtTX = new Rectangle(INTC(DrawingTool.CenterX(rt, szTX)), rt.Bottom - INTC(szTX.Height), INTC(szTX.Width), INTC(szTX.Height));
 
-                    ret.Add("rtLampBack", rtFA);
-                    ret.Add("rtLamp", rtFAIN);
-                    ret.Add("rtText", rtTX);
+                    SetArea("rtLampBack", rtFA);
+                    SetArea("rtLamp", rtFAIN);
+                    SetArea("rtText", rtTX);
                 }
             }
-            return ret;
         }
         #endregion
         #region OnThemeDraw
@@ -266,10 +267,11 @@ namespace Devinno.Forms.Controls
             #region Set
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
-            var rts = GetBounds(e.Graphics);
-            var rtBack = rts["rtLampBack"];
-            var rtLamp = rts["rtLamp"];
+            #endregion
+            #region Bounds
+            var rtText = Areas["rtText"];
+            var rtBack = Areas["rtLampBack"];
+            var rtLamp = Areas["rtLamp"];
             #endregion
             #region Init
             var p = new Pen(LampBackColor, 2);
@@ -312,11 +314,7 @@ namespace Devinno.Forms.Controls
             }
             #endregion
             #region Text
-            if (!string.IsNullOrWhiteSpace(Text))
-            {
-                var rtText = rts["rtText"];
-                Theme.DrawTextShadow(e.Graphics, null, Text, Font, ForeColor, BackColor, rtText, DvContentAlignment.MiddleCenter);
-            }
+            if (!string.IsNullOrWhiteSpace(Text)) Theme.DrawTextShadow(e.Graphics, null, Text, Font, ForeColor, BackColor, rtText, DvContentAlignment.MiddleCenter);
             #endregion
             #endregion
             #region Dispose

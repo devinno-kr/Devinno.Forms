@@ -38,6 +38,12 @@ namespace Devinno.Forms.Dialogs
             }
         }
         #endregion
+        #region DpiRatio
+        public double DpiRatio => (double)this.LogicalToDeviceUnits(1000) / 1000.0;
+        #endregion
+        #region Areas
+        public Dictionary<string, Rectangle> Areas { get; } = new Dictionary<string, Rectangle>();
+        #endregion
 
         #region Title
         private string strTitle = "TITLE";
@@ -275,7 +281,7 @@ namespace Devinno.Forms.Dialogs
                 Size sz = new Size(0, 0);
                 while (true)
                 {
-                    if (this.IsHandleCreated && !this.IsDisposed && !DesignMode)
+                    if (this.IsHandleCreated && !this.IsDisposed && !DesignMode && Areas.Count == 7)
                     {
                         try
                         {
@@ -286,8 +292,9 @@ namespace Devinno.Forms.Dialogs
                                 var rt = new Rectangle(0, 0, c.Width - 1, c.Height - 1);
                                 var rtContent = new Rectangle(c.Padding.Left, c.Padding.Top, rt.Width - (c.Padding.Right + c.Padding.Left) + 1, rt.Height - (c.Padding.Top + c.Padding.Bottom) + 1);
                                 var rtTitle = new Rectangle(rt.X, rt.Y, rt.Width, c.Padding.Top);
-                                var rts = GetBoxBounds();
-                                Rectangle rtExit = rts[2], rtMax = rts[1], rtMin = rts[0];
+                                var rtExit = Areas["rtExit"];
+                                var rtMax = Areas["rtMax"];
+                                var rtMin = Areas["rtMin"];
                                 #endregion
                                 #region Min/Max/Exit
                                 if (!DesignMode)
@@ -347,9 +354,20 @@ namespace Devinno.Forms.Dialogs
         #region OnPaint
         protected override void OnPaint(PaintEventArgs e)
         {
+            LoadAreas(e.Graphics);
+
             #region Color
             var FrameColor = UseThemeColor ? Theme.FrameColor : this.FrameColor;
             var WindowStateButtonColor = UseThemeColor ? Theme.ForeColor : this.WindowStateButtonColor;
+            #endregion
+            #region Bounds
+            var rtExit = Areas["rtExit"];
+            var rtMax = Areas["rtMax"];
+            var rtMin = Areas["rtMin"];
+            var rtTitle = Areas["rtTitle"];
+            var rtTitleBar = Areas["rtTitleBar"];
+            var rtContent = Areas["rtContent"];
+            var rtIcon = Areas["rtIcon"];
             #endregion
             #region Init
             var p = new Pen(FrameColor, 1);
@@ -362,9 +380,7 @@ namespace Devinno.Forms.Dialogs
             if (!BlankForm)
             {
                 #region Draw Background
-                var rtContent = new Rectangle(Padding.Left, Padding.Top, Width - Padding.Right - Padding.Left, Height - Padding.Bottom - Padding.Top);
-                var rtIcon = new Rectangle(0, 0, Padding.Top, Padding.Top);
-
+         
                 e.Graphics.Clear(FrameColor);
                 e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
                 br.Color = BackColor; e.Graphics.FillRectangle(br, rtContent);
@@ -378,13 +394,12 @@ namespace Devinno.Forms.Dialogs
 
                 #endregion
                 #region Draw Exit / Max / Min
-                var boxes = GetBoxBounds();
                 int cn = 4;
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
                 #region Exit
                 if (ExitBox)
                 {
-                    var rt = MathTool.MakeRectangle(boxes[2], new Size(Padding.Top / cn, Padding.Top / cn));
+                    var rt = MathTool.MakeRectangle(rtExit, new Size(Padding.Top / cn, Padding.Top / cn));
                     p.Color = bExit ? Color.Red : WindowStateButtonColor;
                     p.Width = 1;
 
@@ -393,7 +408,7 @@ namespace Devinno.Forms.Dialogs
                 }
                 else if(MinimizeBox || MaximizeBox)
                 {
-                    var rt = MathTool.MakeRectangle(boxes[2], new Size(Padding.Top / cn, Padding.Top / cn));
+                    var rt = MathTool.MakeRectangle(rtExit, new Size(Padding.Top / cn, Padding.Top / cn));
                     p.Color = WindowStateButtonColor.BrightnessTransmit(-0.7);
                     p.Width = 1;
 
@@ -404,7 +419,7 @@ namespace Devinno.Forms.Dialogs
                 #region Max
                 if (MaximizeBox)
                 {
-                    var rt = MathTool.MakeRectangle(boxes[1], new Size(Padding.Top / cn, Padding.Top / cn));
+                    var rt = MathTool.MakeRectangle(rtMax, new Size(Padding.Top / cn, Padding.Top / cn));
                     p.Color = bMax ? Color.DeepSkyBlue : WindowStateButtonColor;
                     p.Width = 1;
 
@@ -419,7 +434,7 @@ namespace Devinno.Forms.Dialogs
                 }
                 else if(MinimizeBox)
                 {
-                    var rt = MathTool.MakeRectangle(boxes[1], new Size(Padding.Top / cn, Padding.Top / cn));
+                    var rt = MathTool.MakeRectangle(rtMax, new Size(Padding.Top / cn, Padding.Top / cn));
                     p.Color = WindowStateButtonColor.BrightnessTransmit(-0.7);
                     p.Width = 1;
 
@@ -429,7 +444,7 @@ namespace Devinno.Forms.Dialogs
                 #region Min
                 if (MinimizeBox)
                 {
-                    var rt = MathTool.MakeRectangle(boxes[0], new Size(Padding.Top / cn, Padding.Top / cn));
+                    var rt = MathTool.MakeRectangle(rtMin, new Size(Padding.Top / cn, Padding.Top / cn));
                     p.Color = bMin ? Color.Yellow : WindowStateButtonColor;
                     p.Width = 1;
 
@@ -437,7 +452,7 @@ namespace Devinno.Forms.Dialogs
                 }
                 else if(MaximizeBox)
                 {
-                    var rt = MathTool.MakeRectangle(boxes[0], new Size(Padding.Top / cn, Padding.Top / cn));
+                    var rt = MathTool.MakeRectangle(rtMin, new Size(Padding.Top / cn, Padding.Top / cn));
                     p.Color = WindowStateButtonColor.BrightnessTransmit(-0.7);
                     p.Width = 1;
 
@@ -446,8 +461,6 @@ namespace Devinno.Forms.Dialogs
                 #endregion
                 #endregion
                 #region Title
-                var rtTitle = new Rectangle(Padding.Top + 15, 0, Width - (Padding.Top * 4) - 15, Padding.Top);
-
                 br.Color = TitleIconColor; 
                 e.Graphics.DrawIcon(ico, br, rtIcon, DvContentAlignment.MiddleCenter);
                 
@@ -455,6 +468,8 @@ namespace Devinno.Forms.Dialogs
                 e.Graphics.DrawText(Title, TitleFont, br, rtTitle, DvContentAlignment.MiddleLeft);
                 #endregion
             }
+
+            if (Theme != null) OnThemeDraw(e, Theme);
 
             #region Dispose
             br.Dispose();
@@ -468,22 +483,24 @@ namespace Devinno.Forms.Dialogs
         {
             if (!BlankForm)
             {
-                #region Rectangle
-                var c = this;
-                var rtTitle = new Rectangle(0, 0, this.Width, c.Padding.Top);
-                var rts = GetBoxBounds();
+                #region Bounds
+                var rtExit = Areas["rtExit"];
+                var rtMax = Areas["rtMax"];
+                var rtMin = Areas["rtMin"];
+                var rtTitle = Areas["rtTitle"];
+                var rtTitleBar = Areas["rtTitleBar"];
                 #endregion
                 #region Min/Max/Exit
                 {
-                    if (ExitBox && CollisionTool.Check(rts[2], e.X, e.Y)) { bdExit = true; Invalidate(); }
-                    if (MaximizeBox && CollisionTool.Check(rts[1], e.X, e.Y)) { bdMax = true; Invalidate(); }
-                    if (MinimizeBox && CollisionTool.Check(rts[0], e.X, e.Y)) { bdMin = true; Invalidate(); }
+                    if (ExitBox && CollisionTool.Check(rtExit, e.X, e.Y)) { bdExit = true; Invalidate(); }
+                    if (MaximizeBox && CollisionTool.Check(rtMax, e.X, e.Y)) { bdMax = true; Invalidate(); }
+                    if (MinimizeBox && CollisionTool.Check(rtMin, e.X, e.Y)) { bdMin = true; Invalidate(); }
                 }
                 #endregion
                 #region Form Move
                 if (Movable)
                 {
-                    if (CollisionTool.Check(rtTitle, e.X, e.Y) && (!CollisionTool.Check(rts[0], e.X, e.Y) && !CollisionTool.Check(rts[1], e.X, e.Y) && !CollisionTool.Check(rts[2], e.X, e.Y)))
+                    if (CollisionTool.Check(rtTitle, e.X, e.Y))
                         mvdown = new WNDMV() { Point = this.PointToScreen(e.Location), Location = this.Location };
                 }
                 #endregion
@@ -496,23 +513,25 @@ namespace Devinno.Forms.Dialogs
         {
             if (!BlankForm)
             {
-                #region Rectangle
-                var c = this;
-                var rtTitle = new Rectangle(0, 0, this.Width, c.Padding.Top);
-                var rts = GetBoxBounds();
+                #region Bounds
+                var rtExit = Areas["rtExit"];
+                var rtMax = Areas["rtMax"];
+                var rtMin = Areas["rtMin"];
+                var rtTitle = Areas["rtTitle"];
+                var rtTitleBar = Areas["rtTitleBar"];
                 #endregion
                 #region Min/Max/Exit
                 {
-                    if (ExitBox && bdExit && CollisionTool.Check(rts[2], e.X, e.Y))
+                    if (ExitBox && bdExit && CollisionTool.Check(rtExit, e.X, e.Y))
                     {
                         this.Close();
                     }
-                    if (MaximizeBox && bdMax && CollisionTool.Check(rts[1], e.X, e.Y))
+                    if (MaximizeBox && bdMax && CollisionTool.Check(rtMax, e.X, e.Y))
                     {
                         if (WindowState != FormWindowState.Maximized) WindowState = FormWindowState.Maximized;
                         else WindowState = FormWindowState.Normal;
                     }
-                    if (MinimizeBox && bdMin && CollisionTool.Check(rts[0], e.X, e.Y))
+                    if (MinimizeBox && bdMin && CollisionTool.Check(rtMin, e.X, e.Y))
                     {
                         WindowState = FormWindowState.Minimized;
                     }
@@ -559,16 +578,17 @@ namespace Devinno.Forms.Dialogs
         {
             if (!BlankForm)
             {
-                #region Rectangle
-                var c = this;
-                var rtTitle = new Rectangle(0, 0, this.Width, c.Padding.Top);
-                var rts = GetBoxBounds();
+                #region Bounds
+                var rtExit = Areas["rtExit"];
+                var rtMax = Areas["rtMax"];
+                var rtMin = Areas["rtMin"];
+                var rtTitle = Areas["rtTitle"];
+                var rtTitleBar = Areas["rtTitleBar"];
                 #endregion
                 #region DoubleClick Maximize
                 if (MaximizeBox)
                 {
-                    var vchk = CollisionTool.Check(rtTitle, e.X, e.Y) && (!CollisionTool.Check(rts[0], e.X, e.Y) && !CollisionTool.Check(rts[1], e.X, e.Y) && !CollisionTool.Check(rts[2], e.X, e.Y));
-                    if (vchk)
+                    if (CollisionTool.Check(rtTitle, e.X, e.Y))
                     {
                         if (WindowState == FormWindowState.Normal) WindowState = FormWindowState.Maximized;
                         else if (WindowState == FormWindowState.Maximized) WindowState = FormWindowState.Normal;
@@ -593,6 +613,9 @@ namespace Devinno.Forms.Dialogs
             base.OnSizeChanged(e);
         }
         #endregion
+        #region OnThemeDraw
+        protected virtual void OnThemeDraw(PaintEventArgs e, DvTheme Theme) { }
+        #endregion
         #region WndProc
         protected override void WndProc(ref Message m)
         {
@@ -609,10 +632,11 @@ namespace Devinno.Forms.Dialogs
                 const int htBottom = 15;
                 const int htBottomLeft = 16;
                 const int htBottomRight = 17;
-                if (m.Msg == NC_HITTEST)
+                if (m.Msg == NC_HITTEST && Areas.ContainsKey("rtExit") && Areas.ContainsKey("rtMax") && Areas.ContainsKey("rtMin"))
                 {
-                    var rts = GetBoxBounds();
-                    Rectangle rtExit = rts[2], rtMax = rts[1], rtMin = rts[0];
+                    var rtExit = Areas["rtExit"];
+                    var rtMax = Areas["rtMax"];
+                    var rtMin = Areas["rtMin"];
 
                     int x = (short)(m.LParam.ToInt64() & 0xFFFF);
                     int y = (short)((m.LParam.ToInt64() & 0xFFFF0000) >> 16);
@@ -637,6 +661,28 @@ namespace Devinno.Forms.Dialogs
             base.WndProc(ref m);
         }
         #endregion
+        #region LoadAreas
+        protected virtual void LoadAreas(Graphics g)
+        {
+            int szwh = Padding.Top / 4;
+            int wh = Padding.Top;
+            var rtExit = new Rectangle(this.Width - wh, 0, wh, wh);
+            var rtMax = new Rectangle(rtExit.X - wh, 0, wh, wh);
+            var rtMin = new Rectangle(rtMax.X - wh, 0, wh, wh);
+            var rtTitle = new Rectangle(Padding.Top + 15, 0, Width - (Padding.Top * 4) - 15, Padding.Top);
+            var rtTitleBar = new Rectangle(0, 0, this.Width, Padding.Top);
+            var rtContent = new Rectangle(Padding.Left, Padding.Top, Width - Padding.Right - Padding.Left, Height - Padding.Bottom - Padding.Top);
+            var rtIcon = new Rectangle(0, 0, Padding.Top, Padding.Top);
+
+            SetArea("rtExit", rtExit);
+            SetArea("rtMax", rtMax);
+            SetArea("rtMin", rtMin);
+            SetArea("rtTitle", rtTitle);
+            SetArea("rtTitleBar", rtTitleBar);
+            SetArea("rtContent", rtContent);
+            SetArea("rtIcon", rtIcon);
+        }
+        #endregion
         #endregion
 
         #region Method
@@ -644,17 +690,6 @@ namespace Devinno.Forms.Dialogs
         public NotifyIcon GetNotifyIcon()
         {
             return notifyIcon;
-        }
-        #endregion
-        #region GetBoxBounds
-        internal Rectangle[] GetBoxBounds()
-        {
-            int szwh = Padding.Top / 4;
-            int wh = Padding.Top;
-            var rtRight = new Rectangle(this.Width - wh, 0, wh, wh);
-            var rtMiddle = new Rectangle(rtRight.X - wh, 0, wh, wh);
-            var rtLeft = new Rectangle(rtMiddle.X - wh, 0, wh, wh);
-            return new Rectangle[] { rtLeft, rtMiddle, rtRight };
         }
         #endregion
         #region SetTrayicon
@@ -676,6 +711,13 @@ namespace Devinno.Forms.Dialogs
                 notifyIcon.Visible = false;
             };
 
+        }
+        #endregion
+        #region SetArea
+        protected void SetArea(string key, Rectangle rt)
+        {
+            if (!Areas.ContainsKey(key)) Areas.Add(key, rt);
+            else Areas[key] = rt;
         }
         #endregion
         #endregion

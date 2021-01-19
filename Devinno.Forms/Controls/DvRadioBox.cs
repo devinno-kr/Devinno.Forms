@@ -85,13 +85,14 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Override
-        #region GetBounds
-        public override Dictionary<string, Rectangle> GetBounds(Graphics g)
+        #region LoadAreas
+        protected override void LoadAreas(Graphics g)
         {
-            var ret = base.GetBounds(g);
+            base.LoadAreas(g);
 
-            var f = (float)this.LogicalToDeviceUnits(1000) / 1000F;
             var rtContent = GetContentBounds();
+
+            var f = DpiRatio;
             var gap = Convert.ToInt32(5 * f);
             var nsz = Convert.ToInt32(18 * f);
             var npt = MathTool.MakeRectangle(rtContent, new Size(nsz, nsz)); //npt.Offset(0, GetTheme().TextOffsetY);
@@ -100,10 +101,9 @@ namespace Devinno.Forms.Controls
             var rtText = new Rectangle(rtBox.Right + gap, rtBox.Y, rtContent.Width - gap - rtBox.Width, rtBox.Height);
             var rtCheck = new Rectangle(rtBox.X, rtBox.Y, rtBox.Width, rtBox.Height); rtCheck.Inflate(-Convert.ToInt32(4 * f), -Convert.ToInt32(4 * f));
 
-            ret.Add("rtBox", rtBox);
-            ret.Add("rtText", rtText);
-            ret.Add("rtCheck", rtCheck);
-            return ret;
+            SetArea("rtBox", rtBox);
+            SetArea("rtText", rtText);
+            SetArea("rtCheck", rtCheck);
         }
         #endregion
         #region OnThemeDraw
@@ -119,23 +119,19 @@ namespace Devinno.Forms.Controls
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             #endregion
+            #region Bounds
+            var rtBox = Areas["rtBox"];
+            var rtText = Areas["rtText"];
+            var rtCheck = Areas["rtCheck"];
+            #endregion
             #region Init
             var p = new Pen(Color.Black);
             var br = new SolidBrush(Color.Black);
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             #endregion
             #region Draw
-            var rts = GetBounds(e.Graphics);
-            var rtBox = rts["rtBox"];
-            var rtText = rts["rtText"];
-            var rtCheck = rts["rtCheck"];
             Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtBox, RoundType.ELLIPSE, BoxDrawOption.OUT_BEVEL | BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW);
-            #region Check
-            if (Checked)
-            {
-                Theme.DrawBox(e.Graphics, CheckColor, BoxColor, rtCheck, RoundType.ELLIPSE, BoxDrawOption.OUT_SHADOW);
-            }
-            #endregion
+            if (Checked) Theme.DrawBox(e.Graphics, CheckColor, BoxColor, rtCheck, RoundType.ELLIPSE, BoxDrawOption.OUT_SHADOW);
             Theme.DrawTextShadow(e.Graphics, null, Text, Font, ForeColor, BackColor, rtText, DvContentAlignment.MiddleLeft);
             #endregion
             #region Dispose
@@ -148,9 +144,8 @@ namespace Devinno.Forms.Controls
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            var rts = GetBounds(null);
-            var rtBox = rts["rtBox"];
-            var rtText = rts["rtText"];
+            var rtBox = Areas["rtBox"];
+            var rtText = Areas["rtText"];
             if (CollisionTool.Check(rtBox, e.Location) || CollisionTool.Check(rtText, e.Location))
             {
                 Checked = !Checked;

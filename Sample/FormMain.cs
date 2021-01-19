@@ -18,37 +18,53 @@ namespace Sample
         public FormMain()
         {
             InitializeComponent();
-            grpH.ValueDraw = true;
-            grpH.GraphMode = DvBarGraphMode.STACK;
-            grpH.Series.Add(new DvGraphSeries() { Name = "Math", Alias = "수학", SeriesColor = Color.Red });
+            grpH.BarSize = grpV.BarSize = 24;
+            grpH.GraphBackColor = grpV.GraphBackColor = Color.FromArgb(30, 30, 30);
+            grpH.ValueDraw = grpV.ValueDraw = true;
+            grpH.Scrollable = grpV.Scrollable = true;
+            grpH.TouchMode = grpV.TouchMode = true;
+            grpH.GraphMode = grpV.GraphMode = DvBarGraphMode.STACK;
+            grpH.Graduation = grpV.Graduation = grpV.GraphMode == DvBarGraphMode.STACK ? 50 : 10;
+            
+            grpV.Series.Add(new DvGraphSeries() { Name = "Math", Alias = "수학", SeriesColor = Color.FromArgb(192,0,0) });
+            grpV.Series.Add(new DvGraphSeries() { Name = "Science", Alias = "과학", SeriesColor = Color.Green });
+            grpV.Series.Add(new DvGraphSeries() { Name = "Programming", Alias = "코딩", SeriesColor = Color.DarkBlue });
+
+            grpH.Series.Add(new DvGraphSeries() { Name = "Math", Alias = "수학", SeriesColor = Color.FromArgb(192, 0, 0) });
             grpH.Series.Add(new DvGraphSeries() { Name = "Science", Alias = "과학", SeriesColor = Color.Green });
-            grpH.Series.Add(new DvGraphSeries() { Name = "Programming", Alias = "코딩", SeriesColor = Color.Blue });
-            grpH.MouseUp += (o, s) =>
+            grpH.Series.Add(new DvGraphSeries() { Name = "Programming", Alias = "코딩", SeriesColor = Color.DarkBlue });
+
+            //grpH.MouseUp += (o, s) => Gen();
+            Gen();
+        }
+
+        void Gen()
+        {
+            var ls = new List<BGraphValue>();
+            var rnd = new Random();
+            int ngp = 30;
+            int A = rnd.Next(50, 100), B = rnd.Next(50, 100), C = rnd.Next(50, 100);
+            for (int y = 15; y < 21; y++)
             {
-                var ls = new List<BGraphValue>();
-                var rnd = new Random();
-                int ngp = 30;
-                int A = rnd.Next(0, 100), B = rnd.Next(0, 100), C = rnd.Next(0, 100);
                 for (int i = 1; i <= 12; i++)
                 {
-                    A = (int)MathTool.Constrain(A + rnd.Next(-ngp, ngp), 0, 100);
-                    B = (int)MathTool.Constrain(B + rnd.Next(-ngp, ngp), 0, 100);
-                    C = (int)MathTool.Constrain(C + rnd.Next(-ngp, ngp), 0, 100);
+                    A = (int)MathTool.Constrain(A + rnd.Next(-ngp, ngp), 30, 100);
+                    B = (int)MathTool.Constrain(B + rnd.Next(-ngp, ngp), 30, 100);
+                    C = (int)MathTool.Constrain(C + rnd.Next(-ngp, ngp), 30, 100);
 
-                    ls.Add(new BGraphValue() { Name = i.ToString("0월"), Math = A, Science = B, Programming = C });
+                    ls.Add(new BGraphValue() { Name = y.ToString("0년") + "\r\n" + i.ToString("0월"), Math = A, Science = B, Programming = C });
                 }
-                grpH.SetDataSource<BGraphValue>(ls);
-            };
+            }
+            grpV.SetDataSource<BGraphValue>(ls);
+            grpH.SetDataSource<BGraphValue>(ls);
         }
+    }
 
-        #region class : BGraphValue
-        public class BGraphValue : GraphData
-        {
-            public override string Name { get; set; }
-            public double Math { get; set; }
-            public double Science { get; set; }
-            public double Programming { get; set; }
-        }
-        #endregion
+    public class BGraphValue : GraphData
+    {
+        public override string Name { get; set; }
+        public double Math { get; set; }
+        public double Science { get; set; }
+        public double Programming { get; set; }
     }
 }

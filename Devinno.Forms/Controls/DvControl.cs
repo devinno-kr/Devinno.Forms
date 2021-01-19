@@ -30,6 +30,12 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region DpiRatio
+        public double DpiRatio => (double)this.LogicalToDeviceUnits(1000) / 1000.0;
+        #endregion
+        #region Areas
+        public Dictionary<string, Rectangle> Areas { get; } = new Dictionary<string, Rectangle>();
+        #endregion
         #endregion
 
         #region Constructor
@@ -46,10 +52,14 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Override
+        #region OnEnabledChanged
         protected override void OnEnabledChanged(EventArgs e) { Invalidate(); base.OnEnabledChanged(e); }
-        
+        #endregion
+        #region OnPaint
         protected override void OnPaint(PaintEventArgs e)
         {
+            LoadAreas(e.Graphics);
+
             var Theme = GetTheme();
             if (Theme != null) OnThemeDraw(e, Theme);
 
@@ -58,9 +68,11 @@ namespace Devinno.Forms.Controls
             if (Theme != null) OnThemeEnableDraw(e, Theme);
             if (Theme != null) BlockDraw(e, Theme); 
         }
-        
+        #endregion
+        #region OnThemeDraw
         protected virtual void OnThemeDraw(PaintEventArgs e, DvTheme Theme) { }
-        
+        #endregion
+        #region OnThemeEnableDraw
         protected virtual void OnThemeEnableDraw(PaintEventArgs e, DvTheme Theme)
         {
             var bgColor = this.BackColor;
@@ -76,23 +88,13 @@ namespace Devinno.Forms.Controls
                 }
             }
         }
-
-        private void BlockDraw(PaintEventArgs e, DvTheme Theme)
+        #endregion
+        #region LoadAreas
+        protected virtual void LoadAreas(Graphics g)
         {
-            var Wnd = this.FindForm() as DvForm;
-            var bgColor = this.BackColor;
-            if (this.BackColor == Color.Transparent)
-            {
-                if (Parent != null) bgColor = Parent.BackColor;
-            }
-            if (Wnd != null && Wnd.Block)
-            {
-                using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
-                {
-                    e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
-                }
-            }
+            SetArea("rtContent", GetContentBounds());
         }
+        #endregion
         #endregion
 
         #region Method
@@ -117,13 +119,6 @@ namespace Devinno.Forms.Controls
             return ret;
         }
         #endregion
-        #region GetBounds
-        public virtual Dictionary<string, Rectangle> GetBounds(Graphics g)
-        {
-            var ret = new Dictionary<string, Rectangle>();
-            return ret;
-        }
-        #endregion
         #region GetContentBounds
         public Rectangle GetContentBounds()
         {
@@ -131,6 +126,31 @@ namespace Devinno.Forms.Controls
             var v = o as DvForm;
             if (v != null && v.Theme != null) return new Rectangle(0, 0, Width - 1 - v.Theme.ShadowGap, Height - 1 - v.Theme.ShadowGap);
             else return new Rectangle(0, 0, Width - 2, Height - 2);
+        }
+        #endregion
+        #region SetArea
+        protected void SetArea(string key, Rectangle rt)
+        {
+            if (!Areas.ContainsKey(key)) Areas.Add(key, rt);
+            else Areas[key] = rt;
+        }
+        #endregion
+        #region BlockDraw
+        private void BlockDraw(PaintEventArgs e, DvTheme Theme)
+        {
+            var Wnd = this.FindForm() as DvForm;
+            var bgColor = this.BackColor;
+            if (this.BackColor == Color.Transparent)
+            {
+                if (Parent != null) bgColor = Parent.BackColor;
+            }
+            if (Wnd != null && Wnd.Block)
+            {
+                using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
+                {
+                    e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
+                }
+            }
         }
         #endregion
         #endregion
