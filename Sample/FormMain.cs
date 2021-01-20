@@ -15,56 +15,26 @@ namespace Sample
 {
     public partial class FormMain : DvForm
     {
+        DateTime n1, n2, n3;
         public FormMain()
         {
             InitializeComponent();
-            grpH.BarSize = grpV.BarSize = 24;
-            grpH.GraphBackColor = grpV.GraphBackColor = Color.FromArgb(30, 30, 30);
-            grpH.ValueDraw = grpV.ValueDraw = true;
-            grpH.Scrollable = grpV.Scrollable = true;
-            grpH.TouchMode = grpV.TouchMode = true;
-            grpH.GraphMode = grpV.GraphMode = DvBarGraphMode.STACK;
-            grpH.Graduation = grpV.Graduation = grpV.GraphMode == DvBarGraphMode.STACK ? 50 : 10;
-            
-            grpV.Series.Add(new DvGraphSeries() { Name = "Math", Alias = "수학", SeriesColor = Color.FromArgb(192,0,0) });
-            grpV.Series.Add(new DvGraphSeries() { Name = "Science", Alias = "과학", SeriesColor = Color.Green });
-            grpV.Series.Add(new DvGraphSeries() { Name = "Programming", Alias = "코딩", SeriesColor = Color.DarkBlue });
 
-            grpH.Series.Add(new DvGraphSeries() { Name = "Math", Alias = "수학", SeriesColor = Color.FromArgb(192, 0, 0) });
-            grpH.Series.Add(new DvGraphSeries() { Name = "Science", Alias = "과학", SeriesColor = Color.Green });
-            grpH.Series.Add(new DvGraphSeries() { Name = "Programming", Alias = "코딩", SeriesColor = Color.DarkBlue });
+            dvButton1.UseLongClick= true;
+            dvButton1.LongClickTime = 1000;
+            dvButton1.MouseDown += (o, s) => n1 = DateTime.Now;
+            dvButton1.LongClick += (o, s) => this.BeginInvoke(new Action(() => MessageBox.Show((DateTime.Now - n1).TotalMilliseconds.ToString())));
 
-            //grpH.MouseUp += (o, s) => Gen();
-            Gen();
+            dvLabel1.UseLongClick = true;
+            dvLabel1.LongClickTime = 1000;
+            dvLabel1.MouseDown += (o, s) => n2 = DateTime.Now;
+            dvLabel1.LongClick += (o, s) => this.BeginInvoke(new Action(() => MessageBox.Show((DateTime.Now - n2).TotalMilliseconds.ToString())));
+
+            dvCircleButton1.UseLongClick = true;
+            dvCircleButton1.LongClickTime = 1000;
+            dvCircleButton1.MouseDown += (o, s) => n3 = DateTime.Now;
+            dvCircleButton1.LongClick += (o, s) => this.BeginInvoke(new Action(() => MessageBox.Show((DateTime.Now - n3).TotalMilliseconds.ToString())));
+
         }
-
-        void Gen()
-        {
-            var ls = new List<BGraphValue>();
-            var rnd = new Random();
-            int ngp = 30;
-            int A = rnd.Next(50, 100), B = rnd.Next(50, 100), C = rnd.Next(50, 100);
-            for (int y = 15; y < 21; y++)
-            {
-                for (int i = 1; i <= 12; i++)
-                {
-                    A = (int)MathTool.Constrain(A + rnd.Next(-ngp, ngp), 30, 100);
-                    B = (int)MathTool.Constrain(B + rnd.Next(-ngp, ngp), 30, 100);
-                    C = (int)MathTool.Constrain(C + rnd.Next(-ngp, ngp), 30, 100);
-
-                    ls.Add(new BGraphValue() { Name = y.ToString("0년") + "\r\n" + i.ToString("0월"), Math = A, Science = B, Programming = C });
-                }
-            }
-            grpV.SetDataSource<BGraphValue>(ls);
-            grpH.SetDataSource<BGraphValue>(ls);
-        }
-    }
-
-    public class BGraphValue : GraphData
-    {
-        public override string Name { get; set; }
-        public double Math { get; set; }
-        public double Science { get; set; }
-        public double Programming { get; set; }
     }
 }

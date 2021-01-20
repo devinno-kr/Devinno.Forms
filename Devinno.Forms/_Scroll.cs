@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Devinno.Forms
 {
-    public class DvScroll
+    public class Scroll
     {
         #region Const
         public const int SC_WH = 16;
@@ -62,6 +62,8 @@ namespace Devinno.Forms
                 else return 0;
             }
         }
+
+        public int ScrollPositionWithOffset => -ScrollPosition + TouchOffset;
         #endregion
 
         #region Member Variable
@@ -83,7 +85,7 @@ namespace Devinno.Forms
         #endregion
 
         #region Constructor
-        public DvScroll()
+        public Scroll()
         {
 
         }

@@ -215,8 +215,7 @@ namespace Devinno.Forms.Controls
 
             if (string.IsNullOrWhiteSpace(Text))
             {
-                var ng = LampSize / 7;
-
+                var ng = Math.Min(LampSize / 8, 9);
                 var szv = new Size(LampSize, LampSize);
                 var rtFA = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
                 var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
@@ -226,7 +225,7 @@ namespace Devinno.Forms.Controls
             }
             else
             {
-                var ng = LampSize / 7;
+                var ng = Math.Min(LampSize / 8, 9);
                 var gap = LampGap;
                 var f = DpiRatio;
                 var szFA = new Size(LampSize, LampSize);
@@ -278,7 +277,7 @@ namespace Devinno.Forms.Controls
             var br = new SolidBrush(LampBackColor);
             #endregion
             #region Draw
-            Theme.DrawBox(e.Graphics, LampBackColor, BackColor, rtBack, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL);
+            Theme.DrawBox(e.Graphics, LampBackColor, BackColor, rtBack, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
             #region Lamp
             if (OnOff)
             {
@@ -304,7 +303,7 @@ namespace Devinno.Forms.Controls
                     using (var pbr = new PathGradientBrush(pth))
                     {
                         pbr.CenterPoint = new Point(Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Left, rtLamp.Right)), Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Top, rtLamp.Bottom)));
-                        pbr.CenterColor = OffLampColor.BrightnessTransmit(LampLightBright/2.0);
+                        pbr.CenterColor = OffLampColor.BrightnessTransmit(LampLightBright);
                         pbr.SurroundColors = new Color[] { OffLampColor.BrightnessTransmit(LampDarkBright/2.0) };
 
                         e.Graphics.FillEllipse(pbr, rtLamp);

@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -139,10 +140,18 @@ namespace Devinno.Forms.Controls
         [Category("- 기능")]
         public bool Clickable { get; set; } = true;
         #endregion
+
+        public bool UseLongClick { get => click.UseLongClick; set=> click.UseLongClick = value; }
+        public int LongClickTime { get => click.LongClickTime; set => click.LongClickTime = value; } 
+        #endregion
+
+        #region Event
+        public event EventHandler LongClick;
         #endregion
 
         #region Member Variable
         private bool bDown = false;
+        private LongClick click = new LongClick();
         #endregion
 
         #region Constructor
@@ -154,6 +163,9 @@ namespace Devinno.Forms.Controls
             Size = new Size(80, 36);
 
             TabStop = true;
+
+            click.Reset = new Action(() => { this.Invoke(new Action(() => { bDown = false; Invalidate(); })); });
+            click.GenLongClick = new Action(() => { this.Invoke(new Action(() => LongClick?.Invoke(this, null))); });
         }
         #endregion
 
@@ -189,13 +201,13 @@ namespace Devinno.Forms.Controls
             if (!bDown)
             {
                 var cv = ButtonColor;
-                if (BackgroundDraw) Theme.DrawBox(e.Graphics, cv, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | (Gradient ? BoxDrawOption.GRADIENT : BoxDrawOption.NONE));
+                if (BackgroundDraw) Theme.DrawBox(e.Graphics, cv, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_V : BoxDrawOption.NONE));
                 Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, BackgroundDraw ? cv : BackColor, new Rectangle(rtText.X, rtText.Y + 0, rtText.Width, rtText.Height), DvContentAlignment.MiddleCenter);
             }
             else
             {
                 var cv = ButtonColor.BrightnessTransmit(Theme.DownBright);
-                if (BackgroundDraw) Theme.DrawBox(e.Graphics, cv, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_REVERSE : BoxDrawOption.NONE));
+                if (BackgroundDraw) Theme.DrawBox(e.Graphics, cv, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_V_REVERSE : BoxDrawOption.NONE));
                 Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor.BrightnessTransmit(Theme.DownBright), BackgroundDraw ? cv : BackColor, new Rectangle(rtText.X, rtText.Y + 1, rtText.Width, rtText.Height), DvContentAlignment.MiddleCenter);
             }
             #endregion
@@ -207,23 +219,25 @@ namespace Devinno.Forms.Controls
             base.OnThemeDraw(e, Theme);
         }
         #endregion
+
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (Clickable)
             {
-                if (TabStop) Focus();
-                bDown = true; Invalidate();
-            }
+                bDown = true; 
+                Invalidate();
 
+                click.MouseDown(e);
+            }
             base.OnMouseDown(e);
         }
         #endregion
         #region OnMouseUp
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            bDown = false;
-            Invalidate();
+            click.MouseUp(e);
+            bDown = false; Invalidate();
             base.OnMouseUp(e);
         }
         #endregion

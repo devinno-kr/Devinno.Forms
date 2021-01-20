@@ -20,6 +20,10 @@ namespace Devinno.Forms.Dialogs
 {
     public partial class DvForm : Form
     {
+        #region Const
+        public const int BlockAlpha = 90;
+        #endregion
+
         #region Properties
         #region Theme
         private DvTheme thm = DvTheme.DefaultTheme;
@@ -32,7 +36,7 @@ namespace Devinno.Forms.Dialogs
                 {
                     var old = thm;
                     thm = value;
-                    if(old != null & old != DvTheme.DefaultTheme) 
+                    if (old != null & old != DvTheme.DefaultTheme)
                         DvTheme.SetTheme(this, value);
                 }
             }
@@ -96,7 +100,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region TitleFont
-        private Font ftTitle= new Font("맑은 고딕", 9, FontStyle.Regular);
+        private Font ftTitle = new Font("맑은 고딕", 9, FontStyle.Regular);
         public Font TitleFont
         {
             get => ftTitle;
@@ -159,6 +163,22 @@ namespace Devinno.Forms.Dialogs
             }
         }
         #endregion
+        #region TitleBarColor
+        private Color cTitleBarColor = DvTheme.DefaultTheme.FrameColor;
+        [Category("- 색상")]
+        public Color TitleBarColor
+        {
+            get => cTitleBarColor;
+            set
+            {
+                if (cTitleBarColor != value)
+                {
+                    cTitleBarColor = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
         #region WindowStateButtonColor
         private Color cWindowStateButtonColor = DvTheme.DefaultTheme.ForeColor;
         [Category("- 색상")]
@@ -181,7 +201,7 @@ namespace Devinno.Forms.Dialogs
         [Category("- 모양")]
         public bool ExitBox
         {
-            get => bExitBox; 
+            get => bExitBox;
             set
             {
                 if (bExitBox != value)
@@ -227,7 +247,7 @@ namespace Devinno.Forms.Dialogs
             {
                 if (bBlock != value)
                 {
-                    bBlock = value; 
+                    bBlock = value;
                     Invalidate();
                     DvTheme.LoopControl(this, (c) => c.Invalidate());
                 }
@@ -245,6 +265,21 @@ namespace Devinno.Forms.Dialogs
                 if (bBlankForm != value)
                 {
                     bBlankForm = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #region NoFrame
+        private bool bNoFrame = false;
+        public bool NoFrame
+        {
+            get => bNoFrame;
+            set
+            {
+                if(bNoFrame != value)
+                {
+                    bNoFrame = value;
                     Invalidate();
                 }
             }
@@ -357,6 +392,7 @@ namespace Devinno.Forms.Dialogs
             LoadAreas(e.Graphics);
 
             #region Color
+            var TitleBarColor = UseThemeColor ? Theme.FrameColor : this.TitleBarColor;
             var FrameColor = UseThemeColor ? Theme.FrameColor : this.FrameColor;
             var WindowStateButtonColor = UseThemeColor ? Theme.ForeColor : this.WindowStateButtonColor;
             #endregion
@@ -380,18 +416,32 @@ namespace Devinno.Forms.Dialogs
             if (!BlankForm)
             {
                 #region Draw Background
-         
-                e.Graphics.Clear(FrameColor);
-                e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
-                br.Color = BackColor; e.Graphics.FillRectangle(br, rtContent);
+                if (NoFrame)
+                {
+                    e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
+                    br.Color = TitleBarColor; e.Graphics.FillRectangle(br, rtTitleBar);
+                    br.Color = TitleBarColor.BrightnessTransmit(-0.2); e.Graphics.FillRectangle(br, rtIcon);
 
-                br.Color = FrameColor.BrightnessTransmit(-0.2); e.Graphics.FillRectangle(br, rtIcon);
+                    p.Width = 1;
+                    p.Color = FrameColor.BrightnessTransmit(-0.1); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 0, rtContent.Right, rtContent.Top + 0);
+                    p.Color = BackColor.BrightnessTransmit(0.2); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 1, rtContent.Right, rtContent.Top + 1);
+                    e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+                }
+                else
+                {
+                    e.Graphics.Clear(FrameColor);
 
-                p.Width = 1;
-                p.Color = FrameColor.BrightnessTransmit(-0.1); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 0, rtContent.Right, rtContent.Top + 0);
-                p.Color = BackColor.BrightnessTransmit(0.2); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 1, rtContent.Right, rtContent.Top + 1);
-                e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+                    e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
+                    br.Color = BackColor; e.Graphics.FillRectangle(br, rtContent);
 
+                    br.Color = TitleBarColor; e.Graphics.FillRectangle(br, rtTitleBar);
+                    br.Color = TitleBarColor.BrightnessTransmit(-0.2); e.Graphics.FillRectangle(br, rtIcon);
+
+                    p.Width = 1;
+                    p.Color = FrameColor.BrightnessTransmit(-0.1); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 0, rtContent.Right, rtContent.Top + 0);
+                    p.Color = BackColor.BrightnessTransmit(0.2); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 1, rtContent.Right, rtContent.Top + 1);
+                    e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+                }
                 #endregion
                 #region Draw Exit / Max / Min
                 int cn = 4;
@@ -470,6 +520,12 @@ namespace Devinno.Forms.Dialogs
             }
 
             if (Theme != null) OnThemeDraw(e, Theme);
+
+            if (Block)
+            {
+                br.Color = Color.FromArgb(BlockAlpha, Color.Black);
+                e.Graphics.FillRectangle(br, new Rectangle(0, 0, Width, Height));
+            }
 
             #region Dispose
             br.Dispose();

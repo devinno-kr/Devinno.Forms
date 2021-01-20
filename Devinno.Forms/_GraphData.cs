@@ -5,18 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Devinno.Forms.Controls
+namespace Devinno.Forms
 {
-    public enum DvBarGraphMode { STACK, LIST }
+    public enum BarGraphMode { STACK, LIST }
 
-    public class DvGraphSeries
+    public class GraphSeries
     {
         public string Name { get; set; }
         public string Alias { get; set; }
         public Color SeriesColor { get; set; }
         public bool Visible { get; set; } = true;
     }
-    
+
     public abstract class GraphData
     {
         public abstract string Name { get; set; }

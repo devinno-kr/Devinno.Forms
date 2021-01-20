@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -38,6 +39,10 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
 
+        #region Member Variable
+
+        #endregion
+
         #region Constructor
         public DvControl()
         {
@@ -66,7 +71,7 @@ namespace Devinno.Forms.Controls
             base.OnPaint(e);
 
             if (Theme != null) OnThemeEnableDraw(e, Theme);
-            if (Theme != null) BlockDraw(e, Theme); 
+            if (Theme != null) OnThemeBlockDraw(e, Theme);
         }
         #endregion
         #region OnThemeDraw
@@ -89,6 +94,23 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region OnThemeBlockDraw
+        protected virtual void OnThemeBlockDraw(PaintEventArgs e, DvTheme Theme)
+        {
+            var wnd = this.FindForm() as DvForm;
+            if (wnd != null)
+            {
+                if (wnd.Block)
+                {
+                    using (var br = new SolidBrush(Color.FromArgb(DvForm.BlockAlpha, Color.Black)))
+                    {
+                        e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
+                    }
+                }
+            }
+        }
+        #endregion
+       
         #region LoadAreas
         protected virtual void LoadAreas(Graphics g)
         {
@@ -133,24 +155,6 @@ namespace Devinno.Forms.Controls
         {
             if (!Areas.ContainsKey(key)) Areas.Add(key, rt);
             else Areas[key] = rt;
-        }
-        #endregion
-        #region BlockDraw
-        private void BlockDraw(PaintEventArgs e, DvTheme Theme)
-        {
-            var Wnd = this.FindForm() as DvForm;
-            var bgColor = this.BackColor;
-            if (this.BackColor == Color.Transparent)
-            {
-                if (Parent != null) bgColor = Parent.BackColor;
-            }
-            if (Wnd != null && Wnd.Block)
-            {
-                using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
-                {
-                    e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
-                }
-            }
         }
         #endregion
         #endregion

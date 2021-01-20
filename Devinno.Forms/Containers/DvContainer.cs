@@ -44,7 +44,7 @@ namespace Devinno.Forms.Containers
             this.SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.UpdateStyles();
-
+            DoubleBuffered = true;
             this.TabStop = false;
         }
         #endregion
@@ -56,13 +56,15 @@ namespace Devinno.Forms.Containers
         #region OnPaint
         protected override void OnPaint(PaintEventArgs e)
         {
+            LoadAreas(e.Graphics);
+
             var Theme = GetTheme();
             if (Theme != null) OnThemeDraw(e, Theme);
 
             base.OnPaint(e);
 
             if (Theme != null) OnThemeEnableDraw(e, Theme);
-            if (Theme != null) BlockDraw(e, Theme);
+            if (Theme != null) OnThemeBlockDraw(e, Theme);
         }
         #endregion
         #region OnThemeDraw
@@ -81,6 +83,22 @@ namespace Devinno.Forms.Containers
                 using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
                 {
                     e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
+                }
+            }
+        }
+        #endregion
+        #region OnThemeBlockDraw
+        protected virtual void OnThemeBlockDraw(PaintEventArgs e, DvTheme Theme)
+        {
+            var wnd = this.FindForm() as DvForm;
+            if (wnd != null)
+            {
+                if (wnd.Block)
+                {
+                    using (var br = new SolidBrush(Color.FromArgb(DvForm.BlockAlpha, Color.Black)))
+                    {
+                        e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
+                    }
                 }
             }
         }
@@ -125,21 +143,25 @@ namespace Devinno.Forms.Containers
             else Areas[key] = rt;
         }
         #endregion
-        #region BlockDraw
-        private void BlockDraw(PaintEventArgs e, DvTheme Theme)
+
+        #region .. Double Buffered function ..
+        public static void SetDoubleBuffered(System.Windows.Forms.Control c)
         {
-            var Wnd = this.FindForm() as DvForm;
-            var bgColor = this.BackColor;
-            if (this.BackColor == Color.Transparent)
+            if (System.Windows.Forms.SystemInformation.TerminalServerSession)
+                return;
+            System.Reflection.PropertyInfo aProp = typeof(System.Windows.Forms.Control).GetProperty("DoubleBuffered", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            aProp.SetValue(c, true, null);
+        }
+
+        #endregion
+        #region .. code for Flucuring ..
+        protected override CreateParams CreateParams
+        {
+            get
             {
-                if (Parent != null) bgColor = Parent.BackColor;
-            }
-            if (Wnd != null && Wnd.Block)
-            {
-                using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
-                {
-                    e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
-                }
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;
+                return cp;
             }
         }
         #endregion
