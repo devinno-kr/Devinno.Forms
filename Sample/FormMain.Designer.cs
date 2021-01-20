@@ -31,9 +31,7 @@ namespace Sample
         {
             this.blackTheme1 = new Devinno.Forms.Themes.BlackTheme();
             this.dvContainer1 = new Devinno.Forms.Containers.DvContainer();
-            this.dvLabel1 = new Devinno.Forms.Controls.DvLabel();
-            this.dvButton1 = new Devinno.Forms.Controls.DvButton();
-            this.dvCircleButton1 = new Devinno.Forms.Controls.DvCircleButton();
+            this.grpC = new Devinno.Forms.Controls.DvCircleGraph();
             this.dvContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,92 +65,40 @@ namespace Sample
             // 
             // dvContainer1
             // 
-            this.dvContainer1.Controls.Add(this.dvCircleButton1);
-            this.dvContainer1.Controls.Add(this.dvLabel1);
-            this.dvContainer1.Controls.Add(this.dvButton1);
+            this.dvContainer1.Controls.Add(this.grpC);
             this.dvContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dvContainer1.Location = new System.Drawing.Point(5, 70);
             this.dvContainer1.Name = "dvContainer1";
             this.dvContainer1.Padding = new System.Windows.Forms.Padding(20);
-            this.dvContainer1.Size = new System.Drawing.Size(1087, 725);
+            this.dvContainer1.Size = new System.Drawing.Size(590, 525);
             this.dvContainer1.TabIndex = 0;
             this.dvContainer1.TabStop = false;
             this.dvContainer1.Text = "dvContainer1";
             this.dvContainer1.UseThemeColor = true;
             // 
-            // dvLabel1
+            // grpC
             // 
-            this.dvLabel1.BackgroundDraw = true;
-            this.dvLabel1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.dvLabel1.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
-            this.dvLabel1.IconGap = 0;
-            this.dvLabel1.IconImage = null;
-            this.dvLabel1.IconSize = 10F;
-            this.dvLabel1.IconString = null;
-            this.dvLabel1.InShadow = true;
-            this.dvLabel1.LabelColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.dvLabel1.Location = new System.Drawing.Point(536, 372);
-            this.dvLabel1.LongClickTime = 0;
-            this.dvLabel1.Name = "dvLabel1";
-            this.dvLabel1.Size = new System.Drawing.Size(274, 80);
-            this.dvLabel1.TabIndex = 1;
-            this.dvLabel1.Text = "dvLabel1";
-            this.dvLabel1.TextPadding = new System.Windows.Forms.Padding(0);
-            this.dvLabel1.UseLongClick = false;
-            this.dvLabel1.UseThemeColor = true;
-            // 
-            // dvButton1
-            // 
-            this.dvButton1.BackgroundDraw = true;
-            this.dvButton1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.dvButton1.Clickable = true;
-            this.dvButton1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.dvButton1.Gradient = true;
-            this.dvButton1.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
-            this.dvButton1.IconGap = 0;
-            this.dvButton1.IconImage = null;
-            this.dvButton1.IconSize = 10F;
-            this.dvButton1.IconString = null;
-            this.dvButton1.Location = new System.Drawing.Point(536, 286);
-            this.dvButton1.LongClickTime = 0;
-            this.dvButton1.Name = "dvButton1";
-            this.dvButton1.Size = new System.Drawing.Size(274, 80);
-            this.dvButton1.TabIndex = 0;
-            this.dvButton1.Text = "dvButton1";
-            this.dvButton1.TextPadding = new System.Windows.Forms.Padding(0);
-            this.dvButton1.UseLongClick = false;
-            this.dvButton1.UseThemeColor = true;
-            // 
-            // dvCircleButton1
-            // 
-            this.dvCircleButton1.BackgroundDraw = true;
-            this.dvCircleButton1.ButtonBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.dvCircleButton1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.dvCircleButton1.Clickable = true;
-            this.dvCircleButton1.Gradient = true;
-            this.dvCircleButton1.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
-            this.dvCircleButton1.IconGap = 0;
-            this.dvCircleButton1.IconImage = null;
-            this.dvCircleButton1.IconSize = 10F;
-            this.dvCircleButton1.IconString = "fa-play";
-            this.dvCircleButton1.Location = new System.Drawing.Point(337, 323);
-            this.dvCircleButton1.Name = "dvCircleButton1";
-            this.dvCircleButton1.Size = new System.Drawing.Size(151, 129);
-            this.dvCircleButton1.TabIndex = 2;
-            this.dvCircleButton1.TextPadding = new System.Windows.Forms.Padding(0);
-            this.dvCircleButton1.UseThemeColor = true;
+            this.grpC.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpC.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.grpC.Location = new System.Drawing.Point(20, 20);
+            this.grpC.Name = "grpC";
+            this.grpC.Size = new System.Drawing.Size(550, 485);
+            this.grpC.TabIndex = 0;
+            this.grpC.TabStop = false;
+            this.grpC.Text = "dvCircleGraph1";
+            this.grpC.UseThemeColor = true;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.ClientSize = new System.Drawing.Size(1097, 800);
+            this.ClientSize = new System.Drawing.Size(600, 600);
             this.Controls.Add(this.dvContainer1);
             this.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.White;
             this.FrameColor = System.Drawing.Color.Red;
-            this.MinimumSize = new System.Drawing.Size(800, 800);
+            this.MinimumSize = new System.Drawing.Size(600, 600);
             this.Name = "FormMain";
             this.NoFrame = true;
             this.Padding = new System.Windows.Forms.Padding(5, 70, 5, 5);
@@ -173,9 +119,7 @@ namespace Sample
 
         private Devinno.Forms.Themes.BlackTheme blackTheme1;
         private Devinno.Forms.Containers.DvContainer dvContainer1;
-        private Devinno.Forms.Controls.DvButton dvButton1;
-        private Devinno.Forms.Controls.DvLabel dvLabel1;
-        private Devinno.Forms.Controls.DvCircleButton dvCircleButton1;
+        private Devinno.Forms.Controls.DvCircleGraph grpC;
     }
 }
 

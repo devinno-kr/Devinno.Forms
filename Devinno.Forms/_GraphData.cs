@@ -20,6 +20,7 @@ namespace Devinno.Forms
     public abstract class GraphData
     {
         public abstract string Name { get; set; }
+        public Color Color { get; set; }
     }
 
     public abstract class TimeGraphData
@@ -36,6 +37,14 @@ namespace Devinno.Forms
     class GV
     {
         public string Name { get; set; }
+        public Color Color { get; set; }
         public Dictionary<string, double> Values { get; } = new Dictionary<string, double>();
+    }
+
+    class CGV
+    {
+        public string Name { get; set; }
+        public double Value { get; set; }
+        public Color Color { get; set; }
     }
 }

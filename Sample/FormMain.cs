@@ -1,4 +1,5 @@
-﻿using Devinno.Forms.Controls;
+﻿using Devinno.Forms;
+using Devinno.Forms.Controls;
 using Devinno.Forms.Dialogs;
 using Devinno.Tools;
 using System;
@@ -15,26 +16,39 @@ namespace Sample
 {
     public partial class FormMain : DvForm
     {
-        DateTime n1, n2, n3;
+       
         public FormMain()
         {
             InitializeComponent();
 
-            dvButton1.UseLongClick= true;
-            dvButton1.LongClickTime = 1000;
-            dvButton1.MouseDown += (o, s) => n1 = DateTime.Now;
-            dvButton1.LongClick += (o, s) => this.BeginInvoke(new Action(() => MessageBox.Show((DateTime.Now - n1).TotalMilliseconds.ToString())));
+            grpC.Series.Add(new GraphSeries() { Name = "Programming", Alias = "프로그래밍", SeriesColor = Color.Red });
+            grpC.Series.Add(new GraphSeries() { Name = "Algorithm", Alias = "알고리즘", SeriesColor = Color.Green });
+            grpC.Series.Add(new GraphSeries() { Name = "DataSturcture", Alias = "자료구조", SeriesColor = Color.Blue });
 
-            dvLabel1.UseLongClick = true;
-            dvLabel1.LongClickTime = 1000;
-            dvLabel1.MouseDown += (o, s) => n2 = DateTime.Now;
-            dvLabel1.LongClick += (o, s) => this.BeginInvoke(new Action(() => MessageBox.Show((DateTime.Now - n2).TotalMilliseconds.ToString())));
+            var rnd = new Random();
+            var ls = new List<BGraphValue>();
+            int ngp = 30;
+            int A = rnd.Next(0, 100), B = rnd.Next(0, 100), C = rnd.Next(0, 100);
+            
+            for (int i = 1; i <= 12; i++)
+            {
+                A = (int)MathTool.Constrain(A + rnd.Next(-ngp, ngp), 0, 100);
+                B = (int)MathTool.Constrain(B + rnd.Next(-ngp, ngp), 0, 100);
+                C = (int)MathTool.Constrain(C + rnd.Next(-ngp, ngp), 0, 100);
 
-            dvCircleButton1.UseLongClick = true;
-            dvCircleButton1.LongClickTime = 1000;
-            dvCircleButton1.MouseDown += (o, s) => n3 = DateTime.Now;
-            dvCircleButton1.LongClick += (o, s) => this.BeginInvoke(new Action(() => MessageBox.Show((DateTime.Now - n3).TotalMilliseconds.ToString())));
+                ls.Add(new BGraphValue() { Name = i.ToString("0월"), Programming = A, Algorithm = B, DataSturcture = C, Color = Color.FromArgb(rnd.Next(0, 192), rnd.Next(0, 192), rnd.Next(0, 192)) });
+            }
 
+            grpC.SetDataSource<BGraphValue>(ls);
         }
+    }
+
+    public class BGraphValue : GraphData
+    {
+        public override string Name { get; set; }
+        
+        public double Programming { get; set; }
+        public double Algorithm { get; set; }
+        public double DataSturcture { get; set; }
     }
 }

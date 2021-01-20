@@ -53,7 +53,7 @@ namespace Devinno.Forms.Controls
 
         #region Series
         /// <summary>
-        /// 그례프 계열
+        /// 계열
         /// </summary>
         [Category("- 동작")]
         public List<GraphSeries> Series { get; } = new List<GraphSeries>();

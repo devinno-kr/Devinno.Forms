@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Design;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -221,22 +222,37 @@ namespace Devinno.Forms.Controls
             if (!bDown)
             {
                 var cv = ButtonColor;
-                if (BackgroundDraw) Theme.DrawBox(e.Graphics, cv, ButtonBackColor, rtButton, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | BoxDrawOption.OUT_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_LT : BoxDrawOption.NONE));
+                if (BackgroundDraw)
+                {
+                    Theme.DrawBox(e.Graphics, cv, ButtonBackColor, rtButton, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | BoxDrawOption.OUT_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_LT : BoxDrawOption.NONE));
+
+                    using (var pth = new GraphicsPath())
+                    {
+                        pth.AddEllipse(rtButton);
+                        using (var pbr = new PathGradientBrush(pth))
+                        {
+                            pbr.CenterPoint = new Point(Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtButton.Left, rtButton.Right)), Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtButton.Top, rtButton.Bottom)));
+                            pbr.CenterColor = Color.FromArgb(30, Color.White);
+                            pbr.SurroundColors = new Color[] { Color.FromArgb(30, Color.Black)};
+
+                            e.Graphics.FillEllipse(pbr, rtButton);
+                        }
+                        Theme.DrawBorder(e.Graphics, cv, rtButton, RoundType.ELLIPSE);
+                    }
+                }
                 Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, BackgroundDraw ? cv : BackColor, new Rectangle(rtText.X, rtText.Y + 0, rtText.Width, rtText.Height), DvContentAlignment.MiddleCenter);
             }
             else
             {
                 var cv = ButtonColor.BrightnessTransmit(Theme.DownBright);
-                if (BackgroundDraw) Theme.DrawBox(e.Graphics, cv, ButtonBackColor, rtButton, RoundType.ELLIPSE, BoxDrawOption.BORDER | (Gradient ? BoxDrawOption.GRADIENT_RB : BoxDrawOption.NONE));
+                if (BackgroundDraw)
+                {
+                    Theme.DrawBox(e.Graphics, cv, ButtonBackColor, rtButton, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_LT : BoxDrawOption.NONE));
+                }
                 Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor.BrightnessTransmit(Theme.DownBright), BackgroundDraw ? cv : BackColor, new Rectangle(rtText.X, rtText.Y + 1, rtText.Width, rtText.Height), DvContentAlignment.MiddleCenter);
-
-                var rtsh = new Rectangle(rtButton.X, rtButton.Y, rtButton.Width, rtButton.Height);
-                rtsh.Inflate(-1, -1);
-
-                p.Width = 2;
-                p.Color = ButtonBackColor.BrightnessTransmit(Theme.InShadowBright);
-                e.Graphics.DrawEllipse(p, rtsh);
             }
+
+
             #endregion
             #region Dispose
             br.Dispose();
