@@ -118,7 +118,6 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-
         #region InShadow
         private bool bInShadow = true;
         public bool InShadow
@@ -134,9 +133,42 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-
+        #region Unit
+        private string strUnit = "";
+        public string Unit
+        {
+            get => strUnit;
+            set
+            {
+                if (strUnit != value)
+                {
+                    strUnit = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #region UnitWidth
+        private int nUnitWidth = 36;
+        public int UnitWidth
+        {
+            get => nUnitWidth;
+            set
+            {
+                if (nUnitWidth != value)
+                {
+                    nUnitWidth = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #region UseLongClick
         public bool UseLongClick { get => click.UseLongClick; set => click.UseLongClick = value; }
+        #endregion 
+        #region LongClickTime
         public int LongClickTime { get => click.LongClickTime; set => click.LongClickTime = value; }
+        #endregion
         #endregion
 
         #region Event
@@ -167,9 +199,15 @@ namespace Devinno.Forms.Controls
         {
             base.LoadAreas(g);
 
+            var szUnitW = 0;
+            if (!string.IsNullOrWhiteSpace(Unit)) szUnitW = UnitWidth;
+
             var rtContent = Areas["rtContent"];
-            var rtText = new Rectangle(rtContent.X + TextPadding.Left, rtContent.Y + TextPadding.Top, rtContent.Width - (TextPadding.Left + TextPadding.Right), rtContent.Height - (TextPadding.Top + TextPadding.Bottom));
+            var rtTextAll = new Rectangle(TextPadding.Left, TextPadding.Top, rtContent.Width - (TextPadding.Left + TextPadding.Right), rtContent.Height - (TextPadding.Top + TextPadding.Bottom));
+            var rtUnit = new Rectangle(rtTextAll.Right - szUnitW, rtTextAll.Top, szUnitW, rtTextAll.Height);
+            var rtText = new Rectangle(rtTextAll.Left, rtTextAll.Top, rtTextAll.Width - rtUnit.Width, rtTextAll.Height); rtText.Inflate(-1, 0);
             SetArea("rtText", rtText);
+            SetArea("rtUnit", rtUnit);
         }
         #endregion
         #region OnThemeDraw
@@ -185,6 +223,7 @@ namespace Devinno.Forms.Controls
             #region Bounds
             var rtContent = Areas["rtContent"];
             var rtText = Areas["rtText"];
+            var rtUnit = Areas["rtUnit"];
             #endregion
             #region Init
             var p = new Pen(LabelColor, 1);
@@ -192,7 +231,13 @@ namespace Devinno.Forms.Controls
             #endregion
             #region Draw
             if (BackgroundDraw) Theme.DrawBox(e.Graphics, LabelColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | (InShadow ? BoxDrawOption.IN_SHADOW : BoxDrawOption.NONE) | BoxDrawOption.OUT_BEVEL);
-            Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, BackgroundDraw ? LabelColor : BackColor, new Rectangle(rtText.X, rtText.Y + 0, rtText.Width, rtText.Height), ContentAlignment);
+            Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, BackgroundDraw ? LabelColor : BackColor, rtText, ContentAlignment);
+            if (UnitWidth > 0 && !string.IsNullOrWhiteSpace(Unit))
+            {
+                TextRenderer.DrawText(e.Graphics, Unit, Font, rtUnit, ForeColor);
+                Theme.DrawTextShadow(e.Graphics, null, Unit, Font, ForeColor, BackgroundDraw ? LabelColor : BackColor, rtUnit, ContentAlignment);
+
+            }
             #endregion
             #region Dispose
             br.Dispose();

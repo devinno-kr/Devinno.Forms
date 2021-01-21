@@ -31,13 +31,14 @@ namespace Sample
         {
             this.blackTheme1 = new Devinno.Forms.Themes.BlackTheme();
             this.dvContainer1 = new Devinno.Forms.Containers.DvContainer();
-            this.grpC = new Devinno.Forms.Controls.DvCircleGraph();
+            this.dvLabel1 = new Devinno.Forms.Controls.DvLabel();
             this.dvContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // blackTheme1
             // 
             this.blackTheme1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.blackTheme1.BevelAlpha = 30;
             this.blackTheme1.BorderBright = -0.5D;
             this.blackTheme1.Color0 = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.blackTheme1.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -59,13 +60,14 @@ namespace Sample
             this.blackTheme1.PointColor = System.Drawing.Color.DarkRed;
             this.blackTheme1.ScrollBarColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.blackTheme1.ScrollCursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.blackTheme1.ShadowAlpha = 60;
             this.blackTheme1.ShadowGap = 2;
             this.blackTheme1.TextOffsetX = 0;
             this.blackTheme1.TextOffsetY = 1;
             // 
             // dvContainer1
             // 
-            this.dvContainer1.Controls.Add(this.grpC);
+            this.dvContainer1.Controls.Add(this.dvLabel1);
             this.dvContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dvContainer1.Location = new System.Drawing.Point(5, 70);
             this.dvContainer1.Name = "dvContainer1";
@@ -76,17 +78,28 @@ namespace Sample
             this.dvContainer1.Text = "dvContainer1";
             this.dvContainer1.UseThemeColor = true;
             // 
-            // grpC
+            // dvLabel1
             // 
-            this.grpC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpC.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.grpC.Location = new System.Drawing.Point(20, 20);
-            this.grpC.Name = "grpC";
-            this.grpC.Size = new System.Drawing.Size(550, 485);
-            this.grpC.TabIndex = 0;
-            this.grpC.TabStop = false;
-            this.grpC.Text = "dvCircleGraph1";
-            this.grpC.UseThemeColor = true;
+            this.dvLabel1.BackgroundDraw = true;
+            this.dvLabel1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.dvLabel1.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvLabel1.IconGap = 0;
+            this.dvLabel1.IconImage = null;
+            this.dvLabel1.IconSize = 10F;
+            this.dvLabel1.IconString = null;
+            this.dvLabel1.InShadow = true;
+            this.dvLabel1.LabelColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dvLabel1.Location = new System.Drawing.Point(106, 172);
+            this.dvLabel1.LongClickTime = 0;
+            this.dvLabel1.Name = "dvLabel1";
+            this.dvLabel1.Size = new System.Drawing.Size(345, 62);
+            this.dvLabel1.TabIndex = 0;
+            this.dvLabel1.Text = "dvLabel1";
+            this.dvLabel1.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvLabel1.Unit = "";
+            this.dvLabel1.UnitWidth = 60;
+            this.dvLabel1.UseLongClick = false;
+            this.dvLabel1.UseThemeColor = true;
             // 
             // FormMain
             // 
@@ -119,7 +132,7 @@ namespace Sample
 
         private Devinno.Forms.Themes.BlackTheme blackTheme1;
         private Devinno.Forms.Containers.DvContainer dvContainer1;
-        private Devinno.Forms.Controls.DvCircleGraph grpC;
+        private Devinno.Forms.Controls.DvLabel dvLabel1;
     }
 }
 
