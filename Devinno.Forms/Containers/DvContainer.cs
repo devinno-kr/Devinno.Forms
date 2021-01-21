@@ -34,6 +34,8 @@ namespace Devinno.Forms.Containers
         public double DpiRatio => (double)this.LogicalToDeviceUnits(1000) / 1000.0;
         #endregion
         #region Areas
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public Dictionary<string, Rectangle> Areas { get; } = new Dictionary<string, Rectangle>();
         #endregion
         #endregion

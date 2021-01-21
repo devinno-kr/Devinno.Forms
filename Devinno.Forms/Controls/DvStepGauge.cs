@@ -187,96 +187,102 @@ namespace Devinno.Forms.Controls
         #region OnThemeDraw
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
-            #region Color
-            var ButtonColor = UseThemeColor ? Theme.Color3 : this.ButtonColor;
-            var OnColor = UseThemeColor ? Theme.PointColor : this.OnColor;
-            var OffColor = UseThemeColor ? Theme.Color2 : this.OffColor;
-            #endregion
-            #region Set
-            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            #endregion
-            #region Bounds
-            var GP = Areas["rtGP"].Width;
-            var rtContent = Areas["rtContent"];
-            var rtBar = Areas["rtBar"];
-            var rtLeft = Areas["rtLeft"];
-            var rtRight = Areas["rtRight"];
-            var rtGauge = Areas["rtGauge"];
-            #endregion
-            #region Init
-            var p = new Pen(ButtonColor, 1);
-            var br = new SolidBrush(ButtonColor);
-            #endregion
-            #region Draw
-            #region Button
-            if (UseButton)
+            if (Areas.Count > 1)
             {
-                br.Color = ForeColor;
-                if (!bLeft)
+                #region Color
+                var ButtonColor = UseThemeColor ? Theme.Color3 : this.ButtonColor;
+                var OnColor = UseThemeColor ? Theme.PointColor : this.OnColor;
+                var OffColor = UseThemeColor ? Theme.Color2 : this.OffColor;
+                #endregion
+                #region Set
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                #endregion
+                #region Bounds
+                var GP = Areas["rtGP"].Width;
+                var rtContent = Areas["rtContent"];
+                var rtBar = Areas["rtBar"];
+                var rtGauge = Areas["rtGauge"];
+                #endregion
+                #region Init
+                var p = new Pen(ButtonColor, 1);
+                var br = new SolidBrush(ButtonColor);
+                #endregion
+                #region Draw
+                #region Button
+                if (UseButton)
                 {
-                    var c = ButtonColor;
-                    var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-left" : "fa-minus";
-                    Theme.DrawBox(e.Graphics, c, BackColor, rtLeft, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
-                    Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtLeft.Height / 5 }, null, Font, ForeColor, c, rtLeft, DvContentAlignment.MiddleCenter);
-                }
-                else
-                {
-                    rtLeft.Offset(0, 1);
-                    var c = ButtonColor.BrightnessTransmit(Theme.DownBright);
-                    var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-left" : "fa-minus";
-                    Theme.DrawBox(e.Graphics, c, BackColor, rtLeft, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
-                    Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtLeft.Height / 5 }, null, Font, ForeColor, c, rtLeft, DvContentAlignment.MiddleCenter);
-                }
+                    var rtLeft = Areas["rtLeft"];
+                    var rtRight = Areas["rtRight"];
 
-                if (!bRight)
-                {
-                    var c = ButtonColor;
-                    var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-right" : "fa-plus";
-                    Theme.DrawBox(e.Graphics, c, BackColor, rtRight, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
-                    Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtRight.Height / 5 }, null, Font, ForeColor, c, rtRight, DvContentAlignment.MiddleCenter);
+                    br.Color = ForeColor;
+                    if (!bLeft)
+                    {
+                        var c = ButtonColor;
+                        var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-left" : "fa-minus";
+                        Theme.DrawBox(e.Graphics, c, BackColor, rtLeft, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
+                        Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtLeft.Height / 5 }, null, Font, ForeColor, c, rtLeft, DvContentAlignment.MiddleCenter);
+                    }
+                    else
+                    {
+                        rtLeft.Offset(0, 1);
+                        var c = ButtonColor.BrightnessTransmit(Theme.DownBright);
+                        var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-left" : "fa-minus";
+                        Theme.DrawBox(e.Graphics, c, BackColor, rtLeft, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
+                        Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtLeft.Height / 5 }, null, Font, ForeColor, c, rtLeft, DvContentAlignment.MiddleCenter);
+                    }
+
+                    if (!bRight)
+                    {
+                        var c = ButtonColor;
+                        var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-right" : "fa-plus";
+                        Theme.DrawBox(e.Graphics, c, BackColor, rtRight, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
+                        Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtRight.Height / 5 }, null, Font, ForeColor, c, rtRight, DvContentAlignment.MiddleCenter);
+                    }
+                    else
+                    {
+                        rtRight.Offset(0, 1);
+                        var c = ButtonColor.BrightnessTransmit(Theme.DownBright);
+                        var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-right" : "fa-plus";
+                        Theme.DrawBox(e.Graphics, c, BackColor, rtRight, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
+                        Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtRight.Height / 5 }, null, Font, ForeColor, c, rtRight, DvContentAlignment.MiddleCenter);
+                    }
                 }
-                else
+                #endregion
+                #region Gauge
+                var w = ((float)rtGauge.Width - ((float)GP * ((float)StepCount - 1F))) / (float)StepCount;
+                for (int i = 0; i < StepCount; i++)
                 {
-                    rtRight.Offset(0, 1);
-                    var c = ButtonColor.BrightnessTransmit(Theme.DownBright);
-                    var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-right" : "fa-plus";
-                    Theme.DrawBox(e.Graphics, c, BackColor, rtRight, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
-                    Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtRight.Height / 5 }, null, Font, ForeColor, c, rtRight, DvContentAlignment.MiddleCenter);
+                    var x = (w + GP) * i;
+                    var rt = new Rectangle(rtGauge.X + Convert.ToInt32((w + GP) * i), rtGauge.Y, Convert.ToInt32(w), rtGauge.Height);
+                    var rtin = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtin.Inflate(-3, -3);
+
+                    var bg = BackColor.BrightnessTransmit(-0.3);
+
+                    Theme.DrawBox(e.Graphics, (i != Step ? OffColor : OnColor), BackColor, rt, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.GRADIENT_V | BoxDrawOption.OUT_SHADOW);
                 }
+                #endregion
+                #endregion
+                #region Dispose
+                br.Dispose();
+                p.Dispose();
+                #endregion
             }
-            #endregion
-            #region Gauge
-            var w = ((float)rtGauge.Width - ((float)GP * ((float)StepCount - 1F))) / (float)StepCount;
-            for (int i = 0; i < StepCount; i++)
-            {
-                var x = (w + GP) * i;
-                var rt = new Rectangle(rtGauge.X + Convert.ToInt32((w + GP) * i), rtGauge.Y, Convert.ToInt32(w), rtGauge.Height);
-                var rtin = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtin.Inflate(-3, -3);
-
-                var bg = BackColor.BrightnessTransmit(-0.3);
-
-                Theme.DrawBox(e.Graphics, (i != Step ? OffColor : OnColor), BackColor, rt, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.GRADIENT_V | BoxDrawOption.OUT_SHADOW);
-            }
-            #endregion
-            #endregion
-            #region Dispose
-            br.Dispose();
-            p.Dispose();
-            #endregion
-
             base.OnThemeDraw(e, Theme);
         }
         #endregion
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (UseButton && Areas.ContainsKey("rtLeft") && Areas.ContainsKey("rtRight"))
+            if (Areas.Count > 1)
             {
-                if (CollisionTool.Check(Areas["rtLeft"], e.Location)) bLeft = true;
-                if (CollisionTool.Check(Areas["rtRight"], e.Location)) bRight = true;
+                if (UseButton && Areas.ContainsKey("rtLeft") && Areas.ContainsKey("rtRight"))
+                {
+                    if (CollisionTool.Check(Areas["rtLeft"], e.Location)) bLeft = true;
+                    if (CollisionTool.Check(Areas["rtRight"], e.Location)) bRight = true;
 
-                Invalidate();
+                    Invalidate();
+                }
             }
             base.OnMouseDown(e);
         }
@@ -284,16 +290,19 @@ namespace Devinno.Forms.Controls
         #region OnMouseUp
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (UseButton && Areas.ContainsKey("rtLeft") && Areas.ContainsKey("rtRight"))
+            if (Areas.Count > 1)
             {
-                if (bLeft && CollisionTool.Check(Areas["rtLeft"], e.Location))
+                if (UseButton && Areas.ContainsKey("rtLeft") && Areas.ContainsKey("rtRight"))
                 {
-                    Step = Convert.ToInt32(MathTool.Constrain(Step - 1, 0, StepCount - 1));
-                }
+                    if (bLeft && CollisionTool.Check(Areas["rtLeft"], e.Location))
+                    {
+                        Step = Convert.ToInt32(MathTool.Constrain(Step - 1, 0, StepCount - 1));
+                    }
 
-                if (bRight && CollisionTool.Check(Areas["rtRight"], e.Location))
-                {
-                    Step = Convert.ToInt32(MathTool.Constrain(Step + 1, 0, StepCount - 1));
+                    if (bRight && CollisionTool.Check(Areas["rtRight"], e.Location))
+                    {
+                        Step = Convert.ToInt32(MathTool.Constrain(Step + 1, 0, StepCount - 1));
+                    }
                 }
             }
             bLeft = bRight = false;

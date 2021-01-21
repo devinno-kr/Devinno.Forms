@@ -1,71 +1,66 @@
-﻿using Devinno.Forms.Dialogs;
+﻿using Devinno.Collections;
+using Devinno.Forms.Controls;
+using Devinno.Forms.Dialogs;
 using Devinno.Forms.Themes;
+using Devinno.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
-namespace Devinno.Forms.Controls
+namespace Devinno.Forms.Containers
 {
-    public class DvControl : Control
+    public class DvTablessControl: TabControl
     {
         #region Properties
-        #region UseThemeColor
-        private bool bUseThemeColor = true;
-        [Category("- 색상")]
-        public bool UseThemeColor
+        #region SelectedTab
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public new TabPage SelectedTab
         {
-            get => bUseThemeColor;
-            set
-            {
-                if (bUseThemeColor != value)
-                {
-                    bUseThemeColor = value;
-                    Invalidate();
-                }
-            }
+            get => base.SelectedTab;
+            set => base.SelectedTab = value;
         }
-        #endregion
-        #region DpiRatio
-        public double DpiRatio => (double)this.LogicalToDeviceUnits(1000) / 1000.0;
-        #endregion
-        #region Areas
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public Dictionary<string, Rectangle> Areas { get; } = new Dictionary<string, Rectangle>();
         #endregion
         #endregion
 
         #region Member Variable
-
+        List<string> cons = new List<string>();
         #endregion
 
         #region Constructor
-        public DvControl()
+        public DvTablessControl()
         {
-            this.SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.OptimizedDoubleBuffer | ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.UpdateStyles();
 
-            DoubleBuffered = true;
-
-            this.TabStop = false;
+            this.Appearance = TabAppearance.FlatButtons;
+            this.ItemSize = new Size(0, 1);
+            this.SizeMode = TabSizeMode.Fixed;
+            if (!this.DesignMode) this.Multiline = true;
         }
         #endregion
 
         #region Override
-        #region OnEnabledChanged
-        protected override void OnEnabledChanged(EventArgs e) { Invalidate(); base.OnEnabledChanged(e); }
+        #region WndProc
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x1328 && !this.DesignMode)
+                m.Result = new IntPtr(1);
+            else
+                base.WndProc(ref m);
+        }
         #endregion
         #region OnPaint
         protected override void OnPaint(PaintEventArgs e)
         {
-            LoadAreas(e.Graphics);
+            e.Graphics.Clear(Parent.BackColor);
 
             var Theme = GetTheme();
             if (Theme != null) OnThemeDraw(e, Theme);
@@ -74,6 +69,13 @@ namespace Devinno.Forms.Controls
 
             if (Theme != null) OnThemeEnableDraw(e, Theme);
             if (Theme != null) OnThemeBlockDraw(e, Theme);
+        }
+        #endregion
+        #region OnEnabledChanged
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            Invalidate(); 
+            base.OnEnabledChanged(e);
         }
         #endregion
         #region OnThemeDraw
@@ -112,16 +114,15 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-       
-        #region LoadAreas
-        protected virtual void LoadAreas(Graphics g)
-        {
-            SetArea("rtContent", GetContentBounds());
-        }
-        #endregion
         #endregion
 
         #region Method
+        #region SetBlock
+        internal void SetBlock(bool bBlock)
+        {
+            foreach (var v in TabPages) ((TabPage)v).BackColor = bBlock ? ColorTool.MixColorAlpha(Parent.BackColor, Color.Black, DvForm.BlockAlpha) : Parent.BackColor;
+        }
+        #endregion
         #region GetTheme
         public DvTheme GetTheme()
         {
@@ -129,35 +130,36 @@ namespace Devinno.Forms.Controls
             try
             {
                 var o = this.FindForm();
-                if (o != null)
-                {
-                    var pi = o.GetType().GetProperty("Theme");
-                    if (pi != null)
-                    {
-                        var thm = pi.GetValue(o);
-                        ret = thm as DvTheme;
-                    }
-                }
+                var pi = o.GetType().GetProperty("Theme");
+                var thm = pi.GetValue(o);
+                ret = thm as DvTheme;
             }
             catch (Exception) { }
             return ret;
         }
         #endregion
-        #region GetContentBounds
-        public Rectangle GetContentBounds()
+       
+        #region .. Double Buffered function ..
+        public static void SetDoubleBuffered(System.Windows.Forms.Control c)
         {
-            var o = this.FindForm();
-            var v = o as DvForm;
-            if (v != null && v.Theme != null) return new Rectangle(0, 0, Width - 1 - v.Theme.ShadowGap, Height - 1 - v.Theme.ShadowGap);
-            else return new Rectangle(0, 0, Width - 2, Height - 2);
+            if (System.Windows.Forms.SystemInformation.TerminalServerSession)
+                return;
+            System.Reflection.PropertyInfo aProp = typeof(System.Windows.Forms.Control).GetProperty("DoubleBuffered", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            aProp.SetValue(c, true, null);
         }
+
         #endregion
-        #region SetArea
-        protected void SetArea(string key, Rectangle rt)
+        #region .. code for Flucuring ..
+        protected override CreateParams CreateParams
         {
-            if (!Areas.ContainsKey(key)) Areas.Add(key, rt);
-            else Areas[key] = rt;
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;
+                return cp;
+            }
         }
+
         #endregion
         #endregion
     }

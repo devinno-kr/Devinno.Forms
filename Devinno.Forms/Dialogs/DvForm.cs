@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Devinno.Forms.Extensions;
+using Devinno.Forms.Containers;
 
 namespace Devinno.Forms.Dialogs
 {
@@ -46,6 +47,8 @@ namespace Devinno.Forms.Dialogs
         public double DpiRatio => (double)this.LogicalToDeviceUnits(1000) / 1000.0;
         #endregion
         #region Areas
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public Dictionary<string, Rectangle> Areas { get; } = new Dictionary<string, Rectangle>();
         #endregion
 
@@ -249,7 +252,11 @@ namespace Devinno.Forms.Dialogs
                 {
                     bBlock = value;
                     Invalidate();
-                    DvTheme.LoopControl(this, (c) => c.Invalidate());
+                    DvTheme.LoopControl(this, (c) =>
+                    {
+                        if (c is DvTablessControl) ((DvTablessControl)c).SetBlock(bBlock);
+                        c.Invalidate();
+                    });
                 }
             }
         }

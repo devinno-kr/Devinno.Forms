@@ -20,6 +20,26 @@ namespace Sample
         {
             InitializeComponent();
 
+            dvButton1.MouseUp += (o, s) => dvTablessControl1.SelectedIndex = 0;
+            dvButton2.MouseUp += (o, s) => dvTablessControl1.SelectedIndex = 1;
+            dvButton3.MouseUp += (o, s) => dvTablessControl1.SelectedIndex = 2;
+
+            dvButton7.MouseUp += (o, s) =>
+            {
+                dvTablessControl1.Enabled = !dvTablessControl1.Enabled;
+                
+                //Block = true;
+                //MessageBox.Show("TEST");
+                //Block = false;
+            };
+
+            dvButton8.MouseUp += (o, s) =>
+            {
+
+                Block = true;
+                MessageBox.Show("TEST");
+                Block = false;
+            };
         }
     }
 }
