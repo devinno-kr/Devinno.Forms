@@ -79,7 +79,7 @@ namespace Sample
             // grpC
             // 
             this.grpC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpC.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.grpC.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.grpC.Location = new System.Drawing.Point(20, 20);
             this.grpC.Name = "grpC";
             this.grpC.Size = new System.Drawing.Size(550, 485);

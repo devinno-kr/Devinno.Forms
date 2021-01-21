@@ -43,7 +43,7 @@ namespace Devinno.Forms.Controls
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (Areas.Count > 1)
+            if (Areas.Count > 1 && Series.Count>1)
             {
                 if (CollisionTool.Check(Areas["rtSelectLeft"], e.Location))
                 {
@@ -70,12 +70,14 @@ namespace Devinno.Forms.Controls
             base.OnMouseUp(e);
         }
         #endregion
+        #region OnMouseMove
         protected override void OnMouseMove(MouseEventArgs e)
         {
             mpt = e.Location;
             Invalidate();
             base.OnMouseMove(e);
         }
+        #endregion
         #region LoadAreas
         protected override void LoadAreas(Graphics g)
         {
@@ -124,131 +126,164 @@ namespace Devinno.Forms.Controls
             var rtSelectRight = Areas["rtSelectRight"];
             #endregion
             #region Draw
-
             if (Series.Count > 0)
             {
                 #region Selector
-                if (bLeftSel) rtSelectLeft.Offset(0, 1);
-                if (bRightSel) rtSelectRight.Offset(0, 1);
+                if (Series.Count > 1)
+                {
+                    if (bLeftSel) rtSelectLeft.Offset(0, 1);
+                    if (bRightSel) rtSelectRight.Offset(0, 1);
 
-                Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-chevron-left") { IconSize = 12 }, null, Font, ForeColor, BackColor, rtSelectLeft);
-                Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-chevron-right") { IconSize = 12 }, null, Font, ForeColor, BackColor, rtSelectRight);
+                    Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-chevron-left") { IconSize = 12 }, null, Font, ForeColor, BackColor, rtSelectLeft);
+                    Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-chevron-right") { IconSize = 12 }, null, Font, ForeColor, BackColor, rtSelectRight);
+                }
                 if (nSelectedIndex >= 0 && nSelectedIndex < Series.Count) Theme.DrawTextShadow(e.Graphics, null, Series[nSelectedIndex].Alias, Font, ForeColor, BackColor, rtSelectLabel);
                 #endregion
 
                 #region Graph
                 if (nSelectedIndex >= 0)
                 {
-                    #region Var
-                    var ls = GraphDatas.Select(x => new CGV() { Name = x.Name, Value = x.Values[Series[nSelectedIndex].Name], Color = x.Color });
-                    var cp = MathTool.CenterPoint(rtGraph);
-
-                    var _rtGR = new Rectangle(rtGraph.X, rtGraph.Y, rtGraph.Width, rtGraph.Height); _rtGR.Inflate(-(_rtGR.Width / 8), -(_rtGR.Width / 8));
-                    var _rtGI = new Rectangle(rtGraph.X, rtGraph.Y, rtGraph.Width, rtGraph.Height); _rtGI.Inflate(-(_rtGI.Width / 4), -(_rtGI.Height / 4));
-
-                    var startAngle = 315F;
-                    var sum = ls.Sum(x => x.Value);
-                    var vv = (_rtGR.Width - _rtGI.Width) / 2;
-                    var pt = Convert.ToSingle(MathTool.Constrain(vv / 6 / 1.33, 6, 14));
-                    #endregion
-
-                    CGV sel = null;
-
-                    using (var ft = new Font(Font.FontFamily, pt, Font.Style))
+                    if (GraphDatas.Count > 0)
                     {
-                        using (var lgbr = new LinearGradientBrush(_rtGR, Color.FromArgb(90, Color.White), Color.FromArgb(90, Color.Black), 45))
+                        #region Var
+                        var ls = GraphDatas.Select(x => new CGV() { Name = x.Name, Value = x.Values[Series[nSelectedIndex].Name], Color = x.Color });
+                        var cp = MathTool.CenterPoint(rtGraph);
+
+                        var _rtGR = new Rectangle(rtGraph.X, rtGraph.Y, rtGraph.Width, rtGraph.Height); _rtGR.Inflate(-(_rtGR.Width / 8), -(_rtGR.Width / 8));
+                        var _rtGI = new Rectangle(rtGraph.X, rtGraph.Y, rtGraph.Width, rtGraph.Height); _rtGI.Inflate(-(_rtGI.Width / 4), -(_rtGI.Height / 4));
+
+                        var startAngle = 315F;
+                        var sum = ls.Sum(x => x.Value);
+                        var vv = (_rtGR.Width - _rtGI.Width) / 2;
+                        var pt = Convert.ToSingle(MathTool.Constrain(vv / 6 / 1.33, 6, 14));
+                        #endregion
+
+                        #region Draw
+                        CGV sel = null;
+                        using (var ft = new Font(Font.FontFamily, pt, Font.Style))
                         {
-                            foreach (var v in ls)
+                            using (var lgbr = new LinearGradientBrush(_rtGR, Color.FromArgb(90, Color.White), Color.FromArgb(90, Color.Black), 45))
                             {
-                                if (v.Value > 0)
+                                foreach (var v in ls)
                                 {
-                                    using (var pth = new GraphicsPath())
+                                    if (v.Value > 0)
                                     {
-                                        #region Var
-                                        var rtGR = new Rectangle(_rtGR.X, _rtGR.Y, _rtGR.Width, _rtGR.Height);
-                                        var rtGI = new Rectangle(_rtGI.X, _rtGI.Y, _rtGI.Width, _rtGI.Height);
+                                        using (var pth = new GraphicsPath())
+                                        {
+                                            #region Var
+                                            var rtGR = new Rectangle(_rtGR.X, _rtGR.Y, _rtGR.Width, _rtGR.Height);
+                                            var rtGI = new Rectangle(_rtGI.X, _rtGI.Y, _rtGI.Width, _rtGI.Height);
 
-                                        var sweepAngle = Convert.ToSingle(MathTool.Map(v.Value, 0, sum, 0, 360));
-                                        var dist = Convert.ToSingle(rtGI.Width - (rtGI.Width / 6));
-                                        var mcp = MathTool.GetPointWithAngle(cp, Convert.ToSingle(MathTool.Map(5, 0, 10, startAngle, startAngle + sweepAngle)), dist);
-                                        var ang = MathTool.GetAngle(cp, mpt); if (ang < 0) ang += 360;
-                                        var bSel = CollisionTool.CheckCircle(_rtGR, mpt) && !CollisionTool.CheckCircle(_rtGI, mpt) && startAngle <= ang && ang <= (startAngle + sweepAngle);
-                                        var gpoff = bSel? 10 : 0;
-                                        var ptOff = MathTool.GetPointWithAngle(cp, Convert.ToSingle(startAngle + sweepAngle / 2.0), gpoff);
+                                            var sweepAngle = Convert.ToSingle(MathTool.Map(v.Value, 0, sum, 0, 360));
+                                            var dist = Convert.ToSingle(rtGI.Width - (rtGI.Width / 8));
+                                            var mcp = MathTool.GetPointWithAngle(cp, Convert.ToSingle(MathTool.Map(5, 0, 10, startAngle, startAngle + sweepAngle)), dist);
+                                            var ang = MathTool.GetAngle(cp, mpt);
+                                            var bSel = CollisionTool.CheckCircle(_rtGR, mpt) && !CollisionTool.CheckCircle(_rtGI, mpt) && MathTool.CompareAngle(ang, startAngle, startAngle + sweepAngle);
+                                            var gpoff = bSel ? 10 : Theme.ShadowGap * 2;
+                                            var ptOff = MathTool.GetPointWithAngle(cp, Convert.ToSingle(startAngle + sweepAngle / 2.0), gpoff);
 
-                                        if (bSel) sel = v;
-                                        #endregion
-                                        #region Offset
-                                        rtGI.Offset(Convert.ToInt32(ptOff.X - cp.X), Convert.ToInt32(ptOff.Y - cp.Y));
-                                        rtGR.Offset(Convert.ToInt32(ptOff.X - cp.X), Convert.ToInt32(ptOff.Y - cp.Y));
-                                        mcp.X += Convert.ToInt32(ptOff.X - cp.X);
-                                        mcp.Y += Convert.ToInt32(ptOff.Y - cp.Y);
-                                        #endregion
-                                        #region Path
-                                        pth.AddArc(rtGI, startAngle, sweepAngle);
-                                        pth.AddArc(rtGR, startAngle + sweepAngle, -sweepAngle);
-                                        pth.CloseFigure();
-                                        #endregion
-                                        #region Fill
-                                        br.Color = v.Color;
-                                        e.Graphics.FillPath(br, pth);
-                                        e.Graphics.FillPath(lgbr, pth);
-                                        #endregion
-                                        #region Border
-                                        p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
-                                        e.Graphics.DrawPath(p, pth);
-                                        #endregion
-                                        #region Text
-                                        var str = v.Name + "\r\n" + "" + (v.Value / sum).ToString("0.0%") + "";
-                                        var sz = e.Graphics.MeasureString(str, ft);
-                                        var nsz = Math.Max(Convert.ToInt32(sz.Width), Convert.ToInt32(sz.Height));
-                                        var rtt = MathTool.MakeRectangle(new Point(Convert.ToInt32(mcp.X), Convert.ToInt32(mcp.Y)), nsz, nsz); rtt.Inflate(1, 1);
-                                        Theme.DrawTextShadow(e.Graphics, null, str, ft, ForeColor, BackColor, rtt, DvContentAlignment.MiddleCenter);
-                                        #endregion
+                                            if (bSel) sel = v;
+                                            #endregion
+                                            #region Offset
+                                            rtGI.Offset(Convert.ToInt32(ptOff.X - cp.X), Convert.ToInt32(ptOff.Y - cp.Y));
+                                            rtGR.Offset(Convert.ToInt32(ptOff.X - cp.X), Convert.ToInt32(ptOff.Y - cp.Y));
+                                            mcp.X += Convert.ToInt32(ptOff.X - cp.X);
+                                            mcp.Y += Convert.ToInt32(ptOff.Y - cp.Y);
+                                            #endregion
+                                            #region Path
+                                            pth.AddArc(rtGI, startAngle, sweepAngle);
+                                            pth.AddArc(rtGR, startAngle + sweepAngle, -sweepAngle);
+                                            pth.CloseFigure();
+                                            #endregion
+                                            #region Fill
+                                            using (var pth2 = pth.Clone() as GraphicsPath)
+                                            {
+                                                var mt = new Matrix(); mt.Translate(Theme.ShadowGap, Theme.ShadowGap);
+                                                pth2.Flatten(mt);
+                                                br.Color = Color.FromArgb(Theme.ShadowAlpha, Color.Black);
+                                                e.Graphics.FillPath(br, pth2);
+                                            }
 
-                                        startAngle += sweepAngle;
-                                        if (startAngle > 360) startAngle -= 360;
-                                        if (startAngle < 0) startAngle += 360;
+                                            br.Color = v.Color;
+                                            e.Graphics.FillPath(br, pth);
+                                            e.Graphics.FillPath(lgbr, pth);
+                                            #endregion
+                                            #region Border
+                                            p.Width = 2; p.Alignment = PenAlignment.Inset; p.Color = Color.FromArgb(Theme.BevelAlpha, Color.White);
+                                            e.Graphics.DrawPath(p, pth);
+                                            
+                                            p.Width = 1; p.Alignment = PenAlignment.Center; p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
+                                            e.Graphics.DrawPath(p, pth);
+                                            #endregion
+                                            #region Text
+                                            var str = v.Name + "\r\n" + "" + (v.Value / sum).ToString("0.0%") + "";
+                                            var sz = e.Graphics.MeasureString(str, ft);
+                                            var nsz = Math.Max(Convert.ToInt32(sz.Width), Convert.ToInt32(sz.Height));
+                                            var rtt = MathTool.MakeRectangle(new Point(Convert.ToInt32(mcp.X), Convert.ToInt32(mcp.Y)), nsz, nsz); rtt.Inflate(1, 1);
+                                            Theme.DrawTextShadow(e.Graphics, null, str, ft, ForeColor, BackColor, rtt, DvContentAlignment.MiddleCenter);
+                                            #endregion
+
+                                            startAngle += sweepAngle;
+                                        }
                                     }
                                 }
                             }
                         }
+                        #endregion
+
+                        #region CurrentItem
+                        if (sel != null)
+                        {
+                            var ptTitle = _rtGI.Height / 20 / 1.33F * 1.75F;
+                            var ptValPer = _rtGI.Height / 20 / 1.33F;
+
+                            var th = _rtGI.Height / 2;
+                            var nh = th / 3;
+
+                            var rtTitle = new Rectangle(_rtGI.X, Convert.ToInt32(_rtGI.Y + (th - th / 2) + (nh * 0)), _rtGI.Width, Convert.ToInt32(nh));
+                            var rtValue = new Rectangle(_rtGI.X, Convert.ToInt32(_rtGI.Y + (th - th / 2) + (nh * 1)), _rtGI.Width, Convert.ToInt32(nh));
+                            var rtRaito = new Rectangle(_rtGI.X, Convert.ToInt32(_rtGI.Y + (th - th / 2) + (nh * 2)), _rtGI.Width, Convert.ToInt32(nh));
+
+                            using (var ft = new Font(Font.FontFamily, ptTitle, FontStyle.Bold))
+                            {
+                                Theme.DrawTextShadow(e.Graphics, null, sel.Name, ft, ForeColor, BackColor, rtTitle);
+                            }
+                            using (var ft = new Font(Font.FontFamily, ptValPer, Font.Style))
+                            {
+                                Theme.DrawTextShadow(e.Graphics, null, sel.Value.ToString(), ft, ForeColor, BackColor, rtValue);
+                            }
+                            using (var ft = new Font(Font.FontFamily, ptValPer, Font.Style))
+                            {
+                                Theme.DrawTextShadow(e.Graphics, null, (sel.Value / sum).ToString("0.0%"), ft, ForeColor, BackColor, rtRaito);
+                            }
+                        }
+                        #endregion
                     }
-
-                    if(sel != null)
+                    else
                     {
-                        var ptTitle = _rtGI.Height / 20 / 1.33F *1.5F;
-                        var ptValPer = _rtGI.Height / 20 / 1.33F;
+                        #region NO DATA
+                        var _rtGR = new Rectangle(rtGraph.X, rtGraph.Y, rtGraph.Width, rtGraph.Height); _rtGR.Inflate(-(_rtGR.Width / 8), -(_rtGR.Width / 8));
+                        var _rtGI = new Rectangle(rtGraph.X, rtGraph.Y, rtGraph.Width, rtGraph.Height); _rtGI.Inflate(-(_rtGI.Width / 4), -(_rtGI.Height / 4));
 
-                        var th = _rtGI.Height / 2;
-                        var nh = th / 3;
-
-                        var rtTitle = new Rectangle(_rtGI.X, Convert.ToInt32(_rtGI.Y + (th - th / 2) + (nh * 0)), _rtGI.Width, Convert.ToInt32(nh));
-                        var rtValue = new Rectangle(_rtGI.X, Convert.ToInt32(_rtGI.Y + (th - th / 2) + (nh * 1)), _rtGI.Width, Convert.ToInt32(nh));
-                        var rtRaito = new Rectangle(_rtGI.X, Convert.ToInt32(_rtGI.Y + (th - th / 2) + (nh * 2)), _rtGI.Width, Convert.ToInt32(nh));
-
-                        using (var ft = new Font(Font.FontFamily, ptTitle, FontStyle.Bold))
-                        {
-                            Theme.DrawTextShadow(e.Graphics, null, sel.Name, ft, ForeColor, BackColor, rtTitle);
-                        }
-                        using (var ft = new Font(Font.FontFamily, ptValPer, Font.Style))
-                        {
-                            Theme.DrawTextShadow(e.Graphics, null, sel.Value.ToString(), ft, ForeColor, BackColor, rtValue);
-                        }
-                        using (var ft = new Font(Font.FontFamily, ptValPer, Font.Style))
-                        {
-                            Theme.DrawTextShadow(e.Graphics, null, (sel.Value / sum).ToString("0.0%"), ft, ForeColor, BackColor, rtRaito);
-                        }
+                        p.Width = 5;
+                        var c = ForeColor.BrightnessTransmit(-0.5);
+                        _rtGR.Offset(Theme.ShadowGap, Theme.ShadowGap); p.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright); e.Graphics.DrawEllipse(p, _rtGR);
+                        _rtGR.Offset(-Theme.ShadowGap, -Theme.ShadowGap); p.Color = c; e.Graphics.DrawEllipse(p, _rtGR);
+                        Theme.DrawTextShadow(e.Graphics, null, "NO DATA", Font, c, BackColor, _rtGR);
+                        #endregion
                     }
                 }
                 else
                 {
-                    #region No SELECT
+                    #region NOT SELECTED
+                    var _rtGR = new Rectangle(rtGraph.X, rtGraph.Y, rtGraph.Width, rtGraph.Height); _rtGR.Inflate(-(_rtGR.Width / 8), -(_rtGR.Width / 8));
+                    var _rtGI = new Rectangle(rtGraph.X, rtGraph.Y, rtGraph.Width, rtGraph.Height); _rtGI.Inflate(-(_rtGI.Width / 4), -(_rtGI.Height / 4));
+
                     p.Width = 5;
                     var c = ForeColor.BrightnessTransmit(-0.5);
-                    rtGraph.Offset(Theme.ShadowGap, Theme.ShadowGap); p.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright); e.Graphics.DrawEllipse(p, rtGraph);
-                    rtGraph.Offset(-Theme.ShadowGap, -Theme.ShadowGap); p.Color = c; e.Graphics.DrawEllipse(p, rtGraph);
-                    Theme.DrawTextShadow(e.Graphics, null, "NO SELECT", Font, c, BackColor, rtGraph);
+                    _rtGR.Offset(Theme.ShadowGap, Theme.ShadowGap); p.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright); e.Graphics.DrawEllipse(p, _rtGR);
+                    _rtGR.Offset(-Theme.ShadowGap, -Theme.ShadowGap); p.Color = c; e.Graphics.DrawEllipse(p, _rtGR);
+                    Theme.DrawTextShadow(e.Graphics, null, "NOT SELECTED", Font, c, BackColor, _rtGR);
                     #endregion
                 }
                 #endregion
@@ -260,10 +295,13 @@ namespace Devinno.Forms.Controls
                 Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-chevron-left") { IconSize = 12 }, null, Font, c, BackColor, rtSelectLeft);
                 Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-chevron-right") { IconSize = 12 }, null, Font, c, BackColor, rtSelectRight);
 
+                var _rtGR = new Rectangle(rtGraph.X, rtGraph.Y, rtGraph.Width, rtGraph.Height); _rtGR.Inflate(-(_rtGR.Width / 8), -(_rtGR.Width / 8));
+                var _rtGI = new Rectangle(rtGraph.X, rtGraph.Y, rtGraph.Width, rtGraph.Height); _rtGI.Inflate(-(_rtGI.Width / 4), -(_rtGI.Height / 4));
+
                 p.Width = 5;
-                rtGraph.Offset(Theme.ShadowGap, Theme.ShadowGap); p.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright); e.Graphics.DrawEllipse(p, rtGraph);
-                rtGraph.Offset(-Theme.ShadowGap, -Theme.ShadowGap); p.Color = c; e.Graphics.DrawEllipse(p, rtGraph);
-                Theme.DrawTextShadow(e.Graphics, null, "EMPTY", Font, c, BackColor, rtGraph);
+                _rtGR.Offset(Theme.ShadowGap, Theme.ShadowGap); p.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright); e.Graphics.DrawEllipse(p, _rtGR);
+                _rtGR.Offset(-Theme.ShadowGap, -Theme.ShadowGap); p.Color = c; e.Graphics.DrawEllipse(p, _rtGR);
+                Theme.DrawTextShadow(e.Graphics, null, "EMPTY", Font, c, BackColor, _rtGR);
                 #endregion
             }
             #endregion

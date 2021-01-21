@@ -58,9 +58,13 @@ namespace Devinno.Forms.Themes
         public override double OutBevelBright { get; set; } = 0.15;
         public override double InBevelBright { get; set; } = 0.4;
         public override int DisableAlpha { get; set; } = 180;
+        public override int BevelAlpha { get; set; } = 30;
+        public override int ShadowAlpha { get; set; } = 60;
 
         public override ThemeMenuColorTable MenuColorTable { get; } = new BlackThemeMenuColorTable();
         #endregion
+
+      
 
         #region Method
         #region DrawBorder

@@ -17,3 +17,55 @@ namespace Devinno.Forms
         }
     }
 }
+
+
+/*
+    Container
+        DvGroupBox
+        DvTab
+        DvPanel
+        DvSplitterTableLayout
+        DvNavigation
+        DvTabControl
+
+    Control
+        DvColorPicker
+        DvComboBox
+        DvContentView
+        DvContentGrid
+        DvDataGrid
+        DvDateTimePicker
+        DvGauge
+        DvInput
+        DvLineGraph
+        DvListBox
+        DvMeter
+        DvNumberBox
+        DvOnOff
+        DvPictureBox
+        DvProgressH
+        DvProgressV
+        DvRadioButton
+        DvSliderH
+        DvSliderV
+        DvSwitch
+        DvTimeGraph
+        DvToggleButton.cs
+        DvToolBox
+        DvTreeView
+        DvTrendGraph
+        DvValueLabel
+        DvVolumeKnob
+
+    Dialog
+        DvColorPickerDialog
+        DvDatetimePickerDialog
+        DvSelectorDialog
+        DvInputBox
+        DvMessageBox
+        DvKeyboard
+        DvKeypad
+        DvSerialPortSetting
+
+
+*/

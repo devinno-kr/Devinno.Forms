@@ -45,6 +45,8 @@ namespace Devinno.Forms.Themes
         public abstract double InBevelBright { get; set; }
         
         public abstract int DisableAlpha { get; set; }
+        public abstract int BevelAlpha { get; set; }
+        public abstract int ShadowAlpha { get; set; }
 
         public abstract ThemeMenuColorTable MenuColorTable { get; }
         #endregion
