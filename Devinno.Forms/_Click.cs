@@ -24,23 +24,26 @@ namespace Devinno.Forms
             dtDown = DateTime.Now;
             if (UseLongClick && LongClickTime > 0)
             {
-                bDownLongClick = true;
-
-                var th = new Thread(new ThreadStart(() =>
+                if (!bDownLongClick)
                 {
-                    while (bDownLongClick && (DateTime.Now - dtDown).TotalMilliseconds < LongClickTime) Thread.Sleep(100);
+                    bDownLongClick = true;
 
-                    if (bDownLongClick && (DateTime.Now - dtDown).TotalMilliseconds >= LongClickTime)
+                    var th = new Thread(new ThreadStart(() =>
                     {
-                        if (GenLongClick != null) GenLongClick();
-                    }
+                        while (bDownLongClick && (DateTime.Now - dtDown).TotalMilliseconds < LongClickTime) Thread.Sleep(100);
 
-                    bDownLongClick = false;
+                        if (bDownLongClick && (DateTime.Now - dtDown).TotalMilliseconds >= LongClickTime)
+                        {
+                            bDownLongClick = false;
 
-                    if (Reset != null) Reset();
-                }))
-                { IsBackground = true };
-                th.Start();
+                            if (Reset != null) Reset();
+                            if (GenLongClick != null) GenLongClick();
+                        }
+                        bDownLongClick = false;
+                    }))
+                    { IsBackground = true };
+                    th.Start();
+                }
             }
         }
 

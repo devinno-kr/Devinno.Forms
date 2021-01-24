@@ -45,12 +45,10 @@ namespace Devinno.Forms
         DvPictureBox
         DvProgressH
         DvProgressV
-        DvRadioButton
         DvSliderH
         DvSliderV
         DvSwitch
         DvTimeGraph
-        DvToggleButton.cs
         DvToolBox
         DvTreeView
         DvTrendGraph

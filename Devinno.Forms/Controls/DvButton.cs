@@ -147,6 +147,7 @@ namespace Devinno.Forms.Controls
 
         #region Event
         public event EventHandler LongClick;
+        public event EventHandler ButtonClick;
         #endregion
 
         #region Member Variable
@@ -236,6 +237,7 @@ namespace Devinno.Forms.Controls
         #region OnMouseUp
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            if (bDown) ButtonClick?.Invoke(this, null);
             click.MouseUp(e);
             bDown = false; Invalidate();
             base.OnMouseUp(e);

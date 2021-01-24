@@ -118,16 +118,16 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region InShadow
-        private bool bInShadow = true;
-        public bool InShadow
+        #region Style
+        private LabelStyle eStyle = LabelStyle.FLAT;
+        public LabelStyle Style
         {
-            get => bInShadow;
+            get => eStyle;
             set
             {
-                if (bInShadow != value)
+                if(eStyle != value)
                 {
-                    bInShadow = value;
+                    eStyle = value;
                     Invalidate();
                 }
             }
@@ -215,6 +215,8 @@ namespace Devinno.Forms.Controls
         {
             #region Color
             var LabelColor = UseThemeColor ? Theme.Color2 : this.LabelColor;
+            var BackColor = this.BackColor;
+            if (BackColor == Color.Transparent) BackColor = GetParentBackColor(Parent);
             #endregion
             #region Set
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
@@ -230,13 +232,26 @@ namespace Devinno.Forms.Controls
             var br = new SolidBrush(LabelColor);
             #endregion
             #region Draw
-            if (BackgroundDraw) Theme.DrawBox(e.Graphics, LabelColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | (InShadow ? BoxDrawOption.IN_SHADOW : BoxDrawOption.NONE) | BoxDrawOption.OUT_BEVEL);
+            if (BackgroundDraw)
+            {
+                switch (Style)
+                {
+                    case LabelStyle.FLAT:
+                        Theme.DrawBox(e.Graphics, LabelColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                        break;
+                    case LabelStyle.CONCAVE:
+                        Theme.DrawBox(e.Graphics, LabelColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+                        break;
+                    case LabelStyle.CONVEX:
+                        Theme.DrawBox(e.Graphics, LabelColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | BoxDrawOption.OUT_SHADOW);
+                        break;
+                }
+            }
+                        
             Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, BackgroundDraw ? LabelColor : BackColor, rtText, ContentAlignment);
             if (UnitWidth > 0 && !string.IsNullOrWhiteSpace(Unit))
             {
-                TextRenderer.DrawText(e.Graphics, Unit, Font, rtUnit, ForeColor);
                 Theme.DrawTextShadow(e.Graphics, null, Unit, Font, ForeColor, BackgroundDraw ? LabelColor : BackColor, rtUnit, ContentAlignment);
-
             }
             #endregion
             #region Dispose
@@ -262,5 +277,25 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #endregion
+
+        
     }
+
+    #region enum : LabelStyle 
+    public enum LabelStyle 
+    {
+        /// <summary>
+        /// 평평한
+        /// </summary>
+        FLAT,
+        /// <summary>
+        /// 오목한
+        /// </summary>
+        CONCAVE, 
+        /// <summary>
+        /// 볼록한
+        /// </summary>
+        CONVEX
+    }
+    #endregion
 }

@@ -89,7 +89,7 @@ namespace Devinno.Forms.Extensions
             if (!string.IsNullOrWhiteSpace(Text))
             {
                 var strfrm = new StringFormat() { LineAlignment = StringAlignment.Center };
-                var sz = g.MeasureString(Text, Font);
+                var sz = g.MeasureString(Text, Font, Bounds.Size);
                 int x = Bounds.X, y = Bounds.Y, w = INTC(sz.Width), h = INTC(sz.Height);
                 switch (Align)
                 {
@@ -115,7 +115,7 @@ namespace Devinno.Forms.Extensions
             if (!string.IsNullOrWhiteSpace(Text))
             {
                 var strfrm = new StringFormat() { LineAlignment = StringAlignment.Center };
-                var sz = g.MeasureString(Text, Font);
+                var sz = g.MeasureString(Text, Font, Bounds.Size);
                 float x = Bounds.X, y = Bounds.Y, w = sz.Width, h = sz.Height;
                 switch (Align)
                 {

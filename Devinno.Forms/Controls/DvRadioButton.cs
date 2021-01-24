@@ -1,15 +1,12 @@
 ﻿using Devinno.Extensions;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
-using Devinno.Forms.Tools;
-using Devinno.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Devinno.Forms.Controls
 {
-    public class DvCircleButton : DvControl
+    public class DvRadioButton : DvControl
     {
         #region Properties
         #region Icon
@@ -55,6 +52,15 @@ namespace Devinno.Forms.Controls
             set { if (ico.IconSize != value) { ico.IconSize = value; Invalidate(); } }
         }
         #endregion
+        #region ContentAlignment
+        private DvContentAlignment eContentAlignment = DvContentAlignment.MiddleCenter;
+        [Category("- 모양")]
+        public DvContentAlignment ContentAlignment
+        {
+            get { return eContentAlignment; }
+            set { if (eContentAlignment != value) { eContentAlignment = value; Invalidate(); } }
+        }
+        #endregion
         #region BackgroundDraw
         private bool bBackgroundDraw = true;
         [Category("- 모양")]
@@ -71,32 +77,33 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region ButtonBackColor
-        private Color cButtonBackColor = DvTheme.DefaultTheme.Color1;
-        public Color ButtonBackColor
+        #region OffButtonColor
+        private Color cOffButtonColor = DvTheme.DefaultTheme.Color3;
+        [Category("- 색상")]
+        public Color OffButtonColor
         {
-            get { return cButtonBackColor; }
+            get => cOffButtonColor;
             set
             {
-                if (cButtonBackColor != value)
+                if (cOffButtonColor != value)
                 {
-                    cButtonBackColor = value;
+                    cOffButtonColor = value;
                     Invalidate();
                 }
             }
         }
         #endregion
-        #region ButtonColor
-        private Color cButtonColor = DvTheme.DefaultTheme.Color3;
+        #region OnButtonColor
+        private Color cOnButtonColor = DvTheme.DefaultTheme.PointColor;
         [Category("- 색상")]
-        public Color ButtonColor
+        public Color OnButtonColor
         {
-            get => cButtonColor;
+            get => cOnButtonColor;
             set
             {
-                if (cButtonColor != value)
+                if (cOnButtonColor != value)
                 {
-                    cButtonColor = value;
+                    cOnButtonColor = value;
                     Invalidate();
                 }
             }
@@ -144,13 +151,39 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region Clickable
-        [Category("- 기능")]
-        public bool Clickable { get; set; } = true;
+        #region Checked
+        private bool bChecked = false;
+        [Category("- 색상")]
+        public bool Checked
+        {
+            get => bChecked;
+            set
+            {
+                if (bChecked != value)
+                {
+                    bChecked = value;
+                    if (bChecked && this.Parent != null)
+                    {
+                        foreach (Control c in this.Parent.Controls)
+                        {
+                            var cr = c as DvRadioButton;
+                            if (cr != null && !this.Equals(cr)) cr.Checked = false;
+                        }
+                    }
+                    CheckedChanged?.Invoke(this, null);
+                    Invalidate();
+                }
+            }
+        }
         #endregion
 
         public bool UseLongClick { get => click.UseLongClick; set => click.UseLongClick = value; }
         public int LongClickTime { get => click.LongClickTime; set => click.LongClickTime = value; }
+        #endregion
+
+        #region Event
+        public event EventHandler LongClick;
+        public event EventHandler CheckedChanged;
         #endregion
 
         #region Member Variable
@@ -158,12 +191,8 @@ namespace Devinno.Forms.Controls
         private LongClick click = new LongClick();
         #endregion
 
-        #region Event
-        public event EventHandler LongClick;
-        #endregion
-
         #region Constructor
-        public DvCircleButton()
+        public DvRadioButton()
         {
             SetStyle(ControlStyles.Selectable, true);
             UpdateStyles();
@@ -183,24 +212,17 @@ namespace Devinno.Forms.Controls
         {
             base.LoadAreas(g);
             var rtContent = Areas["rtContent"];
-
-            var wh = Math.Min(rtContent.Width, rtContent.Height);
-            var ng = Math.Min(wh / 8, 9);
-            var rtButtonBack = DrawingTool.MakeRectangleAlign(rtContent, new Size(wh, wh), DvContentAlignment.MiddleCenter);
-            var rtButton = new Rectangle(rtButtonBack.X, rtButtonBack.Y, rtButtonBack.Width, rtButtonBack.Height); rtButton.Inflate(-ng, -ng);
             var rtText = new Rectangle(rtContent.X + TextPadding.Left, rtContent.Y + TextPadding.Top, rtContent.Width - (TextPadding.Left + TextPadding.Right), rtContent.Height - (TextPadding.Top + TextPadding.Bottom));
-
             SetArea("rtText", rtText);
-            SetArea("rtButtonBack", rtButtonBack);
-            SetArea("rtButton", rtButton);
         }
         #endregion
         #region OnThemeDraw
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
             #region Color
-            var ButtonColor = UseThemeColor ? Theme.Color3 : this.ButtonColor;
-            var ButtonBackColor = UseThemeColor ? Theme.Color1 : this.ButtonBackColor;
+            var OnButtonColor = UseThemeColor ? Theme.PointColor : this.OnButtonColor;
+            var OffButtonColor = UseThemeColor ? Theme.Color3 : this.OffButtonColor;
+            var ButtonColor = Checked ? OnButtonColor : OffButtonColor;
             #endregion
             #region Set
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
@@ -208,57 +230,26 @@ namespace Devinno.Forms.Controls
             #endregion
             #region Bounds
             var rtContent = Areas["rtContent"];
-            var rtButtonBack = Areas["rtButtonBack"];
-            var rtButton = Areas["rtButton"];
             var rtText = Areas["rtText"];
             #endregion
             #region Init
             var p = new Pen(ButtonColor, 1);
             var br = new SolidBrush(ButtonColor);
             #endregion
-            
-            if (rtContent.Width > 1 && rtContent.Height > 1)
+            #region Draw
+            if (!bDown)
             {
-                #region Draw
-                Theme.DrawBox(e.Graphics, ButtonBackColor, BackColor, rtButtonBack, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
-
-                if (!bDown)
-                {
-                    var cv = ButtonColor;
-                    if (BackgroundDraw)
-                    {
-                        Theme.DrawBox(e.Graphics, cv, ButtonBackColor, rtButton, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | BoxDrawOption.OUT_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_LT : BoxDrawOption.NONE));
-
-                        using (var pth = new GraphicsPath())
-                        {
-                            pth.AddEllipse(rtButton);
-                            using (var pbr = new PathGradientBrush(pth))
-                            {
-                                pbr.CenterPoint = new Point(Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtButton.Left, rtButton.Right)), Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtButton.Top, rtButton.Bottom)));
-                                pbr.CenterColor = Color.FromArgb(30, Color.White);
-                                pbr.SurroundColors = new Color[] { Color.FromArgb(30, Color.Black) };
-
-                                e.Graphics.FillEllipse(pbr, rtButton);
-                            }
-                            Theme.DrawBorder(e.Graphics, cv, rtButton, RoundType.ELLIPSE);
-                        }
-                    }
-                    Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, BackgroundDraw ? cv : BackColor, new Rectangle(rtText.X, rtText.Y + 0, rtText.Width, rtText.Height), DvContentAlignment.MiddleCenter);
-                }
-                else
-                {
-                    var cv = ButtonColor.BrightnessTransmit(Theme.DownBright);
-                    if (BackgroundDraw)
-                    {
-                        Theme.DrawBox(e.Graphics, cv, ButtonBackColor, rtButton, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_LT : BoxDrawOption.NONE));
-                    }
-                    Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor.BrightnessTransmit(Theme.DownBright), BackgroundDraw ? cv : BackColor, new Rectangle(rtText.X, rtText.Y + 1, rtText.Width, rtText.Height), DvContentAlignment.MiddleCenter);
-                }
-
-
-                #endregion
+                var cv = ButtonColor;
+                if (BackgroundDraw) Theme.DrawBox(e.Graphics, cv, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_V : BoxDrawOption.NONE));
+                Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, BackgroundDraw ? cv : BackColor, new Rectangle(rtText.X, rtText.Y + 0, rtText.Width, rtText.Height), DvContentAlignment.MiddleCenter);
             }
-            
+            else
+            {
+                var cv = ButtonColor.BrightnessTransmit(Theme.DownBright);
+                if (BackgroundDraw) Theme.DrawBox(e.Graphics, cv, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_V_REVERSE : BoxDrawOption.NONE));
+                Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor.BrightnessTransmit(Theme.DownBright), BackgroundDraw ? cv : BackColor, new Rectangle(rtText.X, rtText.Y + 1, rtText.Width, rtText.Height), DvContentAlignment.MiddleCenter);
+            }
+            #endregion
             #region Dispose
             br.Dispose();
             p.Dispose();
@@ -267,16 +258,15 @@ namespace Devinno.Forms.Controls
             base.OnThemeDraw(e, Theme);
         }
         #endregion
+
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (Clickable)
-            {
-                bDown = true;
-                Invalidate();
+            bDown = true;
+            this.Checked = true;
+            Invalidate();
 
-                click.MouseDown(e);
-            }
+            click.MouseDown(e);
             base.OnMouseDown(e);
         }
         #endregion

@@ -6,31 +6,14 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Devinno.Forms.Controls
+namespace Devinno.Forms.Containers
 {
-    public class DvControl : Control
+    public class DvTableLayoutPanel : TableLayoutPanel
     {
         #region Properties
-        #region UseThemeColor
-        private bool bUseThemeColor = true;
-        [Category("- 색상")]
-        public bool UseThemeColor
-        {
-            get => bUseThemeColor;
-            set
-            {
-                if (bUseThemeColor != value)
-                {
-                    bUseThemeColor = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
         #region DpiRatio
         public double DpiRatio => (double)this.LogicalToDeviceUnits(1000) / 1000.0;
         #endregion
@@ -41,19 +24,13 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
 
-        #region Member Variable
-
-        #endregion
-
         #region Constructor
-        public DvControl()
+        public DvTableLayoutPanel()
         {
             this.SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.UpdateStyles();
-
             DoubleBuffered = true;
-
             this.TabStop = false;
         }
         #endregion
@@ -112,7 +89,6 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-       
         #region LoadAreas
         protected virtual void LoadAreas(Graphics g)
         {
@@ -122,6 +98,15 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Method
+        #region GetContentBounds
+        public Rectangle GetContentBounds()
+        {
+            var o = this.FindForm();
+            var v = o as DvForm;
+            if (v != null && v.Theme != null) return new Rectangle(0, 0, Width - 1 - v.Theme.ShadowGap, Height - 1 - v.Theme.ShadowGap);
+            else return new Rectangle(0, 0, Width - 1, Height - 1);
+        }
+        #endregion
         #region GetTheme
         public DvTheme GetTheme()
         {
@@ -129,35 +114,12 @@ namespace Devinno.Forms.Controls
             try
             {
                 var o = this.FindForm();
-                if (o != null)
-                {
-                    var pi = o.GetType().GetProperty("Theme");
-                    if (pi != null)
-                    {
-                        var thm = pi.GetValue(o);
-                        ret = thm as DvTheme;
-                    }
-                }
+                var pi = o.GetType().GetProperty("Theme");
+                var thm = pi.GetValue(o);
+                ret = thm as DvTheme;
             }
             catch (Exception) { }
             return ret;
-        }
-        #endregion
-        #region GetParentBackColor
-        public Color GetParentBackColor(Control c)
-        {
-            if (c == null) return Color.Transparent;
-            if (c.BackColor != Color.Transparent) return c.BackColor;
-            else return GetParentBackColor(c.Parent);
-        }
-        #endregion
-        #region GetContentBounds
-        public Rectangle GetContentBounds()
-        {
-            var o = this.FindForm();
-            var v = o as DvForm;
-            if (v != null && v.Theme != null) return new Rectangle(0, 0, Width - 1 - v.Theme.ShadowGap, Height - 1 - v.Theme.ShadowGap);
-            else return new Rectangle(0, 0, Width - 2, Height - 2);
         }
         #endregion
         #region SetArea
@@ -165,6 +127,28 @@ namespace Devinno.Forms.Controls
         {
             if (!Areas.ContainsKey(key)) Areas.Add(key, rt);
             else Areas[key] = rt;
+        }
+        #endregion
+
+        #region .. Double Buffered function ..
+        public static void SetDoubleBuffered(System.Windows.Forms.Control c)
+        {
+            if (System.Windows.Forms.SystemInformation.TerminalServerSession)
+                return;
+            System.Reflection.PropertyInfo aProp = typeof(System.Windows.Forms.Control).GetProperty("DoubleBuffered", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            aProp.SetValue(c, true, null);
+        }
+
+        #endregion
+        #region .. code for Flucuring ..
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;
+                return cp;
+            }
         }
         #endregion
         #endregion

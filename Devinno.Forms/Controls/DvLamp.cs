@@ -66,6 +66,21 @@ namespace Devinno.Forms.Controls
         }
         #endregion
 
+        #region LampStyle
+        private LampStyle eLampStyle = LampStyle.CIRCLE;
+        public LampStyle LampStyle
+        {
+            get => eLampStyle;
+            set
+            {
+                if(eLampStyle != value)
+                {
+                    eLampStyle = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
         #region LampOffsetX
         private int nLampOffsetX = 0;
         public int LampOffsetX
@@ -172,6 +187,9 @@ namespace Devinno.Forms.Controls
         }
         #endregion
 
+        #region UseAnimation
+        public bool UseAnimation { get; set; } = false;
+        #endregion
         #region Text
         [Editor(typeof(MultilineStringEditor), typeof(UITypeEditor))]
         [Category("- 모양")]
@@ -191,12 +209,62 @@ namespace Devinno.Forms.Controls
                 if (bOnOff != value)
                 {
                     bOnOff = value;
+                    if (UseAnimation)
+                    {
+                        if (bOnOff) StartOn();
+                        else StartOff();
+                    }
                     Invalidate();
                 }
             }
         }
         #endregion
         #endregion
+
+        #region Member Variable
+        double oa = 0.0;
+        bool ing = false;
+        #endregion
+
+        void StartOn()
+        {
+            var th = new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+                var prev = DateTime.Now;
+                var M = 150D;
+                ing = true;
+                while (bOnOff && (DateTime.Now-prev).TotalMilliseconds <= M)
+                {
+                    oa = (DateTime.Now - prev).TotalMilliseconds / M;
+                    this.Invoke(new Action(() => Invalidate()));
+                    System.Threading.Thread.Sleep(10);
+                }
+                ing = false;
+                this.Invoke(new Action(() => Invalidate()));
+            }))
+            { IsBackground = true };
+            th.Start();
+        }
+
+        void StartOff()
+        {
+            var th = new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+                var prev = DateTime.Now;
+                var M = 150D;
+                ing = true;
+                while (!bOnOff && (DateTime.Now - prev).TotalMilliseconds <= M)
+                {
+                    oa = ((DateTime.Now - prev).TotalMilliseconds / M);
+                    this.Invoke(new Action(() => Invalidate()));
+                    System.Threading.Thread.Sleep(10);
+                }
+                ing = false;
+                this.Invoke(new Action(() => Invalidate()));
+            }))
+            { IsBackground = true };
+            th.Start();
+        }
 
         #region Constructor
         public DvLamp()
@@ -213,10 +281,13 @@ namespace Devinno.Forms.Controls
          
             var rtContent = Areas["rtContent"];
 
+            var wratio = (Width > Height ? (double)Width / (double)Height : 1D);
+            var hratio = (Width < Height ? (double)Height / (double)Width : 1D);
+
             if (string.IsNullOrWhiteSpace(Text))
             {
                 var ng = Math.Min(LampSize / 8, 9);
-                var szv = new Size(LampSize, LampSize);
+                var szv = LampStyle == LampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
                 var rtFA = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
                 var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
 
@@ -225,34 +296,48 @@ namespace Devinno.Forms.Controls
             }
             else
             {
-                var ng = Math.Min(LampSize / 8, 9);
-                var gap = LampGap;
-                var f = DpiRatio;
-                var szFA = new Size(LampSize, LampSize);
-                var szTX = g.MeasureString(Text, Font);
-                var szv = g.MeasureTextIcon(eLampAlignment, szFA, gap, Text, Font);
-
-                var rt = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
-
-                if (LampAlignment == DvTextIconAlignment.LeftRight)
+                if (LampStyle == LampStyle.CIRCLE)
                 {
-                    var rtFA = new Rectangle(rt.X, INTC(DrawingTool.CenterY(rt, szFA)), INTC(szFA.Width), INTC(szFA.Height)); rtFA.Offset(LampOffsetX, LampOffsetY);
-                    var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
-                    var rtTX = new Rectangle(rt.Right - INTC(szTX.Width), INTC(DrawingTool.CenterY(rt, szTX)), INTC(szTX.Width), INTC(szTX.Height));
+                    var ng = Math.Min(LampSize / 8, 9);
+                    var gap = LampGap;
+                    var f = DpiRatio;
+                    var szFA = LampStyle == LampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
+                    var szTX = g.MeasureString(Text, Font);
+                    var szv = g.MeasureTextIcon(eLampAlignment, szFA, gap, Text, Font);
 
-                    SetArea("rtLampBack", rtFA);
-                    SetArea("rtLamp", rtFAIN);
-                    SetArea("rtText", rtTX);
+                    var rt = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
+
+                    if (LampAlignment == DvTextIconAlignment.LeftRight)
+                    {
+                        var rtFA = new Rectangle(rt.X, INTC(DrawingTool.CenterY(rt, szFA)), INTC(szFA.Width), INTC(szFA.Height)); rtFA.Offset(LampOffsetX, LampOffsetY);
+                        var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
+                        var rtTX = new Rectangle(rt.Right - INTC(szTX.Width), INTC(DrawingTool.CenterY(rt, szTX)), INTC(szTX.Width), INTC(szTX.Height));
+
+                        SetArea("rtLampBack", rtFA);
+                        SetArea("rtLamp", rtFAIN);
+                        SetArea("rtText", rtTX);
+                    }
+                    else
+                    {
+                        var rtFA = new Rectangle(INTC(DrawingTool.CenterX(rt, szFA)), rt.Y, INTC(szFA.Width), INTC(szFA.Height)); rtFA.Offset(LampOffsetX, LampOffsetY);
+                        var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
+                        var rtTX = new Rectangle(INTC(DrawingTool.CenterX(rt, szTX)), rt.Bottom - INTC(szTX.Height), INTC(szTX.Width), INTC(szTX.Height));
+
+                        SetArea("rtLampBack", rtFA);
+                        SetArea("rtLamp", rtFAIN);
+                        SetArea("rtText", rtTX);
+                    }
                 }
                 else
                 {
-                    var rtFA = new Rectangle(INTC(DrawingTool.CenterX(rt, szFA)), rt.Y, INTC(szFA.Width), INTC(szFA.Height)); rtFA.Offset(LampOffsetX, LampOffsetY);
+                    var ng = Math.Min(LampSize / 8, 9);
+                    var szv = LampStyle == LampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
+                    var rtFA = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
                     var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
-                    var rtTX = new Rectangle(INTC(DrawingTool.CenterX(rt, szTX)), rt.Bottom - INTC(szTX.Height), INTC(szTX.Width), INTC(szTX.Height));
-
+                   
                     SetArea("rtLampBack", rtFA);
                     SetArea("rtLamp", rtFAIN);
-                    SetArea("rtText", rtTX);
+                    SetArea("rtText", rtFAIN);
                 }
             }
         }
@@ -268,7 +353,6 @@ namespace Devinno.Forms.Controls
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             #endregion
             #region Bounds
-            var rtText = Areas["rtText"];
             var rtBack = Areas["rtLampBack"];
             var rtLamp = Areas["rtLamp"];
             #endregion
@@ -277,43 +361,195 @@ namespace Devinno.Forms.Controls
             var br = new SolidBrush(LampBackColor);
             #endregion
             #region Draw
-            Theme.DrawBox(e.Graphics, LampBackColor, BackColor, rtBack, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
-            #region Lamp
-            if (OnOff)
-            {
-                using (var pth = new GraphicsPath())
-                {
-                    pth.AddEllipse(rtLamp);
-                    using (var pbr = new PathGradientBrush(pth))
-                    {
-                        pbr.CenterPoint = new Point(Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Left, rtLamp.Right)), Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Top, rtLamp.Bottom)));
-                        pbr.CenterColor = OnLampColor.BrightnessTransmit(LampLightBright);
-                        pbr.SurroundColors = new Color[] { OnLampColor.BrightnessTransmit(LampDarkBright) };
 
-                        e.Graphics.FillEllipse(pbr, rtLamp);
+            if (LampStyle == LampStyle.CIRCLE)
+            {
+                Theme.DrawBox(e.Graphics, LampBackColor, BackColor, rtBack, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+                #region Lamp
+                if (OnOff)
+                {
+                    var c = OnLampColor;
+
+                    if (UseAnimation && ing)
+                    {
+                        var r = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OffLampColor.R, OnLampColor.R));
+                        var g = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OffLampColor.G, OnLampColor.G));
+                        var b = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OffLampColor.B, OnLampColor.B));
+                        c = Color.FromArgb(r, g, b);
                     }
-                    Theme.DrawBorder(e.Graphics, LampBackColor, rtLamp, RoundType.ELLIPSE);
+
+                    using (var pth = new GraphicsPath())
+                    {
+                        pth.AddEllipse(rtLamp);
+                        using (var pbr = new PathGradientBrush(pth))
+                        {
+                            pbr.CenterPoint = new Point(Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Left, rtLamp.Right)), Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Top, rtLamp.Bottom)));
+                            pbr.CenterColor = c.BrightnessTransmit(LampLightBright);
+                            pbr.SurroundColors = new Color[] { c.BrightnessTransmit(LampDarkBright) };
+
+                            e.Graphics.FillEllipse(pbr, rtLamp);
+                        }
+                        Theme.DrawBorder(e.Graphics, LampBackColor, rtLamp, RoundType.ELLIPSE);
+                    }
                 }
+                else
+                {
+                    var c = OffLampColor;
+
+                    if (UseAnimation && ing)
+                    {
+                        var r = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OnLampColor.R, OffLampColor.R));
+                        var g = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OnLampColor.G, OffLampColor.G));
+                        var b = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OnLampColor.B, OffLampColor.B));
+                        c = Color.FromArgb(r, g, b);
+                    }
+
+                    using (var pth = new GraphicsPath())
+                    {
+                        pth.AddEllipse(rtLamp);
+                        using (var pbr = new PathGradientBrush(pth))
+                        {
+                            pbr.CenterPoint = new Point(Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Left, rtLamp.Right)), Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Top, rtLamp.Bottom)));
+                            pbr.CenterColor = c.BrightnessTransmit(LampLightBright);
+                            pbr.SurroundColors = new Color[] { c.BrightnessTransmit(LampDarkBright / 2.0) };
+
+                            e.Graphics.FillEllipse(pbr, rtLamp);
+                        }
+                        Theme.DrawBorder(e.Graphics, LampBackColor, rtLamp, RoundType.ELLIPSE);
+                    }
+                }
+                #endregion
             }
             else
             {
-                using (var pth = new GraphicsPath())
+                Theme.DrawBox(e.Graphics, LampBackColor, BackColor, rtBack, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+                #region Lamp
+                if (OnOff)
                 {
-                    pth.AddEllipse(rtLamp);
-                    using (var pbr = new PathGradientBrush(pth))
+                    var c = OnLampColor;
+                    var AON = Convert.ToInt32(OnLampColor.ToHSV().V * 180);
+                    var AOFF = AON / 3;
+                    var BA = AON;
+                  
+                    if (UseAnimation && ing)
                     {
-                        pbr.CenterPoint = new Point(Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Left, rtLamp.Right)), Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Top, rtLamp.Bottom)));
-                        pbr.CenterColor = OffLampColor.BrightnessTransmit(LampLightBright);
-                        pbr.SurroundColors = new Color[] { OffLampColor.BrightnessTransmit(LampDarkBright/2.0) };
-
-                        e.Graphics.FillEllipse(pbr, rtLamp);
+                        var r = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OffLampColor.R, OnLampColor.R));
+                        var g = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OffLampColor.G, OnLampColor.G));
+                        var b = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OffLampColor.B, OnLampColor.B));
+                        c = Color.FromArgb(r, g, b);
+                        BA = Convert.ToInt32(MathTool.Map(oa, 0D, 1D, AOFF, AON));
                     }
-                    Theme.DrawBorder(e.Graphics, LampBackColor, rtLamp, RoundType.ELLIPSE);
+                    #region Fill
+                    using (var pv = DrawingTool.GetRoundRectPath(rtLamp, Theme.Corner))
+                    {
+                        e.Graphics.SetClip(pv);
+                        using (var pth = new GraphicsPath())
+                        {
+                            var rt = new Rectangle(rtBack.X, rtBack.Y, rtBack.Width, rtBack.Height); rt.Inflate(rtBack.Width / 8, rtBack.Height / 8);
+                            pth.AddEllipse(rt);
+                            using (var pbr = new PathGradientBrush(pth))
+                            {
+                                pbr.CenterPoint = new Point(Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Left, rtLamp.Right)), Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Top, rtLamp.Bottom)));
+                                pbr.CenterColor = c.BrightnessTransmit(LampLightBright);
+                                pbr.SurroundColors = new Color[] { c.BrightnessTransmit(LampDarkBright) };
+                                e.Graphics.FillEllipse(pbr, rt);
+                            }
+                        }
+                        e.Graphics.ResetClip();
+                        Theme.DrawBorder(e.Graphics, LampBackColor, rtLamp, RoundType.ALL);
+                    }
+                    #endregion
+                    using (var lgbr = new LinearGradientBrush(rtLamp, Color.FromArgb(Convert.ToByte(MathTool.Constrain(Theme.BevelAlpha * 1.5, 0, 255)), Color.White), Color.FromArgb(0, Color.White), 90))
+                    {
+                        e.Graphics.FillRoundRectangle(lgbr, rtLamp, Theme.Corner);
+                    }
+                    #region InBevel
+                    {
+                        var rt = new Rectangle(rtLamp.X + 1, rtLamp.Y + 1, rtLamp.Width - 1, rtLamp.Height - 1);
+                        var rtex = new Rectangle(rt.X, rt.Y, rt.Width - 1, rt.Height - 1);
+                        e.Graphics.SetClip(rtex);
+                        var c1 = Color.FromArgb(Theme.BevelAlpha, Color.White);
+                        var c2 = Color.Transparent;
+
+                        using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 75))
+                        {
+                            using (var p2 = new Pen(lgbr, 1F))
+                            {
+                                e.Graphics.DrawRoundRectangle(p2, rt, Theme.Corner);
+                            }
+                        }
+                        e.Graphics.ResetClip();
+                    }
+                    #endregion
                 }
+                else
+                {
+                    var c = OffLampColor;
+                    var AON = Convert.ToInt32(OnLampColor.ToHSV().V * 180);
+                    var AOFF = AON / 3;
+                    var BA = AOFF;
+
+                    if (UseAnimation && ing)
+                    {
+                        var r = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OnLampColor.R, OffLampColor.R));
+                        var g = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OnLampColor.G, OffLampColor.G));
+                        var b = Convert.ToByte(MathTool.Map(oa, 0D, 1D, OnLampColor.B, OffLampColor.B));
+                        c = Color.FromArgb(r, g, b);
+                        BA = Convert.ToInt32(MathTool.Map(oa, 0D, 1D, AON, AOFF));
+                    }
+                    #region Fill
+                    using (var pv = DrawingTool.GetRoundRectPath(rtLamp, Theme.Corner))
+                    {
+                        e.Graphics.SetClip(pv);
+                        using (var pth = new GraphicsPath())
+                        {
+                            var rt = new Rectangle(rtBack.X, rtBack.Y, rtBack.Width, rtBack.Height); rt.Inflate(rtBack.Width / 8, rtBack.Height / 8);
+                            pth.AddEllipse(rt);
+                            using (var pbr = new PathGradientBrush(pth))
+                            {
+                                pbr.CenterPoint = new Point(Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Left, rtLamp.Right)), Convert.ToInt32(MathTool.Map(0.25, 0, 1, rtLamp.Top, rtLamp.Bottom)));
+                                pbr.CenterColor = c.BrightnessTransmit(LampLightBright);
+                                pbr.SurroundColors = new Color[] { c.BrightnessTransmit(LampDarkBright / 2.0) };
+                                e.Graphics.FillEllipse(pbr, rt);
+                            }
+                        }
+                        e.Graphics.ResetClip();
+                        Theme.DrawBorder(e.Graphics, LampBackColor, rtLamp, RoundType.ALL);
+                    }
+                    #endregion
+                    using (var lgbr = new LinearGradientBrush(rtLamp, Color.FromArgb(Convert.ToByte(MathTool.Constrain(Theme.BevelAlpha / 1.5, 0, 255)), Color.White), Color.FromArgb(0, Color.White), 90))
+                    {
+                        e.Graphics.FillRoundRectangle(lgbr, rtLamp, Theme.Corner);
+                    }
+                    #region InBevel
+                    {
+                        var rt = new Rectangle(rtLamp.X + 1, rtLamp.Y + 1, rtLamp.Width - 1, rtLamp.Height - 1);
+                        var rtex = new Rectangle(rt.X, rt.Y, rt.Width - 1, rt.Height - 1);
+                        e.Graphics.SetClip(rtex);
+                        var c1 = Color.FromArgb(Theme.BevelAlpha, Color.White);
+                        var c2 = Color.Transparent;
+
+                        using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 75))
+                        {
+                            using (var p2 = new Pen(lgbr, 1F))
+                            {
+                                e.Graphics.DrawRoundRectangle(p2, rt, Theme.Corner);
+                            }
+                        }
+                        e.Graphics.ResetClip();
+                    }
+                    #endregion
+                }
+                #endregion
             }
-            #endregion
+
             #region Text
-            if (!string.IsNullOrWhiteSpace(Text)) Theme.DrawTextShadow(e.Graphics, null, Text, Font, ForeColor, BackColor, rtText, DvContentAlignment.MiddleCenter);
+            if (!string.IsNullOrWhiteSpace(Text))
+            {
+                var rtText = Areas["rtText"];
+
+                Theme.DrawTextShadow(e.Graphics, null, Text, Font, ForeColor, BackColor, rtText, DvContentAlignment.MiddleCenter);
+            }
             #endregion
             #endregion
             #region Dispose
@@ -330,4 +566,8 @@ namespace Devinno.Forms.Controls
         private int INTC(float v) => Convert.ToInt32(Math.Ceiling(v));
         #endregion
     }
+
+    #region enum : LampStyle
+    public enum LampStyle { CIRCLE = 0, RECT = 1 }
+    #endregion
 }

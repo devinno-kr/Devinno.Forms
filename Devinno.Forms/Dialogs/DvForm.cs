@@ -323,7 +323,7 @@ namespace Devinno.Forms.Dialogs
                 Size sz = new Size(0, 0);
                 while (true)
                 {
-                    if (this.IsHandleCreated && !this.IsDisposed && !DesignMode && Areas.Count == 7)
+                    if (this.IsHandleCreated && !this.IsDisposed && !DesignMode && Areas.Count == 7 && !BlankForm)
                     {
                         try
                         {
@@ -685,7 +685,7 @@ namespace Devinno.Forms.Dialogs
             const int NC_HITTEST = 0x84;
 
             #region Resize
-            if (!Fixed && WindowState != FormWindowState.Maximized)
+            if (!Fixed && WindowState != FormWindowState.Maximized && !BlankForm)
             {
                 const int htLeft = 10;
                 const int htRight = 11;

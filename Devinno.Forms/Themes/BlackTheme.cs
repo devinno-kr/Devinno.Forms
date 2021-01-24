@@ -64,8 +64,6 @@ namespace Devinno.Forms.Themes
         public override ThemeMenuColorTable MenuColorTable { get; } = new BlackThemeMenuColorTable();
         #endregion
 
-      
-
         #region Method
         #region DrawBorder
         public override void DrawBorder(Graphics g, Pen p, Rectangle bounds, RoundType round = RoundType.ALL)
@@ -549,13 +547,13 @@ namespace Devinno.Forms.Themes
 
         public override void DrawTextBevel(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
         {
-            bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, bg.BrightnessTransmit(0.5), bounds, align);
+            bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), bounds, align);
             bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, bounds, align);
         }
 
         public override void DrawTextShadow(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
         {
-            bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, bg.BrightnessTransmit(-0.5), bounds, align);
+            bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), bounds, align);
             bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, bounds, align);
         }
         #endregion

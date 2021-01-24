@@ -77,6 +77,22 @@ namespace Devinno.Forms.Containers
             }
         }
         #endregion
+        #region DrawBackground
+        private bool bDrawBackground = false;
+        public bool DrawBackground
+        {
+            get => bDrawBackground;
+            set
+            {
+                if (bDrawBackground != value)
+                {
+                    bDrawBackground = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Constructor
@@ -126,23 +142,28 @@ namespace Devinno.Forms.Containers
                 e.Graphics.Clear(Parent.BackColor);
 
                 #region Border Shadow
-                rtBorder.Inflate(-(BorderWidth / 2), -(BorderWidth / 2));
+                //rtBorder.Inflate(-1, -1);
 
                 p.Width = BorderWidth;
 
                 p.Color = Parent.BackColor.BrightnessTransmit(Theme.OutShadowBright);
-                rtBorder.Offset(Theme.ShadowGap, Theme.ShadowGap); e.Graphics.DrawRoundRectangle(p, rtBorder, Corner);
+                rtBorder.Offset(Theme.ShadowGap, Theme.ShadowGap); 
+                e.Graphics.DrawRoundRectangle(p, rtBorder, Corner);
+                rtBorder.Offset(-Theme.ShadowGap, -Theme.ShadowGap);
                 #endregion
-                #region Fill
-                if (BackColor != Color.Transparent)
+                if (DrawBackground)
                 {
-                    br.Color = BackColor;
-                    e.Graphics.FillRoundRectangle(br, rtBorder, Corner);
+                    #region Fill
+                    if (BackColor != Color.Transparent)
+                    {
+                        br.Color = BackColor;
+                        e.Graphics.FillRoundRectangle(br, rtBorder, Corner);
+                    }
+                    #endregion
                 }
-                #endregion
                 #region Border
                 p.Color = BorderColor;
-                rtBorder.Offset(-Theme.ShadowGap, -Theme.ShadowGap); e.Graphics.DrawRoundRectangle(p, rtBorder, Corner);
+                e.Graphics.DrawRoundRectangle(p, rtBorder, Corner);
                 #endregion
             }
             #endregion
