@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Devinno.Forms", "Devinno.Fo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "..\Sample\Sample.csproj", "{791007C7-A101-4938-8479-69EFF2AF7D02}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KimbabRobot2nd", "..\..\..\..\..\..\Ideantree\럭키이엔지\New Version\KimbabRobot2nd\src\KimbabRobot2nd\KimbabRobot2nd.csproj", "{0F132D09-82A3-49B0-BA86-4CDA95AF1422}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{791007C7-A101-4938-8479-69EFF2AF7D02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{791007C7-A101-4938-8479-69EFF2AF7D02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{791007C7-A101-4938-8479-69EFF2AF7D02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F132D09-82A3-49B0-BA86-4CDA95AF1422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F132D09-82A3-49B0-BA86-4CDA95AF1422}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F132D09-82A3-49B0-BA86-4CDA95AF1422}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F132D09-82A3-49B0-BA86-4CDA95AF1422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
