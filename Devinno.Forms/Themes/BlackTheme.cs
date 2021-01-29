@@ -218,24 +218,25 @@ namespace Devinno.Forms.Themes
                 var c1 = c.BrightnessTransmit(GradientLightBright);
                 var c2 = c.BrightnessTransmit(GradientDarkBright);
 
-                using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 90))
-                {
-                    switch (round)
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 90))
                     {
-                        case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
-                        case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
-                        case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
-                        case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
-                        case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
-                        case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
-                        case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
-                        case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
-                        case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
-                        case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
-                        case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
-                        case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        switch (round)
+                        {
+                            case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
+                            case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
+                            case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
+                            case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
+                            case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
+                            case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
+                            case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
+                            case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
+                            case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
+                            case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
+                            case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
+                            case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        }
                     }
-                }
             }
             else if ((option & BoxDrawOption.GRADIENT_V_REVERSE) == BoxDrawOption.GRADIENT_V_REVERSE)
             {
@@ -244,24 +245,25 @@ namespace Devinno.Forms.Themes
                 var c1 = c.BrightnessTransmit(GradientDarkBright);
                 var c2 = c.BrightnessTransmit(GradientLightBright);
 
-                using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 90))
-                {
-                    switch (round)
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 90))
                     {
-                        case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
-                        case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
-                        case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
-                        case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
-                        case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
-                        case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
-                        case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
-                        case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
-                        case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
-                        case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
-                        case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
-                        case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        switch (round)
+                        {
+                            case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
+                            case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
+                            case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
+                            case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
+                            case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
+                            case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
+                            case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
+                            case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
+                            case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
+                            case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
+                            case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
+                            case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        }
                     }
-                }
             }
             else if ((option & BoxDrawOption.GRADIENT_H) == BoxDrawOption.GRADIENT_H)
             {
@@ -270,24 +272,25 @@ namespace Devinno.Forms.Themes
                 var c1 = c.BrightnessTransmit(GradientDarkBright);
                 var c2 = c.BrightnessTransmit(GradientLightBright);
 
-                using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 180F))
-                {
-                    switch (round)
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 180F))
                     {
-                        case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
-                        case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
-                        case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
-                        case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
-                        case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
-                        case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
-                        case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
-                        case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
-                        case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
-                        case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
-                        case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
-                        case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        switch (round)
+                        {
+                            case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
+                            case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
+                            case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
+                            case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
+                            case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
+                            case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
+                            case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
+                            case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
+                            case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
+                            case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
+                            case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
+                            case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        }
                     }
-                }
             }
             else if ((option & BoxDrawOption.GRADIENT_H_REVERSE) == BoxDrawOption.GRADIENT_H_REVERSE)
             {
@@ -296,24 +299,25 @@ namespace Devinno.Forms.Themes
                 var c1 = c.BrightnessTransmit(GradientDarkBright);
                 var c2 = c.BrightnessTransmit(GradientLightBright);
 
-                using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 0F))
-                {
-                    switch (round)
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 0F))
                     {
-                        case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
-                        case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
-                        case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
-                        case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
-                        case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
-                        case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
-                        case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
-                        case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
-                        case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
-                        case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
-                        case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
-                        case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        switch (round)
+                        {
+                            case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
+                            case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
+                            case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
+                            case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
+                            case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
+                            case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
+                            case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
+                            case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
+                            case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
+                            case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
+                            case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
+                            case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        }
                     }
-                }
             }
             else if ((option & BoxDrawOption.GRADIENT_LT) == BoxDrawOption.GRADIENT_LT)
             {
@@ -322,24 +326,25 @@ namespace Devinno.Forms.Themes
                 var c1 = c.BrightnessTransmit(GradientLightBright);
                 var c2 = c.BrightnessTransmit(GradientDarkBright);
 
-                using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 45))
-                {
-                    switch (round)
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 45))
                     {
-                        case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
-                        case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
-                        case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
-                        case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
-                        case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
-                        case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
-                        case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
-                        case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
-                        case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
-                        case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
-                        case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
-                        case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        switch (round)
+                        {
+                            case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
+                            case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
+                            case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
+                            case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
+                            case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
+                            case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
+                            case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
+                            case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
+                            case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
+                            case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
+                            case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
+                            case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        }
                     }
-                }
             }
             else if ((option & BoxDrawOption.GRADIENT_RT) == BoxDrawOption.GRADIENT_RT)
             {
@@ -348,24 +353,25 @@ namespace Devinno.Forms.Themes
                 var c1 = c.BrightnessTransmit(GradientLightBright);
                 var c2 = c.BrightnessTransmit(GradientDarkBright);
 
-                using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 135))
-                {
-                    switch (round)
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 135))
                     {
-                        case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
-                        case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
-                        case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
-                        case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
-                        case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
-                        case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
-                        case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
-                        case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
-                        case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
-                        case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
-                        case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
-                        case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        switch (round)
+                        {
+                            case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
+                            case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
+                            case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
+                            case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
+                            case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
+                            case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
+                            case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
+                            case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
+                            case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
+                            case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
+                            case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
+                            case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        }
                     }
-                }
             }
             else if ((option & BoxDrawOption.GRADIENT_RB) == BoxDrawOption.GRADIENT_RB)
             {
@@ -374,24 +380,25 @@ namespace Devinno.Forms.Themes
                 var c1 = c.BrightnessTransmit(GradientLightBright);
                 var c2 = c.BrightnessTransmit(GradientDarkBright);
 
-                using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 225))
-                {
-                    switch (round)
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 225))
                     {
-                        case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
-                        case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
-                        case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
-                        case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
-                        case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
-                        case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
-                        case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
-                        case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
-                        case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
-                        case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
-                        case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
-                        case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        switch (round)
+                        {
+                            case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
+                            case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
+                            case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
+                            case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
+                            case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
+                            case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
+                            case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
+                            case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
+                            case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
+                            case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
+                            case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
+                            case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        }
                     }
-                }
             }
             else if ((option & BoxDrawOption.GRADIENT_LB) == BoxDrawOption.GRADIENT_LB)
             {
@@ -400,24 +407,25 @@ namespace Devinno.Forms.Themes
                 var c1 = c.BrightnessTransmit(GradientLightBright);
                 var c2 = c.BrightnessTransmit(GradientDarkBright);
 
-                using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 315))
-                {
-                    switch (round)
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 315))
                     {
-                        case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
-                        case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
-                        case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
-                        case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
-                        case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
-                        case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
-                        case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
-                        case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
-                        case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
-                        case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
-                        case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
-                        case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        switch (round)
+                        {
+                            case RoundType.NONE: g.FillRectangle(lgbr, rt); break;
+                            case RoundType.ALL: g.FillRoundRectangle(lgbr, rt, Corner); break;
+                            case RoundType.L: g.FillRoundRectangleL(lgbr, rt, Corner); break;
+                            case RoundType.R: g.FillRoundRectangleR(lgbr, rt, Corner); break;
+                            case RoundType.T: g.FillRoundRectangleT(lgbr, rt, Corner); break;
+                            case RoundType.B: g.FillRoundRectangleB(lgbr, rt, Corner); break;
+                            case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, Corner); break;
+                            case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, Corner); break;
+                            case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, Corner); break;
+                            case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, Corner); break;
+                            case RoundType.ELLIPSE: g.FillEllipse(lgbr, rt); break;
+                            case RoundType.FULL_HORIZON: g.FillRoundRectangle(lgbr, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                        }
                     }
-                }
             }
             else
             {
@@ -448,28 +456,28 @@ namespace Devinno.Forms.Themes
                 var rt = new Rectangle(bounds.X + 1, bounds.Y + 1, bounds.Width - 2, bounds.Height - 2);
                 var c1 = c.BrightnessTransmit(InBevelBright);
                 var c2 = Color.Transparent;
-
-                using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 90))
-                {
-                    using (var p2 = new Pen(lgbr, 1F))
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 90))
                     {
-                        switch (round)
+                        using (var p2 = new Pen(lgbr, 1F))
                         {
-                            case RoundType.NONE: g.DrawRectangle(p2, rt); break;
-                            case RoundType.ALL: g.DrawRoundRectangle(p2, rt, Corner); break;
-                            case RoundType.L: g.DrawRoundRectangleL(p2, rt, Corner); break;
-                            case RoundType.R: g.DrawRoundRectangleR(p2, rt, Corner); break;
-                            case RoundType.T: g.DrawRoundRectangleT(p2, rt, Corner); break;
-                            case RoundType.B: g.DrawRoundRectangleB(p2, rt, Corner); break;
-                            case RoundType.LT: g.DrawRoundRectangleLT(p2, rt, Corner); break;
-                            case RoundType.RT: g.DrawRoundRectangleRT(p2, rt, Corner); break;
-                            case RoundType.LB: g.DrawRoundRectangleLB(p2, rt, Corner); break;
-                            case RoundType.RB: g.DrawRoundRectangleRB(p2, rt, Corner); break;
-                            case RoundType.ELLIPSE: g.DrawEllipse(p2, rt); break;
-                            case RoundType.FULL_HORIZON: g.DrawRoundRectangle(p2, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                            switch (round)
+                            {
+                                case RoundType.NONE: g.DrawRectangle(p2, rt); break;
+                                case RoundType.ALL: g.DrawRoundRectangle(p2, rt, Corner); break;
+                                case RoundType.L: g.DrawRoundRectangleL(p2, rt, Corner); break;
+                                case RoundType.R: g.DrawRoundRectangleR(p2, rt, Corner); break;
+                                case RoundType.T: g.DrawRoundRectangleT(p2, rt, Corner); break;
+                                case RoundType.B: g.DrawRoundRectangleB(p2, rt, Corner); break;
+                                case RoundType.LT: g.DrawRoundRectangleLT(p2, rt, Corner); break;
+                                case RoundType.RT: g.DrawRoundRectangleRT(p2, rt, Corner); break;
+                                case RoundType.LB: g.DrawRoundRectangleLB(p2, rt, Corner); break;
+                                case RoundType.RB: g.DrawRoundRectangleRB(p2, rt, Corner); break;
+                                case RoundType.ELLIPSE: g.DrawEllipse(p2, rt); break;
+                                case RoundType.FULL_HORIZON: g.DrawRoundRectangle(p2, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                            }
                         }
                     }
-                }
             }
             #endregion
             #region IN BEVEL LT
@@ -481,28 +489,28 @@ namespace Devinno.Forms.Themes
                 g.SetClip(rtex, CombineMode.Intersect);
                 var c1 = c.BrightnessTransmit(InBevelBright);
                 var c2 = Color.Transparent;
-
-                using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 75))
-                {
-                    using (var p2 = new Pen(lgbr, 1F))
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 75))
                     {
-                        switch (round)
+                        using (var p2 = new Pen(lgbr, 1F))
                         {
-                            case RoundType.NONE: g.DrawRectangle(p2, rt); break;
-                            case RoundType.ALL: g.DrawRoundRectangle(p2, rt, Corner); break;
-                            case RoundType.L: g.DrawRoundRectangleL(p2, rt, Corner); break;
-                            case RoundType.R: g.DrawRoundRectangleR(p2, rt, Corner); break;
-                            case RoundType.T: g.DrawRoundRectangleT(p2, rt, Corner); break;
-                            case RoundType.B: g.DrawRoundRectangleB(p2, rt, Corner); break;
-                            case RoundType.LT: g.DrawRoundRectangleLT(p2, rt, Corner); break;
-                            case RoundType.RT: g.DrawRoundRectangleRT(p2, rt, Corner); break;
-                            case RoundType.LB: g.DrawRoundRectangleLB(p2, rt, Corner); break;
-                            case RoundType.RB: g.DrawRoundRectangleRB(p2, rt, Corner); break;
-                            case RoundType.ELLIPSE: g.DrawEllipse(p2, rt); break;
-                            case RoundType.FULL_HORIZON: g.DrawRoundRectangle(p2, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                            switch (round)
+                            {
+                                case RoundType.NONE: g.DrawRectangle(p2, rt); break;
+                                case RoundType.ALL: g.DrawRoundRectangle(p2, rt, Corner); break;
+                                case RoundType.L: g.DrawRoundRectangleL(p2, rt, Corner); break;
+                                case RoundType.R: g.DrawRoundRectangleR(p2, rt, Corner); break;
+                                case RoundType.T: g.DrawRoundRectangleT(p2, rt, Corner); break;
+                                case RoundType.B: g.DrawRoundRectangleB(p2, rt, Corner); break;
+                                case RoundType.LT: g.DrawRoundRectangleLT(p2, rt, Corner); break;
+                                case RoundType.RT: g.DrawRoundRectangleRT(p2, rt, Corner); break;
+                                case RoundType.LB: g.DrawRoundRectangleLB(p2, rt, Corner); break;
+                                case RoundType.RB: g.DrawRoundRectangleRB(p2, rt, Corner); break;
+                                case RoundType.ELLIPSE: g.DrawEllipse(p2, rt); break;
+                                case RoundType.FULL_HORIZON: g.DrawRoundRectangle(p2, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                            }
                         }
                     }
-                }
                 g.SetClip(oldclip, CombineMode.Replace);
             }
             #endregion

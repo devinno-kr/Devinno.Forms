@@ -191,22 +191,28 @@ namespace Devinno.Forms.Controls
                 {
                     if (SelectedIndex >= 0 && SelectedIndex < Items.Count)
                     {
-                        for (int i = 0; i < Items.Count; i++)
+                        if (bAni)
                         {
-                            var v = Items[i];
-                            int x = rtText.X + ((i - SelectedIndex) * rtText.Width) + ox;
-                            if (SelectedIndex == 0 && x > rtText.X + ((Items.Count - 1 - SelectedIndex) * rtText.Width)) x = rtText.X + ((-1 - SelectedIndex) * rtText.Width) + ox;
-                            if (SelectedIndex == Items.Count - 1 && x < rtText.X + ((0 - SelectedIndex) * rtText.Width)) x = rtText.X + ((Items.Count - SelectedIndex) * rtText.Width) + ox;
-                            var rt = new Rectangle(x, rtText.Y, rtText.Width, rtText.Height);
-                            if (CollisionTool.Check(rt, rtText))
+                            for (int i = 0; i < Items.Count; i++)
                             {
-                                var cp = MathTool.CenterPoint(rtText);
-                                var alpha = Convert.ToByte(MathTool.Constrain(MathTool.Map(Math.Abs((rt.X + (rt.Width / 2.0)) - cp.X), 0.0, (rtText.Width / 3), 255.0, 0), 0.0, 255.0));
-
-                                Theme.DrawTextShadow(e.Graphics, v.Icon, v.Text, Font, Color.FromArgb(alpha, ForeColor), BackgroundDraw ? SelectorColor : BackColor, rt, DvContentAlignment.MiddleCenter);
+                                var v = Items[i];
+                                int x = rtText.X + ((i - SelectedIndex) * rtText.Width) + ox;
+                                if (SelectedIndex == 0 && x > rtText.X + ((Items.Count - 1 - SelectedIndex) * rtText.Width)) x = rtText.X + ((-1 - SelectedIndex) * rtText.Width) + ox;
+                                if (SelectedIndex == Items.Count - 1 && x < rtText.X + ((0 - SelectedIndex) * rtText.Width)) x = rtText.X + ((Items.Count - SelectedIndex) * rtText.Width) + ox;
+                                var rt = new Rectangle(x, rtText.Y, rtText.Width, rtText.Height);
+                                if (CollisionTool.Check(rt, rtText))
+                                {
+                                    var cp = MathTool.CenterPoint(rtText);
+                                    var alpha = Convert.ToByte(MathTool.Constrain(MathTool.Map(Math.Abs((rt.X + (rt.Width / 2.0)) - cp.X), 0.0, (rtText.Width / 3), 255.0, 0), 0.0, 255.0));
+                                    Theme.DrawTextShadow(e.Graphics, v.Icon, v.Text, Font, Color.FromArgb(alpha, ForeColor), BackgroundDraw ? SelectorColor : BackColor, rt, DvContentAlignment.MiddleCenter);
+                                }
                             }
                         }
-
+                        else
+                        {
+                            var v = Items[SelectedIndex];
+                            Theme.DrawTextShadow(e.Graphics, v.Icon, v.Text, Font, ForeColor, BackgroundDraw ? SelectorColor : BackColor, rtText, DvContentAlignment.MiddleCenter);
+                        }
                     }
                 }
                 else

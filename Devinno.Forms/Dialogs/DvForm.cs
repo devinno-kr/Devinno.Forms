@@ -22,7 +22,7 @@ namespace Devinno.Forms.Dialogs
     public partial class DvForm : Form
     {
         #region Const
-        public const int BlockAlpha = 90;
+        public const int BlockAlpha = 150;
         #endregion
 
         #region Properties
