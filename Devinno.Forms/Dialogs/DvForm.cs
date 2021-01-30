@@ -44,7 +44,11 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region DpiRatio
+#if NET5_0
         public double DpiRatio => (double)this.LogicalToDeviceUnits(1000) / 1000.0;
+#else
+        public double DpiRatio => 1D;
+#endif
         #endregion
         #region Areas
         [Browsable(false)]
@@ -749,6 +753,14 @@ namespace Devinno.Forms.Dialogs
         #endregion
 
         #region Method
+        #region GetCallerFormTheme
+        public DvTheme GetCallerFormTheme()
+        {
+            DvTheme ret = null;
+            if (Form.ActiveForm is DvForm) ret = ((DvForm)Form.ActiveForm).Theme;
+            return ret;
+        }
+        #endregion
         #region GetNotifyIcon
         public NotifyIcon GetNotifyIcon()
         {

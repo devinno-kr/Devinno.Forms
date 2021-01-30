@@ -13,32 +13,42 @@ namespace Devinno.Forms.Icons
     public class FA
     {
         private static Dictionary<string, Dictionary<string, int>> dic;
-        internal static PrivateFontCollection FontAwesome { get; private set; }
-
+        public static PrivateFontCollection FontAwesome { get; set; }
+        private static int ifar = -1, ifas = -1, ifab = -1;
         static FA()
         {
             #region FontAwesome
-            FontAwesome = new PrivateFontCollection();
+            {
+                FontAwesome = new PrivateFontCollection();
 
-            var baBrands = Properties.Resources.fa_5_Brands_Regular_400;
-            var baRegular = Properties.Resources.fa_5_Free_Regular_400;
-            var baSolid = Properties.Resources.fa_Free_Solid_900;
+                var baBrands = Properties.Resources.Font_Awesome_5_Brands_Regular;
+                var baRegular = Properties.Resources.Font_Awesome_5_Free_Regular;
+                var baSolid = Properties.Resources.Font_Awesome_5_Free_Solid;
 
-            IntPtr pBrands = Marshal.AllocHGlobal(baBrands.Length);
-            IntPtr pRegular = Marshal.AllocHGlobal(baRegular.Length);
-            IntPtr pSolid = Marshal.AllocHGlobal(baSolid.Length);
+                IntPtr pBrands = Marshal.AllocHGlobal(baBrands.Length);
+                IntPtr pRegular = Marshal.AllocHGlobal(baRegular.Length);
+                IntPtr pSolid = Marshal.AllocHGlobal(baSolid.Length);
 
-            Marshal.Copy(baBrands, 0, pBrands, baBrands.Length);
-            Marshal.Copy(baRegular, 0, pRegular, baRegular.Length);
-            Marshal.Copy(baSolid, 0, pSolid, baSolid.Length);
+                Marshal.Copy(baBrands, 0, pBrands, baBrands.Length);
+                Marshal.Copy(baRegular, 0, pRegular, baRegular.Length);
+                Marshal.Copy(baSolid, 0, pSolid, baSolid.Length);
 
-            FontAwesome.AddMemoryFont(pBrands, baBrands.Length);
-            FontAwesome.AddMemoryFont(pRegular, baRegular.Length);
-            FontAwesome.AddMemoryFont(pSolid, baSolid.Length);
+                FontAwesome.AddMemoryFont(pBrands, baBrands.Length);
+                FontAwesome.AddMemoryFont(pRegular, baRegular.Length);
+                FontAwesome.AddMemoryFont(pSolid, baSolid.Length);
 
-            Marshal.FreeHGlobal(pBrands);
-            Marshal.FreeHGlobal(pRegular);
-            Marshal.FreeHGlobal(pSolid);
+                Marshal.FreeHGlobal(pBrands);
+                Marshal.FreeHGlobal(pRegular);
+                Marshal.FreeHGlobal(pSolid);
+
+                for (int i = 0; i < FA.FontAwesome.Families.Length; i++)
+                {
+                    var nm = FA.FontAwesome.Families[i].Name;
+                    if (nm == "Font Awesome 5 Brands Regular") ifab = i;
+                    if (nm == "Font Awesome 5 Free Regular") ifar = i;
+                    if (nm == "Font Awesome 5 Free Solid") ifas = i;
+                }
+            }
             #endregion
             #region Style
             dic = new Dictionary<string, Dictionary<string, int>>();
@@ -1662,6 +1672,8 @@ namespace Devinno.Forms.Icons
             dic["fab"].Add("fa-youtube-square", 0xf431);
             dic["fab"].Add("fa-zhihu", 0xf63f);
             #endregion
+
+
         }
 
         public static FAI GetFAI(string IconString)
@@ -1677,24 +1689,24 @@ namespace Devinno.Forms.Icons
                     var _icon = ls.LastOrDefault();
                     if (ls.FirstOrDefault() == "fab")
                     {
-                        font = FontAwesome.Families[0];
+                        font = FontAwesome.Families[ifab];
                         if (dic["fab"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fab"][_icon]);
                     }
                     else if (ls.FirstOrDefault() == "far")
                     {
-                        font = FontAwesome.Families[1];
+                        font = FontAwesome.Families[ifar];
                         if (dic["far"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["far"][_icon]);
                     }
                     else if (ls.FirstOrDefault() == "fas")
                     {
-                        font = FontAwesome.Families[2];
+                        font = FontAwesome.Families[ifas];
                         if (dic["fas"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fas"][_icon]);
                     }
                 }
                 else if (ls.Count == 1)
                 {
                     var _icon = ls.LastOrDefault();
-                    font = FontAwesome.Families[2];
+                    font = FontAwesome.Families[ifas];
                     if (dic["fas"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fas"][_icon]);
                 }
             }

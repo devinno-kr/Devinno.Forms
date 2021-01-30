@@ -31,7 +31,11 @@ namespace Devinno.Forms.Containers
         }
         #endregion
         #region DpiRatio
+#if NET5_0
         public double DpiRatio => (double)this.LogicalToDeviceUnits(1000) / 1000.0;
+#else
+        public double DpiRatio => 1D;
+#endif
         #endregion
         #region Areas
         [Browsable(false)]
@@ -143,28 +147,6 @@ namespace Devinno.Forms.Containers
         {
             if (!Areas.ContainsKey(key)) Areas.Add(key, rt);
             else Areas[key] = rt;
-        }
-        #endregion
-
-        #region .. Double Buffered function ..
-        public static void SetDoubleBuffered(System.Windows.Forms.Control c)
-        {
-            if (System.Windows.Forms.SystemInformation.TerminalServerSession)
-                return;
-            System.Reflection.PropertyInfo aProp = typeof(System.Windows.Forms.Control).GetProperty("DoubleBuffered", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            aProp.SetValue(c, true, null);
-        }
-
-        #endregion
-        #region .. code for Flucuring ..
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x02000000;
-                return cp;
-            }
         }
         #endregion
         #endregion

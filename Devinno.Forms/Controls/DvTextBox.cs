@@ -74,7 +74,7 @@ namespace Devinno.Forms.Controls
             get => nUnitWidth;
             set
             {
-                if(nUnitWidth != value)
+                if (nUnitWidth != value)
                 {
                     nUnitWidth = value;
                     Invalidate();
@@ -125,7 +125,7 @@ namespace Devinno.Forms.Controls
         public bool MultiLine
         {
             get => OriginalTextBox.Multiline;
-            set => OriginalTextBox.Multiline = value; 
+            set => OriginalTextBox.Multiline = value;
         }
         #endregion
 
@@ -137,20 +137,17 @@ namespace Devinno.Forms.Controls
             set => OriginalTextBox.Text = value;
         }
         #endregion
-        #region Placeholder
-        public string Placeholder
+        #region PlaceholderText
+#if NET5_0
+        [Editor(typeof(MultilineStringEditor), typeof(UITypeEditor))]
+        public string PlaceholderText
         {
             get => OriginalTextBox.PlaceholderText;
-            set
-            {
-                if (OriginalTextBox.PlaceholderText != value)
-                {
-                    OriginalTextBox.PlaceholderText = value;
-                    Invalidate();
-                }
-            }
+            set => OriginalTextBox.PlaceholderText = value;
         }
+#endif
         #endregion
+
         #region Font
         public override Font Font
         {
@@ -270,7 +267,7 @@ namespace Devinno.Forms.Controls
         #region OnSizeChanged
         protected override void OnSizeChanged(EventArgs e)
         {
-            Invalidate(); 
+            Invalidate();
             base.OnSizeChanged(e);
         }
         #endregion

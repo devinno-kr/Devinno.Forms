@@ -32,7 +32,11 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region DpiRatio
+#if NET5_0
         public double DpiRatio => (double)this.LogicalToDeviceUnits(1000) / 1000.0;
+#else
+        public double DpiRatio => 1D;
+#endif
         #endregion
         #region Areas
         [Browsable(false)]

@@ -63,9 +63,9 @@ namespace Devinno.Forms.Properties {
         /// <summary>
         ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static byte[] fa_5_Brands_Regular_400 {
+        internal static byte[] Font_Awesome_5_Brands_Regular {
             get {
-                object obj = ResourceManager.GetObject("fa_5_Brands_Regular_400", resourceCulture);
+                object obj = ResourceManager.GetObject("Font_Awesome_5_Brands_Regular", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace Devinno.Forms.Properties {
         /// <summary>
         ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static byte[] fa_5_Free_Regular_400 {
+        internal static byte[] Font_Awesome_5_Free_Regular {
             get {
-                object obj = ResourceManager.GetObject("fa_5_Free_Regular_400", resourceCulture);
+                object obj = ResourceManager.GetObject("Font_Awesome_5_Free_Regular", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace Devinno.Forms.Properties {
         /// <summary>
         ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static byte[] fa_Free_Solid_900 {
+        internal static byte[] Font_Awesome_5_Free_Solid {
             get {
-                object obj = ResourceManager.GetObject("fa_Free_Solid_900", resourceCulture);
+                object obj = ResourceManager.GetObject("Font_Awesome_5_Free_Solid", resourceCulture);
                 return ((byte[])(obj));
             }
         }

@@ -672,10 +672,10 @@ namespace Devinno.Forms.Tools
             return ret;
         }
 
-        internal static int CenterX(Rectangle rt, Size sz) => rt.X + (rt.Width / 2 - sz.Width / 2);
-        internal static int CenterY(Rectangle rt, Size sz) => rt.Y + (rt.Height / 2 - sz.Height / 2);
-        internal static float CenterX(RectangleF rt, SizeF sz) => rt.X + (rt.Width / 2F - sz.Width / 2F);
-        internal static float CenterY(RectangleF rt, SizeF sz) => rt.Y + (rt.Height / 2F - sz.Height / 2F);
+        public static int CenterX(Rectangle rt, Size sz) => rt.X + (rt.Width / 2 - sz.Width / 2);
+        public static int CenterY(Rectangle rt, Size sz) => rt.Y + (rt.Height / 2 - sz.Height / 2);
+        public static float CenterX(RectangleF rt, SizeF sz) => rt.X + (rt.Width / 2F - sz.Width / 2F);
+        public static float CenterY(RectangleF rt, SizeF sz) => rt.Y + (rt.Height / 2F - sz.Height / 2F);
         #endregion
 
         #region WebImage
