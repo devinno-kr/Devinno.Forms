@@ -434,7 +434,7 @@ namespace Devinno.Forms.Dialogs
                     br.Color = TitleBarColor.BrightnessTransmit(-0.2); e.Graphics.FillRectangle(br, rtIcon);
 
                     p.Width = 1;
-                    p.Color = FrameColor.BrightnessTransmit(-0.1); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 0, rtContent.Right, rtContent.Top + 0);
+                    p.Color = TitleBarColor.BrightnessTransmit(-0.1); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 0, rtContent.Right, rtContent.Top + 0);
                     p.Color = BackColor.BrightnessTransmit(0.2); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 1, rtContent.Right, rtContent.Top + 1);
                     e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
                 }
@@ -449,7 +449,7 @@ namespace Devinno.Forms.Dialogs
                     br.Color = TitleBarColor.BrightnessTransmit(-0.2); e.Graphics.FillRectangle(br, rtIcon);
 
                     p.Width = 1;
-                    p.Color = FrameColor.BrightnessTransmit(-0.1); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 0, rtContent.Right, rtContent.Top + 0);
+                    p.Color = TitleBarColor.BrightnessTransmit(-0.1); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 0, rtContent.Right, rtContent.Top + 0);
                     p.Color = BackColor.BrightnessTransmit(0.2); e.Graphics.DrawLine(p, rtContent.Left, rtContent.Top + 1, rtContent.Right, rtContent.Top + 1);
                     e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
                 }
@@ -793,6 +793,27 @@ namespace Devinno.Forms.Dialogs
         {
             if (!Areas.ContainsKey(key)) Areas.Add(key, rt);
             else Areas[key] = rt;
+        }
+        #endregion
+
+        #region .. Double Buffered function ..
+        public static void SetDoubleBuffered(System.Windows.Forms.Control c)
+        {
+            if (System.Windows.Forms.SystemInformation.TerminalServerSession)
+                return;
+            System.Reflection.PropertyInfo aProp = typeof(System.Windows.Forms.Control).GetProperty("DoubleBuffered", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            aProp.SetValue(c, true, null);
+        }
+        #endregion
+        #region .. code for Flucuring ..
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                //cp.ExStyle |= 0x02000000;
+                return cp;
+            }
         }
         #endregion
         #endregion

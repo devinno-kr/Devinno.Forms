@@ -30,11 +30,11 @@ namespace Devinno.Forms
 
     Control
         DvColorPicker
+        DvDateTimePicker
         DvComboBox
         DvContentView
         DvContentGrid
         DvDataGrid
-        DvDateTimePicker
         DvGauge
         DvInput
         DvLineGraph
@@ -59,10 +59,10 @@ namespace Devinno.Forms
         DvColorPickerDialog
         DvDatetimePickerDialog
         DvSelectorDialog
+        DvPropertiesDialog
         DvInputBox
         DvMessageBox
         DvKeyboard
-        DvKeypad
         DvSerialPortSetting
 
 

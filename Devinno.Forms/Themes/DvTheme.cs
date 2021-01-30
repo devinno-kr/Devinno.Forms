@@ -52,8 +52,7 @@ namespace Devinno.Forms.Themes
         #endregion
         #region Method
         public abstract void DrawBox(Graphics g, Color c, Color bg, Rectangle bounds, RoundType round = RoundType.ALL, BoxDrawOption option = BoxDrawOption.NONE);
-        public abstract void DrawBorder(Graphics g, Color baseColor, Rectangle bounds, RoundType round = RoundType.ALL);
-        public abstract void DrawBorder(Graphics g, Pen p, Rectangle bounds, RoundType round = RoundType.ALL);
+        public abstract void DrawBorder(Graphics g, Color borderColor, Color bg, int borderWidth, Rectangle bounds, RoundType round = RoundType.ALL, BoxDrawOption option = BoxDrawOption.NONE);
 
         public abstract void DrawText(Graphics g, DvIcon icon, string Text, Font ft, Color c, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);
         public abstract void DrawTextShadow(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);

@@ -355,7 +355,7 @@ namespace Devinno.Forms.Controls
 
                                     e.Graphics.FillEllipse(pbr, rtLamp);
                                 }
-                                Theme.DrawBorder(e.Graphics, LampBackColor, rtLamp, RoundType.ELLIPSE);
+                                Theme.DrawBorder(e.Graphics, LampBackColor.BrightnessTransmit(Theme.BorderBright), LampBackColor, 1, rtLamp, RoundType.ELLIPSE, BoxDrawOption.BORDER);
                             }
                             #endregion
                             #region InBevel
@@ -404,7 +404,7 @@ namespace Devinno.Forms.Controls
 
                                     e.Graphics.FillEllipse(pbr, rtLamp);
                                 }
-                                Theme.DrawBorder(e.Graphics, LampBackColor, rtLamp, RoundType.ELLIPSE);
+                                Theme.DrawBorder(e.Graphics, LampBackColor.BrightnessTransmit(Theme.BorderBright), LampBackColor, 1, rtLamp, RoundType.ELLIPSE, BoxDrawOption.BORDER);
                             }
                             #endregion
                             #region InBevel
@@ -471,7 +471,7 @@ namespace Devinno.Forms.Controls
                                 }
                                 e.Graphics.ResetClip();
                                 e.Graphics.SetClip(old);
-                                Theme.DrawBorder(e.Graphics, LampBackColor, rtLamp, RoundType.ALL);
+                                Theme.DrawBorder(e.Graphics, LampBackColor.BrightnessTransmit(Theme.BorderBright), LampBackColor, 1, rtLamp, RoundType.ALL, BoxDrawOption.BORDER);
                             }
                             #endregion
                             #region Gradient
@@ -538,7 +538,7 @@ namespace Devinno.Forms.Controls
                                 }
                                 e.Graphics.ResetClip();
                                 e.Graphics.SetClip(old);
-                                Theme.DrawBorder(e.Graphics, LampBackColor, rtLamp, RoundType.ALL);
+                                Theme.DrawBorder(e.Graphics, LampBackColor.BrightnessTransmit(Theme.BorderBright), LampBackColor, 1, rtLamp, RoundType.ALL, BoxDrawOption.BORDER);
                             }
                             #endregion
                             #region Gardient

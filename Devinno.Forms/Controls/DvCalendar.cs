@@ -325,9 +325,9 @@ namespace Devinno.Forms.Controls
                         var rtv = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtv.Inflate(-1, -1);
                         p.Width = 2;
                         p.Color = c;
-                        if (ix == 0 && iy == 5) Theme.DrawBorder(e.Graphics, p, rtv, RoundType.LB);
-                        else if (ix == 6 && iy == 5) Theme.DrawBorder(e.Graphics, p, rtv, RoundType.RB);
-                        else Theme.DrawBorder(e.Graphics, p, rtv, RoundType.NONE);
+                        if (ix == 0 && iy == 5) Theme.DrawBorder(e.Graphics, c, DaysBoxColor, 2, rtv, RoundType.LB, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                        else if (ix == 6 && iy == 5) Theme.DrawBorder(e.Graphics, c, DaysBoxColor, 2, rtv, RoundType.RB, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                        else Theme.DrawBorder(e.Graphics, c, DaysBoxColor, 2, rtv, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
                     }
                     #endregion
                     #region Text
