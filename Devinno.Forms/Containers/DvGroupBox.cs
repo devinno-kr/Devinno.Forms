@@ -135,7 +135,7 @@ namespace Devinno.Forms.Containers
             else
                 Theme.DrawBorder(e.Graphics, BorderColor, BackColor, BorderWidth, rtPanel, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
 
-            if (string.IsNullOrWhiteSpace(Text))
+            if (!string.IsNullOrWhiteSpace(Text))
             {
                 br.Color = BackColor; e.Graphics.FillRectangle(br, rtTitle);
                 Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, BackColor, rtTitle, DvContentAlignment.MiddleCenter);

@@ -21,9 +21,6 @@ namespace Devinno.Forms
 
 /*
     Container
-        DvGroupBox
-        DvTab
-        DvPanel
         DvSplitterTableLayout
         DvNavigation
         DvTabControl
@@ -36,24 +33,24 @@ namespace Devinno.Forms
         DvContentGrid
         DvDataGrid
         DvGauge
+        DvMeter
         DvInput
         DvLineGraph
-        DvListBox
-        DvMeter
-        DvNumberBox
+        DvTimeGraph
+        DvTrendGraph
+        DvVolumeKnob
         DvOnOff
+        DvSwitch
+        DvListBox
+        DvNumberBox
+        DvToolBox
         DvPictureBox
         DvProgressH
         DvProgressV
         DvSliderH
         DvSliderV
-        DvSwitch
-        DvTimeGraph
-        DvToolBox
         DvTreeView
-        DvTrendGraph
         DvValueLabel
-        DvVolumeKnob
 
     Dialog
         DvColorPickerDialog
