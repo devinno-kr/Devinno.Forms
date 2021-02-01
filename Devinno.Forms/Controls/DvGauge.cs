@@ -1,4 +1,5 @@
-﻿using Devinno.Forms.Themes;
+﻿using Devinno.Extensions;
+using Devinno.Forms.Themes;
 using Devinno.Forms.Tools;
 using Devinno.Tools;
 using System;
@@ -237,18 +238,48 @@ namespace Devinno.Forms.Controls
             #region Draw
             e.Graphics.Clear(BackColor);
             var cp = MathTool.CenterPoint(rtRemark);
-
+            #region Remark
+            var ng = Convert.ToInt32(16 * DpiRatio);
+            p.Color = RemarkColor;
+            #region Graduation Large
             for (decimal i = Minimum; i <= Maximum; i += GraduationLarge)
             {
                 var gsang = Convert.ToSingle(MathTool.Map(MathTool.Constrain((double)i, (double)Minimum, (double)Maximum), (double)Minimum, (double)Maximum, 0D, SweepAngle)) + StartAngle;
 
                 var pT = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2);
+                var p1 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - (ng / 2));
+                var p2 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - ng);
+
                 var txt = i.ToString("0");
                 var sz = e.Graphics.MeasureString(txt, Font);
-                var rt = MathTool.MakeRectangle(pT, (int)Math.Ceiling(sz.Width), (int)Math.Ceiling(sz.Height));
+                var rt = MathTool.MakeRectangle(pT, sz.Width / 2F, sz.Height / 2F);
+                p.Width = 2;
+                e.Graphics.DrawLine(p, p1, p2);
 
-                Theme.DrawTextShadow(e.Graphics, null, txt, Font, ForeColor, BackColor, new Rectangle((int)rt.X, (int)rt.Y, (int)rt.Width, (int)rt.Height), DvContentAlignment.MiddleCenter);
+                br.Color = BackColor; e.Graphics.FillEllipse(br, rt);
+                rt.Offset(0, 1); br.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright); e.Graphics.DrawString(txt, Font, br, rt);
+                rt.Offset(0, -1); br.Color = RemarkColor; e.Graphics.DrawString(txt, Font, br, rt);
             }
+            #endregion
+            #region Graduation Small
+            for (decimal i = Minimum; i <= Maximum; i += GraduationSmall)
+            {
+                if (i % GraduationLarge != 0)
+                {
+                    var gsang = Convert.ToSingle(MathTool.Map(MathTool.Constrain((double)i, (double)Minimum, (double)Maximum), (double)Minimum, (double)Maximum, 0D, SweepAngle)) + StartAngle;
+                    var p1 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - (ng / 1.35F));
+                    var p2 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - ng);
+
+                    p.Width = 1; e.Graphics.DrawLine(p, p1, p2);
+                }
+            }
+            #endregion
+            #region Arc
+            var rtRemarkIn = new Rectangle(rtRemark.X, rtRemark.Y, rtRemark.Width, rtRemark.Height); rtRemarkIn.Inflate(-ng, -ng);
+            p.Width = 2;    e.Graphics.DrawArc(p, rtRemarkIn, StartAngle, SweepAngle);
+            #endregion
+            #endregion
+
             #endregion
             #region Dispose
             br.Dispose();

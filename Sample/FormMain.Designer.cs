@@ -72,7 +72,7 @@ namespace Sample
             this.dvControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.dvControl1.Location = new System.Drawing.Point(5, 50);
             this.dvControl1.Name = "dvControl1";
-            this.dvControl1.Size = new System.Drawing.Size(599, 1);
+            this.dvControl1.Size = new System.Drawing.Size(290, 1);
             this.dvControl1.TabIndex = 2;
             this.dvControl1.TabStop = false;
             this.dvControl1.UseThemeColor = true;
@@ -84,7 +84,7 @@ namespace Sample
             this.dvContainer1.Location = new System.Drawing.Point(5, 51);
             this.dvContainer1.Name = "dvContainer1";
             this.dvContainer1.Padding = new System.Windows.Forms.Padding(15);
-            this.dvContainer1.Size = new System.Drawing.Size(599, 544);
+            this.dvContainer1.Size = new System.Drawing.Size(290, 244);
             this.dvContainer1.TabIndex = 3;
             this.dvContainer1.TabStop = false;
             this.dvContainer1.Text = "dvContainer1";
@@ -92,8 +92,10 @@ namespace Sample
             // 
             // dvGauge1
             // 
+            this.dvGauge1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dvGauge1.EmptyColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvGauge1.FillColor = System.Drawing.Color.Red;
+            this.dvGauge1.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dvGauge1.GraduationLarge = new decimal(new int[] {
             10,
             0,
@@ -104,7 +106,7 @@ namespace Sample
             0,
             0,
             0});
-            this.dvGauge1.Location = new System.Drawing.Point(70, 54);
+            this.dvGauge1.Location = new System.Drawing.Point(15, 15);
             this.dvGauge1.Maximum = new decimal(new int[] {
             100,
             0,
@@ -117,7 +119,7 @@ namespace Sample
             0});
             this.dvGauge1.Name = "dvGauge1";
             this.dvGauge1.RemarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
-            this.dvGauge1.Size = new System.Drawing.Size(482, 431);
+            this.dvGauge1.Size = new System.Drawing.Size(260, 214);
             this.dvGauge1.StartAngle = 135;
             this.dvGauge1.SweepAngle = 270;
             this.dvGauge1.TabIndex = 0;
@@ -135,13 +137,13 @@ namespace Sample
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.ClientSize = new System.Drawing.Size(609, 600);
+            this.ClientSize = new System.Drawing.Size(300, 300);
             this.Controls.Add(this.dvContainer1);
             this.Controls.Add(this.dvControl1);
             this.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.White;
             this.FrameColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.MinimumSize = new System.Drawing.Size(600, 600);
+            this.MinimumSize = new System.Drawing.Size(300, 300);
             this.Name = "FormMain";
             this.NoFrame = true;
             this.Padding = new System.Windows.Forms.Padding(5, 50, 5, 5);
