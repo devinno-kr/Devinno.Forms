@@ -48,4 +48,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Devinno">
+      <HintPath>..\..\Devinno\Devinno\bin\Debug\net5.0\Devinno.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

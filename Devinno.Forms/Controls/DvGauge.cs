@@ -276,7 +276,7 @@ namespace Devinno.Forms.Controls
             #endregion
             #region Arc
             var rtRemarkIn = new Rectangle(rtRemark.X, rtRemark.Y, rtRemark.Width, rtRemark.Height); rtRemarkIn.Inflate(-ng, -ng);
-            p.Width = 2;    e.Graphics.DrawArc(p, rtRemarkIn, StartAngle, SweepAngle);
+            p.Width = 2; e.Graphics.DrawArc(p, rtRemarkIn, StartAngle, SweepAngle);
             #endregion
             #endregion
 
