@@ -32,8 +32,6 @@ namespace Devinno.Forms
         DvContentView
         DvContentGrid
         DvDataGrid
-        DvGauge
-        DvMeter
         DvInput
         DvLineGraph
         DvTimeGraph

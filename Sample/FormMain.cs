@@ -17,7 +17,7 @@ namespace Sample
     public partial class FormMain : DvForm
     {
         Timer tmr;
-        int n = 0;
+        double n = 0;
         public FormMain()
         {
             InitializeComponent();
@@ -26,9 +26,8 @@ namespace Sample
             tmr.Interval = 10;
             tmr.Tick += (o, s) =>
             {
-                n++;
-                dvMeter1.Value = Math.Abs(n % 200 - 100);
-                
+                n += 0.1;
+                dvGauge1.Value = dvMeter1.Value = Math.Abs(n % 200 - 100);
             };
             tmr.Enabled = true;
         }

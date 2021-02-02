@@ -15,6 +15,10 @@ namespace Devinno.Forms.Controls
 {
     public class DvGauge : DvControl
     {
+        #region Cosnt
+        const float DIV = 7F;
+        #endregion
+
         #region Properties
         #region FillColor
         private Color cFillColor = DvTheme.DefaultTheme.PointColor;
@@ -234,10 +238,10 @@ namespace Devinno.Forms.Controls
 
             var rtContent = Areas["rtContent"];
             var wh = Math.Min(rtContent.Width, rtContent.Height);
-            var ngp1 = 7;
+            var ngp1 = DIV;
             var ngp2 = wh / 35;
             var rtCircle = DrawingTool.MakeRectangleAlign(rtContent, new Size(wh, wh), DvContentAlignment.MiddleCenter);
-            var rtCircleIn = new Rectangle(rtCircle.X, rtCircle.Y, rtCircle.Width, rtCircle.Height); rtCircleIn.Inflate(-wh / ngp1, -wh / ngp1);
+            var rtCircleIn = new Rectangle(rtCircle.X, rtCircle.Y, rtCircle.Width, rtCircle.Height); rtCircleIn.Inflate(-Convert.ToInt32(wh / ngp1), -Convert.ToInt32(wh / ngp1));
 
             SetArea("rtCircle", rtCircle);
             SetArea("rtCircleIn", rtCircleIn);
@@ -384,28 +388,21 @@ namespace Devinno.Forms.Controls
                     e.Graphics.FillPath(lgbr, pth);
                 }
                 #endregion
+                #region Gradient2
+                e.Graphics.SetClip(pth);
+                e.Graphics.DrawImage(ResourceTool.circlegrad, rtCircle);
+                e.Graphics.ResetClip();
+                #endregion
                 #region Bevel
                 e.Graphics.SetClip(pth);
                 e.Graphics.TranslateTransform(1, 1);
-                p.Width = 1;
-                p.Color = FillColor.BrightnessTransmit(Theme.InBevelBright);
+                p.Width = 2;
+                p.Color = Color.FromArgb(30, Color.White);
                 e.Graphics.DrawPath(p, pth);
                 e.Graphics.TranslateTransform(-1, -1);
                 e.Graphics.ResetClip();
                 #endregion
-                #region Gradient2
-                using (var pth2 = new GraphicsPath())
-                {
-                    pth2.AddEllipse(rtCircle);
-                    using (var pbr = new PathGradientBrush(pth2))
-                    {
-                        pbr.CenterPoint = cp;
-                        pbr.CenterColor = Color.FromArgb(60, Color.Black);
-                        pbr.SurroundColors = new Color[] { Color.Transparent };
-                        //e.Graphics.FillPath(pbr, pth);
-                    }
-                }
-                #endregion
+                
             }
             #endregion
             #region Border

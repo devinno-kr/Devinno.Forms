@@ -396,15 +396,17 @@ namespace Devinno.Forms.Controls
                     var mat2 = new Matrix(); mat2.Translate(-2, -2);
 
                     
-                    var _pt = MathTool.GetPointWithAngle(cp, vang + StartAngle, rtRemark.Width / 2);
-                    var _rtS = MathTool.MakeRectangle(_pt, 3);
-                    var _rtL = MathTool.MakeRectangle(cp, ngpin);
-                    var _rtF = MathTool.MakeRectangle(_pt, cp); _rtF.Inflate(ngpin, ngpin);
+                    var pt = MathTool.GetPointWithAngle(cp, vang + StartAngle, rtRemark.Width / 2);
+                    var rtS = MathTool.MakeRectangle(pt, 3);
+                    var rtL = MathTool.MakeRectangle(cp, ngpin);
+                    var rtF = MathTool.MakeRectangle(pt, cp); rtF.Inflate(ngpin, ngpin);
 
+                    /*
                     var pt = new Point(Convert.ToInt32(_pt.X), Convert.ToInt32(_pt.Y));
                     var rtS = new Rectangle(Convert.ToInt32(_rtS.X), Convert.ToInt32(_rtS.Y), Convert.ToInt32(_rtS.Width), Convert.ToInt32(_rtS.Height));
                     var rtL = new Rectangle(Convert.ToInt32(_rtL.X), Convert.ToInt32(_rtL.Y), Convert.ToInt32(_rtL.Width), Convert.ToInt32(_rtL.Height));
                     var rtF = new Rectangle(Convert.ToInt32(_rtF.X), Convert.ToInt32(_rtF.Y), Convert.ToInt32(_rtF.Width), Convert.ToInt32(_rtF.Height));
+                    */
 
                     pth.AddArc(rtL, vang + StartAngle + 90, 180);
                     pth.AddArc(rtS, vang + StartAngle + 90 + 180, 180);
@@ -449,7 +451,8 @@ namespace Devinno.Forms.Controls
             {
                 var txt = Value.ToString(string.IsNullOrWhiteSpace(ValueFormatString) ? "0" : ValueFormatString);
                 var sz = e.Graphics.MeasureString(txt, ValueFont);
-                var pt = MathTool.GetPointWithAngle(cp, StartAngle - (360 - SweepAngle) / 2, rtRemarkIn.Width / 2 - Convert.ToInt32(sz.Height / 2));
+                //var pt = MathTool.GetPointWithAngle(cp, StartAngle - (360 - SweepAngle) / 2, rtRemarkIn.Width / 2 - Convert.ToInt32(sz.Height / 2));
+                var pt = MathTool.GetPointWithAngle(cp, StartAngle - (360 - SweepAngle) / 2, (rtRemarkIn.Width / 2) - Convert.ToInt32(sz.Height / 4));
                 var rt = MathTool.MakeRectangle(new Point(Convert.ToInt32(pt.X), Convert.ToInt32(pt.Y)), Convert.ToInt32(sz.Width), Convert.ToInt32(sz.Height));
 
                 Theme.DrawTextShadow(e.Graphics, null, txt, ValueFont, ForeColor, BackColor, rt, DvContentAlignment.MiddleCenter);

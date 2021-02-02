@@ -34,6 +34,7 @@ namespace Sample
             this.dvContainer1 = new Devinno.Forms.Containers.DvContainer();
             this.dvTableLayoutPanel1 = new Devinno.Forms.Containers.DvTableLayoutPanel();
             this.dvMeter1 = new Devinno.Forms.Controls.DvMeter();
+            this.dvGauge1 = new Devinno.Forms.Controls.DvGauge();
             this.dvContainer1.SuspendLayout();
             this.dvTableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -74,7 +75,7 @@ namespace Sample
             this.dvControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.dvControl1.Location = new System.Drawing.Point(5, 50);
             this.dvControl1.Name = "dvControl1";
-            this.dvControl1.Size = new System.Drawing.Size(290, 1);
+            this.dvControl1.Size = new System.Drawing.Size(590, 1);
             this.dvControl1.TabIndex = 2;
             this.dvControl1.TabStop = false;
             this.dvControl1.UseThemeColor = true;
@@ -86,7 +87,7 @@ namespace Sample
             this.dvContainer1.Location = new System.Drawing.Point(5, 51);
             this.dvContainer1.Name = "dvContainer1";
             this.dvContainer1.Padding = new System.Windows.Forms.Padding(15);
-            this.dvContainer1.Size = new System.Drawing.Size(290, 244);
+            this.dvContainer1.Size = new System.Drawing.Size(590, 544);
             this.dvContainer1.TabIndex = 3;
             this.dvContainer1.TabStop = false;
             this.dvContainer1.Text = "dvContainer1";
@@ -94,23 +95,26 @@ namespace Sample
             // 
             // dvTableLayoutPanel1
             // 
-            this.dvTableLayoutPanel1.ColumnCount = 1;
+            this.dvTableLayoutPanel1.ColumnCount = 2;
+            this.dvTableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.dvTableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.dvTableLayoutPanel1.Controls.Add(this.dvMeter1, 0, 0);
+            this.dvTableLayoutPanel1.Controls.Add(this.dvGauge1, 1, 0);
             this.dvTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dvTableLayoutPanel1.Location = new System.Drawing.Point(15, 15);
             this.dvTableLayoutPanel1.Name = "dvTableLayoutPanel1";
-            this.dvTableLayoutPanel1.RowCount = 1;
+            this.dvTableLayoutPanel1.RowCount = 2;
             this.dvTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.dvTableLayoutPanel1.Size = new System.Drawing.Size(260, 214);
+            this.dvTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.dvTableLayoutPanel1.Size = new System.Drawing.Size(560, 514);
             this.dvTableLayoutPanel1.TabIndex = 0;
             // 
             // dvMeter1
             // 
             this.dvMeter1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dvMeter1.DrawText = true;
-            this.dvMeter1.FillColor = System.Drawing.Color.DarkGoldenrod;
-            this.dvMeter1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dvMeter1.FillColor = System.Drawing.Color.DarkRed;
+            this.dvMeter1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dvMeter1.GraduationLarge = 10D;
             this.dvMeter1.GraduationSmall = 2D;
             this.dvMeter1.Location = new System.Drawing.Point(3, 3);
@@ -118,10 +122,10 @@ namespace Sample
             this.dvMeter1.Minimum = 0D;
             this.dvMeter1.Name = "dvMeter1";
             this.dvMeter1.NeedleColor = System.Drawing.Color.White;
-            this.dvMeter1.NeedlePointColor = System.Drawing.Color.DarkOrange;
+            this.dvMeter1.NeedlePointColor = System.Drawing.Color.Red;
             this.dvMeter1.RemarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.dvMeter1.RemarkFormatString = null;
-            this.dvMeter1.Size = new System.Drawing.Size(254, 208);
+            this.dvMeter1.Size = new System.Drawing.Size(274, 251);
             this.dvMeter1.StartAngle = 120;
             this.dvMeter1.SweepAngle = 300;
             this.dvMeter1.TabIndex = 3;
@@ -132,18 +136,43 @@ namespace Sample
             this.dvMeter1.ValueFont = new System.Drawing.Font("Eras Demi ITC", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dvMeter1.ValueFormatString = "0\'%\'";
             // 
+            // dvGauge1
+            // 
+            this.dvGauge1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dvGauge1.EmptyColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.dvGauge1.FillColor = System.Drawing.Color.Red;
+            this.dvGauge1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dvGauge1.GraduationLarge = 10D;
+            this.dvGauge1.GraduationSmall = 2D;
+            this.dvGauge1.Location = new System.Drawing.Point(283, 3);
+            this.dvGauge1.Maximum = 100D;
+            this.dvGauge1.Minimum = 0D;
+            this.dvGauge1.Name = "dvGauge1";
+            this.dvGauge1.RemarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.dvGauge1.RemarkFormatString = null;
+            this.dvGauge1.Size = new System.Drawing.Size(274, 251);
+            this.dvGauge1.StartAngle = 120;
+            this.dvGauge1.SweepAngle = 300;
+            this.dvGauge1.TabIndex = 4;
+            this.dvGauge1.TabStop = false;
+            this.dvGauge1.Text = "dvGauge1";
+            this.dvGauge1.UseThemeColor = true;
+            this.dvGauge1.Value = 0D;
+            this.dvGauge1.ValueFont = new System.Drawing.Font("Eras Demi ITC", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dvGauge1.ValueFormatString = "0\'%\'";
+            // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.ClientSize = new System.Drawing.Size(300, 300);
+            this.ClientSize = new System.Drawing.Size(600, 600);
             this.Controls.Add(this.dvContainer1);
             this.Controls.Add(this.dvControl1);
             this.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.White;
             this.FrameColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.MinimumSize = new System.Drawing.Size(300, 300);
+            this.MinimumSize = new System.Drawing.Size(600, 600);
             this.Name = "FormMain";
             this.NoFrame = true;
             this.Padding = new System.Windows.Forms.Padding(5, 50, 5, 5);
@@ -169,6 +198,7 @@ namespace Sample
         private Devinno.Forms.Containers.DvContainer dvContainer1;
         private Devinno.Forms.Containers.DvTableLayoutPanel dvTableLayoutPanel1;
         private Devinno.Forms.Controls.DvMeter dvMeter1;
+        private Devinno.Forms.Controls.DvGauge dvGauge1;
     }
 }
 
