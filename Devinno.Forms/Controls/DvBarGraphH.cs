@@ -243,6 +243,13 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvBarGraphH()
         {
+            #region SetStyle : Selectable
+            SetStyle(ControlStyles.Selectable, true);
+            UpdateStyles();
+
+            TabStop = true;
+            #endregion
+
             Size = new System.Drawing.Size(300, 200);
 
             scroll.Direction = ScrollDirection.Vertical;
@@ -265,6 +272,8 @@ namespace Devinno.Forms.Controls
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            Focus();
+
             if (Scrollable && Areas.ContainsKey("rtScroll") && Areas.ContainsKey("rtGraph"))
             {
                 scroll.MouseDown(e, Areas["rtScroll"]);

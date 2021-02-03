@@ -179,9 +179,12 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvTextBox()
         {
-            this.SetStyle(ControlStyles.Selectable, true);
-            this.UpdateStyles();
+            #region SetStyle : Selectable
+            SetStyle(ControlStyles.Selectable, true);
+            UpdateStyles();
+
             TabStop = true;
+            #endregion
 
             #region TextBox
             OriginalTextBox.ForeColor = ForeColor;

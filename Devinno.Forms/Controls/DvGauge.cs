@@ -314,6 +314,7 @@ namespace Devinno.Forms.Controls
             }
             #endregion
             #region Remark
+            var thickL = 3;
             #region Graduation Large
             var ng = (rtCircleIn.Width - rtRemark.Width) / 4;
             for (double i = Minimum; i <= Maximum; i += GraduationLarge)
@@ -326,14 +327,14 @@ namespace Devinno.Forms.Controls
 
                 var txt = i.ToString(string.IsNullOrWhiteSpace(RemarkFormatString) ? "0" : RemarkFormatString);
                 var sz = e.Graphics.MeasureString(txt, Font);
-                var rt = MathTool.MakeRectangle(pT, sz.Width / 2F, sz.Height / 2F);
-                p.Width = 1;
+                var _rt = MathTool.MakeRectangle(pT, sz.Width / 2F, sz.Height / 2F);
+                var rt = new Rectangle(Convert.ToInt32(_rt.X), Convert.ToInt32(_rt.Y), Convert.ToInt32(_rt.Width), Convert.ToInt32(_rt.Height)); rt.Inflate(1, 1); 
+                p.Width = thickL;
                 p.Color = RemarkColor;
                 e.Graphics.DrawLine(p, p1, p2);
 
-                //br.Color = BackColor; e.Graphics.FillEllipse(br, rt);
-                rt.Offset(0, 1); br.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright); e.Graphics.DrawString(txt, Font, br, rt);
-                rt.Offset(0, -1); br.Color = RemarkColor; e.Graphics.DrawString(txt, Font, br, rt);
+                br.Color = BackColor; e.Graphics.FillEllipse(br, rt);
+                Theme.DrawTextShadow(e.Graphics, null, txt, Font, RemarkColor, BackColor, rt, DvContentAlignment.MiddleCenter);
             }
             #endregion
             #region Graduation Small
@@ -397,7 +398,7 @@ namespace Devinno.Forms.Controls
                 e.Graphics.SetClip(pth);
                 e.Graphics.TranslateTransform(1, 1);
                 p.Width = 2;
-                p.Color = Color.FromArgb(30, Color.White);
+                p.Color = Color.FromArgb(Theme.BevelAlpha, Color.White);
                 e.Graphics.DrawPath(p, pth);
                 e.Graphics.TranslateTransform(-1, -1);
                 e.Graphics.ResetClip();

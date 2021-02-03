@@ -73,11 +73,13 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvRadioBox()
         {
-            #region Set Style
-            this.SetStyle(ControlStyles.Selectable, true);
-            this.UpdateStyles();
+            #region SetStyle : Selectable
+            SetStyle(ControlStyles.Selectable, true);
+            UpdateStyles();
+
             TabStop = true;
             #endregion
+
             #region Size
             Size = new System.Drawing.Size(120, 36);
             #endregion
@@ -149,8 +151,8 @@ namespace Devinno.Forms.Controls
             if (CollisionTool.Check(rtBox, e.Location) || CollisionTool.Check(rtText, e.Location))
             {
                 Checked = !Checked;
+                Focus();
             }
-
             base.OnMouseDown(e);
         }
         #endregion

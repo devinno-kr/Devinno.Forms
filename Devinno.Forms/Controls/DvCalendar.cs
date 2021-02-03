@@ -127,8 +127,12 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvCalendar()
         {
+            #region SetStyle : Selectable
             SetStyle(ControlStyles.Selectable, true);
             UpdateStyles();
+
+            TabStop = true;
+            #endregion
 
             Size = new Size(250, 200);
         }
@@ -354,6 +358,8 @@ namespace Devinno.Forms.Controls
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            Focus();
+
             #region DayList
             int Days = DateTime.DaysInMonth(CurrentYear, CurrentMonth);
             DateTime dt = new DateTime(CurrentYear, CurrentMonth, 1);

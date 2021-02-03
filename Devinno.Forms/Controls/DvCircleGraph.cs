@@ -35,6 +35,12 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvCircleGraph()
         {
+            #region SetStyle : Selectable
+            SetStyle(ControlStyles.Selectable, true);
+            UpdateStyles();
+
+            TabStop = true;
+            #endregion
 
         }
         #endregion
@@ -43,6 +49,7 @@ namespace Devinno.Forms.Controls
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            Focus();
             if (Areas.Count > 1 && Series.Count>1)
             {
                 if (CollisionTool.Check(Areas["rtSelectLeft"], e.Location))

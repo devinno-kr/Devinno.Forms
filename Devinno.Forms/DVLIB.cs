@@ -21,7 +21,6 @@ namespace Devinno.Forms
 
 /*
     Container
-        DvSplitterTableLayout
         DvNavigation
         DvTabControl
 

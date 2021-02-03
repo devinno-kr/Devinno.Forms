@@ -165,12 +165,14 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvCircleButton()
         {
+            #region SetStyle : Selectable
             SetStyle(ControlStyles.Selectable, true);
             UpdateStyles();
 
-            Size = new Size(80, 36);
-
             TabStop = true;
+            #endregion
+
+            Size = new Size(80, 36);
 
             click.Reset = new Action(() => { this.Invoke(new Action(() => { bDown = false; Invalidate(); })); });
             click.GenLongClick = new Action(() => { this.Invoke(new Action(() => LongClick?.Invoke(this, null))); });
@@ -272,6 +274,8 @@ namespace Devinno.Forms.Controls
         {
             if (Clickable)
             {
+                Focus();
+
                 bDown = true;
                 Invalidate();
 

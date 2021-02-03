@@ -13,19 +13,19 @@ using System.Windows.Forms;
 
 namespace Devinno.Forms.Controls
 {
-    public class DvMeter : DvControl
+    public class DvKnob : DvControl
     {
         #region Properties
-        #region FillColor
-        private Color cFillColor = DvTheme.DefaultTheme.PointColor;
-        public Color FillColor
+        #region KnobColor
+        private Color cKnobColor = DvTheme.DefaultTheme.Color3;
+        public Color KnobColor
         {
-            get => cFillColor;
+            get => cKnobColor;
             set
             {
-                if (cFillColor != value)
+                if (cKnobColor != value)
                 {
-                    cFillColor = value;
+                    cKnobColor = value;
                     Invalidate();
                 }
             }
@@ -41,36 +41,6 @@ namespace Devinno.Forms.Controls
                 if (cRemarkColor != value)
                 {
                     cRemarkColor = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
-        #region NeedleColor
-        private Color cNeedleColor = Color.White;
-        public Color NeedleColor
-        {
-            get => cNeedleColor;
-            set
-            {
-                if (cNeedleColor != value)
-                {
-                    cNeedleColor = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
-        #region NeedlePointColor
-        private Color cNeedlePointColor = Color.Red;
-        public Color NeedlePointColor
-        {
-            get => cNeedlePointColor;
-            set
-            {
-                if (cNeedlePointColor != value)
-                {
-                    cNeedlePointColor = value;
                     Invalidate();
                 }
             }
@@ -120,6 +90,7 @@ namespace Devinno.Forms.Controls
                 if (nValue != v)
                 {
                     nValue = v;
+                    ValueChanged?.Invoke(this, null);
                     Invalidate();
                 }
             }
@@ -247,21 +218,21 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-
-        #region VolumeDownState
-        public bool VolumeDownState { get; private set; }
-        #endregion
         #endregion
 
-        #region Member Variable
-        List<decimal> lsmv = new List<decimal>();
-        Point prev;
-        decimal DownValue;
+        #region Event
+        public event EventHandler ValueChanged;
         #endregion
 
         #region Constructor
-        public DvMeter()
+        public DvKnob()
         {
+            #region SetStyle : Selectable
+            SetStyle(ControlStyles.Selectable, true);
+            UpdateStyles();
+
+            TabStop = true;
+            #endregion
 
         }
         #endregion
@@ -305,9 +276,12 @@ namespace Devinno.Forms.Controls
             var rtRemarkIn = new Rectangle(rtRemark.X, rtRemark.Y, rtRemark.Width, rtRemark.Height); rtRemarkIn.Inflate(-ng, -ng);
             SetArea("rtRemarkIn", rtRemarkIn);
             #endregion
-            #region rtGauge
-            var rtGauge = new Rectangle(rtRemarkIn.X, rtRemarkIn.Y, rtRemarkIn.Width, rtRemarkIn.Height); rtGauge.Inflate(-ng / 2, -ng / 2);
-            SetArea("rtGauge", rtGauge);
+            #region rtKnob
+            var rtKnob = new Rectangle(rtRemarkIn.X, rtRemarkIn.Y, rtRemarkIn.Width, rtRemarkIn.Height); rtKnob.Inflate(-ng / 2, -ng / 2);
+            SetArea("rtKnob", rtKnob);
+
+            var rtKnobIn = new Rectangle(rtKnob.X, rtKnob.Y, rtKnob.Width, rtKnob.Height); rtKnobIn.Inflate(-Convert.ToInt32(rtKnob.Width / 3), -Convert.ToInt32(rtKnob.Width / 3));
+            SetArea("rtKnobIn", rtKnobIn);
             #endregion
         }
         #endregion
@@ -315,7 +289,7 @@ namespace Devinno.Forms.Controls
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
             #region Color
-            var FillColor = UseThemeColor ? Theme.PointColor : this.FillColor;
+            var KnobColor = UseThemeColor ? Theme.Color3 : this.KnobColor;
             var RemarkColor = UseThemeColor ? Theme.Color5 : this.RemarkColor;
             #endregion
             #region Set
@@ -327,11 +301,12 @@ namespace Devinno.Forms.Controls
             var rtCircle = Areas["rtCircle"];
             var rtRemark = Areas["rtRemark"];
             var rtRemarkIn = Areas["rtRemarkIn"];
-            var rtGuage = Areas["rtGauge"];
+            var rtKnob = Areas["rtKnob"];
+            var rtKnobIn = Areas["rtKnobIn"];
             #endregion
             #region Init
-            var p = new Pen(FillColor, 2);
-            var br = new SolidBrush(FillColor);
+            var p = new Pen(KnobColor, 2);
+            var br = new SolidBrush(KnobColor);
             #endregion
             #region Draw
             e.Graphics.Clear(BackColor);
@@ -340,7 +315,6 @@ namespace Devinno.Forms.Controls
             var ng = (rtCircle.Width - rtRemark.Width) / 2;
             p.Color = RemarkColor;
             var thickL = 3;
-
             #region Graduation Large
             for (double i = Minimum; i <= Maximum; i += GraduationLarge)
             {
@@ -367,94 +341,65 @@ namespace Devinno.Forms.Controls
                 if (i % GraduationLarge != 0)
                 {
                     var gsang = Convert.ToSingle(MathTool.Map(MathTool.Constrain(i, Minimum, Maximum), Minimum, Maximum, 0D, SweepAngle)) + StartAngle;
-                    var p1 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - (ng / 1.5F));
+                    var p1 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - (ng / 1.25F));
                     var p2 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - ng - 1);
 
                     p.Width = 1; e.Graphics.DrawLine(p, p1, p2);
                 }
             }
             #endregion
-            #region Arc
-            p.Width = thickL; e.Graphics.DrawArc(p, rtRemarkIn, StartAngle, SweepAngle);
             #endregion
-            #endregion
-            #region Gauge
+            #region Knob
+            using (var pth = new GraphicsPath())
             {
-                var rt = new Rectangle(rtGuage.X, rtGuage.Y, rtGuage.Width, rtGuage.Height);
-                using (var pth = new GraphicsPath())
-                {
-                    var vang = Convert.ToSingle(MathTool.Map(MathTool.Constrain(Value, Minimum, Maximum), Minimum, Maximum, 0, SweepAngle));
+                pth.AddEllipse(rtKnob);
+                //pth.AddEllipse(rtKnobIn);
 
-                    pth.AddArc(rt, StartAngle, vang);
-                    rt.Inflate(-rt.Width / 20, -rt.Width / 20);
-                    pth.AddArc(rt, StartAngle + vang, -vang);
-                    pth.CloseAllFigures();
-
-                    br.Color = FillColor;
-                    e.Graphics.FillPath(br, pth);
-                }
+                #region Shadow
+                e.Graphics.TranslateTransform(Theme.ShadowGap, Theme.ShadowGap);
+                br.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright);
+                e.Graphics.FillPath(br, pth);
+                e.Graphics.TranslateTransform(-Theme.ShadowGap, -Theme.ShadowGap);
+                #endregion
+                #region Fill
+                br.Color = KnobColor;
+                e.Graphics.FillPath(br, pth);
+                #endregion
+                #region Mask
+                e.Graphics.SetClip(pth);
+                e.Graphics.DrawImage(ResourceTool.volumemask, rtKnob);
+                e.Graphics.ResetClip();
+                #endregion
+                #region Border
+                p.Width = 1;
+                p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
+                e.Graphics.DrawPath(p, pth);
+                #endregion
             }
             #endregion
-            #region Needle
+            #region Cursor
             {
-                var vang = Convert.ToSingle(MathTool.Map(MathTool.Constrain(Value, Minimum, Maximum), Minimum, Maximum, 0, SweepAngle));
-                var ngpin = rtCircle.Width / 12;
+                var vang = Convert.ToSingle(MathTool.Map(MathTool.Constrain(Value, Minimum, Maximum), Minimum, Maximum, 0, SweepAngle)) + StartAngle;
 
-                using (var pth = new GraphicsPath())
-                {
-                    #region Path
-                    var mat1 = new Matrix(); mat1.Translate(2, 2);
-                    var mat2 = new Matrix(); mat2.Translate(-2, -2);
+                var wh = rtKnob.Width / 2;
+                var pt1 = MathTool.GetPointWithAngle(cp, vang, wh - (wh / 6));
+                var pt2 = MathTool.GetPointWithAngle(cp, vang, wh - Convert.ToInt32(wh / 2.5));
 
-                    
-                    var pt = MathTool.GetPointWithAngle(cp, vang + StartAngle, rtRemark.Width / 2);
-                    var rtS = MathTool.MakeRectangle(pt, 3);
-                    var rtL = MathTool.MakeRectangle(cp, ngpin);
-                    var rtF = MathTool.MakeRectangle(pt, cp); rtF.Inflate(ngpin, ngpin);
+                p.Width = Math.Max(1, rtKnob.Width / 32);
+                p.StartCap = LineCap.Round;
+                p.EndCap = LineCap.Round;
+                #region Shadow
+                var n = 1;// Theme.ShadowGap;
+                e.Graphics.TranslateTransform(n, n);
+                p.Color = KnobColor.BrightnessTransmit(Theme.BorderBright); 
+                e.Graphics.DrawLine(p, pt1, pt2);
+                e.Graphics.TranslateTransform(-n, -n);
+                #endregion
+                #region Fille
+                p.Color = ForeColor;    
+                e.Graphics.DrawLine(p, pt1, pt2);
+                #endregion
 
-                    /*
-                    var pt = new Point(Convert.ToInt32(_pt.X), Convert.ToInt32(_pt.Y));
-                    var rtS = new Rectangle(Convert.ToInt32(_rtS.X), Convert.ToInt32(_rtS.Y), Convert.ToInt32(_rtS.Width), Convert.ToInt32(_rtS.Height));
-                    var rtL = new Rectangle(Convert.ToInt32(_rtL.X), Convert.ToInt32(_rtL.Y), Convert.ToInt32(_rtL.Width), Convert.ToInt32(_rtL.Height));
-                    var rtF = new Rectangle(Convert.ToInt32(_rtF.X), Convert.ToInt32(_rtF.Y), Convert.ToInt32(_rtF.Width), Convert.ToInt32(_rtF.Height));
-                    */
-
-                    pth.AddArc(rtL, vang + StartAngle + 90, 180);
-                    pth.AddArc(rtS, vang + StartAngle + 90 + 180, 180);
-                    pth.CloseAllFigures();
-                    #endregion
-                
-                    #region Shadow
-                    pth.Flatten(mat1);
-                    br.Color = Color.FromArgb(90, Color.Black); 
-                    e.Graphics.FillPath(br, pth);
-                    #endregion
-                    #region Needle
-                    pth.Flatten(mat2);
-                    using (var pth2 = new GraphicsPath())
-                    {
-                        pth2.AddEllipse(rtF);
-                        using (var lgbr = new LinearGradientBrush(rtF, NeedleColor, NeedleColor, vang + StartAngle)) 
-                        {
-                            var cb = new ColorBlend();
-                            cb.Positions = new float[] { 0F, 0.6F, 0.6F, 1F };
-                            cb.Colors = new Color[] { NeedleColor, NeedleColor, NeedlePointColor, NeedlePointColor };
-                            lgbr.InterpolationColors = cb;
-
-                            e.Graphics.FillPath(lgbr, pth);
-                        }
-                    }
-                    #endregion
-                    #region Border
-                    p.Width = 1;
-                    p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
-                    e.Graphics.DrawPath(p, pth);
-                    #endregion
-                }
-
-                var rtHole = MathTool.MakeRectangle(cp, ngpin / 3);
-                br.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
-                e.Graphics.FillEllipse(br, rtHole);
             }
             #endregion
             #region Text
@@ -462,11 +407,10 @@ namespace Devinno.Forms.Controls
             {
                 var txt = Value.ToString(string.IsNullOrWhiteSpace(ValueFormatString) ? "0" : ValueFormatString);
                 var sz = e.Graphics.MeasureString(txt, ValueFont);
-                //var pt = MathTool.GetPointWithAngle(cp, StartAngle - (360 - SweepAngle) / 2, rtRemarkIn.Width / 2 - Convert.ToInt32(sz.Height / 2));
                 var pt = MathTool.GetPointWithAngle(cp, StartAngle - (360 - SweepAngle) / 2, (rtRemarkIn.Width / 2) - Convert.ToInt32(sz.Height / 4));
                 var rt = MathTool.MakeRectangle(new Point(Convert.ToInt32(pt.X), Convert.ToInt32(pt.Y)), Convert.ToInt32(sz.Width), Convert.ToInt32(sz.Height));
 
-                Theme.DrawTextShadow(e.Graphics, null, txt, ValueFont, ForeColor, BackColor, rt, DvContentAlignment.MiddleCenter);
+                //Theme.DrawTextShadow(e.Graphics, null, txt, ValueFont, ForeColor, BackColor, rt, DvContentAlignment.MiddleCenter);
             }
             #endregion
             #endregion
@@ -477,7 +421,6 @@ namespace Devinno.Forms.Controls
             base.OnThemeDraw(e, Theme);
         }
         #endregion
-
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -485,19 +428,6 @@ namespace Devinno.Forms.Controls
             base.OnMouseDown(e);
         }
         #endregion
-        #region OnMouseUp
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseUp(e);
-        }
         #endregion
-        #region OnMouseMove
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-        }
-        #endregion
-        #endregion
-
     }
 }

@@ -14,7 +14,7 @@ namespace Devinno.Forms.Tools
         internal static Bitmap circlegrad { get; private set; }
         static ResourceTool()
         {
-            volumemask = new Bitmap(Properties.Resources.tmi);
+            volumemask = new Bitmap(Properties.Resources.tmi2);
             saturation = new Bitmap(Properties.Resources.Saturation);
             circlegrad = new Bitmap(Properties.Resources.gb);
         }

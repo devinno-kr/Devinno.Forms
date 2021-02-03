@@ -107,12 +107,14 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvSelector()
         {
+            #region SetStyle : Selectable
             SetStyle(ControlStyles.Selectable, true);
             UpdateStyles();
 
-            Size = new Size(80, 36);
-
             TabStop = true;
+            #endregion
+
+            Size = new Size(80, 36);
         }
         #endregion
 
@@ -237,6 +239,7 @@ namespace Devinno.Forms.Controls
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            Focus();
             if(Areas.Count>1)
             {
                 if (CollisionTool.Check(Areas["rtLeft"], e.Location)) { bLeft = true; }

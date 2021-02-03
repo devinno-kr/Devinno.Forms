@@ -66,9 +66,10 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvCheckBox()
         {
-            #region Set Style
-            this.SetStyle(ControlStyles.Selectable, true);
-            this.UpdateStyles();
+            #region SetStyle : Selectable
+            SetStyle(ControlStyles.Selectable, true);
+            UpdateStyles();
+
             TabStop = true;
             #endregion
             #region Size
@@ -149,6 +150,7 @@ namespace Devinno.Forms.Controls
             if (CollisionTool.Check(rtBox, e.Location) || CollisionTool.Check(rtText, e.Location))
             {
                 Checked = !Checked;
+                Focus();
             }
 
             base.OnMouseDown(e);
