@@ -782,7 +782,4 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
     }
-
-
-
 }
