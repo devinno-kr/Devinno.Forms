@@ -4,6 +4,7 @@ using Devinno.Forms.Tools;
 using Devinno.Tools;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Devinno.Forms.Controls
     {
         #region Properties
         #region KnobColor
-        private Color cKnobColor = DvTheme.DefaultTheme.Color3;
+        private Color cKnobColor = DvTheme.DefaultTheme.Color1;
         public Color KnobColor
         {
             get => cKnobColor;
@@ -31,16 +32,61 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region RemarkColor
-        private Color cRemarkColor = DvTheme.DefaultTheme.Color5;
-        public Color RemarkColor
+        #region FillColor
+        private Color cFillColor = DvTheme.DefaultTheme.PointColor;
+        public Color FillColor
         {
-            get => cRemarkColor;
+            get => cFillColor;
             set
             {
-                if (cRemarkColor != value)
+                if (cFillColor != value)
                 {
-                    cRemarkColor = value;
+                    cFillColor = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #region EmptyColor
+        private Color cEmptyColor = DvTheme.DefaultTheme.Color0;
+        public Color EmptyColor
+        {
+            get => cEmptyColor;
+            set
+            {
+                if (cEmptyColor != value)
+                {
+                    cEmptyColor = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #region CursorColor
+        private Color cCursorColor = Color.White;
+        public Color CursorColor
+        {
+            get => cCursorColor;
+            set
+            {
+                if (cCursorColor != value)
+                {
+                    cCursorColor = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #region CursorDownColor
+        private Color cCursorDownColor = Color.Red;
+        public Color CursorDownColor
+        {
+            get => cCursorDownColor;
+            set
+            {
+                if (cCursorDownColor != value)
+                {
+                    cCursorDownColor = value;
                     Invalidate();
                 }
             }
@@ -91,36 +137,6 @@ namespace Devinno.Forms.Controls
                 {
                     nValue = v;
                     ValueChanged?.Invoke(this, null);
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
-        #region GraduationLarge
-        private double nGraduationLarge = 10D;
-        public double GraduationLarge
-        {
-            get => nGraduationLarge;
-            set
-            {
-                if (nGraduationLarge != value)
-                {
-                    nGraduationLarge = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
-        #region GraduationSmall
-        private double nGraduationSmall = 2D;
-        public double GraduationSmall
-        {
-            get => nGraduationSmall;
-            set
-            {
-                if (nGraduationSmall != value)
-                {
-                    nGraduationSmall = value;
                     Invalidate();
                 }
             }
@@ -218,10 +234,20 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+
+        #region CursorDownState
+        public bool CursorDownState { get; private set; }
+        #endregion
         #endregion
 
         #region Event
         public event EventHandler ValueChanged;
+        #endregion
+
+        #region Member Variable
+        double DownValue;
+        double calcAngle;
+        Point prev;
         #endregion
 
         #region Constructor
@@ -246,51 +272,31 @@ namespace Devinno.Forms.Controls
             var rtContent = Areas["rtContent"];
             var wh = Math.Min(rtContent.Width, rtContent.Height);
             var ngp2 = wh / 35;
+            var ng = wh / 20;
+
             var rtCircle = DrawingTool.MakeRectangleAlign(rtContent, new Size(wh, wh), DvContentAlignment.MiddleCenter);
-
             SetArea("rtCircle", rtCircle);
-            #region rtRemark
-            var cp = MathTool.CenterPoint(rtCircle);
-            float L = rtCircle.Left, R = rtCircle.Right, T = rtCircle.Top, B = rtCircle.Bottom;
-            for (double i = Minimum; i <= Maximum; i += GraduationLarge)
-            {
-                var gsang = Convert.ToSingle(MathTool.Map(MathTool.Constrain(i, Minimum, Maximum), Minimum, Maximum, 0D, SweepAngle)) + StartAngle;
 
-                var pT = MathTool.GetPointWithAngle(cp, gsang, rtCircle.Width / 2);
-                var txt = i.ToString(string.IsNullOrWhiteSpace(RemarkFormatString) ? "0" : RemarkFormatString);
-                var sz = g.MeasureString(txt, Font);
-                var rt = MathTool.MakeRectangle(pT, (int)Math.Ceiling(sz.Width), (int)Math.Ceiling(sz.Height));
+            var rtGauge = new Rectangle(rtCircle.X, rtCircle.Y, rtCircle.Width, rtCircle.Height); rtGauge.Inflate(-ng, -ng);
+            SetArea("rtGauge", rtGauge);
 
-                L = Math.Min(rt.Left, L);
-                R = Math.Max(rt.Right, R);
-                T = Math.Min(rt.Top, T);
-                B = Math.Max(rt.Bottom, B);
-            }
-            var vm = Math.Max(Math.Max(Math.Abs(L - rtCircle.Left), Math.Abs(R - rtCircle.Right)), Math.Max(Math.Abs(T - rtCircle.Top), Math.Abs(B - rtCircle.Bottom)));
-            var rtRemark = new Rectangle(rtCircle.X, rtCircle.Y, rtCircle.Width, rtCircle.Height);
-            rtRemark.Inflate(-Convert.ToInt32(vm / 2F) - ngp2, -Convert.ToInt32(vm / 2F) - ngp2);
-            SetArea("rtRemark", rtRemark);
-            #endregion
-            #region rtRemarkIn
-            var ng = (rtCircle.Width - rtRemark.Width) / 2;
-            var rtRemarkIn = new Rectangle(rtRemark.X, rtRemark.Y, rtRemark.Width, rtRemark.Height); rtRemarkIn.Inflate(-ng, -ng);
-            SetArea("rtRemarkIn", rtRemarkIn);
-            #endregion
-            #region rtKnob
-            var rtKnob = new Rectangle(rtRemarkIn.X, rtRemarkIn.Y, rtRemarkIn.Width, rtRemarkIn.Height); rtKnob.Inflate(-ng / 2, -ng / 2);
+            var rtKnob = new Rectangle(rtGauge.X, rtGauge.Y, rtGauge.Width, rtGauge.Height); rtKnob.Inflate(-ng / 2, -ng / 2);
             SetArea("rtKnob", rtKnob);
 
             var rtKnobIn = new Rectangle(rtKnob.X, rtKnob.Y, rtKnob.Width, rtKnob.Height); rtKnobIn.Inflate(-Convert.ToInt32(rtKnob.Width / 3), -Convert.ToInt32(rtKnob.Width / 3));
             SetArea("rtKnobIn", rtKnobIn);
-            #endregion
         }
         #endregion
         #region OnThemeDraw
+
+        Bitmap bm;
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
             #region Color
-            var KnobColor = UseThemeColor ? Theme.Color3 : this.KnobColor;
-            var RemarkColor = UseThemeColor ? Theme.Color5 : this.RemarkColor;
+            var KnobColor = UseThemeColor ? Theme.Color1 : this.KnobColor;
+            var FillColor = UseThemeColor ? Theme.PointColor : this.FillColor;
+            var EmptyColor = UseThemeColor ? Theme.Color0 : this.FillColor;
+            var KnobBorderColor = KnobColor.BrightnessTransmit(0.75);
             #endregion
             #region Set
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
@@ -299,10 +305,22 @@ namespace Devinno.Forms.Controls
             #region Bounds
             var rtContent = Areas["rtContent"];
             var rtCircle = Areas["rtCircle"];
-            var rtRemark = Areas["rtRemark"];
-            var rtRemarkIn = Areas["rtRemarkIn"];
+            var rtGauge = Areas["rtGauge"];
             var rtKnob = Areas["rtKnob"];
             var rtKnobIn = Areas["rtKnobIn"];
+
+            var cp = MathTool.CenterPoint(rtCircle);
+            #endregion
+            #region Buf
+            if (bm == null || (bm != null && (bm.Width != rtKnob.Width || bm.Width != rtKnob.Width)))
+            {
+                if (bm != null) bm.Dispose();
+                bm = new Bitmap(rtKnob.Width, rtKnob.Height);
+                using (var g = Graphics.FromImage(bm))
+                {
+                    g.DrawImage(ResourceTool.volumemask, 0, 0, rtKnob.Width, rtKnob.Height);
+                }
+            }
             #endregion
             #region Init
             var p = new Pen(KnobColor, 2);
@@ -310,72 +328,42 @@ namespace Devinno.Forms.Controls
             #endregion
             #region Draw
             e.Graphics.Clear(BackColor);
-            var cp = MathTool.CenterPoint(rtRemark);
+
             #region Remark
-            var ng = (rtCircle.Width - rtRemark.Width) / 2;
-            p.Color = RemarkColor;
-            var thickL = 3;
-            #region Graduation Large
-            for (double i = Minimum; i <= Maximum; i += GraduationLarge)
-            {
-                var gsang = Convert.ToSingle(MathTool.Map(MathTool.Constrain(i, Minimum, Maximum), Minimum, Maximum, 0D, SweepAngle)) + StartAngle;
+            var ng = rtCircle.Width / 20;
+            p.Width = ng;
 
-                var pT = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2);
-                var p1 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - (ng / 2));
-                var p2 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - ng - 1);
+            p.Color = EmptyColor;
+            e.Graphics.DrawArc(p, rtGauge, StartAngle, (float)MathTool.Map(Maximum, Minimum, Maximum, 0, Math.Min(SweepAngle, 360)));
 
-                var txt = i.ToString(string.IsNullOrWhiteSpace(RemarkFormatString) ? "0" : RemarkFormatString);
-                var sz = e.Graphics.MeasureString(txt, Font);
-                var _rt = MathTool.MakeRectangle(pT, sz.Width / 2F, sz.Height / 2F);
-                var rt = new Rectangle(Convert.ToInt32(_rt.X), Convert.ToInt32(_rt.Y), Convert.ToInt32(_rt.Width), Convert.ToInt32(_rt.Height)); rt.Inflate(1, 1);
-                p.Width = thickL;
-                e.Graphics.DrawLine(p, p1, p2);
-
-                br.Color = BackColor; e.Graphics.FillEllipse(br, rt);
-                Theme.DrawTextShadow(e.Graphics, null, txt, Font, RemarkColor, BackColor, rt, DvContentAlignment.MiddleCenter);
-            }
-            #endregion
-            #region Graduation Small
-            for (double i = Minimum; i <= Maximum; i += GraduationSmall)
-            {
-                if (i % GraduationLarge != 0)
-                {
-                    var gsang = Convert.ToSingle(MathTool.Map(MathTool.Constrain(i, Minimum, Maximum), Minimum, Maximum, 0D, SweepAngle)) + StartAngle;
-                    var p1 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - (ng / 1.25F));
-                    var p2 = MathTool.GetPointWithAngle(cp, gsang, rtRemark.Width / 2 - ng - 1);
-
-                    p.Width = 1; e.Graphics.DrawLine(p, p1, p2);
-                }
-            }
-            #endregion
+            p.Color = FillColor;
+            e.Graphics.DrawArc(p, rtGauge, StartAngle, (float)MathTool.Map(Value, Minimum, Maximum, 0, Math.Min(SweepAngle, 360)));
             #endregion
             #region Knob
-            using (var pth = new GraphicsPath())
-            {
-                pth.AddEllipse(rtKnob);
-                //pth.AddEllipse(rtKnobIn);
+            #region Shadow
+            e.Graphics.TranslateTransform(Theme.ShadowGap, Theme.ShadowGap);
+            br.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright);
+            e.Graphics.FillEllipse(br, rtKnob);
+            e.Graphics.TranslateTransform(-Theme.ShadowGap, -Theme.ShadowGap);
+            #endregion
+            #region Fill
+            br.Color = KnobColor;
+            e.Graphics.FillEllipse(br, rtKnob);
 
-                #region Shadow
-                e.Graphics.TranslateTransform(Theme.ShadowGap, Theme.ShadowGap);
-                br.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright);
-                e.Graphics.FillPath(br, pth);
-                e.Graphics.TranslateTransform(-Theme.ShadowGap, -Theme.ShadowGap);
-                #endregion
-                #region Fill
-                br.Color = KnobColor;
-                e.Graphics.FillPath(br, pth);
-                #endregion
-                #region Mask
-                e.Graphics.SetClip(pth);
-                e.Graphics.DrawImage(ResourceTool.volumemask, rtKnob);
-                e.Graphics.ResetClip();
-                #endregion
-                #region Border
-                p.Width = 1;
-                p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
-                e.Graphics.DrawPath(p, pth);
-                #endregion
-            }
+            var nk = rtKnob.Width / 50;
+            var rtKnobBorder = new Rectangle(rtKnob.X, rtKnob.Y, rtKnob.Width, rtKnob.Height); rtKnobBorder.Inflate(-nk, -nk);
+            p.Width = nk * 2;
+            p.Color = KnobBorderColor;
+            e.Graphics.DrawEllipse(p, rtKnobBorder);
+            #endregion
+            #region Mask
+            e.Graphics.DrawImage(bm, rtKnob);
+            #endregion
+            #region Border
+            p.Width = 1;
+            p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
+            e.Graphics.DrawEllipse(p, rtKnob);
+            #endregion
             #endregion
             #region Cursor
             {
@@ -391,26 +379,21 @@ namespace Devinno.Forms.Controls
                 #region Shadow
                 var n = 1;// Theme.ShadowGap;
                 e.Graphics.TranslateTransform(n, n);
-                p.Color = KnobColor.BrightnessTransmit(Theme.BorderBright); 
+                p.Color = KnobColor.BrightnessTransmit(Theme.BorderBright);
                 e.Graphics.DrawLine(p, pt1, pt2);
                 e.Graphics.TranslateTransform(-n, -n);
                 #endregion
-                #region Fille
-                p.Color = ForeColor;    
+                #region Fill
+                p.Color = CursorDownState ? CursorDownColor : CursorColor;
                 e.Graphics.DrawLine(p, pt1, pt2);
                 #endregion
-
             }
             #endregion
             #region Text
             if (DrawText)
             {
                 var txt = Value.ToString(string.IsNullOrWhiteSpace(ValueFormatString) ? "0" : ValueFormatString);
-                var sz = e.Graphics.MeasureString(txt, ValueFont);
-                var pt = MathTool.GetPointWithAngle(cp, StartAngle - (360 - SweepAngle) / 2, (rtRemarkIn.Width / 2) - Convert.ToInt32(sz.Height / 4));
-                var rt = MathTool.MakeRectangle(new Point(Convert.ToInt32(pt.X), Convert.ToInt32(pt.Y)), Convert.ToInt32(sz.Width), Convert.ToInt32(sz.Height));
-
-                //Theme.DrawTextShadow(e.Graphics, null, txt, ValueFont, ForeColor, BackColor, rt, DvContentAlignment.MiddleCenter);
+                Theme.DrawTextShadow(e.Graphics, null, txt, ValueFont, ForeColor, KnobColor, rtCircle, DvContentAlignment.MiddleCenter);
             }
             #endregion
             #endregion
@@ -425,9 +408,120 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             Focus();
+            #region Bounds
+            var rtContent = Areas["rtContent"];
+            var rtCircle = Areas["rtCircle"];
+            var rtKnob = Areas["rtKnob"];
+            var rtKnobIn = Areas["rtKnobIn"];
+
+            var cp = MathTool.CenterPoint(rtCircle);
+            #endregion
+            #region Cursor
+            var vang = Convert.ToSingle(MathTool.Map(MathTool.Constrain(Value, Minimum, Maximum), Minimum, Maximum, 0, SweepAngle)) + StartAngle;
+            var wh = rtKnob.Width / 2;
+            var pt1 = MathTool.GetPointWithAngle(cp, vang, wh - (wh / 6));
+            var pt2 = MathTool.GetPointWithAngle(cp, vang, wh - Convert.ToInt32(wh / 2.5));
+            var v = Convert.ToSingle(Math.Abs(wh / 6 - wh / 2.5));
+            //if(CollisionTool.CheckLine(pt1, pt2, e.Location, v/2) && CollisionTool.CheckCircle(rtKnob, e.Location))
+            if(CollisionTool.CheckCircle(rtKnob, e.Location))
+            {
+                CursorDownState = true;
+                calcAngle = 0;
+                prev = e.Location;
+                DownValue = Value; 
+                Invalidate();
+            }
+            #endregion
             base.OnMouseDown(e);
         }
         #endregion
+        #region OnMouseUp
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (Areas.Count > 0)
+            {
+                #region Bounds
+                var rtContent = Areas["rtContent"];
+                var rtCircle = Areas["rtCircle"];
+                var rtKnob = Areas["rtKnob"];
+                var rtKnobIn = Areas["rtKnobIn"];
+
+                var cp = MathTool.CenterPoint(rtCircle);
+
+                if (SweepAngle > 360)
+                {
+                    var vang = Convert.ToSingle(MathTool.Map(MathTool.Constrain(Value, Minimum, Maximum), Minimum, Maximum, 0, SweepAngle));
+                    var maxpage = Math.Floor(SweepAngle / 360D);
+                    var nowpage = Math.Floor((vang + calcAngle) / 360D);
+                }
+                #endregion
+
+                if (CursorDownState)
+                {
+                    #region Value
+                    var pv = MathTool.GetAngle(cp, prev);
+                    var nv = MathTool.GetAngle(cp, e.Location);
+
+                    var v = nv - pv;
+                    if (v < -300) v = 360 + v;
+                    else if (v > 300) v = v - 360;
+                    calcAngle += v;
+
+                    var cv = MathTool.Map(calcAngle, 0D, SweepAngle, Minimum, Maximum);
+                    Value = MathTool.Constrain(DownValue + cv, Minimum, Maximum);
+                    #endregion
+                    CursorDownState = false;
+                    Invalidate();
+                }
+                Invalidate();
+            }
+            base.OnMouseUp(e);
+        }
+        #endregion
+        #region OnMouseMove
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            if (Areas.Count > 0)
+            {
+                #region Bounds
+                var rtContent = Areas["rtContent"];
+                var rtCircle = Areas["rtCircle"];
+                var rtKnob = Areas["rtKnob"];
+                var rtKnobIn = Areas["rtKnobIn"];
+
+                var cp = MathTool.CenterPoint(rtCircle);
+                       
+                if (SweepAngle > 360)
+                {
+                    var vang = Convert.ToSingle(MathTool.Map(MathTool.Constrain(Value, Minimum, Maximum), Minimum, Maximum, 0, SweepAngle));
+                    var maxpage = Math.Floor(SweepAngle / 360D);
+                    var nowpage = Math.Floor((vang + calcAngle) / 360D);
+                }
+                #endregion
+
+                if (CursorDownState)
+                {
+                    #region Value
+                    var pv = MathTool.GetAngle(cp, prev);
+                    var nv = MathTool.GetAngle(cp, e.Location);
+
+                    var v = nv - pv;
+                    if (v < -300) v = 360 + v;
+                    else if (v > 300) v = v - 360;
+                    calcAngle += v;
+
+                    var cv = MathTool.Map(calcAngle, 0D, SweepAngle, Minimum, Maximum);
+                    Value = MathTool.Constrain(DownValue + cv, Minimum, Maximum);
+                    #endregion
+                    prev = e.Location;
+                }
+            }
+            base.OnMouseMove(e);
+        }
+        #endregion
+        #endregion
+
+        #region Method
         #endregion
     }
 }

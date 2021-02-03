@@ -165,27 +165,28 @@ namespace Sample
             // 
             // dvKnob1
             // 
+            this.dvKnob1.CursorColor = System.Drawing.Color.White;
+            this.dvKnob1.CursorDownColor = System.Drawing.Color.Red;
             this.dvKnob1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dvKnob1.DrawText = true;
+            this.dvKnob1.EmptyColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.dvKnob1.FillColor = System.Drawing.Color.Red;
             this.dvKnob1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.dvKnob1.GraduationLarge = 10D;
-            this.dvKnob1.GraduationSmall = 2D;
             this.dvKnob1.KnobColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvKnob1.Location = new System.Drawing.Point(3, 260);
             this.dvKnob1.Maximum = 100D;
             this.dvKnob1.Minimum = 0D;
             this.dvKnob1.Name = "dvKnob1";
-            this.dvKnob1.RemarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.dvKnob1.RemarkFormatString = null;
             this.dvKnob1.Size = new System.Drawing.Size(274, 251);
             this.dvKnob1.StartAngle = 135;
-            this.dvKnob1.SweepAngle = 270;
+            this.dvKnob1.SweepAngle = 1800;
             this.dvKnob1.TabIndex = 5;
             this.dvKnob1.TabStop = false;
             this.dvKnob1.Text = "dvKnob1";
             this.dvKnob1.UseThemeColor = true;
             this.dvKnob1.Value = 0D;
-            this.dvKnob1.ValueFont = new System.Drawing.Font("나눔고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dvKnob1.ValueFont = new System.Drawing.Font("Eras Demi ITC", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dvKnob1.ValueFormatString = null;
             // 
             // FormMain

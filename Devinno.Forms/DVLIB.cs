@@ -35,7 +35,6 @@ namespace Devinno.Forms
         DvLineGraph
         DvTimeGraph
         DvTrendGraph
-        DvVolumeKnob
         DvOnOff
         DvSwitch
         DvListBox
