@@ -134,7 +134,7 @@ namespace Devinno.Forms.Controls
             TabStop = true;
             #endregion
 
-            Size = new Size(250, 200);
+            Size = new Size(300, 200);
         }
         #endregion
 

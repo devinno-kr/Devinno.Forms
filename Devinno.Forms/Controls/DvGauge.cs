@@ -226,7 +226,7 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvGauge()
         {
-
+            this.Size = new Size(300, 300);
         }
         #endregion
 

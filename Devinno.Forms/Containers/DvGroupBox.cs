@@ -103,7 +103,7 @@ namespace Devinno.Forms.Containers
         #region Constructor
         public DvGroupBox()
         {
-            Size = new Size(200, 150);
+            Size = new Size(300, 200);
         }
         #endregion
 

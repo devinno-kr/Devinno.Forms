@@ -173,21 +173,24 @@ namespace Devinno.Forms.Controls
 
         #region Event
         public event EventHandler LongClick;
+        public event EventHandler LabelClick;
         #endregion
 
         #region Member Variable
         private LongClick click = new LongClick();
+        private bool bDown = false;
         #endregion
 
         #region Constructor
         public DvLabel()
         {
+            #region SetStyle : Selectable
             SetStyle(ControlStyles.Selectable, true);
             UpdateStyles();
-
-            Size = new Size(80, 36);
-
             TabStop = true;
+            #endregion
+
+            Size = new Size(150, 30);
 
             click.GenLongClick = new Action(() => { this.Invoke(new Action(() => LongClick?.Invoke(this, null))); });
         }
@@ -266,6 +269,7 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             click.MouseDown(e);
+            bDown = true;
             base.OnMouseDown(e);
         }
         #endregion
@@ -273,12 +277,15 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseUp(MouseEventArgs e)
         {
             click.MouseUp(e);
+            if (bDown)
+            {
+                bDown = false;
+                LabelClick?.Invoke(this, null);
+            }
             base.OnMouseUp(e);
         }
         #endregion
         #endregion
-
-        
     }
 
     #region enum : LabelStyle 

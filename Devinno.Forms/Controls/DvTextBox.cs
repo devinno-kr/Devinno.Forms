@@ -199,7 +199,7 @@ namespace Devinno.Forms.Controls
             OriginalTextBox.Font = this.Font;
             #endregion
 
-            this.Size = new Size(80, 36);
+            this.Size = new Size(150, 30);
         }
         #endregion
 

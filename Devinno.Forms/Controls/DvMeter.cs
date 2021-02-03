@@ -262,7 +262,7 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvMeter()
         {
-
+            this.Size = new Size(300, 300);
         }
         #endregion
 

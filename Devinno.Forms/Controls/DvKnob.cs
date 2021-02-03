@@ -248,6 +248,7 @@ namespace Devinno.Forms.Controls
         double DownValue;
         double calcAngle;
         Point prev;
+        Bitmap bm;
         #endregion
 
         #region Constructor
@@ -259,7 +260,9 @@ namespace Devinno.Forms.Controls
 
             TabStop = true;
             #endregion
-
+            #region Size
+            this.Size = new Size(300, 300);
+            #endregion
         }
         #endregion
 
@@ -288,8 +291,6 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region OnThemeDraw
-
-        Bitmap bm;
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
             #region Color

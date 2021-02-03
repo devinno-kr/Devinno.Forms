@@ -230,7 +230,7 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvLamp()
         {
-            Size = new Size(36, 36);
+            Size = new Size(150, 30);
         }
         #endregion
 

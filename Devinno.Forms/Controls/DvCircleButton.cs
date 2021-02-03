@@ -171,8 +171,9 @@ namespace Devinno.Forms.Controls
 
             TabStop = true;
             #endregion
-
-            Size = new Size(80, 36);
+            #region Size
+            this.Size = new Size(80, 80);
+            #endregion
 
             click.Reset = new Action(() => { this.Invoke(new Action(() => { bDown = false; Invalidate(); })); });
             click.GenLongClick = new Action(() => { this.Invoke(new Action(() => LongClick?.Invoke(this, null))); });

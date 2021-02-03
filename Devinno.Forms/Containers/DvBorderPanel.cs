@@ -101,7 +101,7 @@ namespace Devinno.Forms.Containers
             SetStyle(ControlStyles.Selectable, true);
             UpdateStyles();
 
-            Size = new Size(80, 36);
+            Size = new Size(300, 200);
 
             TabStop = true;
         }
