@@ -22,8 +22,8 @@ namespace Devinno.Forms.Themes
         public static Color StaticColor3 { get; } = Color.FromArgb(90, 90, 90);
         public static Color StaticColor4 { get; } = Color.FromArgb(120, 120, 120);
         public static Color StaticColor5 { get; } = Color.FromArgb(150, 150, 150);
-        public static Color StaticPointColor { get; } = Color.Red;
-        public static Color StaticFrameColor { get; } = Color.FromArgb(40, 40, 40);
+        public static Color StaticPointColor { get; } = Color.DarkRed;
+        public static Color StaticFrameColor { get; } = Color.FromArgb(30, 30, 30);
         public static Color StaticScrollBarColor { get; } = Color.FromArgb(20, 20, 20);
         public static Color StaticScrollCursorColor { get; } = Color.FromArgb(180, 180, 180);
         #endregion
@@ -47,15 +47,15 @@ namespace Devinno.Forms.Themes
         public override int Corner { get; set; } = 5;
         public override int TextOffsetX { get; set; } = 0;
         public override int TextOffsetY { get; set; } = 1;
-        public override int ShadowGap { get; set; } = 2;
+        public override int ShadowGap { get; set; } = 1;
 
         public override double DownBright { get; set; } = -0.25;
         public override double BorderBright { get; set; } = -0.5;
         public override double GradientLightBright { get; set; } = 0.2;
         public override double GradientDarkBright { get; set; } = -0.2;
-        public override double OutShadowBright { get; set; } = -0.15;
+        public override double OutShadowBright { get; set; } = -0.4;
         public override double InShadowBright { get; set; } = -0.3;
-        public override double OutBevelBright { get; set; } = 0.15;
+        public override double OutBevelBright { get; set; } = 0.2;
         public override double InBevelBright { get; set; } = 0.4;
         public override int DisableAlpha { get; set; } = 180;
         public override int BevelAlpha { get; set; } = 30;
@@ -671,6 +671,70 @@ namespace Devinno.Forms.Themes
                 g.SetClip(oldclip, CombineMode.Replace);
             }
             #endregion
+            #region IN BEVEL2
+            if ((option & BoxDrawOption.IN_BEVEL2) == BoxDrawOption.IN_BEVEL2)
+            {
+                var rt = new Rectangle(bounds.X + 1, bounds.Y + 1, bounds.Width - 2, bounds.Height - 2);
+                var c1 = c.BrightnessTransmit(InBevelBright);
+                var c2 = Color.Transparent;
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(new Rectangle(bounds.X - 1, bounds.Y - 1, bounds.Width + 2, bounds.Height + 2), c1, c2, 90))
+                    {
+                        using (var p2 = new Pen(lgbr, 2F))
+                        {
+                            switch (round)
+                            {
+                                case RoundType.NONE: g.DrawRectangle(p2, rt); break;
+                                case RoundType.ALL: g.DrawRoundRectangle(p2, rt, Corner); break;
+                                case RoundType.L: g.DrawRoundRectangleL(p2, rt, Corner); break;
+                                case RoundType.R: g.DrawRoundRectangleR(p2, rt, Corner); break;
+                                case RoundType.T: g.DrawRoundRectangleT(p2, rt, Corner); break;
+                                case RoundType.B: g.DrawRoundRectangleB(p2, rt, Corner); break;
+                                case RoundType.LT: g.DrawRoundRectangleLT(p2, rt, Corner); break;
+                                case RoundType.RT: g.DrawRoundRectangleRT(p2, rt, Corner); break;
+                                case RoundType.LB: g.DrawRoundRectangleLB(p2, rt, Corner); break;
+                                case RoundType.RB: g.DrawRoundRectangleRB(p2, rt, Corner); break;
+                                case RoundType.ELLIPSE: g.DrawEllipse(p2, rt); break;
+                                case RoundType.FULL_HORIZON: g.DrawRoundRectangle(p2, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                            }
+                        }
+                    }
+            }
+            #endregion
+            #region IN BEVEL LT2
+            if ((option & BoxDrawOption.IN_BEVEL_LT2) == BoxDrawOption.IN_BEVEL_LT2)
+            {
+                var oldclip = g.Clip.GetBounds(g);
+                var rt = new Rectangle(bounds.X + 1, bounds.Y + 1, bounds.Width - 1, bounds.Height - 1);
+                var rtex = new Rectangle(rt.X, rt.Y, rt.Width - 1, rt.Height - 1);
+                g.SetClip(rtex, CombineMode.Intersect);
+                var c1 = c.BrightnessTransmit(InBevelBright);
+                var c2 = Color.Transparent;
+                if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
+                    using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 75))
+                    {
+                        using (var p2 = new Pen(lgbr, 2F))
+                        {
+                            switch (round)
+                            {
+                                case RoundType.NONE: g.DrawRectangle(p2, rt); break;
+                                case RoundType.ALL: g.DrawRoundRectangle(p2, rt, Corner); break;
+                                case RoundType.L: g.DrawRoundRectangleL(p2, rt, Corner); break;
+                                case RoundType.R: g.DrawRoundRectangleR(p2, rt, Corner); break;
+                                case RoundType.T: g.DrawRoundRectangleT(p2, rt, Corner); break;
+                                case RoundType.B: g.DrawRoundRectangleB(p2, rt, Corner); break;
+                                case RoundType.LT: g.DrawRoundRectangleLT(p2, rt, Corner); break;
+                                case RoundType.RT: g.DrawRoundRectangleRT(p2, rt, Corner); break;
+                                case RoundType.LB: g.DrawRoundRectangleLB(p2, rt, Corner); break;
+                                case RoundType.RB: g.DrawRoundRectangleRB(p2, rt, Corner); break;
+                                case RoundType.ELLIPSE: g.DrawEllipse(p2, rt); break;
+                                case RoundType.FULL_HORIZON: g.DrawRoundRectangle(p2, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
+                            }
+                        }
+                    }
+                g.SetClip(oldclip, CombineMode.Replace);
+            }
+            #endregion
             #region BORDER
             if ((option & BoxDrawOption.BORDER) == BoxDrawOption.BORDER)
             {
@@ -720,6 +784,29 @@ namespace Devinno.Forms.Themes
         {
             bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), bounds, align);
             bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, bounds, align);
+        }
+
+        public override void DrawText(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
+        {
+            using (var br = new SolidBrush(c))
+            {
+                using (var brico = new SolidBrush(cico))
+                {
+                    g.DrawTextIcon(icon, Text, ft, br, brico, bounds, align, TextOffsetX, TextOffsetY);
+                }
+            }
+        }
+
+        public override void DrawTextBevel(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
+        {
+            bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), bounds, align);
+            bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, cico, bounds, align);
+        }
+
+        public override void DrawTextShadow(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
+        {
+            bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), bounds, align);
+            bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, cico, bounds, align);
         }
         #endregion
         #endregion

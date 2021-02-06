@@ -184,12 +184,6 @@ namespace Devinno.Forms.Controls
         #region Constructor
         public DvLabel()
         {
-            #region SetStyle : Selectable
-            SetStyle(ControlStyles.Selectable, true);
-            UpdateStyles();
-            TabStop = true;
-            #endregion
-
             Size = new Size(150, 30);
 
             click.GenLongClick = new Action(() => { this.Invoke(new Action(() => LongClick?.Invoke(this, null))); });
@@ -218,8 +212,6 @@ namespace Devinno.Forms.Controls
         {
             #region Color
             var LabelColor = UseThemeColor ? Theme.Color2 : this.LabelColor;
-            var BackColor = this.BackColor;
-            if (BackColor == Color.Transparent) BackColor = GetParentBackColor(Parent);
             #endregion
             #region Set
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
@@ -252,9 +244,24 @@ namespace Devinno.Forms.Controls
             }
                         
             Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, BackgroundDraw ? LabelColor : BackColor, rtText, ContentAlignment);
+
             if (UnitWidth > 0 && !string.IsNullOrWhiteSpace(Unit))
             {
-                Theme.DrawTextShadow(e.Graphics, null, Unit, Font, ForeColor, BackgroundDraw ? LabelColor : BackColor, rtUnit, ContentAlignment);
+                #region Unit Sep
+                if (BackgroundDraw)
+                {
+                    var szh = Convert.ToInt32(rtUnit.Height / 2);
+
+                    p.Width = 1;
+
+                    p.Color = LabelColor.BrightnessTransmit(Theme.OutBevelBright);
+                    e.Graphics.DrawLine(p, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+
+                    p.Color = LabelColor.BrightnessTransmit(Theme.BorderBright);
+                    e.Graphics.DrawLine(p, rtUnit.X - 1, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X - 1, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+                }
+                #endregion
+                Theme.DrawTextShadow(e.Graphics, null, Unit, Font, ForeColor, LabelColor, rtUnit);
             }
             #endregion
             #region Dispose

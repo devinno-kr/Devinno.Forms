@@ -15,6 +15,7 @@ using System.Windows.Forms;
 
 namespace Devinno.Forms.Controls
 {
+    [Description("버튼")]
     public class DvButton : DvControl
     {
         #region Properties
@@ -244,13 +245,14 @@ namespace Devinno.Forms.Controls
         #region OnMouseUp
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            click.MouseUp(e);
+            ButtonUp?.Invoke(this, null);
             if (bDown)
             {
+                bDown = false;
                 ButtonClick?.Invoke(this, null);
-                ButtonUp?.Invoke(this, null);
             }
-            click.MouseUp(e);
-            bDown = false; Invalidate();
+            Invalidate();
             base.OnMouseUp(e);
         }
         #endregion

@@ -370,7 +370,7 @@ namespace Devinno.Forms.Controls
 
                                     using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 75))
                                     {
-                                        using (var p2 = new Pen(lgbr, 1F))
+                                        using (var p2 = new Pen(lgbr, 2F))
                                         {
                                             e.Graphics.DrawEllipse(p2, rt);
                                         }
@@ -419,7 +419,7 @@ namespace Devinno.Forms.Controls
 
                                     using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 75))
                                     {
-                                        using (var p2 = new Pen(lgbr, 1F))
+                                        using (var p2 = new Pen(lgbr, 2F))
                                         {
                                             e.Graphics.DrawEllipse(p2, rt);
                                         }

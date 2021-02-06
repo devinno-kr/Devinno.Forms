@@ -57,6 +57,10 @@ namespace Devinno.Forms.Themes
         public abstract void DrawText(Graphics g, DvIcon icon, string Text, Font ft, Color c, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);
         public abstract void DrawTextShadow(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);
         public abstract void DrawTextBevel(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);
+
+        public abstract void DrawText(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);
+        public abstract void DrawTextShadow(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);
+        public abstract void DrawTextBevel(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter);
         #endregion
         #region Static Method
         internal static void SetTheme(Control control, DvTheme theme)

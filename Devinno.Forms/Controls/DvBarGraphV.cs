@@ -820,7 +820,7 @@ namespace Devinno.Forms.Controls
                     foreach (var v in values)
                     {
                         var r = new GV() { Name = v.Name };
-                        foreach (var sv in Series) r.Values.Add(sv.Name, (double)dic[sv.Name].GetValue(v));
+                        foreach (var sv in Series) r.Values.Add(sv.Name, Convert.ToDouble(dic[sv.Name].GetValue(v)));
                         GraphDatas.Add(r);
                     }
 

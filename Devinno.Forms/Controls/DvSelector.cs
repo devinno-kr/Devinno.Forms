@@ -405,7 +405,7 @@ namespace Devinno.Forms.Controls
         public float IconSize { get => Icon.IconSize; set => Icon.IconSize = value; }
         #endregion
         #region Text
-        public string Text { get; }
+        public string Text { get; set; }
         #endregion
         #region Tag
         public object Tag { get; set; }

@@ -25,28 +25,28 @@ namespace Devinno.Forms
         DvTabControl
 
     Control
+        (DvContentView)
+        (DvContentGrid)
+
         DvColorPicker
         DvDateTimePicker
-        DvComboBox
-        DvContentView
-        DvContentGrid
-        DvDataGrid
         DvInput
-        DvLineGraph
-        DvTimeGraph
-        DvTrendGraph
-        DvOnOff
-        DvSwitch
-        DvListBox
-        DvNumberBox
-        DvToolBox
-        DvPictureBox
+
         DvProgressH
         DvProgressV
         DvSliderH
         DvSliderV
+
+        DvLineGraph
+        DvTimeGraph
+        DvTrendGraph
+
+        DvComboBox
         DvTreeView
-        DvValueLabel
+        DvToolBox
+        DvListBox
+
+        DvDataGrid
 
     Dialog
         DvColorPickerDialog

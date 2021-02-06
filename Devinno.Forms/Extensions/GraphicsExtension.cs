@@ -339,7 +339,6 @@ namespace Devinno.Forms.Extensions
                 }
             }
         }
-
         public static void DrawTextIcon(this Graphics g, DvIcon icon, string text, Font font, Brush br, RectangleF bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
         {
             if (icon == null || (icon != null && icon.IconImage == null && !FA.Valid(icon.IconString)))
@@ -410,6 +409,157 @@ namespace Devinno.Forms.Extensions
                             if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
 
                             g.DrawIcon(icon, br, rtFA, DvContentAlignment.MiddleLeft);
+                            g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void DrawTextIcon(this Graphics g, DvIcon icon, string text, Font font, Brush br, Brush brico, Rectangle bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
+        {
+            if (icon == null || (icon != null && icon.IconImage == null && !FA.Valid(icon.IconString)))
+            {
+                var rt = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                rt.Offset(TextOffsetX, TextOffsetY);
+                DrawText(g, text, font, br, rt, align);
+            }
+            else
+            {
+                if (icon.IconImage != null)
+                {
+                    var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
+                    var szTX = g.MeasureString(text, font);
+                    var szFA = g.MeasureIcon(icon);
+                    var szv = g.MeasureTextIcon(icon, text, font);
+                    var rt = DrawingTool.MakeRectangleAlign(bounds, szv, align);
+
+                    if (icon.Alignment == DvTextIconAlignment.LeftRight)
+                    {
+                        var rtFA = new Rectangle(rt.X, INTC(DrawingTool.CenterY(rt, szFA)), INTC(szFA.Width), INTC(szFA.Height));
+                        var rtTX = new Rectangle(rt.Right - INTC(szTX.Width), INTC(DrawingTool.CenterY(rt, szTX)), INTC(szTX.Width), INTC(szTX.Height));
+
+                        if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                        g.DrawIcon(icon, brico, rtFA, DvContentAlignment.MiddleCenter);
+                        g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleCenter);
+                    }
+                    else
+                    {
+                        var rtFA = new Rectangle(INTC(DrawingTool.CenterX(rt, szFA)), rt.Y, INTC(szFA.Width), INTC(szFA.Height));
+                        var rtTX = new Rectangle(INTC(DrawingTool.CenterX(rt, szTX)), rt.Bottom - INTC(szTX.Height), INTC(szTX.Width), INTC(szTX.Height));
+                        if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                        g.DrawIcon(icon, brico, rtFA, DvContentAlignment.MiddleCenter);
+                        g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleCenter);
+                    }
+                }
+                else
+                {
+                    var r = FA.GetFAI(icon.IconString);
+
+                    using (var fontFA = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
+                    {
+                        var textFA = r.IconText;
+                        var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
+                        var szTX = g.MeasureString(text, font);
+                        var szFA = g.MeasureIcon(icon);
+                        var szv = g.MeasureTextIcon(icon, text, font);
+                        var rt = DrawingTool.MakeRectangleAlign(bounds, szv, align);
+
+                        if (icon.Alignment == DvTextIconAlignment.LeftRight)
+                        {
+                            var rtFA = new Rectangle(rt.X, INTC(DrawingTool.CenterY(rt, szFA)), INTC(szFA.Width), INTC(szFA.Height));
+                            var rtTX = new Rectangle(rt.Right - INTC(szTX.Width), INTC(DrawingTool.CenterY(rt, szTX)), INTC(szTX.Width), INTC(szTX.Height));
+
+                            if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                            g.DrawIcon(icon, brico, rtFA, DvContentAlignment.MiddleCenter);
+                            g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleCenter);
+                        }
+                        else
+                        {
+                            var rtFA = new Rectangle(INTC(DrawingTool.CenterX(rt, szFA)), rt.Y, INTC(szFA.Width), INTC(szFA.Height));
+                            var rtTX = new Rectangle(INTC(DrawingTool.CenterX(rt, szTX)), rt.Bottom - INTC(szTX.Height), INTC(szTX.Width), INTC(szTX.Height));
+                            if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                            g.DrawIcon(icon, brico, rtFA, DvContentAlignment.MiddleCenter);
+                            g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleCenter);
+                        }
+                    }
+                }
+            }
+        }
+        public static void DrawTextIcon(this Graphics g, DvIcon icon, string text, Font font, Brush br, Brush brico, RectangleF bounds, DvContentAlignment align, int TextOffsetX = 0, int TextOffsetY = 0)
+        {
+            if (icon == null || (icon != null && icon.IconImage == null && !FA.Valid(icon.IconString)))
+            {
+                var rt = new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                rt.Offset(TextOffsetX, TextOffsetY);
+                DrawText(g, text, font, br, bounds, align);
+            }
+            else
+            {
+                if (icon.IconImage != null)
+                {
+                    var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
+                    var szTX = g.MeasureString(text, font);
+                    var szFA = g.MeasureIcon(icon);
+                    var szv = g.MeasureTextIcon(icon, text, font);
+                    var rt = DrawingTool.MakeRectangleAlign(bounds, szv, align);
+
+                    if (icon.Alignment == DvTextIconAlignment.LeftRight)
+                    {
+                        var rtFA = new RectangleF(rt.X, DrawingTool.CenterY(rt, szFA), szFA.Width, szFA.Height);
+                        var rtTX = new RectangleF(rt.Right - szTX.Width, DrawingTool.CenterY(rt, szTX), szTX.Width, szTX.Height);
+
+                        if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                        g.DrawIcon(icon, brico, rtFA, DvContentAlignment.MiddleLeft);
+                        g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
+                    }
+                    else
+                    {
+                        var rtFA = new RectangleF(DrawingTool.CenterX(rt, szFA), rt.Y, szFA.Width, szFA.Height);
+                        var rtTX = new RectangleF(DrawingTool.CenterX(rt, szTX), rt.Bottom - szTX.Height, szTX.Width, szTX.Height);
+
+                        if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                        g.DrawIcon(icon, brico, rtFA, DvContentAlignment.MiddleLeft);
+                        g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
+                    }
+                }
+                else
+                {
+                    var r = FA.GetFAI(icon.IconString);
+
+                    using (var fontFA = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
+                    {
+                        var textFA = r.IconText;
+                        var gap = string.IsNullOrWhiteSpace(text) ? 0 : icon.Gap;
+                        var szTX = g.MeasureString(text, font);
+                        var szFA = g.MeasureIcon(icon);
+                        var szv = g.MeasureTextIcon(icon, text, font);
+                        var rt = DrawingTool.MakeRectangleAlign(bounds, szv, align);
+
+                        if (icon.Alignment == DvTextIconAlignment.LeftRight)
+                        {
+                            var rtFA = new RectangleF(rt.X, DrawingTool.CenterY(rt, szFA), szFA.Width, szFA.Height);
+                            var rtTX = new RectangleF(rt.Right - szTX.Width, DrawingTool.CenterY(rt, szTX), szTX.Width, szTX.Height);
+
+                            if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                            g.DrawIcon(icon, brico, rtFA, DvContentAlignment.MiddleLeft);
+                            g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
+                        }
+                        else
+                        {
+                            var rtFA = new RectangleF(DrawingTool.CenterX(rt, szFA), rt.Y, szFA.Width, szFA.Height);
+                            var rtTX = new RectangleF(DrawingTool.CenterX(rt, szTX), rt.Bottom - szTX.Height, szTX.Width, szTX.Height);
+
+                            if (TextOffsetX != 0 || TextOffsetY != 0) rtTX.Offset(TextOffsetX, TextOffsetY);
+
+                            g.DrawIcon(icon, brico, rtFA, DvContentAlignment.MiddleLeft);
                             g.DrawText(text, font, br, rtTX, DvContentAlignment.MiddleLeft);
                         }
                     }

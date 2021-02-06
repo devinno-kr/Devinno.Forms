@@ -16,20 +16,16 @@ namespace Sample
 {
     public partial class FormMain : DvForm
     {
-        Timer tmr;
-        double n = 0;
+        DvColorPickerDialog dv = new DvColorPickerDialog();
         public FormMain()
         {
             InitializeComponent();
+            
+            ooR.OnOffChanged += (o, s) => lmpR.OnOff = ooR.OnOff;
+            ooG.OnOffChanged += (o, s) => lmpG.OnOff = ooG.OnOff;
+            ooB.OnOffChanged += (o, s) => lmpB.OnOff = ooB.OnOff;
 
-            tmr = new Timer();
-            tmr.Interval = 10;
-            tmr.Tick += (o, s) =>
-            {
-                n += 0.1;
-                dvGauge1.Value = dvMeter1.Value = Math.Abs(n % 200 - 100);
-            };
-            tmr.Enabled = true;
+            dvButton1.ButtonClick += (o, s) => dv.ShowColorPicker(Color.DarkSlateGray);
         }
     }
 }

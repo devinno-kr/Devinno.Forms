@@ -34,7 +34,7 @@ namespace Devinno.Forms.Containers
             this.SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.UpdateStyles();
-            DoubleBuffered = true;
+            this.DoubleBuffered = true;
             this.TabStop = false;
         }
         #endregion

@@ -43,6 +43,7 @@ namespace Devinno.Forms.Containers
             this.Appearance = TabAppearance.FlatButtons;
             this.ItemSize = new Size(0, 1);
             this.SizeMode = TabSizeMode.Fixed;
+
             if (!this.DesignMode) this.Multiline = true;
         }
         #endregion

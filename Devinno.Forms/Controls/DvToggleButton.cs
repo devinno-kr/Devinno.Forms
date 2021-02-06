@@ -179,6 +179,9 @@ namespace Devinno.Forms.Controls
 
         #region Event
         public event EventHandler LongClick;
+        public event EventHandler ButtonClick;
+        public event EventHandler ButtonDown;
+        public event EventHandler ButtonUp;
         public event EventHandler CheckedChanged;
         #endregion
 
@@ -265,7 +268,7 @@ namespace Devinno.Forms.Controls
                 Focus();
                 bDown = true;
                 Invalidate();
-
+                ButtonDown?.Invoke(this, null);
                 click.MouseDown(e);
             }
             base.OnMouseDown(e);
@@ -275,7 +278,13 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseUp(MouseEventArgs e)
         {
             click.MouseUp(e);
-            bDown = false; Invalidate();
+            ButtonUp?.Invoke(this, null);
+            if (bDown)
+            {
+                bDown = false;
+                ButtonClick?.Invoke(this, null);
+            }
+            Invalidate();
             base.OnMouseUp(e);
         }
         #endregion

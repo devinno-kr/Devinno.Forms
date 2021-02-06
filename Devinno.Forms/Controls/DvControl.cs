@@ -45,6 +45,10 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
 
+        #region Event
+        public event EventHandler<ThemeDrawEventArgs> ThemeDraw;
+        #endregion
+
         #region Member Variable
 
         #endregion
@@ -81,7 +85,10 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region OnThemeDraw
-        protected virtual void OnThemeDraw(PaintEventArgs e, DvTheme Theme) { }
+        protected virtual void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
+        {
+            ThemeDraw?.Invoke(this, new ThemeDrawEventArgs(e, Theme));
+        }
         #endregion
         #region OnThemeEnableDraw
         protected virtual void OnThemeEnableDraw(PaintEventArgs e, DvTheme Theme)
@@ -173,4 +180,18 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
     }
+
+    #region class : ThemeDrawEventArgs
+    public class ThemeDrawEventArgs
+    {
+        public PaintEventArgs PaintArgs { get; private set; }
+        public DvTheme Theme { get; private set; }
+
+        public ThemeDrawEventArgs(PaintEventArgs PaintArgs, DvTheme Theme)
+        {
+            this.PaintArgs = PaintArgs;
+            this.Theme = Theme;
+        }
+    }
+    #endregion
 }
