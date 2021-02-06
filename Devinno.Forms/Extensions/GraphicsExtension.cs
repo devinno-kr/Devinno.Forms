@@ -173,9 +173,12 @@ namespace Devinno.Forms.Extensions
             {
                 if (icon.IconImage != null)
                 {
-                    var sz = g.MeasureIcon(icon);
-                    var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
-                    g.DrawImage(icon.IconImage, rt);
+                    if (!icon.Shadow)
+                    {
+                        var sz = g.MeasureIcon(icon);
+                        var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
+                        g.DrawImage(icon.IconImage, rt);
+                    }
                 }
                 else if (FA.Valid(icon.IconString))
                 {
@@ -201,9 +204,12 @@ namespace Devinno.Forms.Extensions
             {
                 if (icon.IconImage != null)
                 {
-                    var sz = g.MeasureIcon(icon);
-                    var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
-                    g.DrawImage(icon.IconImage, rt);
+                    if (!icon.Shadow)
+                    {
+                        var sz = g.MeasureIcon(icon);
+                        var rt = DrawingTool.MakeRectangleAlign(bounds, sz, align);
+                        g.DrawImage(icon.IconImage, rt);
+                    }
                 }
                 else if (FA.Valid(icon.IconString))
                 {

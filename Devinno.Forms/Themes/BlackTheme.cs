@@ -24,7 +24,7 @@ namespace Devinno.Forms.Themes
         public static Color StaticColor5 { get; } = Color.FromArgb(150, 150, 150);
         public static Color StaticPointColor { get; } = Color.DarkRed;
         public static Color StaticFrameColor { get; } = Color.FromArgb(30, 30, 30);
-        public static Color StaticScrollBarColor { get; } = Color.FromArgb(20, 20, 20);
+        public static Color StaticScrollBarColor { get; } = Color.FromArgb(30, 30, 30);
         public static Color StaticScrollCursorColor { get; } = Color.FromArgb(180, 180, 180);
         #endregion
 
@@ -776,14 +776,14 @@ namespace Devinno.Forms.Themes
 
         public override void DrawTextBevel(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
         {
-            bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), bounds, align);
-            bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, bounds, align);
+            if (icon != null) icon.Shadow = true; bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), bounds, align);
+            if (icon != null) icon.Shadow = false; bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, bounds, align);
         }
 
         public override void DrawTextShadow(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
         {
-            bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), bounds, align);
-            bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, bounds, align);
+            if (icon != null) icon.Shadow = true; bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), bounds, align);
+            if (icon != null) icon.Shadow = false; bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, bounds, align);
         }
 
         public override void DrawText(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
@@ -799,14 +799,14 @@ namespace Devinno.Forms.Themes
 
         public override void DrawTextBevel(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
         {
-            bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), bounds, align);
-            bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, cico, bounds, align);
+            if (icon != null) icon.Shadow = true; bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), bounds, align);
+            if (icon != null) icon.Shadow = false; bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, cico, bounds, align);
         }
 
         public override void DrawTextShadow(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
         {
-            bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), bounds, align);
-            bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, cico, bounds, align);
+            if (icon != null) icon.Shadow = true; bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), bounds, align);
+            if (icon != null) icon.Shadow = false; bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, cico, bounds, align);
         }
         #endregion
         #endregion

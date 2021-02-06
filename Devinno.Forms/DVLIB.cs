@@ -28,7 +28,6 @@ namespace Devinno.Forms
         (DvContentView)
         (DvContentGrid)
 
-        DvColorPicker
         DvDateTimePicker
         DvInput
 
@@ -49,7 +48,6 @@ namespace Devinno.Forms
         DvDataGrid
 
     Dialog
-        DvColorPickerDialog
         DvDatetimePickerDialog
         DvSelectorDialog
         DvPropertiesDialog

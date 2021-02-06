@@ -20,12 +20,19 @@ namespace Sample
         public FormMain()
         {
             InitializeComponent();
-            
+
             ooR.OnOffChanged += (o, s) => lmpR.OnOff = ooR.OnOff;
             ooG.OnOffChanged += (o, s) => lmpG.OnOff = ooG.OnOff;
             ooB.OnOffChanged += (o, s) => lmpB.OnOff = ooB.OnOff;
 
             dvButton1.ButtonClick += (o, s) => dv.ShowColorPicker(Color.DarkSlateGray);
+
+            dvListBox1.TouchMode = true;
+            for (int i = 1; i <= 100; i++)
+            {
+                dvListBox1.Items.Add(new ListBoxItem("TEST" + i, "fa-check", 12) { IconGap = 5 });
+                dvComboBox1.Items.Add(new ComboBoxItem("TEST" + i, "fa-check", 12) { IconGap = 5 });
+            }
         }
     }
 }

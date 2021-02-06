@@ -29,9 +29,11 @@ namespace Sample
         /// </summary>
         private void InitializeComponent()
         {
-            this.blackTheme1 = new Devinno.Forms.Themes.BlackTheme();
             this.dvControl1 = new Devinno.Forms.Controls.DvControl();
             this.dvContainer1 = new Devinno.Forms.Containers.DvContainer();
+            this.dvComboBox1 = new Devinno.Forms.Controls.DvComboBox();
+            this.dvListBox1 = new Devinno.Forms.Controls.DvListBox();
+            this.dvColorPicker1 = new Devinno.Forms.Controls.DvColorPicker();
             this.dvNumberBox3 = new Devinno.Forms.Controls.DvNumberBox();
             this.dvNumberBox2 = new Devinno.Forms.Controls.DvNumberBox();
             this.dvValueLabelButton2 = new Devinno.Forms.Controls.DvValueLabelButton();
@@ -51,36 +53,6 @@ namespace Sample
             this.dvContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // blackTheme1
-            // 
-            this.blackTheme1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.blackTheme1.BevelAlpha = 30;
-            this.blackTheme1.BorderBright = -0.5D;
-            this.blackTheme1.Color0 = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.blackTheme1.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.blackTheme1.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.blackTheme1.Color3 = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.blackTheme1.Color4 = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.blackTheme1.Color5 = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.blackTheme1.Corner = 5;
-            this.blackTheme1.DisableAlpha = 180;
-            this.blackTheme1.DownBright = -0.25D;
-            this.blackTheme1.ForeColor = System.Drawing.Color.White;
-            this.blackTheme1.FrameColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(41)))), ((int)(((byte)(41)))));
-            this.blackTheme1.GradientDarkBright = -0.2D;
-            this.blackTheme1.GradientLightBright = 0.2D;
-            this.blackTheme1.InBevelBright = 0.4D;
-            this.blackTheme1.InShadowBright = -0.3D;
-            this.blackTheme1.OutBevelBright = 0.2D;
-            this.blackTheme1.OutShadowBright = -0.4D;
-            this.blackTheme1.PointColor = System.Drawing.Color.DarkRed;
-            this.blackTheme1.ScrollBarColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.blackTheme1.ScrollCursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.blackTheme1.ShadowAlpha = 60;
-            this.blackTheme1.ShadowGap = 1;
-            this.blackTheme1.TextOffsetX = 0;
-            this.blackTheme1.TextOffsetY = 1;
-            // 
             // dvControl1
             // 
             this.dvControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
@@ -88,13 +60,16 @@ namespace Sample
             this.dvControl1.Location = new System.Drawing.Point(7, 60);
             this.dvControl1.Margin = new System.Windows.Forms.Padding(5);
             this.dvControl1.Name = "dvControl1";
-            this.dvControl1.Size = new System.Drawing.Size(809, 1);
+            this.dvControl1.Size = new System.Drawing.Size(1096, 1);
             this.dvControl1.TabIndex = 2;
             this.dvControl1.TabStop = false;
             this.dvControl1.UseThemeColor = true;
             // 
             // dvContainer1
             // 
+            this.dvContainer1.Controls.Add(this.dvComboBox1);
+            this.dvContainer1.Controls.Add(this.dvListBox1);
+            this.dvContainer1.Controls.Add(this.dvColorPicker1);
             this.dvContainer1.Controls.Add(this.dvNumberBox3);
             this.dvContainer1.Controls.Add(this.dvNumberBox2);
             this.dvContainer1.Controls.Add(this.dvValueLabelButton2);
@@ -114,17 +89,67 @@ namespace Sample
             this.dvContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dvContainer1.Location = new System.Drawing.Point(7, 61);
             this.dvContainer1.Name = "dvContainer1";
-            this.dvContainer1.Size = new System.Drawing.Size(809, 579);
+            this.dvContainer1.Size = new System.Drawing.Size(1096, 648);
             this.dvContainer1.TabIndex = 3;
             this.dvContainer1.TabStop = false;
             this.dvContainer1.Text = "dvContainer1";
             this.dvContainer1.UseThemeColor = true;
             // 
+            // dvComboBox1
+            // 
+            this.dvComboBox1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvComboBox1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.dvComboBox1.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvComboBox1.ItemHeight = 45;
+            this.dvComboBox1.ItemPadding = new System.Windows.Forms.Padding(0);
+            this.dvComboBox1.Location = new System.Drawing.Point(50, 559);
+            this.dvComboBox1.MaximumViewCount = 10;
+            this.dvComboBox1.Name = "dvComboBox1";
+            this.dvComboBox1.SelectedIndex = -1;
+            this.dvComboBox1.SelectItemColor = System.Drawing.Color.DarkRed;
+            this.dvComboBox1.Size = new System.Drawing.Size(338, 45);
+            this.dvComboBox1.TabIndex = 21;
+            this.dvComboBox1.Text = "dvComboBox1";
+            this.dvComboBox1.TouchMode = false;
+            this.dvComboBox1.UseThemeColor = true;
+            // 
+            // dvListBox1
+            // 
+            this.dvListBox1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dvListBox1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.dvListBox1.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvListBox1.ItemPadding = new System.Windows.Forms.Padding(0);
+            this.dvListBox1.Location = new System.Drawing.Point(691, 110);
+            this.dvListBox1.Name = "dvListBox1";
+            this.dvListBox1.RowHeight = 45;
+            this.dvListBox1.ScrollPosition = 0;
+            this.dvListBox1.SelectedItemColor = System.Drawing.Color.DarkRed;
+            this.dvListBox1.SelectionMode = Devinno.Forms.Controls.ItemSelectionMode.SINGLE;
+            this.dvListBox1.Size = new System.Drawing.Size(303, 428);
+            this.dvListBox1.TabIndex = 20;
+            this.dvListBox1.TabStop = false;
+            this.dvListBox1.Text = "dvListBox1";
+            this.dvListBox1.TouchMode = false;
+            this.dvListBox1.UseThemeColor = true;
+            // 
+            // dvColorPicker1
+            // 
+            this.dvColorPicker1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dvColorPicker1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvColorPicker1.Location = new System.Drawing.Point(50, 493);
+            this.dvColorPicker1.Name = "dvColorPicker1";
+            this.dvColorPicker1.SelectedColor = System.Drawing.Color.White;
+            this.dvColorPicker1.Size = new System.Drawing.Size(338, 45);
+            this.dvColorPicker1.TabIndex = 19;
+            this.dvColorPicker1.Text = "dvColorPicker1";
+            this.dvColorPicker1.TextStyle = Devinno.Forms.Controls.DvColorTextStyle.TEXT;
+            this.dvColorPicker1.UseThemeColor = true;
+            // 
             // dvNumberBox3
             // 
             this.dvNumberBox3.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvNumberBox3.FormatString = null;
-            this.dvNumberBox3.Location = new System.Drawing.Point(453, 460);
+            this.dvNumberBox3.Location = new System.Drawing.Point(412, 433);
             this.dvNumberBox3.Maximum = 100D;
             this.dvNumberBox3.Minimum = 0D;
             this.dvNumberBox3.Name = "dvNumberBox3";
@@ -141,7 +166,7 @@ namespace Sample
             // 
             this.dvNumberBox2.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvNumberBox2.FormatString = null;
-            this.dvNumberBox2.Location = new System.Drawing.Point(453, 409);
+            this.dvNumberBox2.Location = new System.Drawing.Point(412, 382);
             this.dvNumberBox2.Maximum = 100D;
             this.dvNumberBox2.Minimum = 0D;
             this.dvNumberBox2.Name = "dvNumberBox2";
@@ -169,7 +194,7 @@ namespace Sample
             this.dvValueLabelButton2.IconImage = null;
             this.dvValueLabelButton2.IconSize = 10F;
             this.dvValueLabelButton2.IconString = "fa-arrow-down";
-            this.dvValueLabelButton2.Location = new System.Drawing.Point(91, 460);
+            this.dvValueLabelButton2.Location = new System.Drawing.Point(50, 433);
             this.dvValueLabelButton2.LongClickTime = 1000;
             this.dvValueLabelButton2.Name = "dvValueLabelButton2";
             this.dvValueLabelButton2.Size = new System.Drawing.Size(338, 45);
@@ -200,7 +225,7 @@ namespace Sample
             this.dvValueLabelButton1.IconImage = null;
             this.dvValueLabelButton1.IconSize = 10F;
             this.dvValueLabelButton1.IconString = "fa-arrow-up";
-            this.dvValueLabelButton1.Location = new System.Drawing.Point(91, 409);
+            this.dvValueLabelButton1.Location = new System.Drawing.Point(50, 382);
             this.dvValueLabelButton1.LongClickTime = 1000;
             this.dvValueLabelButton1.Name = "dvValueLabelButton1";
             this.dvValueLabelButton1.Size = new System.Drawing.Size(338, 45);
@@ -227,7 +252,7 @@ namespace Sample
             this.lmpB.LampOffsetY = 0;
             this.lmpB.LampSize = 80;
             this.lmpB.LampStyle = Devinno.Forms.Controls.LampStyle.CIRCLE;
-            this.lmpB.Location = new System.Drawing.Point(271, 86);
+            this.lmpB.Location = new System.Drawing.Point(230, 59);
             this.lmpB.Name = "lmpB";
             this.lmpB.OffLampColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.lmpB.OnLampColor = System.Drawing.Color.DodgerBlue;
@@ -249,7 +274,7 @@ namespace Sample
             this.lmpG.LampOffsetY = 0;
             this.lmpG.LampSize = 80;
             this.lmpG.LampStyle = Devinno.Forms.Controls.LampStyle.CIRCLE;
-            this.lmpG.Location = new System.Drawing.Point(181, 86);
+            this.lmpG.Location = new System.Drawing.Point(140, 59);
             this.lmpG.Name = "lmpG";
             this.lmpG.OffLampColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.lmpG.OnLampColor = System.Drawing.Color.Lime;
@@ -264,7 +289,7 @@ namespace Sample
             // 
             this.dvSwitch3.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvSwitch3.Font = new System.Drawing.Font("나눔고딕", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.dvSwitch3.Location = new System.Drawing.Point(453, 321);
+            this.dvSwitch3.Location = new System.Drawing.Point(412, 294);
             this.dvSwitch3.Name = "dvSwitch3";
             this.dvSwitch3.OnOff = false;
             this.dvSwitch3.PointColor = System.Drawing.Color.DodgerBlue;
@@ -278,7 +303,7 @@ namespace Sample
             // 
             this.dvSwitch2.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvSwitch2.Font = new System.Drawing.Font("나눔고딕", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.dvSwitch2.Location = new System.Drawing.Point(453, 270);
+            this.dvSwitch2.Location = new System.Drawing.Point(412, 243);
             this.dvSwitch2.Name = "dvSwitch2";
             this.dvSwitch2.OnOff = false;
             this.dvSwitch2.PointColor = System.Drawing.Color.Lime;
@@ -292,7 +317,7 @@ namespace Sample
             // 
             this.dvSwitch1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvSwitch1.Font = new System.Drawing.Font("나눔고딕", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.dvSwitch1.Location = new System.Drawing.Point(453, 219);
+            this.dvSwitch1.Location = new System.Drawing.Point(412, 192);
             this.dvSwitch1.Name = "dvSwitch1";
             this.dvSwitch1.OnOff = false;
             this.dvSwitch1.PointColor = System.Drawing.Color.Red;
@@ -314,7 +339,7 @@ namespace Sample
             this.dvButton3.IconImage = null;
             this.dvButton3.IconSize = 10F;
             this.dvButton3.IconString = "fa-times";
-            this.dvButton3.Location = new System.Drawing.Point(91, 270);
+            this.dvButton3.Location = new System.Drawing.Point(50, 243);
             this.dvButton3.LongClickTime = 0;
             this.dvButton3.Name = "dvButton3";
             this.dvButton3.Size = new System.Drawing.Size(194, 45);
@@ -336,7 +361,7 @@ namespace Sample
             this.dvButton2.IconImage = null;
             this.dvButton2.IconSize = 10F;
             this.dvButton2.IconString = "fa-ban";
-            this.dvButton2.Location = new System.Drawing.Point(91, 321);
+            this.dvButton2.Location = new System.Drawing.Point(50, 294);
             this.dvButton2.LongClickTime = 0;
             this.dvButton2.Name = "dvButton2";
             this.dvButton2.Size = new System.Drawing.Size(194, 45);
@@ -350,7 +375,7 @@ namespace Sample
             // 
             this.ooB.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.ooB.DrawText = false;
-            this.ooB.Location = new System.Drawing.Point(309, 321);
+            this.ooB.Location = new System.Drawing.Point(268, 294);
             this.ooB.Name = "ooB";
             this.ooB.OffBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ooB.OffTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
@@ -366,7 +391,7 @@ namespace Sample
             // 
             this.ooG.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.ooG.DrawText = false;
-            this.ooG.Location = new System.Drawing.Point(309, 270);
+            this.ooG.Location = new System.Drawing.Point(268, 243);
             this.ooG.Name = "ooG";
             this.ooG.OffBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ooG.OffTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
@@ -389,7 +414,7 @@ namespace Sample
             this.lmpR.LampOffsetY = 0;
             this.lmpR.LampSize = 80;
             this.lmpR.LampStyle = Devinno.Forms.Controls.LampStyle.CIRCLE;
-            this.lmpR.Location = new System.Drawing.Point(91, 86);
+            this.lmpR.Location = new System.Drawing.Point(50, 59);
             this.lmpR.Name = "lmpR";
             this.lmpR.OffLampColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.lmpR.OnLampColor = System.Drawing.Color.Red;
@@ -412,7 +437,7 @@ namespace Sample
             this.dvButton1.IconImage = null;
             this.dvButton1.IconSize = 10F;
             this.dvButton1.IconString = "fa-check";
-            this.dvButton1.Location = new System.Drawing.Point(91, 219);
+            this.dvButton1.Location = new System.Drawing.Point(50, 192);
             this.dvButton1.LongClickTime = 0;
             this.dvButton1.Name = "dvButton1";
             this.dvButton1.Size = new System.Drawing.Size(194, 45);
@@ -426,7 +451,7 @@ namespace Sample
             // 
             this.ooR.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.ooR.DrawText = false;
-            this.ooR.Location = new System.Drawing.Point(309, 219);
+            this.ooR.Location = new System.Drawing.Point(268, 192);
             this.ooR.Name = "ooR";
             this.ooR.OffBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ooR.OffTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
@@ -443,20 +468,17 @@ namespace Sample
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.ClientSize = new System.Drawing.Size(823, 647);
+            this.ClientSize = new System.Drawing.Size(1110, 716);
             this.Controls.Add(this.dvContainer1);
             this.Controls.Add(this.dvControl1);
             this.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ForeColor = System.Drawing.Color.White;
-            this.FrameColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.MinimumSize = new System.Drawing.Size(300, 200);
             this.Name = "FormMain";
             this.NoFrame = true;
             this.Padding = new System.Windows.Forms.Padding(7, 60, 7, 7);
             this.Text = "Sample";
-            this.Theme = this.blackTheme1;
             this.Title = "Sample";
-            this.TitleBarColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.TitleFont = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.TitleIconColor = System.Drawing.Color.Gainsboro;
             this.TitleIconSize = 14F;
@@ -468,8 +490,6 @@ namespace Sample
         }
 
         #endregion
-
-        private Devinno.Forms.Themes.BlackTheme blackTheme1;
         private Devinno.Forms.Controls.DvControl dvControl1;
         private Devinno.Forms.Containers.DvContainer dvContainer1;
         private Devinno.Forms.Controls.DvOnOff ooR;
@@ -488,6 +508,9 @@ namespace Sample
         private Devinno.Forms.Controls.DvValueLabelButton dvValueLabelButton2;
         private Devinno.Forms.Controls.DvNumberBox dvNumberBox3;
         private Devinno.Forms.Controls.DvNumberBox dvNumberBox2;
+        private Devinno.Forms.Controls.DvColorPicker dvColorPicker1;
+        private Devinno.Forms.Controls.DvListBox dvListBox1;
+        private Devinno.Forms.Controls.DvComboBox dvComboBox1;
     }
 }
 

@@ -17,6 +17,8 @@ namespace Devinno.Forms.Icons
         public DvTextIconAlignment Alignment { get; set; } = DvTextIconAlignment.LeftRight;
         public int Gap { get; set; } = 0;
 
+        internal bool Shadow { get; set; }
+
         public DvIcon() { }
         public DvIcon(string iconString) => this.IconString = iconString;
     }
