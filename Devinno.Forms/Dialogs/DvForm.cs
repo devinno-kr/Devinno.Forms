@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Containers;
+using Devinno.Forms.Controls;
 
 namespace Devinno.Forms.Dialogs
 {
@@ -687,7 +688,6 @@ namespace Devinno.Forms.Dialogs
         protected override void WndProc(ref Message m)
         {
             const int NC_HITTEST = 0x84;
-
             #region Resize
             if (!Fixed && WindowState != FormWindowState.Maximized && !BlankForm)
             {
@@ -806,6 +806,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region .. code for Flucuring ..
+        /*
         protected override CreateParams CreateParams
         {
             get
@@ -815,8 +816,10 @@ namespace Devinno.Forms.Dialogs
                 return cp;
             }
         }
+        */
         #endregion
         #endregion
+
     }
 
     #region class : WNDMV

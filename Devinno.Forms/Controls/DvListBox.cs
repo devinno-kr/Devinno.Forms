@@ -131,6 +131,10 @@ namespace Devinno.Forms.Controls
         #region ScrollPosition
         public int ScrollPosition { get => scroll.ScrollPosition; set => scroll.ScrollPosition = value; }
         #endregion
+
+        #region RectMode
+        internal bool RectMode { get; set; } = false;
+        #endregion
         #endregion
 
         #region Event
@@ -141,7 +145,9 @@ namespace Devinno.Forms.Controls
 
         #region Member Variable
         private Scroll scroll = new Scroll();
-        internal bool RectMode { get; set; } = false;
+        private ListBoxItem first;
+        private Point downPoint;
+        private DateTime downTime;
         #endregion
 
         #region Constructor
@@ -202,10 +208,9 @@ namespace Devinno.Forms.Controls
             {
                 if (!RectMode) e.Graphics.SetClip(pp);
                 Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtBox, RectMode ? RoundType.NONE : RoundType.L, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
-                for (int i = 0; i < Items.Count; i++)
+
+                Loop((i, rt, itm) =>
                 {
-                    var itm = Items[i];
-                    var rt = new Rectangle(rtBox.Left, scroll.ScrollPositionWithOffset + rtBox.Top + (RowHeight * i), rtBox.Width, RowHeight);
                     if (CollisionTool.Check(new Rectangle(rt.X + 1, rt.Y + 1, rt.Width - 2, rt.Height - 2), rtBox))
                     {
                         var cRow = SelectedItems.Contains(itm) ? SelectedItemColor : ItemColor;
@@ -293,7 +298,8 @@ namespace Devinno.Forms.Controls
                             #endregion
                         }
                     }
-                }
+                });
+
                 if (!RectMode) e.Graphics.ResetClip();
 
                 var border = BackColor.BrightnessTransmit(Theme.BorderBright);
@@ -334,6 +340,12 @@ namespace Devinno.Forms.Controls
             {
                 scroll.MouseDown(e, Areas["rtScroll"]);
                 if (scroll.TouchMode && CollisionTool.Check(Areas["rtBox"], e.Location)) scroll.TouchDown(e);
+
+                if (CollisionTool.Check(Areas["rtBox"], e.Location))
+                {
+                    downPoint = e.Location;
+                    downTime = DateTime.Now;
+                }
             }
             Invalidate();
             base.OnMouseDown(e);
@@ -357,8 +369,90 @@ namespace Devinno.Forms.Controls
         {
             if (Areas.ContainsKey("rtScroll") && Areas.ContainsKey("rtBox"))
             {
+                var rtBox = Areas["rtBox"];
+                var rtScroll = Areas["rtScroll"];
+
                 scroll.MouseUP(e);
-                if (scroll.TouchMode && CollisionTool.Check(Areas["rtBox"], e.Location)) scroll.TouchUp(e);
+                if (scroll.TouchMode && CollisionTool.Check(rtBox, e.Location)) scroll.TouchUp(e);
+
+                if (CollisionTool.Check(rtBox, e.Location) && Math.Abs(downPoint.Y - e.Y) < Scroll.GapSize && (DateTime.Now - downTime).TotalSeconds < Scroll.GapTime )
+                {
+                    Loop((i, rtITM, v) =>
+                    {
+                        if (CollisionTool.Check(rtITM, e.Location))
+                        {
+                            #region Single Selection
+                            if (SelectionMode == ItemSelectionMode.SINGLE)
+                            {
+                                #region Select
+                                SelectedItems.Clear();
+                                SelectedItems.Add(v);
+                                if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                first = v;
+                                #endregion
+                            }
+                            #endregion
+                            #region Multi Selection
+                            else if (SelectionMode == ItemSelectionMode.MULTI)
+                            {
+                                if ((ModifierKeys & Keys.Control) == Keys.Control)
+                                {
+                                    #region Control
+                                    if (SelectedItems.Contains(v))
+                                    {
+                                        SelectedItems.Remove(v);
+                                        if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                    }
+                                    else
+                                    {
+                                        SelectedItems.Add(v);
+                                        if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                        first = v;
+                                    }
+                                    #endregion
+                                }
+                                else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+                                {
+                                    #region Shift
+                                    if (first == null)
+                                    {
+                                        SelectedItems.Add(v);
+                                        if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                    }
+                                    else
+                                    {
+                                        int idx1 = Items.IndexOf(first);
+                                        int idx2 = i;
+                                        int min = Math.Min(idx1, idx2);
+                                        int max = Math.Max(idx1, idx2);
+
+                                        bool b = false;
+                                        for (int ii = min; ii <= max; ii++)
+                                        {
+                                            if (!SelectedItems.Contains(Items[ii]))
+                                            {
+                                                SelectedItems.Add(Items[ii]);
+                                                b = true;
+                                            }
+                                        }
+                                        if (b && SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                    }
+                                    #endregion
+                                }
+                                else
+                                {
+                                    #region Select
+                                    SelectedItems.Clear();
+                                    SelectedItems.Add(v);
+                                    if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                    first = v;
+                                    #endregion
+                                }
+                            }
+                            #endregion
+                        }
+                    });
+                }
             }
             Invalidate();
             base.OnMouseUp(e);
@@ -371,16 +465,11 @@ namespace Devinno.Forms.Controls
             this.Focus();
             if (SelectionMode != ItemSelectionMode.NONE)
             {
-                if (Areas.ContainsKey("rtBox"))
+                Loop((i, rt, itm) =>
                 {
-                    var rtBox = Areas["rtBox"];
-                    for (int i = 0; i < Items.Count; i++)
-                    {
-                        var itm = Items[i];
-                        var rt = new Rectangle(rtBox.Left, scroll.ScrollPositionWithOffset + rtBox.Top + (RowHeight * i), rtBox.Width, RowHeight);
-                        if (CollisionTool.Check(rt, e.Location)) ItemClicked?.Invoke(this, new ListBoxItemClickedEventArgs(itm));
-                    }
-                }
+                    if (Math.Abs(downPoint.Y - e.Y) < Scroll.GapSize && (DateTime.Now - downTime).TotalSeconds < Scroll.GapTime && CollisionTool.Check(rt, e.Location))
+                        ItemClicked?.Invoke(this, new ListBoxItemClickedEventArgs(itm));
+                });
                 Invalidate();
             }
             base.OnMouseClick(e);
@@ -392,19 +481,32 @@ namespace Devinno.Forms.Controls
             this.Focus();
             if (SelectionMode != ItemSelectionMode.NONE)
             {
-                if (Areas.ContainsKey("rtBox"))
+                Loop((i, rt, itm) =>
                 {
-                    var rtBox = Areas["rtBox"];
-                    for (int i = 0; i < Items.Count; i++)
-                    {
-                        var itm = Items[i];
-                        var rt = new Rectangle(rtBox.Left, scroll.ScrollPositionWithOffset + rtBox.Top + (RowHeight * i), rtBox.Width, RowHeight);
-                        if (CollisionTool.Check(rt, e.Location)) ItemDoubleClicked?.Invoke(this, new ListBoxItemClickedEventArgs(itm));
-                    }
-                }
+                    if (Math.Abs(downPoint.Y - e.Y) < Scroll.GapSize && (DateTime.Now - downTime).TotalSeconds < Scroll.GapTime && CollisionTool.Check(rt, e.Location))
+                        ItemDoubleClicked?.Invoke(this, new ListBoxItemClickedEventArgs(itm));
+                });
                 Invalidate();
             }
             base.OnMouseDoubleClick(e);
+        }
+        #endregion
+        #endregion
+
+        #region Method
+        #region Loop
+        private void Loop(Action<int, Rectangle, ListBoxItem> act)
+        {
+            if (Areas.ContainsKey("rtBox"))
+            {
+                var rtBox = Areas["rtBox"];
+                for (int i = 0; i < Items.Count; i++)
+                {
+                    var itm = Items[i];
+                    var rt = new Rectangle(rtBox.Left, scroll.ScrollPositionWithOffset + rtBox.Top + (RowHeight * i), rtBox.Width, RowHeight);
+                    if (CollisionTool.Check(new Rectangle(rt.X + 1, rt.Y + 1, rt.Width - 2, rt.Height - 2), rtBox)) act(i, rt, itm);
+                }
+            }
         }
         #endregion
         #endregion

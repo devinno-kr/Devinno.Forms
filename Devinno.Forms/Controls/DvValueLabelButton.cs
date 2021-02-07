@@ -181,7 +181,7 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region Style
-        private LabelStyle eStyle = LabelStyle.FLAT;
+        private LabelStyle eStyle = LabelStyle.FlatConvex;
         public LabelStyle Style
         {
             get => eStyle;
@@ -313,18 +313,23 @@ namespace Devinno.Forms.Controls
             #endregion
             #region Draw
             Theme.DrawBox(e.Graphics, TitleColor, BackColor, rtTitle, RoundType.L, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW);
+
             switch (Style)
             {
-                case LabelStyle.FLAT:
+                case LabelStyle.FlatConcave:
+                    Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL);
+                    break;
+                case LabelStyle.FlatConvex:
                     Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
                     break;
-                case LabelStyle.CONCAVE:
+                case LabelStyle.Concave:
                     Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
                     break;
-                case LabelStyle.CONVEX:
-                    Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | BoxDrawOption.OUT_SHADOW);
+                case LabelStyle.Convex:
+                    Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW | BoxDrawOption.IN_BEVEL_LT);
                     break;
             }
+
             Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, TitleColor, rtTitle);
             Theme.DrawTextShadow(e.Graphics, null, Value, Font, ForeColor, ValueColor, rtValue);
 
@@ -349,10 +354,10 @@ namespace Devinno.Forms.Controls
                 p.Width = 1;
 
                 p.Color = ValueColor.BrightnessTransmit(Theme.OutBevelBright);
-                e.Graphics.DrawLine(p, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+                e.Graphics.DrawLine(p, rtUnit.X + 1, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X + 1, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
 
                 p.Color = ValueColor.BrightnessTransmit(Theme.BorderBright);
-                e.Graphics.DrawLine(p, rtUnit.X - 1, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X - 1, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+                e.Graphics.DrawLine(p, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
                 #endregion
                 Theme.DrawTextShadow(e.Graphics, null, Unit, Font, ForeColor, ValueColor, rtUnit);
             }

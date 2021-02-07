@@ -30,6 +30,9 @@ namespace Devinno.Forms.Dialogs
         Size sz;
         Bitmap bmHue, bmColor;
         bool bHueChange;
+
+        DvColorBox ColorBox = new DvColorBox();
+        DvMessageBox msg = new DvMessageBox();
         #endregion
 
         #region Constructor
@@ -53,6 +56,11 @@ namespace Devinno.Forms.Dialogs
                 lblB.Value = c.B.ToString();
             };
             tmr.Enabled = true;
+            #endregion
+            #region Control Event
+            lblR.MouseClick += Input;
+            lblG.MouseClick += Input;
+            lblB.MouseClick += Input;
             #endregion
 
             btnOK.ButtonClick += (o, s) => DialogResult = DialogResult.OK;
@@ -356,10 +364,46 @@ namespace Devinno.Forms.Dialogs
         #endregion
         #endregion
 
+        #region Input
+        void Input(object o, MouseEventArgs s)
+        {
+            if (!ColorBox.Visible)
+            {
+                var ret = ColorBox.ShowColorBox(Color);
+                if (ret.HasValue)
+                {
+                    Color = ret.Value;
+
+                    #region Set
+                    {
+                        #region Bounds
+                        var NW = 30;
+                        var rtContent = draw.GetContentBounds();
+                        var rt = new Rectangle(rtContent.X, rtContent.Y + 4, rtContent.Width, rtContent.Height - 4); rt.Inflate(-3, -3);
+                        var rtHue = new Rectangle(rt.Right - NW, rt.Y, NW, rt.Height);
+                        var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 8 - rtHue.Width, rt.Height);
+                        #endregion
+
+                        Hue = Color.GetHue();
+                        var vc = Color.ToHSV();
+
+                        nHueDownY = Convert.ToInt32(MathTool.Map(Hue, 0D, 360D, rtHue.Top, rtHue.Bottom));
+
+                        nColorX = Convert.ToInt32(MathTool.Map(vc.S, 0D, 1D, rtColor.Left, rtColor.Right));
+                        nColorY = Convert.ToInt32(MathTool.Map(vc.V, 0D, 1D, rtColor.Bottom, rtColor.Top));
+                    }
+                    #endregion
+                }
+            }
+        }
+        #endregion
+
         #region ShowColorPicker
         public Color? ShowColorPicker(Color? color = null)
         {
             Color? ret = null;
+           
+            Theme = GetCallerFormTheme() ?? Theme;
 
             #region Set
             {
@@ -381,7 +425,7 @@ namespace Devinno.Forms.Dialogs
                 nColorY = Convert.ToInt32(MathTool.Map(vc.V, 0D, 1D, rtColor.Bottom, rtColor.Top));
             }
             #endregion
-
+           
             if (this.ShowDialog() == DialogResult.OK)
             {
                 ret = this.Color;

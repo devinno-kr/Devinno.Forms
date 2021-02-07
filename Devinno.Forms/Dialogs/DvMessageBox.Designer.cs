@@ -103,7 +103,7 @@ namespace Devinno.Forms.Dialogs
             this.lblMessage.Margin = new System.Windows.Forms.Padding(0);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(570, 140);
-            this.lblMessage.Style = Devinno.Forms.Controls.LabelStyle.FLAT;
+            this.lblMessage.Style = Devinno.Forms.Controls.LabelStyle.Convex;
             this.lblMessage.TabIndex = 0;
             this.lblMessage.TextPadding = new System.Windows.Forms.Padding(0);
             this.lblMessage.Unit = "";

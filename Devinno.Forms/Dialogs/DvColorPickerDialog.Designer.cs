@@ -72,7 +72,7 @@ namespace Devinno.Forms.Dialogs
             this.lblB.Location = new System.Drawing.Point(285, 3);
             this.lblB.Name = "lblB";
             this.lblB.Size = new System.Drawing.Size(136, 45);
-            this.lblB.Style = Devinno.Forms.Controls.LabelStyle.FLAT;
+            this.lblB.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
             this.lblB.TabIndex = 3;
             this.lblB.TabStop = false;
             this.lblB.Text = "B";
@@ -95,7 +95,7 @@ namespace Devinno.Forms.Dialogs
             this.lblR.Location = new System.Drawing.Point(3, 3);
             this.lblR.Name = "lblR";
             this.lblR.Size = new System.Drawing.Size(135, 45);
-            this.lblR.Style = Devinno.Forms.Controls.LabelStyle.FLAT;
+            this.lblR.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
             this.lblR.TabIndex = 2;
             this.lblR.TabStop = false;
             this.lblR.Text = "R";
@@ -118,7 +118,7 @@ namespace Devinno.Forms.Dialogs
             this.lblG.Location = new System.Drawing.Point(144, 3);
             this.lblG.Name = "lblG";
             this.lblG.Size = new System.Drawing.Size(135, 45);
-            this.lblG.Style = Devinno.Forms.Controls.LabelStyle.FLAT;
+            this.lblG.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
             this.lblG.TabIndex = 1;
             this.lblG.TabStop = false;
             this.lblG.Text = "G";
@@ -191,7 +191,7 @@ namespace Devinno.Forms.Dialogs
             this.lblColor.LongClickTime = 0;
             this.lblColor.Name = "lblColor";
             this.lblColor.Size = new System.Drawing.Size(62, 45);
-            this.lblColor.Style = Devinno.Forms.Controls.LabelStyle.FLAT;
+            this.lblColor.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
             this.lblColor.TabIndex = 4;
             this.lblColor.TabStop = false;
             this.lblColor.TextPadding = new System.Windows.Forms.Padding(0);

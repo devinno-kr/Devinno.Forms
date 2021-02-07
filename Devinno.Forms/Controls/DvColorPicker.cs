@@ -155,7 +155,7 @@ namespace Devinno.Forms.Controls
                 var ico = new DvIcon("fa-palette") { IconSize = isz };
                 var cv = ButtonColor;
                 var ct = ForeColor;
-                Theme.DrawBox(e.Graphics, cv, BackColor, rtBtn, RoundType.RT, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
+                Theme.DrawBox(e.Graphics, cv, BackColor, rtBtn, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
                 Theme.DrawTextShadow(e.Graphics, ico, null, Font, ct, cv, new Rectangle(rtBtn.X + 1, rtBtn.Y + 0, rtBtn.Width, rtBtn.Height), DvContentAlignment.MiddleCenter);
             }
             else
@@ -163,7 +163,7 @@ namespace Devinno.Forms.Controls
                 var ico = new DvIcon("fa-palette") { IconSize = isz };
                 var cv = ButtonColor.BrightnessTransmit(Theme.DownBright);
                 var ct = ForeColor.BrightnessTransmit(Theme.DownBright);
-                Theme.DrawBox(e.Graphics, cv, BackColor, rtBtn, RoundType.RT, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
+                Theme.DrawBox(e.Graphics, cv, BackColor, rtBtn, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
                 Theme.DrawTextShadow(e.Graphics, ico, null, Font, ct, cv, new Rectangle(rtBtn.X + 1, rtBtn.Y + 1, rtBtn.Width, rtBtn.Height), DvContentAlignment.MiddleCenter);
             }
             #endregion

@@ -1,4 +1,6 @@
-﻿using Devinno.Forms.Dialogs;
+﻿using Devinno.Extensions;
+using Devinno.Forms.Containers;
+using Devinno.Forms.Dialogs;
 using Devinno.Forms.Themes;
 using Devinno.Tools;
 using System;
@@ -50,7 +52,7 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region OriginalTextBox
-        public TextBox OriginalTextBox { get; } = new TextBox();
+        public TextBox OriginalTextBox { get; private set; }
         #endregion
         #region Unit
         private string strUnit = "";
@@ -137,17 +139,7 @@ namespace Devinno.Forms.Controls
             set => OriginalTextBox.Text = value;
         }
         #endregion
-        #region PlaceholderText
-#if NET5_0
-        [Editor(typeof(MultilineStringEditor), typeof(UITypeEditor))]
-        public string PlaceholderText
-        {
-            get => OriginalTextBox.PlaceholderText;
-            set => OriginalTextBox.PlaceholderText = value;
-        }
-#endif
-        #endregion
-
+  
         #region Font
         public override Font Font
         {
@@ -174,10 +166,25 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region Style
+        private LabelStyle eStyle = LabelStyle.FlatConcave;
+        public LabelStyle Style
+        {
+            get => eStyle;
+            set
+            {
+                if (eStyle != value)
+                {
+                    eStyle = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
         #endregion
 
         #region Constructor
-        public DvTextBox()
+        public DvTextBox() 
         {
             #region SetStyle : Selectable
             SetStyle(ControlStyles.Selectable, true);
@@ -186,68 +193,119 @@ namespace Devinno.Forms.Controls
             TabStop = true;
             #endregion
 
+            this.Size = new Size(150, 30);
+
             #region TextBox
-            OriginalTextBox.ForeColor = ForeColor;
+            OriginalTextBox = new TextBox();
+            OriginalTextBox.Location = new System.Drawing.Point(0, 0);
+            OriginalTextBox.Name = "OriginalTextBox";
+            OriginalTextBox.Size = new System.Drawing.Size(60, 28);
             OriginalTextBox.BorderStyle = BorderStyle.None;
+            OriginalTextBox.TabIndex = 0;
             OriginalTextBox.TextAlign = HorizontalAlignment.Center;
-            OriginalTextBox.ScrollBars = ScrollBars.None;
+            Controls.Add(OriginalTextBox);
+
             OriginalTextBox.TextChanged += (o, s) => { TextChange(); };
             OriginalTextBox.GotFocus += (o, s) => { Invalidate(); };
             OriginalTextBox.LostFocus += (o, s) => { Invalidate(); };
-            this.Controls.Add(OriginalTextBox);
-
-            OriginalTextBox.Font = this.Font;
             #endregion
-
-            this.Size = new Size(150, 30);
         }
         #endregion
 
         #region Override
-        #region OnThemeDraw
-        protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
+        #region LoadAreas
+        protected override void LoadAreas(Graphics g)
         {
-            #region Color
-            var BoxColor = UseThemeColor ? Theme.Color1 : TextBoxColor;
-            #endregion
-            #region Set
-            var Wnd = this.FindForm() as DvForm;
+            base.LoadAreas(g);
 
-            if (OriginalTextBox.ForeColor != ForeColor) OriginalTextBox.ForeColor = ForeColor;
-            if (OriginalTextBox.ForeColor != BoxColor) OriginalTextBox.BackColor = BoxColor;
-
-            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            #endregion
-            #region Bounds
             var szUnitW = 0;
             if (!string.IsNullOrWhiteSpace(Unit)) szUnitW = UnitWidth;
 
-            var rtContent = GetContentBounds();
+            var rtContent = Areas["rtContent"];
             var rtTextAll = new Rectangle(TextPadding.Left, TextPadding.Top, rtContent.Width - (TextPadding.Left + TextPadding.Right), rtContent.Height - (TextPadding.Top + TextPadding.Bottom));
             var rtUnit = new Rectangle(rtTextAll.Right - szUnitW, rtTextAll.Top, szUnitW, rtTextAll.Height);
             var rtText = new Rectangle(rtTextAll.Left, rtTextAll.Top, rtTextAll.Width - rtUnit.Width, rtTextAll.Height); rtText.Inflate(-1, 0);
-            #endregion
-            #region Init
-            var p = new Pen(BoxColor, 2);
-            var br = new SolidBrush(BoxColor);
-            #endregion
-            #region Draw
-            Center(e.Graphics, Wnd);
-            Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.OUT_BEVEL);
-            TextRenderer.DrawText(e.Graphics, Unit, Font, rtUnit, ForeColor);
-            #region Enabled Text
-            if (!Enabled || (Wnd != null && Wnd.Block))
+            SetArea("rtText", rtText);
+            SetArea("rtUnit", rtUnit);
+        }
+        #endregion
+        #region OnThemeDraw
+        protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
+        {
+            if (Areas.Count > 1)
             {
-                var rt = OriginalTextBox.Bounds; rt.Offset(1, 0);
-                TextRenderer.DrawText(e.Graphics, OriginalTextBox.Text, this.Font, rt, ForeColor);
+                #region Color
+                var BoxColor = UseThemeColor ? Theme.Color1 : TextBoxColor;
+                #endregion
+                #region Set
+                var Wnd = this.FindForm() as DvForm;
+
+                if (OriginalTextBox.ForeColor != ForeColor) OriginalTextBox.ForeColor = ForeColor;
+                if (OriginalTextBox.ForeColor != BoxColor) OriginalTextBox.BackColor = BoxColor;
+
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                #endregion
+                #region Bounds
+                var rtContent = Areas["rtContent"];
+                var rtUnit = Areas["rtUnit"];
+                var rtText = Areas["rtText"];
+                #endregion
+                #region Init
+                var p = new Pen(BoxColor, 2);
+                var br = new SolidBrush(BoxColor);
+                #endregion
+                #region Draw
+                Center(e.Graphics, Wnd);
+
+                switch (Style)
+                {
+                    case LabelStyle.FlatConcave:
+                        Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL);
+                        break;
+                    case LabelStyle.FlatConvex:
+                        Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                        break;
+                    case LabelStyle.Concave:
+                        Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+                        break;
+                    case LabelStyle.Convex:
+                        Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW | BoxDrawOption.IN_BEVEL_LT);
+                        break;
+                }
+
+                TextRenderer.DrawText(e.Graphics, Unit, Font, rtUnit, ForeColor);
+                #region Enabled Text
+                if (!Enabled || (Wnd != null && Wnd.Block))
+                {
+                    var rt = OriginalTextBox.Bounds; rt.Offset(1, 0);
+                    TextRenderer.DrawText(e.Graphics, OriginalTextBox.Text, this.Font, rt, ForeColor);
+                }
+                #endregion
+
+                #region Unit
+                if (UnitWidth > 0 && !string.IsNullOrWhiteSpace(Unit))
+                {
+                    #region Unit Sep
+                    var szh = Convert.ToInt32(rtUnit.Height / 2);
+
+                    p.Width = 1;
+
+                    p.Color = TextBoxColor.BrightnessTransmit(-Theme.BorderBright);
+                    e.Graphics.DrawLine(p, rtUnit.X + 1, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X + 1, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+
+                    p.Color = TextBoxColor.BrightnessTransmit(Theme.BorderBright);
+                    e.Graphics.DrawLine(p, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+                    #endregion
+                    Theme.DrawTextShadow(e.Graphics, null, Unit, Font, ForeColor, TextBoxColor, rtUnit);
+                }
+                #endregion
+                #endregion
+                #region Dispose
+                br.Dispose();
+                p.Dispose();
+                #endregion
             }
-            #endregion
-            #endregion
-            #region Dispose
-            br.Dispose();
-            p.Dispose();
-            #endregion
             base.OnThemeDraw(e, Theme);
         }
         #endregion
@@ -357,38 +415,36 @@ namespace Devinno.Forms.Controls
         #region Center
         private void Center(Graphics g, DvForm Wnd)
         {
-            #region Font
-            if (DesignMode)
+            if (Areas.Count > 1)
             {
-                OriginalTextBox.Font = this.Font;
-            }
-            else
-            {
-                var f = (float)OriginalTextBox.LogicalToDeviceUnits(1000) / 1000F;
-                var ftsz = this.Font.Size * f;
-                if (OriginalTextBox.Font.Name != this.Font.Name || OriginalTextBox.Font.Style != this.Font.Style || OriginalTextBox.Font.Size != ftsz)
+                #region Font
+                if (DesignMode)
                 {
-                    var old = OriginalTextBox.Font;
-                    OriginalTextBox.Font = new Font(this.Font.FontFamily, ftsz, this.Font.Style);
-                    old.Dispose();
+                    OriginalTextBox.Font = this.Font;
                 }
+                else
+                {
+                    var f = (float)OriginalTextBox.LogicalToDeviceUnits(1000) / 1000F;
+                    var ftsz = this.Font.Size * f;
+                    if (OriginalTextBox.Font.Name != this.Font.Name || OriginalTextBox.Font.Style != this.Font.Style || OriginalTextBox.Font.Size != ftsz)
+                    {
+                        //var old = OriginalTextBox.Font;
+                        OriginalTextBox.Font = new Font(this.Font.FontFamily, ftsz, this.Font.Style);
+                        //old.Dispose();
+                    }
+                }
+                #endregion
+                #region Bounds
+                var rtUnit = Areas["rtUnit"];
+                var rtText = Areas["rtText"];
+                #endregion
+                #region Set
+                OriginalTextBox.Size = rtText.Size;
+                var rttb = MathTool.MakeRectangle(rtText, OriginalTextBox.Size);
+                OriginalTextBox.Location = new Point(rttb.X + 0, rttb.Y + 0);
+                OriginalTextBox.Visible = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block));
+                #endregion
             }
-            #endregion
-            #region Bounds
-            var szUnitW = 0;
-            if (!string.IsNullOrWhiteSpace(Unit)) szUnitW = UnitWidth;
-
-            var rtContent = GetContentBounds();
-            var rtTextAll = new Rectangle(TextPadding.Left, TextPadding.Top, rtContent.Width - (TextPadding.Left + TextPadding.Right), rtContent.Height - (TextPadding.Top + TextPadding.Bottom));
-            var rtUnit = new Rectangle(rtTextAll.Right - szUnitW, rtTextAll.Top, szUnitW, rtTextAll.Height);
-            var rtText = new Rectangle(rtTextAll.Left, rtTextAll.Top, rtTextAll.Width - rtUnit.Width, rtTextAll.Height); rtText.Inflate(-1, 0);
-            #endregion
-            #region Set
-            OriginalTextBox.Size = rtText.Size;
-            var rttb = MathTool.MakeRectangle(rtText, OriginalTextBox.Size);
-            OriginalTextBox.Location = new Point(rttb.X + 0, rttb.Y + 0);
-            OriginalTextBox.Visible = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block));
-            #endregion
         }
         #endregion
         #endregion

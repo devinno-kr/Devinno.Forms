@@ -94,14 +94,6 @@ namespace Devinno.Forms.Dialogs
         }
 
         #region Method
-        #region GetCallerFormTheme
-        private DvTheme GetCallerFormTheme()
-        {
-            DvTheme ret = null;
-            if (Form.ActiveForm is DvForm) ret = ((DvForm)Form.ActiveForm).Theme;
-            return ret;
-        }
-        #endregion
         #region SetText
         void SetText()
         {

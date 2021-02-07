@@ -14,8 +14,8 @@ namespace Devinno.Forms
     {
         #region Const
         public const int SC_WH = 16;
-        const int GapSize = 10;
-        const int GapTime = 1;
+        public const int GapSize = 10;
+        public const int GapTime = 1;
         const double decelerationRate = 0.997;
         #endregion
 
@@ -223,6 +223,7 @@ namespace Devinno.Forms
                         }))
                         { IsBackground = true };
                         th.Start();
+
                     }
                 }
                 tcDown = null;

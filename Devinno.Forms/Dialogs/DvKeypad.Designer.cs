@@ -150,7 +150,7 @@ namespace Devinno.Forms.Dialogs
             this.lbl.Margin = new System.Windows.Forms.Padding(0);
             this.lbl.Name = "lbl";
             this.lbl.Size = new System.Drawing.Size(350, 74);
-            this.lbl.Style = Devinno.Forms.Controls.LabelStyle.CONVEX;
+            this.lbl.Style = Devinno.Forms.Controls.LabelStyle.Convex;
             this.lbl.TabIndex = 0;
             this.lbl.TextPadding = new System.Windows.Forms.Padding(0);
             this.lbl.Unit = "";

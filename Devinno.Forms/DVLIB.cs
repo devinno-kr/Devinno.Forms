@@ -40,10 +40,8 @@ namespace Devinno.Forms
         DvTimeGraph
         DvTrendGraph
 
-        DvComboBox
         DvTreeView
         DvToolBox
-        DvListBox
 
         DvDataGrid
 

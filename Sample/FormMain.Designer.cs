@@ -31,6 +31,11 @@ namespace Sample
         {
             this.dvControl1 = new Devinno.Forms.Controls.DvControl();
             this.dvContainer1 = new Devinno.Forms.Containers.DvContainer();
+            this.dvValueInput4 = new Devinno.Forms.Controls.DvValueInput();
+            this.dvValueInput3 = new Devinno.Forms.Controls.DvValueInput();
+            this.dvValueInput2 = new Devinno.Forms.Controls.DvValueInput();
+            this.dvValueInput1 = new Devinno.Forms.Controls.DvValueInput();
+            this.dvTextBox1 = new Devinno.Forms.Controls.DvTextBox();
             this.dvComboBox1 = new Devinno.Forms.Controls.DvComboBox();
             this.dvListBox1 = new Devinno.Forms.Controls.DvListBox();
             this.dvColorPicker1 = new Devinno.Forms.Controls.DvColorPicker();
@@ -67,6 +72,11 @@ namespace Sample
             // 
             // dvContainer1
             // 
+            this.dvContainer1.Controls.Add(this.dvValueInput4);
+            this.dvContainer1.Controls.Add(this.dvValueInput3);
+            this.dvContainer1.Controls.Add(this.dvValueInput2);
+            this.dvContainer1.Controls.Add(this.dvValueInput1);
+            this.dvContainer1.Controls.Add(this.dvTextBox1);
             this.dvContainer1.Controls.Add(this.dvComboBox1);
             this.dvContainer1.Controls.Add(this.dvListBox1);
             this.dvContainer1.Controls.Add(this.dvColorPicker1);
@@ -95,6 +105,153 @@ namespace Sample
             this.dvContainer1.Text = "dvContainer1";
             this.dvContainer1.UseThemeColor = true;
             // 
+            // dvValueInput4
+            // 
+            this.dvValueInput4.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.dvValueInput4.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvValueInput4.IconGap = 0;
+            this.dvValueInput4.IconImage = null;
+            this.dvValueInput4.IconSize = 10F;
+            this.dvValueInput4.IconString = null;
+            this.dvValueInput4.InputStyle = Devinno.Forms.Controls.DvInputType.COMBO;
+            this.dvValueInput4.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dvValueInput4.ItemHeight = 30;
+            this.dvValueInput4.ItemPadding = new System.Windows.Forms.Padding(0);
+            this.dvValueInput4.Location = new System.Drawing.Point(612, 535);
+            this.dvValueInput4.MaximumViewCount = 10;
+            this.dvValueInput4.MinusInput = false;
+            this.dvValueInput4.Name = "dvValueInput4";
+            this.dvValueInput4.OnOff = false;
+            this.dvValueInput4.SelectedIndex = -1;
+            this.dvValueInput4.SelectedItemColor = System.Drawing.Color.DarkRed;
+            this.dvValueInput4.Size = new System.Drawing.Size(408, 45);
+            this.dvValueInput4.TabIndex = 26;
+            this.dvValueInput4.Text = "MONTH";
+            this.dvValueInput4.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvValueInput4.TitleBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvValueInput4.TitleWidth = 120;
+            this.dvValueInput4.TouchMode = false;
+            this.dvValueInput4.Unit = "";
+            this.dvValueInput4.UnitWidth = 80;
+            this.dvValueInput4.UseThemeColor = true;
+            this.dvValueInput4.Value = "";
+            this.dvValueInput4.ValueBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            // 
+            // dvValueInput3
+            // 
+            this.dvValueInput3.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.dvValueInput3.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvValueInput3.IconGap = 0;
+            this.dvValueInput3.IconImage = null;
+            this.dvValueInput3.IconSize = 10F;
+            this.dvValueInput3.IconString = null;
+            this.dvValueInput3.InputStyle = Devinno.Forms.Controls.DvInputType.BOOL;
+            this.dvValueInput3.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dvValueInput3.ItemHeight = 30;
+            this.dvValueInput3.ItemPadding = new System.Windows.Forms.Padding(0);
+            this.dvValueInput3.Location = new System.Drawing.Point(612, 484);
+            this.dvValueInput3.MaximumViewCount = 10;
+            this.dvValueInput3.MinusInput = false;
+            this.dvValueInput3.Name = "dvValueInput3";
+            this.dvValueInput3.OnOff = true;
+            this.dvValueInput3.SelectedIndex = -1;
+            this.dvValueInput3.SelectedItemColor = System.Drawing.Color.DarkRed;
+            this.dvValueInput3.Size = new System.Drawing.Size(408, 45);
+            this.dvValueInput3.TabIndex = 25;
+            this.dvValueInput3.Text = "USE";
+            this.dvValueInput3.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvValueInput3.TitleBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvValueInput3.TitleWidth = 120;
+            this.dvValueInput3.TouchMode = false;
+            this.dvValueInput3.Unit = "";
+            this.dvValueInput3.UnitWidth = 80;
+            this.dvValueInput3.UseThemeColor = true;
+            this.dvValueInput3.Value = "";
+            this.dvValueInput3.ValueBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            // 
+            // dvValueInput2
+            // 
+            this.dvValueInput2.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.dvValueInput2.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvValueInput2.IconGap = 0;
+            this.dvValueInput2.IconImage = null;
+            this.dvValueInput2.IconSize = 10F;
+            this.dvValueInput2.IconString = null;
+            this.dvValueInput2.InputStyle = Devinno.Forms.Controls.DvInputType.TEXT;
+            this.dvValueInput2.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dvValueInput2.ItemHeight = 30;
+            this.dvValueInput2.ItemPadding = new System.Windows.Forms.Padding(0);
+            this.dvValueInput2.Location = new System.Drawing.Point(612, 382);
+            this.dvValueInput2.MaximumViewCount = 10;
+            this.dvValueInput2.MinusInput = false;
+            this.dvValueInput2.Name = "dvValueInput2";
+            this.dvValueInput2.OnOff = false;
+            this.dvValueInput2.SelectedIndex = -1;
+            this.dvValueInput2.SelectedItemColor = System.Drawing.Color.DarkRed;
+            this.dvValueInput2.Size = new System.Drawing.Size(408, 45);
+            this.dvValueInput2.TabIndex = 24;
+            this.dvValueInput2.Text = "TEST";
+            this.dvValueInput2.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvValueInput2.TitleBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvValueInput2.TitleWidth = 120;
+            this.dvValueInput2.TouchMode = false;
+            this.dvValueInput2.Unit = "";
+            this.dvValueInput2.UnitWidth = 80;
+            this.dvValueInput2.UseThemeColor = true;
+            this.dvValueInput2.Value = "";
+            this.dvValueInput2.ValueBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            // 
+            // dvValueInput1
+            // 
+            this.dvValueInput1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.dvValueInput1.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvValueInput1.IconGap = 0;
+            this.dvValueInput1.IconImage = null;
+            this.dvValueInput1.IconSize = 10F;
+            this.dvValueInput1.IconString = null;
+            this.dvValueInput1.InputStyle = Devinno.Forms.Controls.DvInputType.FLOATING;
+            this.dvValueInput1.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dvValueInput1.ItemHeight = 30;
+            this.dvValueInput1.ItemPadding = new System.Windows.Forms.Padding(0);
+            this.dvValueInput1.Location = new System.Drawing.Point(612, 433);
+            this.dvValueInput1.MaximumViewCount = 10;
+            this.dvValueInput1.MinusInput = false;
+            this.dvValueInput1.Name = "dvValueInput1";
+            this.dvValueInput1.OnOff = false;
+            this.dvValueInput1.SelectedIndex = -1;
+            this.dvValueInput1.SelectedItemColor = System.Drawing.Color.DarkRed;
+            this.dvValueInput1.Size = new System.Drawing.Size(408, 45);
+            this.dvValueInput1.TabIndex = 23;
+            this.dvValueInput1.Text = "DISTANCE";
+            this.dvValueInput1.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvValueInput1.TitleBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvValueInput1.TitleWidth = 120;
+            this.dvValueInput1.TouchMode = false;
+            this.dvValueInput1.Unit = "mm";
+            this.dvValueInput1.UnitWidth = 80;
+            this.dvValueInput1.UseThemeColor = true;
+            this.dvValueInput1.Value = "";
+            this.dvValueInput1.ValueBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            // 
+            // dvTextBox1
+            // 
+            this.dvTextBox1.InputType = Devinno.Forms.Controls.DvInputType.TEXT;
+            this.dvTextBox1.Location = new System.Drawing.Point(412, 535);
+            this.dvTextBox1.MaxLength = 32767;
+            this.dvTextBox1.MinusInput = false;
+            this.dvTextBox1.MultiLine = false;
+            this.dvTextBox1.Name = "dvTextBox1";
+            this.dvTextBox1.Size = new System.Drawing.Size(173, 45);
+            this.dvTextBox1.Style = Devinno.Forms.Controls.LabelStyle.FlatConcave;
+            this.dvTextBox1.TabIndex = 22;
+            this.dvTextBox1.Text = "dvTextBox1";
+            this.dvTextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.dvTextBox1.TextBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.dvTextBox1.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvTextBox1.Unit = "";
+            this.dvTextBox1.UnitWidth = 36;
+            this.dvTextBox1.UseThemeColor = true;
+            // 
             // dvComboBox1
             // 
             this.dvComboBox1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
@@ -102,11 +259,11 @@ namespace Sample
             this.dvComboBox1.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvComboBox1.ItemHeight = 45;
             this.dvComboBox1.ItemPadding = new System.Windows.Forms.Padding(0);
-            this.dvComboBox1.Location = new System.Drawing.Point(50, 559);
+            this.dvComboBox1.Location = new System.Drawing.Point(50, 535);
             this.dvComboBox1.MaximumViewCount = 10;
             this.dvComboBox1.Name = "dvComboBox1";
             this.dvComboBox1.SelectedIndex = -1;
-            this.dvComboBox1.SelectItemColor = System.Drawing.Color.DarkRed;
+            this.dvComboBox1.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.dvComboBox1.Size = new System.Drawing.Size(338, 45);
             this.dvComboBox1.TabIndex = 21;
             this.dvComboBox1.Text = "dvComboBox1";
@@ -119,13 +276,13 @@ namespace Sample
             this.dvListBox1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvListBox1.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvListBox1.ItemPadding = new System.Windows.Forms.Padding(0);
-            this.dvListBox1.Location = new System.Drawing.Point(691, 110);
+            this.dvListBox1.Location = new System.Drawing.Point(612, 59);
             this.dvListBox1.Name = "dvListBox1";
             this.dvListBox1.RowHeight = 45;
             this.dvListBox1.ScrollPosition = 0;
             this.dvListBox1.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.dvListBox1.SelectionMode = Devinno.Forms.Controls.ItemSelectionMode.SINGLE;
-            this.dvListBox1.Size = new System.Drawing.Size(303, 428);
+            this.dvListBox1.Size = new System.Drawing.Size(408, 280);
             this.dvListBox1.TabIndex = 20;
             this.dvListBox1.TabStop = false;
             this.dvListBox1.Text = "dvListBox1";
@@ -136,7 +293,7 @@ namespace Sample
             // 
             this.dvColorPicker1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.dvColorPicker1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.dvColorPicker1.Location = new System.Drawing.Point(50, 493);
+            this.dvColorPicker1.Location = new System.Drawing.Point(50, 484);
             this.dvColorPicker1.Name = "dvColorPicker1";
             this.dvColorPicker1.SelectedColor = System.Drawing.Color.White;
             this.dvColorPicker1.Size = new System.Drawing.Size(338, 45);
@@ -198,7 +355,7 @@ namespace Sample
             this.dvValueLabelButton2.LongClickTime = 1000;
             this.dvValueLabelButton2.Name = "dvValueLabelButton2";
             this.dvValueLabelButton2.Size = new System.Drawing.Size(338, 45);
-            this.dvValueLabelButton2.Style = Devinno.Forms.Controls.LabelStyle.FLAT;
+            this.dvValueLabelButton2.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
             this.dvValueLabelButton2.TabIndex = 15;
             this.dvValueLabelButton2.Text = "DCL";
             this.dvValueLabelButton2.TitleBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
@@ -229,7 +386,7 @@ namespace Sample
             this.dvValueLabelButton1.LongClickTime = 1000;
             this.dvValueLabelButton1.Name = "dvValueLabelButton1";
             this.dvValueLabelButton1.Size = new System.Drawing.Size(338, 45);
-            this.dvValueLabelButton1.Style = Devinno.Forms.Controls.LabelStyle.FLAT;
+            this.dvValueLabelButton1.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
             this.dvValueLabelButton1.TabIndex = 14;
             this.dvValueLabelButton1.Text = "ACL";
             this.dvValueLabelButton1.TitleBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
@@ -511,6 +668,11 @@ namespace Sample
         private Devinno.Forms.Controls.DvColorPicker dvColorPicker1;
         private Devinno.Forms.Controls.DvListBox dvListBox1;
         private Devinno.Forms.Controls.DvComboBox dvComboBox1;
+        private Devinno.Forms.Controls.DvTextBox dvTextBox1;
+        private Devinno.Forms.Controls.DvValueInput dvValueInput1;
+        private Devinno.Forms.Controls.DvValueInput dvValueInput2;
+        private Devinno.Forms.Controls.DvValueInput dvValueInput4;
+        private Devinno.Forms.Controls.DvValueInput dvValueInput3;
     }
 }
 

@@ -47,15 +47,15 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region SelectItemColor
-        private Color cSelectItemColor = DvTheme.DefaultTheme.PointColor;
-        public Color SelectItemColor
+        private Color cSelectedItemColor = DvTheme.DefaultTheme.PointColor;
+        public Color SelectedItemColor
         {
-            get { return cSelectItemColor; }
+            get { return cSelectedItemColor; }
             set
             {
-                if (cSelectItemColor != value)
+                if (cSelectedItemColor != value)
                 {
-                    cSelectItemColor = value;
+                    cSelectedItemColor = value;
                     Invalidate();
                 }
             }
@@ -195,7 +195,7 @@ namespace Devinno.Forms.Controls
             #region Color
             var BoxColor = UseThemeColor ? Theme.Color3 : this.BoxColor;
             var ItemColor = UseThemeColor ? Theme.Color3 : this.ItemColor;
-            var SelectedItemColor = UseThemeColor ? Theme.PointColor : this.SelectItemColor;
+            var SelectedItemColor = UseThemeColor ? Theme.PointColor : this.SelectedItemColor;
             #endregion
             #region Set
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
@@ -496,16 +496,6 @@ namespace Devinno.Forms.Controls
                     }
                 };
 
-                ListBox.Paint += (o, e) =>
-                {
-                    var cc = o as DvListBox;
-                    var rtContent = cc.GetContentBounds();
-                    using (var p = new Pen(Color.FromArgb(30, Color.White)))
-                    {
-                        e.Graphics.DrawLine(p, rtContent.Left + 1, rtContent.Top + 1, rtContent.Right - Devinno.Forms.Scroll.SC_WH - 1, rtContent.Top + 1);
-                    }
-                };
-
                 if (c.SelectedIndex != -1) ListBox.SelectedItems.Add(c.Items[c.SelectedIndex]);
 
                 this.Controls.Add(ListBox);
@@ -515,11 +505,13 @@ namespace Devinno.Forms.Controls
                 var Theme = c.GetTheme();
                 var BoxColor = c.UseThemeColor ? Theme.Color2 : c.BoxColor;
                 var ItemColor = c.UseThemeColor ? Theme.Color3 : c.ItemColor;
-                var SelectedItemColor = c.UseThemeColor ? Theme.PointColor : c.SelectItemColor;
+                var SelectedItemColor = c.UseThemeColor ? Theme.PointColor : c.SelectedItemColor;
                 #endregion
                 this.BackColor = ListBox.BackColor = c.BackColor;
                 this.ForeColor = ListBox.ForeColor = c.ForeColor;
+                ListBox.UseThemeColor = false;
                 ListBox.BoxColor = BoxColor;
+                ListBox.ItemColor = ItemColor;
                 ListBox.SelectedItemColor = SelectedItemColor;
             }
 
