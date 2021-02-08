@@ -20,9 +20,16 @@ namespace Sample
         DvKeypad Keypad = new DvKeypad();
         DvKeypadH Keypad2 = new DvKeypadH();
 
+        Timer tmr = new Timer();
+        double v;
+
         public FormMain()
         {
             InitializeComponent();
+
+            tmr.Interval = 10;
+            tmr.Tick += (o, s) => { v += 0.1; dvProgressv1.Value= dvProgressh1.Value = Math.Abs(v%200 - 100); };
+            tmr.Enabled = true;
 
             ooR.OnOffChanged += (o, s) => lmpR.OnOff = ooR.OnOff;
             ooG.OnOffChanged += (o, s) => lmpG.OnOff = ooG.OnOff;

@@ -101,15 +101,17 @@ namespace Devinno.Forms
                 if (Direction == ScrollDirection.Vertical)
                 {
                     int h = Convert.ToInt32(MathTool.Map(ScrollView, 0, ScrollTotal, 0, rtScroll.Height));
-                    int y = Convert.ToInt32(MathTool.Map(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Top, rtScroll.Bottom - h));
+                    h = Math.Max(h, 30);
 
+                    int y = Convert.ToInt32(MathTool.Map(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Top, rtScroll.Bottom - h));
                     return new Rectangle(rtScroll.X, y, rtScroll.Width, h);
                 }
                 else
                 {
                     int w = Convert.ToInt32(MathTool.Map(ScrollView, 0, ScrollTotal, 0, rtScroll.Width));
-                    int x = Convert.ToInt32(MathTool.Map(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Left, rtScroll.Right - w));
+                    w = Math.Max(w, 30);
 
+                    int x = Convert.ToInt32(MathTool.Map(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Left, rtScroll.Right - w));
                     return new Rectangle(x, rtScroll.Y, w, rtScroll.Height);
                 }
             }
@@ -146,11 +148,13 @@ namespace Devinno.Forms
                 if (Direction == ScrollDirection.Vertical)
                 {
                     int h = Convert.ToInt32(MathTool.Map(ScrollView, 0, ScrollTotal, 0, rtScroll.Height));
+                    h = Math.Max(h, 30);
                     ScrollPosition = Convert.ToInt32(MathTool.Map(e.Y - (scDown.DownPoint.Y - scDown.CursorBounds.Y), rtScroll.Top, rtScroll.Bottom - h, 0, ScrollTotal - ScrollView));
                 }
                 else if(Direction == ScrollDirection.Horizon)
                 {
                     int w = Convert.ToInt32(MathTool.Map(ScrollView, 0, ScrollTotal, 0, rtScroll.Width));
+                    w = Math.Max(w, 30);
                     ScrollPosition = Convert.ToInt32(MathTool.Map(e.X - (scDown.DownPoint.X - scDown.CursorBounds.X), rtScroll.Left, rtScroll.Right - w, 0, ScrollTotal - ScrollView));
                 }
             }

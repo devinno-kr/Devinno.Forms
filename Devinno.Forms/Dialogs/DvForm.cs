@@ -806,17 +806,15 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region .. code for Flucuring ..
-        /*
         protected override CreateParams CreateParams
         {
             get
             {
                 CreateParams cp = base.CreateParams;
-                //cp.ExStyle |= 0x02000000;
+                if (!DesignMode) cp.ExStyle |= 0x02000000;
                 return cp;
             }
         }
-        */
         #endregion
         #endregion
 

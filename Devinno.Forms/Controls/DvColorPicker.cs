@@ -245,10 +245,16 @@ namespace Devinno.Forms.Controls
         {
             if (bDown)
             {
+                var frm = this.FindForm() as DvForm;
+                if (frm != null) frm.Block = true;
+
                 bDown = false;
                 var ret = dlg.ShowColorPicker(Value);
                 if (ret.HasValue) Value = ret.Value;
                 Invalidate();
+
+                if (frm != null) frm.Block = false;
+
             }
             base.OnMouseUp(e);
         }

@@ -31,6 +31,10 @@ namespace Sample
         {
             this.dvControl1 = new Devinno.Forms.Controls.DvControl();
             this.dvContainer1 = new Devinno.Forms.Containers.DvContainer();
+            this.dvSliderv1 = new Devinno.Forms.Controls.DvSliderV();
+            this.dvSliderh1 = new Devinno.Forms.Controls.DvSliderH();
+            this.dvProgressv1 = new Devinno.Forms.Controls.DvProgressV();
+            this.dvProgressh1 = new Devinno.Forms.Controls.DvProgressH();
             this.dvDateTimePicker1 = new Devinno.Forms.Controls.DvDateTimePicker();
             this.dvValueInput4 = new Devinno.Forms.Controls.DvValueInput();
             this.dvValueInput3 = new Devinno.Forms.Controls.DvValueInput();
@@ -66,13 +70,17 @@ namespace Sample
             this.dvControl1.Location = new System.Drawing.Point(7, 60);
             this.dvControl1.Margin = new System.Windows.Forms.Padding(5);
             this.dvControl1.Name = "dvControl1";
-            this.dvControl1.Size = new System.Drawing.Size(1096, 1);
+            this.dvControl1.Size = new System.Drawing.Size(1180, 1);
             this.dvControl1.TabIndex = 2;
             this.dvControl1.TabStop = false;
             this.dvControl1.UseThemeColor = true;
             // 
             // dvContainer1
             // 
+            this.dvContainer1.Controls.Add(this.dvSliderv1);
+            this.dvContainer1.Controls.Add(this.dvSliderh1);
+            this.dvContainer1.Controls.Add(this.dvProgressv1);
+            this.dvContainer1.Controls.Add(this.dvProgressh1);
             this.dvContainer1.Controls.Add(this.dvDateTimePicker1);
             this.dvContainer1.Controls.Add(this.dvValueInput4);
             this.dvContainer1.Controls.Add(this.dvValueInput3);
@@ -101,18 +109,96 @@ namespace Sample
             this.dvContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dvContainer1.Location = new System.Drawing.Point(7, 61);
             this.dvContainer1.Name = "dvContainer1";
-            this.dvContainer1.Size = new System.Drawing.Size(1096, 648);
+            this.dvContainer1.Size = new System.Drawing.Size(1180, 722);
             this.dvContainer1.TabIndex = 3;
             this.dvContainer1.TabStop = false;
             this.dvContainer1.Text = "dvContainer1";
             this.dvContainer1.UseThemeColor = true;
+            // 
+            // dvSliderv1
+            // 
+            this.dvSliderv1.BarColor = System.Drawing.Color.DarkRed;
+            this.dvSliderv1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.dvSliderv1.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvSliderv1.DrawText = false;
+            this.dvSliderv1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dvSliderv1.FormatString = "0";
+            this.dvSliderv1.Location = new System.Drawing.Point(1077, 382);
+            this.dvSliderv1.Maximum = 100D;
+            this.dvSliderv1.Minimum = 0D;
+            this.dvSliderv1.Name = "dvSliderv1";
+            this.dvSliderv1.Reverse = false;
+            this.dvSliderv1.Size = new System.Drawing.Size(45, 300);
+            this.dvSliderv1.TabIndex = 31;
+            this.dvSliderv1.Text = "dvSliderv1";
+            this.dvSliderv1.Tick = 0D;
+            this.dvSliderv1.UseThemeColor = true;
+            this.dvSliderv1.Value = 0D;
+            // 
+            // dvSliderh1
+            // 
+            this.dvSliderh1.BarColor = System.Drawing.Color.DarkRed;
+            this.dvSliderh1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.dvSliderh1.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvSliderh1.DrawText = false;
+            this.dvSliderh1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dvSliderh1.FormatString = "0\'%\'";
+            this.dvSliderh1.Location = new System.Drawing.Point(612, 637);
+            this.dvSliderh1.Maximum = 100D;
+            this.dvSliderh1.Minimum = 0D;
+            this.dvSliderh1.Name = "dvSliderh1";
+            this.dvSliderh1.Reverse = false;
+            this.dvSliderh1.Size = new System.Drawing.Size(408, 45);
+            this.dvSliderh1.TabIndex = 30;
+            this.dvSliderh1.Text = "dvSliderh1";
+            this.dvSliderh1.Tick = 0D;
+            this.dvSliderh1.UseThemeColor = true;
+            this.dvSliderh1.Value = 0D;
+            // 
+            // dvProgressv1
+            // 
+            this.dvProgressv1.BarColor = System.Drawing.Color.DarkRed;
+            this.dvProgressv1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.dvProgressv1.DrawText = true;
+            this.dvProgressv1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dvProgressv1.FormatString = "0\'%\'";
+            this.dvProgressv1.Location = new System.Drawing.Point(1026, 382);
+            this.dvProgressv1.Maximum = 100D;
+            this.dvProgressv1.Minimum = 0D;
+            this.dvProgressv1.Name = "dvProgressv1";
+            this.dvProgressv1.Reverse = false;
+            this.dvProgressv1.Size = new System.Drawing.Size(45, 300);
+            this.dvProgressv1.TabIndex = 29;
+            this.dvProgressv1.TabStop = false;
+            this.dvProgressv1.Text = "dvProgressv1";
+            this.dvProgressv1.UseThemeColor = true;
+            this.dvProgressv1.Value = 0D;
+            // 
+            // dvProgressh1
+            // 
+            this.dvProgressh1.BarColor = System.Drawing.Color.DarkRed;
+            this.dvProgressh1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.dvProgressh1.DrawText = true;
+            this.dvProgressh1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dvProgressh1.FormatString = "0\'%\'";
+            this.dvProgressh1.Location = new System.Drawing.Point(612, 586);
+            this.dvProgressh1.Maximum = 100D;
+            this.dvProgressh1.Minimum = 0D;
+            this.dvProgressh1.Name = "dvProgressh1";
+            this.dvProgressh1.Reverse = false;
+            this.dvProgressh1.Size = new System.Drawing.Size(408, 45);
+            this.dvProgressh1.TabIndex = 28;
+            this.dvProgressh1.TabStop = false;
+            this.dvProgressh1.Text = "dvProgressh1";
+            this.dvProgressh1.UseThemeColor = true;
+            this.dvProgressh1.Value = 0D;
             // 
             // dvDateTimePicker1
             // 
             this.dvDateTimePicker1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.dvDateTimePicker1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvDateTimePicker1.ButtonWidth = 50;
-            this.dvDateTimePicker1.DateTimeStyle = Devinno.Forms.Controls.DvDateTimeStyle.DateTime;
+            this.dvDateTimePicker1.DateTimeStyle = Devinno.Forms.Controls.DvDateTimeStyle.Date;
             this.dvDateTimePicker1.Location = new System.Drawing.Point(50, 535);
             this.dvDateTimePicker1.Name = "dvDateTimePicker1";
             this.dvDateTimePicker1.Size = new System.Drawing.Size(338, 45);
@@ -138,7 +224,9 @@ namespace Sample
             this.dvValueInput4.MaximumViewCount = 10;
             this.dvValueInput4.MinusInput = false;
             this.dvValueInput4.Name = "dvValueInput4";
+            this.dvValueInput4.OffText = "OFF";
             this.dvValueInput4.OnOff = false;
+            this.dvValueInput4.OnText = "ON";
             this.dvValueInput4.SelectedIndex = -1;
             this.dvValueInput4.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.dvValueInput4.Size = new System.Drawing.Size(408, 45);
@@ -171,7 +259,9 @@ namespace Sample
             this.dvValueInput3.MaximumViewCount = 10;
             this.dvValueInput3.MinusInput = false;
             this.dvValueInput3.Name = "dvValueInput3";
+            this.dvValueInput3.OffText = "UNUSED";
             this.dvValueInput3.OnOff = true;
+            this.dvValueInput3.OnText = "USED";
             this.dvValueInput3.SelectedIndex = -1;
             this.dvValueInput3.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.dvValueInput3.Size = new System.Drawing.Size(408, 45);
@@ -204,7 +294,9 @@ namespace Sample
             this.dvValueInput2.MaximumViewCount = 10;
             this.dvValueInput2.MinusInput = false;
             this.dvValueInput2.Name = "dvValueInput2";
+            this.dvValueInput2.OffText = "OFF";
             this.dvValueInput2.OnOff = false;
+            this.dvValueInput2.OnText = "ON";
             this.dvValueInput2.SelectedIndex = -1;
             this.dvValueInput2.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.dvValueInput2.Size = new System.Drawing.Size(408, 45);
@@ -237,7 +329,9 @@ namespace Sample
             this.dvValueInput1.MaximumViewCount = 10;
             this.dvValueInput1.MinusInput = false;
             this.dvValueInput1.Name = "dvValueInput1";
+            this.dvValueInput1.OffText = "OFF";
             this.dvValueInput1.OnOff = false;
+            this.dvValueInput1.OnText = "ON";
             this.dvValueInput1.SelectedIndex = -1;
             this.dvValueInput1.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.dvValueInput1.Size = new System.Drawing.Size(408, 45);
@@ -553,7 +647,8 @@ namespace Sample
             // ooB
             // 
             this.ooB.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.ooB.DrawText = false;
+            this.ooB.DrawText = true;
+            this.ooB.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ooB.Location = new System.Drawing.Point(268, 294);
             this.ooB.Name = "ooB";
             this.ooB.OffBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -569,7 +664,8 @@ namespace Sample
             // ooG
             // 
             this.ooG.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.ooG.DrawText = false;
+            this.ooG.DrawText = true;
+            this.ooG.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ooG.Location = new System.Drawing.Point(268, 243);
             this.ooG.Name = "ooG";
             this.ooG.OffBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -629,7 +725,8 @@ namespace Sample
             // ooR
             // 
             this.ooR.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.ooR.DrawText = false;
+            this.ooR.DrawText = true;
+            this.ooR.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ooR.Location = new System.Drawing.Point(268, 192);
             this.ooR.Name = "ooR";
             this.ooR.OffBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -647,7 +744,7 @@ namespace Sample
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.ClientSize = new System.Drawing.Size(1110, 716);
+            this.ClientSize = new System.Drawing.Size(1194, 790);
             this.Controls.Add(this.dvContainer1);
             this.Controls.Add(this.dvControl1);
             this.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
@@ -695,6 +792,10 @@ namespace Sample
         private Devinno.Forms.Controls.DvValueInput dvValueInput4;
         private Devinno.Forms.Controls.DvValueInput dvValueInput3;
         private Devinno.Forms.Controls.DvDateTimePicker dvDateTimePicker1;
+        private Devinno.Forms.Controls.DvProgressH dvProgressh1;
+        private Devinno.Forms.Controls.DvProgressV dvProgressv1;
+        private Devinno.Forms.Controls.DvSliderH dvSliderh1;
+        private Devinno.Forms.Controls.DvSliderV dvSliderv1;
     }
 }
 

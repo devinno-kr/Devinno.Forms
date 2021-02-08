@@ -27,14 +27,7 @@ namespace Devinno.Forms
     Control
         (DvContentView)
         (DvContentGrid)
-
-        DvDateTimePicker
        
-        DvProgressH
-        DvProgressV
-        DvSliderH
-        DvSliderV
-
         DvLineGraph
         DvTimeGraph
         DvTrendGraph
@@ -45,11 +38,9 @@ namespace Devinno.Forms
         DvDataGrid
 
     Dialog
-        DvDatetimePickerDialog
         DvSelectorDialog
         DvPropertiesDialog
         DvInputBox
-        DvMessageBox
         DvKeyboard
         DvSerialPortSetting
 

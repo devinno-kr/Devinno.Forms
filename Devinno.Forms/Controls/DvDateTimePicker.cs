@@ -175,7 +175,7 @@ namespace Devinno.Forms.Controls
             }
             else if (DateTimeStyle == DvDateTimeStyle.Date)
             {
-                str = Value.ToString("HH:mm:ss");
+                str = Value.ToString("yyyy-MM-dd");
             }
             #endregion
             var sz = rtBtn.Height / 2;
@@ -210,18 +210,33 @@ namespace Devinno.Forms.Controls
                 bDown = false;
                 if (DateTimeStyle == DvDateTimeStyle.DateTime)
                 {
+                    var frm = this.FindForm() as DvForm;
+                    if (frm != null) frm.Block = true;
+
                     var ret = dlg.ShowDateTimePicker(Value);
                     if (ret.HasValue) Value = ret.Value;
+
+                    if (frm != null) frm.Block = false;
                 }
                 else if (DateTimeStyle == DvDateTimeStyle.Date)
                 {
+                    var frm = this.FindForm() as DvForm;
+                    if (frm != null) frm.Block = true;
+
                     var ret = dlg.ShowDatePicker(Value);
                     if (ret.HasValue) Value = ret.Value;
+
+                    if (frm != null) frm.Block = false;
                 }
                 else if (DateTimeStyle == DvDateTimeStyle.Time)
                 {
+                    var frm = this.FindForm() as DvForm;
+                    if (frm != null) frm.Block = true;
+
                     var ret = dlg.ShowTimePicker(Value);
                     if (ret.HasValue) Value = ret.Value;
+
+                    if (frm != null) frm.Block = false;
                 }
                 Invalidate();
             }
