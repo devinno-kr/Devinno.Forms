@@ -70,7 +70,7 @@ namespace Sample
             this.dvControl1.Location = new System.Drawing.Point(7, 60);
             this.dvControl1.Margin = new System.Windows.Forms.Padding(5);
             this.dvControl1.Name = "dvControl1";
-            this.dvControl1.Size = new System.Drawing.Size(1180, 1);
+            this.dvControl1.Size = new System.Drawing.Size(1200, 1);
             this.dvControl1.TabIndex = 2;
             this.dvControl1.TabStop = false;
             this.dvControl1.UseThemeColor = true;
@@ -109,7 +109,7 @@ namespace Sample
             this.dvContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dvContainer1.Location = new System.Drawing.Point(7, 61);
             this.dvContainer1.Name = "dvContainer1";
-            this.dvContainer1.Size = new System.Drawing.Size(1180, 722);
+            this.dvContainer1.Size = new System.Drawing.Size(1200, 722);
             this.dvContainer1.TabIndex = 3;
             this.dvContainer1.TabStop = false;
             this.dvContainer1.Text = "dvContainer1";
@@ -123,7 +123,7 @@ namespace Sample
             this.dvSliderv1.DrawText = false;
             this.dvSliderv1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dvSliderv1.FormatString = "0";
-            this.dvSliderv1.Location = new System.Drawing.Point(1077, 382);
+            this.dvSliderv1.Location = new System.Drawing.Point(1110, 382);
             this.dvSliderv1.Maximum = 100D;
             this.dvSliderv1.Minimum = 0D;
             this.dvSliderv1.Name = "dvSliderv1";
@@ -143,7 +143,7 @@ namespace Sample
             this.dvSliderh1.DrawText = false;
             this.dvSliderh1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dvSliderh1.FormatString = "0\'%\'";
-            this.dvSliderh1.Location = new System.Drawing.Point(612, 637);
+            this.dvSliderh1.Location = new System.Drawing.Point(617, 637);
             this.dvSliderh1.Maximum = 100D;
             this.dvSliderh1.Minimum = 0D;
             this.dvSliderh1.Name = "dvSliderh1";
@@ -162,7 +162,7 @@ namespace Sample
             this.dvProgressv1.DrawText = true;
             this.dvProgressv1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dvProgressv1.FormatString = "0\'%\'";
-            this.dvProgressv1.Location = new System.Drawing.Point(1026, 382);
+            this.dvProgressv1.Location = new System.Drawing.Point(1059, 382);
             this.dvProgressv1.Maximum = 100D;
             this.dvProgressv1.Minimum = 0D;
             this.dvProgressv1.Name = "dvProgressv1";
@@ -181,7 +181,7 @@ namespace Sample
             this.dvProgressh1.DrawText = true;
             this.dvProgressh1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.dvProgressh1.FormatString = "0\'%\'";
-            this.dvProgressh1.Location = new System.Drawing.Point(612, 586);
+            this.dvProgressh1.Location = new System.Drawing.Point(617, 586);
             this.dvProgressh1.Maximum = 100D;
             this.dvProgressh1.Minimum = 0D;
             this.dvProgressh1.Name = "dvProgressh1";
@@ -220,7 +220,7 @@ namespace Sample
             this.dvValueInput4.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.dvValueInput4.ItemHeight = 30;
             this.dvValueInput4.ItemPadding = new System.Windows.Forms.Padding(0);
-            this.dvValueInput4.Location = new System.Drawing.Point(612, 535);
+            this.dvValueInput4.Location = new System.Drawing.Point(617, 535);
             this.dvValueInput4.MaximumViewCount = 10;
             this.dvValueInput4.MinusInput = false;
             this.dvValueInput4.Name = "dvValueInput4";
@@ -255,7 +255,7 @@ namespace Sample
             this.dvValueInput3.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.dvValueInput3.ItemHeight = 30;
             this.dvValueInput3.ItemPadding = new System.Windows.Forms.Padding(0);
-            this.dvValueInput3.Location = new System.Drawing.Point(612, 484);
+            this.dvValueInput3.Location = new System.Drawing.Point(617, 484);
             this.dvValueInput3.MaximumViewCount = 10;
             this.dvValueInput3.MinusInput = false;
             this.dvValueInput3.Name = "dvValueInput3";
@@ -290,7 +290,7 @@ namespace Sample
             this.dvValueInput2.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.dvValueInput2.ItemHeight = 30;
             this.dvValueInput2.ItemPadding = new System.Windows.Forms.Padding(0);
-            this.dvValueInput2.Location = new System.Drawing.Point(612, 382);
+            this.dvValueInput2.Location = new System.Drawing.Point(617, 382);
             this.dvValueInput2.MaximumViewCount = 10;
             this.dvValueInput2.MinusInput = false;
             this.dvValueInput2.Name = "dvValueInput2";
@@ -325,7 +325,7 @@ namespace Sample
             this.dvValueInput1.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.dvValueInput1.ItemHeight = 30;
             this.dvValueInput1.ItemPadding = new System.Windows.Forms.Padding(0);
-            this.dvValueInput1.Location = new System.Drawing.Point(612, 433);
+            this.dvValueInput1.Location = new System.Drawing.Point(617, 433);
             this.dvValueInput1.MaximumViewCount = 10;
             this.dvValueInput1.MinusInput = false;
             this.dvValueInput1.Name = "dvValueInput1";
@@ -391,7 +391,7 @@ namespace Sample
             this.dvListBox1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvListBox1.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvListBox1.ItemPadding = new System.Windows.Forms.Padding(0);
-            this.dvListBox1.Location = new System.Drawing.Point(612, 59);
+            this.dvListBox1.Location = new System.Drawing.Point(617, 59);
             this.dvListBox1.Name = "dvListBox1";
             this.dvListBox1.RowHeight = 45;
             this.dvListBox1.ScrollPosition = 0;
@@ -401,7 +401,7 @@ namespace Sample
             this.dvListBox1.TabIndex = 20;
             this.dvListBox1.TabStop = false;
             this.dvListBox1.Text = "dvListBox1";
-            this.dvListBox1.TouchMode = false;
+            this.dvListBox1.TouchMode = true;
             this.dvListBox1.UseThemeColor = true;
             // 
             // dvColorPicker1
@@ -744,7 +744,7 @@ namespace Sample
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.ClientSize = new System.Drawing.Size(1194, 790);
+            this.ClientSize = new System.Drawing.Size(1214, 790);
             this.Controls.Add(this.dvContainer1);
             this.Controls.Add(this.dvControl1);
             this.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);

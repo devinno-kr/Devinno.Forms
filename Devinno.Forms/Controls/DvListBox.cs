@@ -499,11 +499,18 @@ namespace Devinno.Forms.Controls
         {
             if (Areas.ContainsKey("rtBox"))
             {
+                var sc = scroll.ScrollPosition;
+                var posoff = scroll.ScrollPositionWithOffset;
+
                 var rtBox = Areas["rtBox"];
-                for (int i = 0; i < Items.Count; i++)
+                var si = Convert.ToInt32(Math.Floor((double)(sc - scroll.TouchOffset) / (double)RowHeight));
+                var cnt = Convert.ToInt32(Math.Ceiling((double)(rtBox.Height - Math.Min(0, scroll.TouchOffset)) / (double)RowHeight));
+                var ei = si + cnt;
+
+                for (int i = Math.Max(0, si); i < ei + 1 && i < Items.Count; i++)
                 {
                     var itm = Items[i];
-                    var rt = new Rectangle(rtBox.Left, scroll.ScrollPositionWithOffset + rtBox.Top + (RowHeight * i), rtBox.Width, RowHeight);
+                    var rt = new Rectangle(rtBox.Left, posoff + rtBox.Top + (RowHeight * i), rtBox.Width, RowHeight);
                     if (CollisionTool.Check(new Rectangle(rt.X + 1, rt.Y + 1, rt.Width - 2, rt.Height - 2), rtBox)) act(i, rt, itm);
                 }
             }

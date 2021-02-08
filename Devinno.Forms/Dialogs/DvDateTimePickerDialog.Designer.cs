@@ -217,6 +217,7 @@ namespace Devinno.Forms.Dialogs
             // 
             // inSec
             // 
+            this.inSec.ButtonWidth = 45;
             this.inSec.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inSec.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inSec.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
@@ -232,7 +233,9 @@ namespace Devinno.Forms.Dialogs
             this.inSec.MaximumViewCount = 10;
             this.inSec.MinusInput = false;
             this.inSec.Name = "inSec";
+            this.inSec.OffText = "OFF";
             this.inSec.OnOff = false;
+            this.inSec.OnText = "ON";
             this.inSec.SelectedIndex = -1;
             this.inSec.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.inSec.Size = new System.Drawing.Size(172, 44);
@@ -251,6 +254,7 @@ namespace Devinno.Forms.Dialogs
             // 
             // inHour
             // 
+            this.inHour.ButtonWidth = 45;
             this.inHour.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inHour.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inHour.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
@@ -266,7 +270,9 @@ namespace Devinno.Forms.Dialogs
             this.inHour.MaximumViewCount = 10;
             this.inHour.MinusInput = false;
             this.inHour.Name = "inHour";
+            this.inHour.OffText = "OFF";
             this.inHour.OnOff = false;
+            this.inHour.OnText = "ON";
             this.inHour.SelectedIndex = -1;
             this.inHour.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.inHour.Size = new System.Drawing.Size(170, 44);
@@ -284,6 +290,7 @@ namespace Devinno.Forms.Dialogs
             // 
             // inMin
             // 
+            this.inMin.ButtonWidth = 45;
             this.inMin.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inMin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inMin.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
@@ -299,7 +306,9 @@ namespace Devinno.Forms.Dialogs
             this.inMin.MaximumViewCount = 10;
             this.inMin.MinusInput = false;
             this.inMin.Name = "inMin";
+            this.inMin.OffText = "OFF";
             this.inMin.OnOff = false;
+            this.inMin.OnText = "ON";
             this.inMin.SelectedIndex = -1;
             this.inMin.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.inMin.Size = new System.Drawing.Size(170, 44);
