@@ -29,8 +29,7 @@ namespace Devinno.Forms
         (DvContentGrid)
 
         DvDateTimePicker
-        DvInput
-
+       
         DvProgressH
         DvProgressV
         DvSliderH

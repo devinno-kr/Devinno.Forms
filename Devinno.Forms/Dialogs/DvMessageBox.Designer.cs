@@ -44,10 +44,10 @@ namespace Devinno.Forms.Dialogs
             // 
             this.pnl.Controls.Add(this.layout);
             this.pnl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnl.Location = new System.Drawing.Point(0, 60);
+            this.pnl.Location = new System.Drawing.Point(7, 60);
             this.pnl.Name = "pnl";
-            this.pnl.Padding = new System.Windows.Forms.Padding(15);
-            this.pnl.Size = new System.Drawing.Size(600, 240);
+            this.pnl.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.pnl.Size = new System.Drawing.Size(586, 233);
             this.pnl.TabIndex = 0;
             this.pnl.TabStop = false;
             this.pnl.Text = "dvContainer1";
@@ -75,7 +75,7 @@ namespace Devinno.Forms.Dialogs
             this.layout.Controls.Add(this.btnYes, 5, 2);
             this.layout.Controls.Add(this.btnNo, 7, 2);
             this.layout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layout.Location = new System.Drawing.Point(15, 15);
+            this.layout.Location = new System.Drawing.Point(3, 10);
             this.layout.Margin = new System.Windows.Forms.Padding(0);
             this.layout.Name = "layout";
             this.layout.RowCount = 3;
@@ -83,7 +83,7 @@ namespace Devinno.Forms.Dialogs
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.layout.Size = new System.Drawing.Size(570, 210);
+            this.layout.Size = new System.Drawing.Size(580, 220);
             this.layout.TabIndex = 0;
             // 
             // lblMessage
@@ -102,9 +102,10 @@ namespace Devinno.Forms.Dialogs
             this.lblMessage.LongClickTime = 0;
             this.lblMessage.Margin = new System.Windows.Forms.Padding(0);
             this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(570, 140);
+            this.lblMessage.Size = new System.Drawing.Size(580, 147);
             this.lblMessage.Style = Devinno.Forms.Controls.LabelStyle.Convex;
             this.lblMessage.TabIndex = 0;
+            this.lblMessage.TabStop = false;
             this.lblMessage.TextPadding = new System.Windows.Forms.Padding(0);
             this.lblMessage.Unit = "";
             this.lblMessage.UnitWidth = 36;
@@ -124,11 +125,11 @@ namespace Devinno.Forms.Dialogs
             this.btnOk.IconImage = null;
             this.btnOk.IconSize = 10F;
             this.btnOk.IconString = "fa-check";
-            this.btnOk.Location = new System.Drawing.Point(104, 150);
+            this.btnOk.Location = new System.Drawing.Point(106, 157);
             this.btnOk.LongClickTime = 0;
             this.btnOk.Margin = new System.Windows.Forms.Padding(0);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(52, 60);
+            this.btnOk.Size = new System.Drawing.Size(53, 63);
             this.btnOk.TabIndex = 1;
             this.btnOk.Text = "확인";
             this.btnOk.TextPadding = new System.Windows.Forms.Padding(0);
@@ -148,11 +149,11 @@ namespace Devinno.Forms.Dialogs
             this.btnCancel.IconImage = null;
             this.btnCancel.IconSize = 10F;
             this.btnCancel.IconString = "fa-times";
-            this.btnCancel.Location = new System.Drawing.Point(166, 150);
+            this.btnCancel.Location = new System.Drawing.Point(169, 157);
             this.btnCancel.LongClickTime = 0;
             this.btnCancel.Margin = new System.Windows.Forms.Padding(0);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(52, 60);
+            this.btnCancel.Size = new System.Drawing.Size(53, 63);
             this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "취소";
             this.btnCancel.TextPadding = new System.Windows.Forms.Padding(0);
@@ -172,11 +173,11 @@ namespace Devinno.Forms.Dialogs
             this.btnYes.IconImage = null;
             this.btnYes.IconSize = 10F;
             this.btnYes.IconString = "far fa-check-circle";
-            this.btnYes.Location = new System.Drawing.Point(228, 150);
+            this.btnYes.Location = new System.Drawing.Point(232, 157);
             this.btnYes.LongClickTime = 0;
             this.btnYes.Margin = new System.Windows.Forms.Padding(0);
             this.btnYes.Name = "btnYes";
-            this.btnYes.Size = new System.Drawing.Size(52, 60);
+            this.btnYes.Size = new System.Drawing.Size(53, 63);
             this.btnYes.TabIndex = 4;
             this.btnYes.Text = "예";
             this.btnYes.TextPadding = new System.Windows.Forms.Padding(0);
@@ -196,11 +197,11 @@ namespace Devinno.Forms.Dialogs
             this.btnNo.IconImage = null;
             this.btnNo.IconSize = 10F;
             this.btnNo.IconString = "far fa-times-circle";
-            this.btnNo.Location = new System.Drawing.Point(290, 150);
+            this.btnNo.Location = new System.Drawing.Point(295, 157);
             this.btnNo.LongClickTime = 0;
             this.btnNo.Margin = new System.Windows.Forms.Padding(0);
             this.btnNo.Name = "btnNo";
-            this.btnNo.Size = new System.Drawing.Size(52, 60);
+            this.btnNo.Size = new System.Drawing.Size(53, 63);
             this.btnNo.TabIndex = 5;
             this.btnNo.Text = "아니요";
             this.btnNo.TextPadding = new System.Windows.Forms.Padding(0);
@@ -213,13 +214,11 @@ namespace Devinno.Forms.Dialogs
             this.ClientSize = new System.Drawing.Size(600, 300);
             this.Controls.Add(this.pnl);
             this.Fixed = true;
-            this.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ForeColor = System.Drawing.Color.White;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DvMessageBox";
             this.NoFrame = true;
-            this.Padding = new System.Windows.Forms.Padding(0, 60, 0, 0);
+            this.Padding = new System.Windows.Forms.Padding(7, 60, 7, 7);
             this.Text = "";
             this.Title = "";
             this.TitleFont = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);

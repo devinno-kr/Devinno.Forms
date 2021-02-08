@@ -1,6 +1,5 @@
 ﻿using Devinno.Extensions;
 using Devinno.Forms.Dialogs;
-using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
 using Devinno.Tools;
@@ -14,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Devinno.Forms.Controls
 {
-    public class DvColorPicker : DvControl
+    public class DvDateTimePicker : DvControl
     {
         #region Properties
         #region ButtonColor
@@ -56,31 +55,31 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region Value
-        private Color cValue = Color.White;
-        public Color Value
+        private DateTime dtValue = DateTime.Now;
+        public DateTime Value
         {
-            get => cValue;
+            get => dtValue;
             set
             {
-                if (cValue != value)
+                if (dtValue != value)
                 {
-                    cValue = value;
+                    dtValue = value;
                     Invalidate();
                 }
             }
         }
         #endregion
-
-        #region TextStyle
-        private DvColorTextStyle eTextStyle = DvColorTextStyle.TEXT;
-        public DvColorTextStyle TextStyle
+        
+        #region DateTimeStyle
+        private DvDateTimeStyle eDateTimeStyle = DvDateTimeStyle.DateTime;
+        public DvDateTimeStyle DateTimeStyle
         {
-            get => eTextStyle;
+            get => eDateTimeStyle;
             set
             {
-                if (eTextStyle != value)
+                if (eDateTimeStyle != value)
                 {
-                    eTextStyle = value;
+                    eDateTimeStyle = value;
                     Invalidate();
                 }
             }
@@ -90,12 +89,11 @@ namespace Devinno.Forms.Controls
 
         #region Member Variable
         bool bDown = false;
-        DvColorPickerDialog dlg = new DvColorPickerDialog();
-        Dictionary<int, List<string>> dicKnown = new Dictionary<int, List<string>>();
+        DvDateTimePickerDialog dlg = new DvDateTimePickerDialog();
         #endregion
 
         #region Constructor
-        public DvColorPicker()
+        public DvDateTimePicker()
         {
             #region SetStyle : Selectable
             SetStyle(ControlStyles.Selectable, true);
@@ -105,17 +103,6 @@ namespace Devinno.Forms.Controls
             #endregion
 
             Size = new Size(150, 30);
-
-            foreach (KnownColor kc in Enum.GetValues(typeof(KnownColor)))
-            {
-                Color known = Color.FromKnownColor(kc);
-                if (!known.IsSystemColor)
-                {
-                    int k = known.ToArgb();
-                    if (!dicKnown.ContainsKey(k)) dicKnown.Add(k, new List<string>());
-                    dicKnown[k].Add(known.Name);
-                }
-            }
         }
         #endregion
 
@@ -160,7 +147,7 @@ namespace Devinno.Forms.Controls
             #region Button
             if (!bDown)
             {
-                var ico = new DvIcon("fa-palette") { IconSize = isz };
+                var ico = new DvIcon("far fa-calendar-alt") { IconSize = isz };
                 var cv = ButtonColor;
                 var ct = ForeColor;
                 Theme.DrawBox(e.Graphics, cv, BackColor, rtBtn, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
@@ -168,7 +155,7 @@ namespace Devinno.Forms.Controls
             }
             else
             {
-                var ico = new DvIcon("fa-palette") { IconSize = isz };
+                var ico = new DvIcon("far fa-calendar-alt") { IconSize = isz };
                 var cv = ButtonColor.BrightnessTransmit(Theme.DownBright);
                 var ct = ForeColor.BrightnessTransmit(Theme.DownBright);
                 Theme.DrawBox(e.Graphics, cv, BackColor, rtBtn, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
@@ -178,47 +165,22 @@ namespace Devinno.Forms.Controls
             #region Text
             #region String
             string str = "";
-            if (TextStyle == DvColorTextStyle.ARGB)
+            if (DateTimeStyle == DvDateTimeStyle.DateTime)
             {
-                str = "(" + Value.A + "," + Value.R + "," + Value.G + "," + Value.B + ")";
+                str = Value.ToString("yyyy-MM-dd HH:mm:ss");
             }
-            else if (TextStyle == DvColorTextStyle.TEXT)
+            else if (DateTimeStyle == DvDateTimeStyle.Time)
             {
-                var k = Value.ToArgb();
-                if (dicKnown.ContainsKey(k)) str = dicKnown[k].First();
-                else str = Value.Name.ToUpper();
+                str = Value.ToString("HH:mm:ss");
             }
-            else if (TextStyle == DvColorTextStyle.ALL)
+            else if (DateTimeStyle == DvDateTimeStyle.Date)
             {
-                string nm = "";
-                var k = Value.ToArgb();
-                if (dicKnown.ContainsKey(k)) nm = dicKnown[k].First();
-                else nm = Value.Name.ToUpper();
-
-                str = nm + " (" + Value.A + "," + Value.R + "," + Value.G + "," + Value.B + ")";
+                str = Value.ToString("HH:mm:ss");
             }
             #endregion
             var sz = rtBtn.Height / 2;
 
-            using (var bmp = new Bitmap(sz+1, sz+1))
-            {
-                using (var g = Graphics.FromImage(bmp))
-                {
-                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
-
-                    br.Color = Value; 
-                    g.FillRectangle(br, new Rectangle(1, 1, sz - 1, sz - 1));
-
-                    p.Width = 1;
-                    p.Color = Color.Black;
-                    g.DrawRectangle(p, new Rectangle(1, 1, sz - 1, sz - 1));
-                }
-
-                var ico = new DvIcon() { IconImage = bmp, Gap = 10 };
-                var h = e.Graphics.MeasureTextIcon(ico, str, Font).Height / 2;
-                rtTxt.Inflate(-Convert.ToInt32(h), 0);
-                Theme.DrawTextShadow(e.Graphics, ico, str, Font, ForeColor, BoxColor, rtTxt, DvContentAlignment.MiddleLeft);
-            }
+            Theme.DrawTextShadow(e.Graphics, null, str, Font, ForeColor, BoxColor, rtTxt, DvContentAlignment.MiddleCenter);
             #endregion
             #endregion
             #region Dispose
@@ -246,8 +208,21 @@ namespace Devinno.Forms.Controls
             if (bDown)
             {
                 bDown = false;
-                var ret = dlg.ShowColorPicker(Value);
-                if (ret.HasValue) Value = ret.Value;
+                if (DateTimeStyle == DvDateTimeStyle.DateTime)
+                {
+                    var ret = dlg.ShowDateTimePicker(Value);
+                    if (ret.HasValue) Value = ret.Value;
+                }
+                else if (DateTimeStyle == DvDateTimeStyle.Date)
+                {
+                    var ret = dlg.ShowDatePicker(Value);
+                    if (ret.HasValue) Value = ret.Value;
+                }
+                else if (DateTimeStyle == DvDateTimeStyle.Time)
+                {
+                    var ret = dlg.ShowTimePicker(Value);
+                    if (ret.HasValue) Value = ret.Value;
+                }
                 Invalidate();
             }
             base.OnMouseUp(e);
@@ -255,7 +230,8 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
     }
-    #region enum : DvColorTextStyle 
-    public enum DvColorTextStyle { ARGB, TEXT, ALL }
+
+    #region enum : DvDateTimeStyle 
+    public enum DvDateTimeStyle { DateTime, Date, Time }
     #endregion
 }

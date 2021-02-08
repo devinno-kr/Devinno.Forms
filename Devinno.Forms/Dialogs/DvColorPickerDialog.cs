@@ -31,7 +31,6 @@ namespace Devinno.Forms.Dialogs
         Bitmap bmHue, bmColor;
         bool bHueChange;
 
-        DvColorBox ColorBox = new DvColorBox();
         DvMessageBox msg = new DvMessageBox();
         #endregion
 
@@ -46,21 +45,17 @@ namespace Devinno.Forms.Dialogs
             draw.MouseMove += Draw_MouseMove;
             draw.MouseUp += Draw_MouseUp;
             #endregion
-            #region Timer Event
-            tmr.Tick += (o, s) =>
-            {
-                var c = this.Color;
-                lblColor.LabelColor = c;
-                lblR.Value = c.R.ToString();
-                lblG.Value = c.G.ToString();
-                lblB.Value = c.B.ToString();
-            };
-            tmr.Enabled = true;
-            #endregion
             #region Control Event
-            lblR.MouseClick += Input;
-            lblG.MouseClick += Input;
-            lblB.MouseClick += Input;
+            inR.OriginalTextBox.TextChanged += OriginalTextBox_TextChanged;
+            inG.OriginalTextBox.TextChanged += OriginalTextBox_TextChanged;
+            inB.OriginalTextBox.TextChanged += OriginalTextBox_TextChanged;
+
+            inR.OriginalTextBox.LostFocus += (o, s) => inR.Value = Color.R.ToString();
+            inG.OriginalTextBox.LostFocus += (o, s) => inG.Value = Color.G.ToString();
+            inB.OriginalTextBox.LostFocus += (o, s) => inB.Value = Color.B.ToString();
+            #endregion
+            #region Set
+            inR.OriginalTextBox.MaxLength = inG.OriginalTextBox.MaxLength = inB.OriginalTextBox.MaxLength = 3;
             #endregion
 
             btnOK.ButtonClick += (o, s) => DialogResult = DialogResult.OK;
@@ -72,25 +67,29 @@ namespace Devinno.Forms.Dialogs
         #region Draw_MouseUp
         private void Draw_MouseUp(object sender, MouseEventArgs e)
         {
-            #region Bounds
             var inv = false;
+            #region Bounds
             var NW = 30;
             var rtContent = draw.GetContentBounds();
-            var rt = new Rectangle(rtContent.X, rtContent.Y + 4, rtContent.Width, rtContent.Height - 4); rt.Inflate(-3, -3);
+            var rt = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width, rtContent.Height);
             var rtHue = new Rectangle(rt.Right - NW, rt.Y, NW, rt.Height);
-            var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 8 - rtHue.Width, rt.Height);
+            var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 10 - rtHue.Width, rt.Height);
             #endregion
             #region Hue
             if (bHueDown)
             {
-                nHueDownY = Convert.ToInt32(MathTool.Constrain(e.Y, rtHue.Top, rtHue.Bottom)); 
+                var nHueDownY = Convert.ToInt32(MathTool.Constrain(e.Y, rtHue.Top, rtHue.Bottom)); 
                 var i = Convert.ToInt32(MathTool.Constrain(nHueDownY - rtHue.Y, 0, rtColor.Height));
                 var vc = new HsvColor() { A = 1, H = MathTool.Map(i, 0D, rtHue.Height, 0D, 360D), S = 1, V = 1 };
-                Hue = vc.ToRGB().GetHue();
-
                 var vc2 = Color.ToHSV();
                 vc2.H = vc.H;
-                Color = vc2.ToRGB();
+                var c = vc2.ToRGB();
+
+                this.Color = c;
+                this.nHueDownY = nHueDownY;
+                this.Hue = this.Color.GetHue();
+                //this.nColorX = nColorX;
+                //this.nColorY = nColorY;
 
                 bHueDown = false;
                 bHueChange = true;
@@ -100,8 +99,8 @@ namespace Devinno.Forms.Dialogs
             #region Color
             if (bColorDown)
             {
-                nColorY = Convert.ToInt32(MathTool.Constrain(e.Y, rtColor.Top, rtColor.Bottom));
-                nColorX = Convert.ToInt32(MathTool.Constrain(e.X, rtColor.Left, rtColor.Right));
+                int nColorY = Convert.ToInt32(MathTool.Constrain(e.Y, rtColor.Top, rtColor.Bottom));
+                int nColorX = Convert.ToInt32(MathTool.Constrain(e.X, rtColor.Left, rtColor.Right));
                 int nw = rtColor.Width;
                 int nh = rtColor.Height;
                 int y = nColorY - rtColor.Y;
@@ -114,37 +113,49 @@ namespace Devinno.Forms.Dialogs
                 var c = vc.ToRGB();
 
                 this.Color = c;
+                //this.nHueDownY = nHueDownY;
+                //this.Hue = this.Color.GetHue();
+                this.nColorX = nColorX;
+                this.nColorY = nColorY;
 
                 bColorDown = false;
                 inv |= true;
             }
             #endregion
 
-            if (inv) draw.Invalidate();
+            if (inv)
+            {
+                Set();
+                draw.Invalidate();
+            }
         }
         #endregion
         #region Draw_MouseMove
         private void Draw_MouseMove(object sender, MouseEventArgs e)
         {
-            #region Bounds
             var inv = false;
+            #region Bounds
             var NW = 30;
             var rtContent = draw.GetContentBounds();
-            var rt = new Rectangle(rtContent.X, rtContent.Y + 4, rtContent.Width, rtContent.Height - 4); rt.Inflate(-3, -3);
+            var rt = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width, rtContent.Height);
             var rtHue = new Rectangle(rt.Right - NW, rt.Y, NW, rt.Height);
-            var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 8 - rtHue.Width, rt.Height);
+            var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 10 - rtHue.Width, rt.Height);
             #endregion
             #region Hue
             if (bHueDown)
             {
-                nHueDownY = Convert.ToInt32(MathTool.Constrain(e.Y, rtHue.Top, rtHue.Bottom));
+                var nHueDownY = Convert.ToInt32(MathTool.Constrain(e.Y, rtHue.Top, rtHue.Bottom));
                 var i = Convert.ToInt32(MathTool.Constrain(nHueDownY - rtHue.Y, 0, rtColor.Height));
                 var vc = new HsvColor() { A = 1, H = MathTool.Map(i, 0D, rtHue.Height, 0D, 360D), S = 1, V = 1 };
-                Hue = vc.ToRGB().GetHue();
-
                 var vc2 = Color.ToHSV();
                 vc2.H = vc.H;
-                Color = vc2.ToRGB();
+                var c = vc2.ToRGB();
+
+                this.Color = c;
+                this.nHueDownY = nHueDownY;
+                this.Hue = this.Color.GetHue();
+                //this.nColorX = nColorX;
+                //this.nColorY = nColorY;
 
                 bHueChange = true;
                 inv = true;
@@ -153,8 +164,8 @@ namespace Devinno.Forms.Dialogs
             #region Color
             if (bColorDown)
             {
-                nColorY = Convert.ToInt32(MathTool.Constrain(e.Y, rtColor.Top, rtColor.Bottom));
-                nColorX = Convert.ToInt32(MathTool.Constrain(e.X, rtColor.Left, rtColor.Right));
+                int nColorY = Convert.ToInt32(MathTool.Constrain(e.Y, rtColor.Top, rtColor.Bottom));
+                int nColorX = Convert.ToInt32(MathTool.Constrain(e.X, rtColor.Left, rtColor.Right));
                 int nw = rtColor.Width;
                 int nh = rtColor.Height;
                 int y = nColorY - rtColor.Y;
@@ -167,36 +178,48 @@ namespace Devinno.Forms.Dialogs
                 var c = vc.ToRGB();
 
                 this.Color = c;
+                //this.nHueDownY = nHueDownY;
+                //this.Hue = this.Color.GetHue();
+                this.nColorX = nColorX;
+                this.nColorY = nColorY;
 
                 inv |= true;
             }
             #endregion
 
-            if (inv) draw.Invalidate();
+            if (inv)
+            {
+                Set();
+                draw.Invalidate();
+            }
         }
         #endregion
         #region Draw_MouseDown
         private void Draw_MouseDown(object sender, MouseEventArgs e)
         {
-            #region Bounds
             var inv = false;
+            #region Bounds
             var NW = 30;
             var rtContent = draw.GetContentBounds();
-            var rt = new Rectangle(rtContent.X, rtContent.Y + 4, rtContent.Width, rtContent.Height - 4); rt.Inflate(-3, -3);
+            var rt = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width, rtContent.Height);
             var rtHue = new Rectangle(rt.Right - NW, rt.Y, NW, rt.Height);
-            var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 8 - rtHue.Width, rt.Height);
+            var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 10 - rtHue.Width, rt.Height);
             #endregion
             #region Hue
             if (CollisionTool.Check(rtHue, e.Location))
             {
-                nHueDownY = Convert.ToInt32(MathTool.Constrain(e.Y, rtHue.Top, rtHue.Bottom));
+                var nHueDownY = Convert.ToInt32(MathTool.Constrain(e.Y, rtHue.Top, rtHue.Bottom));
                 var i = Convert.ToInt32(MathTool.Constrain(nHueDownY - rtHue.Y, 0, rtColor.Height));
                 var vc = new HsvColor() { A = 1, H = MathTool.Map(i, 0D, rtHue.Height, 0D, 360D), S = 1, V = 1 };
-                Hue = vc.ToRGB().GetHue();
-
                 var vc2 = Color.ToHSV();
                 vc2.H = vc.H;
-                Color = vc2.ToRGB();
+                var c = vc2.ToRGB();
+
+                this.Color = c;
+                this.nHueDownY = nHueDownY;
+                this.Hue = this.Color.GetHue();
+                //this.nColorX = nColorX;
+                //this.nColorY = nColorY;
 
                 bHueDown = true;
                 bHueChange = true;
@@ -206,8 +229,8 @@ namespace Devinno.Forms.Dialogs
             #region Color
             if (CollisionTool.Check(rtColor, e.Location))
             {
-                nColorY = Convert.ToInt32(MathTool.Constrain(e.Y, rtColor.Top, rtColor.Bottom));
-                nColorX = Convert.ToInt32(MathTool.Constrain(e.X, rtColor.Left, rtColor.Right));
+                int nColorY = Convert.ToInt32(MathTool.Constrain(e.Y, rtColor.Top, rtColor.Bottom));
+                int nColorX = Convert.ToInt32(MathTool.Constrain(e.X, rtColor.Left, rtColor.Right));
                 int nw = rtColor.Width;
                 int nh = rtColor.Height;
                 int y = nColorY - rtColor.Y;
@@ -220,13 +243,21 @@ namespace Devinno.Forms.Dialogs
                 var c = vc.ToRGB();
 
                 this.Color = c;
+                //this.nHueDownY = nHueDownY;
+                //this.Hue = this.Color.GetHue();
+                this.nColorX = nColorX;
+                this.nColorY = nColorY;
 
                 bColorDown = true;
                 inv |= true;
             }
             #endregion
 
-            if (inv) draw.Invalidate();
+            if (inv)
+            {
+                Set();
+                draw.Invalidate();
+            }
         }
         #endregion
         #region Draw_ThemeDraw
@@ -243,9 +274,9 @@ namespace Devinno.Forms.Dialogs
             #region Bounds
             var NW = 30;
             var rtContent = draw.GetContentBounds();
-            var rt = new Rectangle(rtContent.X, rtContent.Y + 4, rtContent.Width, rtContent.Height - 4); rt.Inflate(-3, -3);
+            var rt = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width, rtContent.Height);
             var rtHue = new Rectangle(rt.Right - NW, rt.Y, NW, rt.Height);
-            var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 8 - rtHue.Width, rt.Height);
+            var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 10 - rtHue.Width, rt.Height);
             #endregion
             #region Make
             if (sz != this.Size || bmColor == null || bmHue == null || bHueChange)
@@ -333,6 +364,8 @@ namespace Devinno.Forms.Dialogs
 
             //if (bHueDown)
             {
+                e.Graphics.SetClip(new Rectangle(rtHue.X - 1, rtHue.Y - 1, rtHue.Width + 2, rtHue.Height + 2));
+
                 p.Width = 1;
 
                 p.Color = Color.FromArgb(120, Color.Black);
@@ -340,10 +373,14 @@ namespace Devinno.Forms.Dialogs
 
                 p.Color = Color.White; 
                 e.Graphics.DrawLine(p, rtHue.Left, nHueDownY, rtHue.Right - 1, nHueDownY);
+
+                e.Graphics.ResetClip();
             }
 
             //if (bColorDown)
             {
+                e.Graphics.SetClip(new Rectangle(rtColor.X - 1, rtColor.Y - 1, rtColor.Width + 2, rtColor.Height + 2));
+
                 p.Width = 1; 
                 int n = Convert.ToInt32(DpiRatio * 5);
 
@@ -354,6 +391,8 @@ namespace Devinno.Forms.Dialogs
                 p.Color = Color.White;
                 e.Graphics.DrawLine(p, nColorX - n, nColorY, nColorX + n, nColorY);
                 e.Graphics.DrawLine(p, nColorX, nColorY - n, nColorX, nColorY + n);
+
+                e.Graphics.ResetClip();
             }
             #endregion
             #region Dispose
@@ -362,42 +401,56 @@ namespace Devinno.Forms.Dialogs
             #endregion
         }
         #endregion
-        #endregion
-
-        #region Input
-        void Input(object o, MouseEventArgs s)
+        #region OriginalTextBox_TextChanged
+        private void OriginalTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!ColorBox.Visible)
+            byte r, g, b;
+            if (!(bColorDown || bHueDown) && byte.TryParse(inR.Value, out r) && byte.TryParse(inG.Value, out g) && byte.TryParse(inB.Value, out b))
             {
-                var ret = ColorBox.ShowColorBox(Color);
-                if (ret.HasValue)
+                Color = Color.FromArgb(r, g, b);
+                #region Set
                 {
-                    Color = ret.Value;
-
-                    #region Set
-                    {
-                        #region Bounds
-                        var NW = 30;
-                        var rtContent = draw.GetContentBounds();
-                        var rt = new Rectangle(rtContent.X, rtContent.Y + 4, rtContent.Width, rtContent.Height - 4); rt.Inflate(-3, -3);
-                        var rtHue = new Rectangle(rt.Right - NW, rt.Y, NW, rt.Height);
-                        var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 8 - rtHue.Width, rt.Height);
-                        #endregion
-
-                        Hue = Color.GetHue();
-                        var vc = Color.ToHSV();
-
-                        nHueDownY = Convert.ToInt32(MathTool.Map(Hue, 0D, 360D, rtHue.Top, rtHue.Bottom));
-
-                        nColorX = Convert.ToInt32(MathTool.Map(vc.S, 0D, 1D, rtColor.Left, rtColor.Right));
-                        nColorY = Convert.ToInt32(MathTool.Map(vc.V, 0D, 1D, rtColor.Bottom, rtColor.Top));
-                    }
+                    #region Bounds
+                    var NW = 30;
+                    var rtContent = draw.GetContentBounds();
+                    var rt = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width, rtContent.Height);
+                    var rtHue = new Rectangle(rt.Right - NW, rt.Y, NW, rt.Height);
+                    var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 10 - rtHue.Width, rt.Height);
                     #endregion
+
+                    Hue = Color.GetHue();
+                    var vc = Color.ToHSV();
+
+                    var nHueDownY = Convert.ToInt32(MathTool.Map(Hue, 0D, 360D, rtHue.Top, rtHue.Bottom));
+                    var nColorX = Convert.ToInt32(MathTool.Map(vc.S, 0D, 1D, rtColor.Left, rtColor.Right));
+                    var nColorY = Convert.ToInt32(MathTool.Map(vc.V, 0D, 1D, rtColor.Bottom, rtColor.Top));
+
+                    bool change = false;
+                    if (this.nHueDownY != nHueDownY) { this.nHueDownY = nHueDownY; change = true; bHueChange = true; }
+                    if (this.nColorX != nColorX) { this.nColorX = nColorX; change = true; }
+                    if (this.nColorY != nColorY) { this.nColorY = nColorY; change = true; }
+
+                    if (change) draw.Invalidate();
+
+                    lblColor.LabelColor = Color;
                 }
+                #endregion
             }
         }
         #endregion
+        #endregion
 
+        #region Method
+        #region Set
+        void Set()
+        {
+            var c = this.Color;
+            lblColor.LabelColor = c;
+            inR.Value = c.R.ToString();
+            inG.Value = c.G.ToString();
+            inB.Value = c.B.ToString();
+        }
+        #endregion
         #region ShowColorPicker
         public Color? ShowColorPicker(Color? color = null)
         {
@@ -410,19 +463,13 @@ namespace Devinno.Forms.Dialogs
                 #region Bounds
                 var NW = 30;
                 var rtContent = draw.GetContentBounds();
-                var rt = new Rectangle(rtContent.X, rtContent.Y + 4, rtContent.Width, rtContent.Height - 4); rt.Inflate(-3, -3);
+                var rt = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width, rtContent.Height);
                 var rtHue = new Rectangle(rt.Right - NW, rt.Y, NW, rt.Height);
-                var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 8 - rtHue.Width, rt.Height);
+                var rtColor = new Rectangle(rt.X, rt.Y, rt.Width - 10 - rtHue.Width, rt.Height);
                 #endregion
 
                 Color = color.HasValue? color.Value : Color.White;
-                Hue = Color.GetHue();
-                var vc = Color.ToHSV();
-
-                nHueDownY = Convert.ToInt32(MathTool.Map(Hue, 0D, 360D, rtHue.Top, rtHue.Bottom));
-
-                nColorX = Convert.ToInt32(MathTool.Map(vc.S, 0D, 1D, rtColor.Left, rtColor.Right));
-                nColorY = Convert.ToInt32(MathTool.Map(vc.V, 0D, 1D, rtColor.Bottom, rtColor.Top));
+                Set();
             }
             #endregion
            
@@ -432,6 +479,7 @@ namespace Devinno.Forms.Dialogs
             }
             return ret;
         }
+        #endregion
         #endregion
     }
 }

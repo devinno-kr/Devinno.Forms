@@ -16,7 +16,10 @@ namespace Sample
 {
     public partial class FormMain : DvForm
     {
-        DvColorPickerDialog dv = new DvColorPickerDialog();
+        DvMessageBox MessageBox = new DvMessageBox();
+        DvKeypad Keypad = new DvKeypad();
+        DvKeypadH Keypad2 = new DvKeypadH();
+
         public FormMain()
         {
             InitializeComponent();
@@ -25,7 +28,12 @@ namespace Sample
             ooG.OnOffChanged += (o, s) => lmpG.OnOff = ooG.OnOff;
             ooB.OnOffChanged += (o, s) => lmpB.OnOff = ooB.OnOff;
 
-            dvButton1.ButtonClick += (o, s) => dv.ShowColorPicker(Color.DarkSlateGray);
+            dvButton1.ButtonClick += (o, s) =>
+            {
+                Block = true;
+                MessageBox.ShowMessageBoxOk("Title", "Message");
+                Block = false;
+            };
 
             dvListBox1.SelectionMode = ItemSelectionMode.MULTI;
             dvValueInput4.ItemHeight = 45;

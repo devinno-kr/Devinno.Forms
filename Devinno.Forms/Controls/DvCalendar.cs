@@ -112,8 +112,8 @@ namespace Devinno.Forms.Controls
         #endregion
         #region SelectDays
         private List<DateTime> lstSel = new List<DateTime>();
-        public event EventHandler SelectDaysChanged;
-        public List<DateTime> SelectDays
+        public event EventHandler SelectedDaysChanged;
+        public List<DateTime> SelectedDays
         {
             get { return lstSel; }
         }
@@ -285,7 +285,7 @@ namespace Devinno.Forms.Controls
                         }
                         #endregion
                         #region Text
-                        if (!SelectDays.Contains(tm))
+                        if (!SelectedDays.Contains(tm))
                         {
                             var ctext = ForeColor;
                             var s = tm.Day.ToString();
@@ -308,9 +308,9 @@ namespace Devinno.Forms.Controls
             #endregion
             #region SelectDays
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-            foreach (var v in SelectDays)
+            foreach (var v in SelectedDays)
             {
-                var sidx = d.ToList().IndexOf(v);
+                var sidx = d.ToList().IndexOf(v.Date);
                 if (sidx >= 0)
                 {
                     #region Bounds
@@ -408,22 +408,22 @@ namespace Devinno.Forms.Controls
                                 {
                                     if (ModifierKeys == Keys.Control || ModifierKeys == Keys.Shift)
                                     {
-                                        if (SelectDays.Contains(tm)) SelectDays.Remove(tm);
-                                        else SelectDays.Add(tm);
-                                        SelectDaysChanged?.Invoke(this, null);
+                                        if (SelectedDays.Contains(tm)) SelectedDays.Remove(tm);
+                                        else SelectedDays.Add(tm);
+                                        SelectedDaysChanged?.Invoke(this, null);
                                     }
                                     else
                                     {
-                                        SelectDays.Clear();
-                                        SelectDays.Add(tm);
-                                        SelectDaysChanged?.Invoke(this, null);
+                                        SelectedDays.Clear();
+                                        SelectedDays.Add(tm);
+                                        SelectedDaysChanged?.Invoke(this, null);
                                     }
                                 }
                                 else
                                 {
-                                    SelectDays.Clear();
-                                    SelectDays.Add(tm);
-                                    SelectDaysChanged?.Invoke(this, null);
+                                    SelectedDays.Clear();
+                                    SelectedDays.Add(tm);
+                                    SelectedDaysChanged?.Invoke(this, null);
                                 }
                             }
                             else

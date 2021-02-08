@@ -282,9 +282,9 @@ namespace Devinno.Forms.Controls
             if (bDown)
             {
                 bDown = false;
+                Invalidate();
                 ButtonClick?.Invoke(this, null);
             }
-            Invalidate();
             base.OnMouseUp(e);
         }
         #endregion

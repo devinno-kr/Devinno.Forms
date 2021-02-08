@@ -31,6 +31,7 @@ namespace Sample
         {
             this.dvControl1 = new Devinno.Forms.Controls.DvControl();
             this.dvContainer1 = new Devinno.Forms.Containers.DvContainer();
+            this.dvDateTimePicker1 = new Devinno.Forms.Controls.DvDateTimePicker();
             this.dvValueInput4 = new Devinno.Forms.Controls.DvValueInput();
             this.dvValueInput3 = new Devinno.Forms.Controls.DvValueInput();
             this.dvValueInput2 = new Devinno.Forms.Controls.DvValueInput();
@@ -72,6 +73,7 @@ namespace Sample
             // 
             // dvContainer1
             // 
+            this.dvContainer1.Controls.Add(this.dvDateTimePicker1);
             this.dvContainer1.Controls.Add(this.dvValueInput4);
             this.dvContainer1.Controls.Add(this.dvValueInput3);
             this.dvContainer1.Controls.Add(this.dvValueInput2);
@@ -105,8 +107,23 @@ namespace Sample
             this.dvContainer1.Text = "dvContainer1";
             this.dvContainer1.UseThemeColor = true;
             // 
+            // dvDateTimePicker1
+            // 
+            this.dvDateTimePicker1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dvDateTimePicker1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvDateTimePicker1.ButtonWidth = 50;
+            this.dvDateTimePicker1.DateTimeStyle = Devinno.Forms.Controls.DvDateTimeStyle.DateTime;
+            this.dvDateTimePicker1.Location = new System.Drawing.Point(50, 535);
+            this.dvDateTimePicker1.Name = "dvDateTimePicker1";
+            this.dvDateTimePicker1.Size = new System.Drawing.Size(338, 45);
+            this.dvDateTimePicker1.TabIndex = 27;
+            this.dvDateTimePicker1.Text = "dvDateTimePicker1";
+            this.dvDateTimePicker1.UseThemeColor = true;
+            this.dvDateTimePicker1.Value = new System.DateTime(2021, 2, 8, 12, 33, 55, 632);
+            // 
             // dvValueInput4
             // 
+            this.dvValueInput4.ButtonWidth = 50;
             this.dvValueInput4.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvValueInput4.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvValueInput4.IconGap = 0;
@@ -139,6 +156,7 @@ namespace Sample
             // 
             // dvValueInput3
             // 
+            this.dvValueInput3.ButtonWidth = 60;
             this.dvValueInput3.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvValueInput3.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvValueInput3.IconGap = 0;
@@ -171,6 +189,7 @@ namespace Sample
             // 
             // dvValueInput2
             // 
+            this.dvValueInput2.ButtonWidth = 60;
             this.dvValueInput2.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvValueInput2.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvValueInput2.IconGap = 0;
@@ -203,6 +222,7 @@ namespace Sample
             // 
             // dvValueInput1
             // 
+            this.dvValueInput1.ButtonWidth = 60;
             this.dvValueInput1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvValueInput1.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvValueInput1.IconGap = 0;
@@ -255,11 +275,12 @@ namespace Sample
             // dvComboBox1
             // 
             this.dvComboBox1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvComboBox1.ButtonWidth = 50;
             this.dvComboBox1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvComboBox1.ItemColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvComboBox1.ItemHeight = 45;
             this.dvComboBox1.ItemPadding = new System.Windows.Forms.Padding(0);
-            this.dvComboBox1.Location = new System.Drawing.Point(50, 535);
+            this.dvComboBox1.Location = new System.Drawing.Point(50, 586);
             this.dvComboBox1.MaximumViewCount = 10;
             this.dvComboBox1.Name = "dvComboBox1";
             this.dvComboBox1.SelectedIndex = -1;
@@ -293,14 +314,15 @@ namespace Sample
             // 
             this.dvColorPicker1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.dvColorPicker1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvColorPicker1.ButtonWidth = 50;
             this.dvColorPicker1.Location = new System.Drawing.Point(50, 484);
             this.dvColorPicker1.Name = "dvColorPicker1";
-            this.dvColorPicker1.SelectedColor = System.Drawing.Color.White;
             this.dvColorPicker1.Size = new System.Drawing.Size(338, 45);
             this.dvColorPicker1.TabIndex = 19;
             this.dvColorPicker1.Text = "dvColorPicker1";
             this.dvColorPicker1.TextStyle = Devinno.Forms.Controls.DvColorTextStyle.TEXT;
             this.dvColorPicker1.UseThemeColor = true;
+            this.dvColorPicker1.Value = System.Drawing.Color.White;
             // 
             // dvNumberBox3
             // 
@@ -629,7 +651,6 @@ namespace Sample
             this.Controls.Add(this.dvContainer1);
             this.Controls.Add(this.dvControl1);
             this.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.ForeColor = System.Drawing.Color.White;
             this.MinimumSize = new System.Drawing.Size(300, 200);
             this.Name = "FormMain";
             this.NoFrame = true;
@@ -673,6 +694,7 @@ namespace Sample
         private Devinno.Forms.Controls.DvValueInput dvValueInput2;
         private Devinno.Forms.Controls.DvValueInput dvValueInput4;
         private Devinno.Forms.Controls.DvValueInput dvValueInput3;
+        private Devinno.Forms.Controls.DvDateTimePicker dvDateTimePicker1;
     }
 }
 

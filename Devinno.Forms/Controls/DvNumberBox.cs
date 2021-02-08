@@ -17,6 +17,10 @@ namespace Devinno.Forms.Controls
 {
     public class DvNumberBox : DvControl
     {
+        #region Const 
+        const int CHKTM = 500;
+        #endregion
+
         #region Properties
         #region ButtonColor
         private Color cButtonColor = DvTheme.DefaultTheme.Color3;
@@ -170,15 +174,17 @@ namespace Devinno.Forms.Controls
                     var tmm = (DateTime.Now - dtMinusDown).TotalMilliseconds;
                     var tmp = (DateTime.Now - dtPlusDown).TotalMilliseconds;
 
-                    if (bMinusDown)
+                    if (bMinusDown && tmm >= CHKTM)
                     {
-                        var delay = (int)MathTool.Constrain(MathTool.Map(tmm, 2000, 500, mininterval, maxinterval), mininterval, maxinterval);
+
+                        var delay = (int)MathTool.Constrain(MathTool.Map(tmm, 2000, CHKTM, mininterval, maxinterval), mininterval, maxinterval);
                         this.Invoke(new Action(() => { Value = MathTool.Constrain(Value - Tick, Minimum, Maximum); }));
                         Thread.Sleep(delay);
                     }
-                    else if (bPlusDown)
+                    else if (bPlusDown && tmp >= CHKTM)
                     {
-                        var delay = (int)MathTool.Constrain(MathTool.Map(tmp, 2000, 500, mininterval, maxinterval), mininterval, maxinterval);
+                    
+                        var delay = (int)MathTool.Constrain(MathTool.Map(tmp, 2000, CHKTM, mininterval, maxinterval), mininterval, maxinterval);
                         this.Invoke(new Action(() => { Value = MathTool.Constrain(Value + Tick, Minimum, Maximum); }));
                         Thread.Sleep(delay);
                     }
@@ -425,13 +431,13 @@ namespace Devinno.Forms.Controls
             if (bMinusDown)
             {
                 bMinusDown = false;
-                if ((DateTime.Now - dtMinusDown).TotalMilliseconds < 500) Value = MathTool.Constrain(Value - Tick, Minimum, Maximum);
+                if ((DateTime.Now - dtMinusDown).TotalMilliseconds < CHKTM) Value = MathTool.Constrain(Value - Tick, Minimum, Maximum);
                 Invalidate();
             }
             if (bPlusDown)
             {
                 bPlusDown = false;
-                if ((DateTime.Now - dtPlusDown).TotalMilliseconds < 500) Value = MathTool.Constrain(Value + Tick, Minimum, Maximum);
+                if ((DateTime.Now - dtPlusDown).TotalMilliseconds < CHKTM) Value = MathTool.Constrain(Value + Tick, Minimum, Maximum);
                 Invalidate();
             }
             if(bValueDown)

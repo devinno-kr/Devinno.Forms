@@ -393,9 +393,9 @@ namespace Devinno.Forms.Controls
             if (bDown)
             {
                 bDown = false;
+                Invalidate();
                 if (Areas.ContainsKey("rtButton") && CollisionTool.Check(Areas["rtButton"], e.Location)) ButtonClick?.Invoke(this, null);
             }
-            Invalidate();
             base.OnMouseUp(e);
         }
         #endregion

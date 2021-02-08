@@ -321,6 +321,14 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region ButtonWidth
+        int nButtonWidth = 60;
+        public int ButtonWidth
+        {
+            get { return nButtonWidth; }
+            set { if (nButtonWidth != value) { nButtonWidth = value; Invalidate(); } }
+        }
+        #endregion
         #endregion
 
         #region Member Variable
@@ -345,6 +353,7 @@ namespace Devinno.Forms.Controls
             OriginalTextBox.Size = new System.Drawing.Size(60, 28);
             OriginalTextBox.BorderStyle = BorderStyle.None;
             OriginalTextBox.TabIndex = 0;
+            OriginalTextBox.TextAlign = HorizontalAlignment.Center;
             Controls.Add(OriginalTextBox);
 
             OriginalTextBox.TextChanged += (o, s) => { TextChange(); };
@@ -388,7 +397,7 @@ namespace Devinno.Forms.Controls
             var rtOff = new Rectangle(rtOn.Right, rtValueAll.Y, rtContent.Right- rtOn.Right, rtValueAll.Height);
             SetArea("rtOff", rtOff);
 
-            var rtIco = new Rectangle(rtValueAll.Right - rtValueAll.Height, rtValueAll.Y, rtValueAll.Height, rtValueAll.Height);
+            var rtIco = new Rectangle(rtValueAll.Right - ButtonWidth, rtValueAll.Y, ButtonWidth, rtValueAll.Height);
             SetArea("rtIco", rtIco);
 
             var rtComboValue = new Rectangle(rtValue.X, rtValue.Y, rtValue.Width - rtIco.Width, rtValue.Height);

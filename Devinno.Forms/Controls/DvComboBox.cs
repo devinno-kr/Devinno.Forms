@@ -76,6 +76,14 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region ButtonWidth
+        int nButtonWidth = 60;
+        public int ButtonWidth
+        {
+            get { return nButtonWidth; }
+            set { if (nButtonWidth != value) { nButtonWidth = value; Invalidate(); } }
+        }
+        #endregion
 
         #region MaximumViewCount
         int nMaximumViewCount = 10;
@@ -181,7 +189,7 @@ namespace Devinno.Forms.Controls
             base.LoadAreas(g);
 
             var rtContent = Areas["rtContent"];
-            var rtIco = new Rectangle(rtContent.Right - rtContent.Height, rtContent.Y, rtContent.Height, rtContent.Height);
+            var rtIco = new Rectangle(rtContent.Right - ButtonWidth, rtContent.Y, ButtonWidth, rtContent.Height);
             var rtBox = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width - rtIco.Width, rtContent.Height);
             var rtText = new Rectangle(rtBox.X + ItemPadding.Left, rtBox.Y + ItemPadding.Top, rtBox.Width - (ItemPadding.Left + ItemPadding.Right), rtBox.Height - (ItemPadding.Top + ItemPadding.Bottom));
 
