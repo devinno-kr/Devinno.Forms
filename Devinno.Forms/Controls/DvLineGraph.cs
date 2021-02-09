@@ -214,12 +214,11 @@ namespace Devinno.Forms.Controls
             scroll.ScrollChanged += (o, s) => Invalidate();
             scroll.GetScrollTotal = () => GraphDatas.Count > 0 && Series.Count > 0 ? GraphDatas.Count * DataW : 0;
             scroll.GetScrollTick = () => ((Series.Count + 2) * GapWidth);
-            scroll.GetScrollView = () => Areas["rtGraph"].Width;
+            scroll.GetScrollView = () => Areas.ContainsKey("rtGraph") ? Areas["rtGraph"].Width : 0;
         }
         #endregion
 
         #region Override
-
         #region OnMouseWheel
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -277,7 +276,9 @@ namespace Devinno.Forms.Controls
             var rtContent = GetContentBounds();
             var f = DpiRatio;
             var GP = Convert.ToInt32(6 * f);
-            var ValueAxisWidth = Convert.ToInt32(Math.Max(g.MeasureString(Minimum.ToString(), Font).Width * 1.5, g.MeasureString(Maximum.ToString(), Font).Width * 1.5));
+            var sMin = string.IsNullOrWhiteSpace(FormatString) ? Minimum.ToString("0") : Minimum.ToString(FormatString);
+            var sMax = string.IsNullOrWhiteSpace(FormatString) ? Maximum.ToString("0") : Maximum.ToString(FormatString);
+            var ValueAxisWidth = Convert.ToInt32(Math.Max(g.MeasureString(sMin, Font).Width * 1.5, g.MeasureString(sMax, Font).Width * 1.5));
             var NameAxisHeight = Convert.ToInt32(GP + (CHSZ.Height * 1.5));
             var RemarkAreaHeight = Convert.ToInt32(GP + (CHSZ.Height * 1.5) + GP);
             var gpTopMargin = Convert.ToInt32(CHSZ.Height) + 2;
@@ -302,10 +303,15 @@ namespace Devinno.Forms.Controls
             else
             {
                 var scwh = Convert.ToInt32(Scroll.SC_WH * f);
-                var rtGraph = new Rectangle(rtGraphAl.Left, rtGraphAl.Top, rtGraphAl.Width, rtGraphAl.Height - scwh);
-                var rtScroll = new Rectangle(rtGraph.Left, rtGraph.Bottom + 2, rtGraph.Width, scwh);
+
+                rtNameAxis = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtRemark.Top - GP - scwh - NameAxisHeight - GP, rtContent.Width - (ValueAxisWidth + GP), NameAxisHeight);
+                rtValueAxis = new Rectangle(rtContent.X, rtContent.Y + gpTopMargin, ValueAxisWidth, rtNameAxis.Top - rtContent.Top - gpTopMargin - GP);
+                rtGraphAl = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtContent.Y + gpTopMargin, rtContent.Width - (ValueAxisWidth + GP), rtValueAxis.Height);
+
+                var rtGraph = new Rectangle(rtGraphAl.Left, rtGraphAl.Top, rtGraphAl.Width, rtGraphAl.Height);
+                var rtScroll = new Rectangle(rtGraph.Left, rtRemark.Top - GP - scwh, rtGraph.Width, scwh);
                 rtValueAxis.Height = rtGraphAl.Height = rtGraph.Height;
-                rtNameAxis.Y += 2;
+
                 SetArea("rtRemark", rtRemark);
                 SetArea("rtNameAxis", rtNameAxis);
                 SetArea("rtValueAxis", rtValueAxis);
@@ -400,7 +406,7 @@ namespace Devinno.Forms.Controls
                     for (var i = Minimum; i <= Maximum; i += Graduation)
                     {
                         var n = i;
-                        var s = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
+                        var s = string.IsNullOrWhiteSpace(FormatString) ? n.ToString("0") : n.ToString(FormatString);
                         var y = Convert.ToInt32(MathTool.Map(n, Minimum, Maximum, rtGraph.Bottom, rtGraph.Top));
                         var sz = e.Graphics.MeasureString(s, Font);
                         var rt = MathTool.MakeRectangle(new Point(0, y), Convert.ToInt32(10), Convert.ToInt32(sz.Height));
@@ -541,7 +547,7 @@ namespace Devinno.Forms.Controls
                     for (var i = Minimum; i <= Maximum; i += Graduation)
                     {
                         var n = i;
-                        var s = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
+                        var s = string.IsNullOrWhiteSpace(FormatString) ? n.ToString("0") : n.ToString(FormatString);
                         var y = Convert.ToInt32(MathTool.Map(n, Minimum, Maximum, rtGraph.Bottom, rtGraph.Top));
                         var sz = e.Graphics.MeasureString(s, Font);
                         var rt = MathTool.MakeRectangle(new Point(0, y), Convert.ToInt32(10), Convert.ToInt32(sz.Height));
@@ -602,8 +608,11 @@ namespace Devinno.Forms.Controls
                         p.Width = 2;
                         p.DashStyle = DashStyle.Solid;
 
-                        p.Color = ser.SeriesColor;
-                        e.Graphics.DrawLines(p, ls.Select(x => x.Position).ToArray());
+                        if (ls.Count >= 2)
+                        {
+                            p.Color = ser.SeriesColor;
+                            e.Graphics.DrawLines(p, ls.Select(x => x.Position).ToArray());
+                        }
 
                         p.Width = 1;
                         if (PointDraw || ValueDraw)
@@ -635,13 +644,15 @@ namespace Devinno.Forms.Controls
                 e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
                 #region Scroll
-                e.Graphics.SetClip(rtScroll);
-                br.Color = Theme.ScrollBarColor;
-                e.Graphics.FillRectangle(br, rtScroll);
+                Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScroll, RoundType.ALL);
+                Theme.DrawBorder(e.Graphics, BackColor.BrightnessTransmit(-Theme.BorderBright), BackColor, 1, rtScroll, RoundType.ALL, BoxDrawOption.BORDER);
+
+                e.Graphics.SetClip(new Rectangle(rtScroll.X + 6, rtScroll.Y + 0, rtScroll.Width - 12, rtScroll.Height - 0));
 
                 var cCur = scroll.IsScrolling ? Theme.ScrollCursorColor.BrightnessTransmit(0.3) : Theme.ScrollCursorColor;
                 var rtcur = scroll.GetScrollCursorRect(rtScroll);
                 if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
+
                 e.Graphics.ResetClip();
                 #endregion
                 #endregion
@@ -690,9 +701,11 @@ namespace Devinno.Forms.Controls
         #endregion
     }
 
+    #region class : LGV
     class LGV
     {
         public Point Position { get; set; }
         public double Value{ get; set; }
     }
+    #endregion
 }

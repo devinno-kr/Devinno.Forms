@@ -355,4 +355,14 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
     }
+
+    #region class : CGV
+    class CGV
+    {
+        public string Name { get; set; }
+        public double Value { get; set; }
+        public Color Color { get; set; }
+    }
+    #endregion
+
 }

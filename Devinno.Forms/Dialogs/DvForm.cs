@@ -736,7 +736,7 @@ namespace Devinno.Forms.Dialogs
             var rtExit = new Rectangle(this.Width - wh, 0, wh, wh);
             var rtMax = new Rectangle(rtExit.X - wh, 0, wh, wh);
             var rtMin = new Rectangle(rtMax.X - wh, 0, wh, wh);
-            var rtTitle = new Rectangle(Padding.Top + 15, 0, Width - (Padding.Top * 4) - 15, Padding.Top);
+            var rtTitle = new Rectangle(Padding.Top + 15, 0, Width - (Padding.Top * (MaximizeBox || MinimizeBox ? 4 : 2)) - 15, Padding.Top);
             var rtTitleBar = new Rectangle(0, 0, this.Width, Padding.Top);
             var rtContent = new Rectangle(Padding.Left, Padding.Top, Width - Padding.Right - Padding.Left, Height - Padding.Bottom - Padding.Top);
             var rtIcon = new Rectangle(0, 0, Padding.Top, Padding.Top);

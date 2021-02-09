@@ -255,8 +255,8 @@ namespace Devinno.Forms.Controls
             scroll.Direction = ScrollDirection.Vertical;
             scroll.ScrollChanged += (o, s) => Invalidate();
             scroll.GetScrollTotal = () => GraphDatas.Count > 0 && Series.Count > 0 ? GraphDatas.Count * DataH : 0;
-            scroll.GetScrollTick = () => (GraphMode == BarGraphMode.LIST ? (Series.Count + 2) * BarSize : 3 * BarSize);
-            scroll.GetScrollView = () => Areas["rtGraph"].Height;
+            scroll.GetScrollTick = () => DataH;
+            scroll.GetScrollView = () => Areas.ContainsKey("rtGraph") ? Areas["rtGraph"].Height : 0;
         }
         #endregion
 
@@ -344,8 +344,8 @@ namespace Devinno.Forms.Controls
             else
             {
                 var scwh = Convert.ToInt32(Scroll.SC_WH * f);
-                var rtGraph = new Rectangle(rtGraphAl.Left, rtGraphAl.Top, rtGraphAl.Width - scwh, rtGraphAl.Height);
-                var rtScroll = new Rectangle(rtGraph.Right, rtGraph.Top, scwh, rtGraph.Height);
+                var rtGraph = new Rectangle(rtGraphAl.Left, rtGraphAl.Top, rtGraphAl.Width - scwh - GP, rtGraphAl.Height);
+                var rtScroll = new Rectangle(rtGraph.Right + GP, rtGraph.Top, scwh, rtGraph.Height);
                 SetArea("rtGraph", rtGraph);
                 SetArea("rtScroll", rtScroll);
             }
@@ -426,7 +426,7 @@ namespace Devinno.Forms.Controls
                     for (var i = Minimum; i <= Maximum; i += Graduation)
                     {
                         var n = i;
-                        var s = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
+                        var s = string.IsNullOrWhiteSpace(FormatString) ? n.ToString("0") : n.ToString(FormatString);
                         var x = Convert.ToInt32(MathTool.Map(n, Minimum, Maximum, rtGraph.Left, rtGraph.Right));
                         var y = rtValueAxis.Top + (rtValueAxis.Height / 2);
                         var sz = e.Graphics.MeasureString(s, Font);
@@ -586,7 +586,7 @@ namespace Devinno.Forms.Controls
                     for (var i = Minimum; i <= Maximum; i += Graduation)
                     {
                         var n = i;
-                        var s = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
+                        var s = string.IsNullOrWhiteSpace(FormatString) ? n.ToString("0") : n.ToString(FormatString);
                         var x = Convert.ToInt32(MathTool.Map(n, Minimum, Maximum, rtGraph.Left, rtGraph.Right));
                         var y = rtValueAxis.Top + (rtValueAxis.Height / 2);
                         var sz = e.Graphics.MeasureString(s, Font);
@@ -643,10 +643,9 @@ namespace Devinno.Forms.Controls
                                         var rtv = new Rectangle(rtGraph.Left, rt.Top + (ic * ih), Convert.ToInt32(w), ih);
                                         var ser = dicSer[vk];
                                         Theme.DrawBox(e.Graphics, ser.SeriesColor, bg, rtv, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | (Gradient ? BoxDrawOption.GRADIENT_V : BoxDrawOption.NONE));
-                                        if (ValueDraw)
+                                        if (ValueDraw && CollisionTool.Check(rtv, rtGraph))
                                         {
-                                            e.Graphics.ResetClip();
-                                            e.Graphics.SetClip(rtv);
+                                            e.Graphics.SetClip(rtv, CombineMode.Intersect);
                                            
                                             var txt = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
                                             Theme.DrawTextShadow(e.Graphics, null, txt, Font, ForeColor, ser.SeriesColor, new Rectangle(rtv.X, rtv.Y, rtv.Width - 5, rtv.Height), DvContentAlignment.MiddleRight);
@@ -684,10 +683,9 @@ namespace Devinno.Forms.Controls
                                         var rtv = new Rectangle(ix, rt.Top, Convert.ToInt32(w), rt.Height);
                                         var ser = dicSer[vk];
                                         Theme.DrawBox(e.Graphics, ser.SeriesColor, bg, rtv, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | (Gradient ? BoxDrawOption.GRADIENT_V : BoxDrawOption.NONE));
-                                        if (ValueDraw)
+                                        if (ValueDraw && CollisionTool.Check(rtv, rtGraph))
                                         {
-                                            e.Graphics.ResetClip();
-                                            e.Graphics.SetClip(rtv);
+                                            e.Graphics.SetClip(rtv, CombineMode.Intersect);
 
                                             var txt = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
                                             var sz = e.Graphics.MeasureString(txt, Font);
@@ -709,13 +707,15 @@ namespace Devinno.Forms.Controls
                 e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
                 #region Scroll
-                e.Graphics.SetClip(rtScroll);
-                br.Color = Theme.ScrollBarColor;
-                e.Graphics.FillRectangle(br, rtScroll);
+                Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScroll, RoundType.ALL);
+                Theme.DrawBorder(e.Graphics, BackColor.BrightnessTransmit(-Theme.BorderBright), BackColor, 1, rtScroll, RoundType.ALL, BoxDrawOption.BORDER);
+
+                e.Graphics.SetClip(new Rectangle(rtScroll.X + 0, rtScroll.Y + 6, rtScroll.Width - 0, rtScroll.Height - 12));
 
                 var cCur = scroll.IsScrolling ? Theme.ScrollCursorColor.BrightnessTransmit(0.3) : Theme.ScrollCursorColor;
                 var rtcur = scroll.GetScrollCursorRect(rtScroll);
                 if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
+
                 e.Graphics.ResetClip();
                 #endregion
                 #endregion

@@ -15,24 +15,12 @@ namespace Devinno.Forms
         public string Name { get; set; }
         public string Alias { get; set; }
         public Color SeriesColor { get; set; }
-        public bool Visible { get; set; } = true;
     }
 
     public abstract class GraphData
     {
         public abstract string Name { get; set; }
         public Color Color { get; set; }
-    }
-
-    public abstract class TimeGraphData
-    {
-        public abstract DateTime Time { get; set; }
-    }
-
-    class TGV
-    {
-        public DateTime Time { get; set; }
-        public Dictionary<string, double> Values { get; } = new Dictionary<string, double>();
     }
 
     class GV
@@ -53,10 +41,22 @@ namespace Devinno.Forms
         internal GraphData Data { get; set; }
     }
 
-    class CGV
+    public class GraphSeries2 : GraphSeries
     {
-        public string Name { get; set; }
-        public double Value { get; set; }
-        public Color Color { get; set; }
+        public double Minimum { get; set; }
+        public double Maximum { get; set; }
+        public bool Visible { get; set; } = true;
     }
+
+    public abstract class TimeGraphData
+    {
+        public abstract DateTime Time { get; set; }
+    }
+
+    class TGV
+    {
+        public DateTime Time { get; set; }
+        public Dictionary<string, double> Values { get; } = new Dictionary<string, double>();
+    }
+
 }
