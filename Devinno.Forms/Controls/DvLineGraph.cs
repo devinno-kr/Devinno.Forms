@@ -1,5 +1,4 @@
 ﻿using Devinno.Extensions;
-using Devinno.Forms.Extensions;
 using Devinno.Forms.Themes;
 using Devinno.Forms.Tools;
 using Devinno.Tools;
@@ -15,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Devinno.Forms.Controls
 {
-    public class DvBarGraphV : DvControl
+    public class DvLineGraph : DvControl
     {
         #region Properties
         #region GraphBackColor
@@ -139,23 +138,23 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-
-        #region GraphMode
-        private BarGraphMode eGraphMode = BarGraphMode.LIST;
-        [Category("- 동작")]
-        public BarGraphMode GraphMode
+        #region PointDraw
+        private bool bPointDraw = false;
+        [Category("- 모양")]
+        public bool PointDraw
         {
-            get => eGraphMode;
+            get => bPointDraw;
             set
             {
-                if (eGraphMode != value)
+                if (bPointDraw != value)
                 {
-                    eGraphMode = value;
+                    bPointDraw = value;
                     Invalidate();
                 }
             }
         }
         #endregion
+
         #region Scrollable
         private bool bScrollable = false;
         public bool Scrollable
@@ -186,53 +185,12 @@ namespace Devinno.Forms.Controls
         }
         #endregion
 
-        #region Gradient
-        private bool bGradient = false;
-        public bool Gradient
-        {
-            get => bGradient;
-            set
-            {
-                if (bGradient != value)
-                {
-                    bGradient = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
-        #region BarSize
-        private int nBarSize = 48;
-        public int BarSize
-        {
-            get => nBarSize;
-            set
-            {
-                if (nBarSize != value)
-                {
-                    nBarSize = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
-        #region BarGap
-        private int nBarGap = 8;
-        public int BarGap
-        {
-            get => nBarGap;
-            set
-            {
-                if (nBarGap != value)
-                {
-                    nBarGap = value;
-                    Invalidate();
-                }
-            }
-        }
+        #region GapWidth
+        public int GapWidth { get; set; } = 80;
         #endregion
 
-        private int DataW => GraphMode == BarGraphMode.LIST ? (Series.Count * BarSize) + (BarGap * 2) : BarSize + (BarGap * 2);
+        private int DataW => GapWidth;
+
         #endregion
 
         #region Member Variable
@@ -241,7 +199,7 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Constructor
-        public DvBarGraphV()
+        public DvLineGraph()
         {
             #region SetStyle : Selectable
             SetStyle(ControlStyles.Selectable, true);
@@ -255,12 +213,13 @@ namespace Devinno.Forms.Controls
             scroll.Direction = ScrollDirection.Horizon;
             scroll.ScrollChanged += (o, s) => Invalidate();
             scroll.GetScrollTotal = () => GraphDatas.Count > 0 && Series.Count > 0 ? GraphDatas.Count * DataW : 0;
-            scroll.GetScrollTick = () => (GraphMode == BarGraphMode.LIST ? (Series.Count + 2) * BarSize : 3 * BarSize);
+            scroll.GetScrollTick = () => ((Series.Count + 2) * GapWidth);
             scroll.GetScrollView = () => Areas["rtGraph"].Width;
         }
         #endregion
 
         #region Override
+
         #region OnMouseWheel
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -314,18 +273,6 @@ namespace Devinno.Forms.Controls
         {
             base.LoadAreas(g);
 
-            #region Min/Max
-            var Minimum = this.Minimum;
-            var Maximum = this.Maximum;
-            if (GraphDatas.Count > 0)
-            {
-                var rMinimum = GraphMode == BarGraphMode.LIST ? GraphDatas.Select(x => x.Values.Min(x2 => x2.Value)).Min() : GraphDatas.Select(x => x.Values.Sum(x2 => x2.Value)).Min();
-                var rMaximum = GraphMode == BarGraphMode.LIST ? GraphDatas.Select(x => x.Values.Max(x2 => x2.Value)).Max() : GraphDatas.Select(x => x.Values.Sum(x2 => x2.Value)).Max();
-                Minimum = Math.Min(this.Minimum, rMinimum);
-                Maximum = Math.Max(this.Maximum, Math.Ceiling(rMaximum / Graduation) * Graduation);
-            }
-            #endregion
-
             var CHSZ = g.MeasureString("H", Font);
             var rtContent = GetContentBounds();
             var f = DpiRatio;
@@ -333,14 +280,14 @@ namespace Devinno.Forms.Controls
             var ValueAxisWidth = Convert.ToInt32(Math.Max(g.MeasureString(Minimum.ToString(), Font).Width * 1.5, g.MeasureString(Maximum.ToString(), Font).Width * 1.5));
             var NameAxisHeight = Convert.ToInt32(GP + (CHSZ.Height * 1.5));
             var RemarkAreaHeight = Convert.ToInt32(GP + (CHSZ.Height * 1.5) + GP);
-            var gpTopMargin = Convert.ToInt32(CHSZ.Height / 2);
-            var rtRemark = new Rectangle(rtContent.X + ValueAxisWidth + GP,     rtContent.Bottom - RemarkAreaHeight,    rtContent.Width - (ValueAxisWidth + GP),    RemarkAreaHeight);
-            var rtNameAxis = new Rectangle(rtContent.X + ValueAxisWidth + GP,   rtRemark.Top - GP - NameAxisHeight ,    rtContent.Width - (ValueAxisWidth + GP),    NameAxisHeight);
+            var gpTopMargin = Convert.ToInt32(CHSZ.Height) + 2;
+            var rtRemark = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtContent.Bottom - RemarkAreaHeight, rtContent.Width - (ValueAxisWidth + GP), RemarkAreaHeight);
+            var rtNameAxis = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtRemark.Top - GP - NameAxisHeight, rtContent.Width - (ValueAxisWidth + GP), NameAxisHeight);
             var rtValueAxis = new Rectangle(rtContent.X, rtContent.Y + gpTopMargin, ValueAxisWidth, rtNameAxis.Top - rtContent.Top - gpTopMargin);
-            var rtGraphAl = new Rectangle(rtContent.X + ValueAxisWidth + GP,    rtContent.Y + gpTopMargin,              rtContent.Width - (ValueAxisWidth + GP),    rtValueAxis.Height);
+            var rtGraphAl = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtContent.Y + gpTopMargin, rtContent.Width - (ValueAxisWidth + GP), rtValueAxis.Height);
 
             SetArea("rtCHSZ", new Rectangle(0, 0, Convert.ToInt32(Math.Ceiling(CHSZ.Width)), Convert.ToInt32(Math.Ceiling(CHSZ.Height))));
-           
+
             if (!Scrollable)
             {
                 var rtGraph = rtGraphAl;
@@ -350,7 +297,7 @@ namespace Devinno.Forms.Controls
                 SetArea("rtGraphAl", rtGraphAl);
                 SetArea("rtGP", new Rectangle(0, 0, GP, GP));
                 SetArea("rtGraph", rtGraph);
-                if (Areas.ContainsKey("rtScroll")) Areas.Remove("rtScroll");
+                SetArea("rtScroll", new Rectangle(0, 0, 0, 0));
             }
             else
             {
@@ -414,8 +361,8 @@ namespace Devinno.Forms.Controls
                 var Maximum = this.Maximum;
                 if (GraphDatas.Count > 0)
                 {
-                    var rMinimum = GraphMode == BarGraphMode.LIST ? GraphDatas.Select(x => x.Values.Min(x2 => x2.Value)).Min() : GraphDatas.Select(x => x.Values.Sum(x2 => x2.Value)).Min();
-                    var rMaximum = GraphMode == BarGraphMode.LIST ? GraphDatas.Select(x => x.Values.Max(x2 => x2.Value)).Max() : GraphDatas.Select(x => x.Values.Sum(x2 => x2.Value)).Max();
+                    var rMinimum = GraphDatas.Select(x => x.Values.Min(x2 => x2.Value)).Min();
+                    var rMaximum = GraphDatas.Select(x => x.Values.Max(x2 => x2.Value)).Max();
                     Minimum = Math.Min(this.Minimum, rMinimum);
                     Maximum = Math.Max(this.Maximum, Math.Ceiling(rMaximum / Graduation) * Graduation);
                 }
@@ -424,7 +371,7 @@ namespace Devinno.Forms.Controls
                 if (Series.Count > 0)
                 {
                     var ls = Series.Select(x => e.Graphics.MeasureString(x.Alias, Font)).ToList();
-                    var RemarkW = (GP * 2) + ls.Sum(x => Convert.ToInt32(10 * f) + Convert.ToInt32(5 * f) + Convert.ToInt32(x.Width) + (GP * 2) +2);
+                    var RemarkW = (GP * 2) + ls.Sum(x => Convert.ToInt32(10 * f) + Convert.ToInt32(5 * f) + Convert.ToInt32(x.Width) + (GP * 2) + 2);
                     var rtRemarkBox = DrawingTool.MakeRectangleAlign(rtRemark, new Size(RemarkW, rtRemark.Height), DvContentAlignment.MiddleCenter);
                     Theme.DrawBox(e.Graphics, BackColor.BrightnessTransmit(0.2), BackColor, rtRemarkBox, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW);
 
@@ -438,7 +385,7 @@ namespace Devinno.Forms.Controls
                         var rtBR = DrawingTool.MakeRectangleAlign(new Rectangle(ix, rtRemarkBox.Top, nwbr, rtRemarkBox.Height), new Size(nwbr, nwgp), DvContentAlignment.MiddleCenter);
                         ix += rtBR.Width;
                         ix += nwgp;
-                        var rtTX = new Rectangle(ix, rtRemarkBox.Y, Convert.ToInt32(ls[i].Width)+2, rtRemarkBox.Height);
+                        var rtTX = new Rectangle(ix, rtRemarkBox.Y, Convert.ToInt32(ls[i].Width + 2), rtRemarkBox.Height);
                         ix += rtTX.Width;
                         ix += GP * 2;
 
@@ -456,8 +403,8 @@ namespace Devinno.Forms.Controls
                         var s = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
                         var y = Convert.ToInt32(MathTool.Map(n, Minimum, Maximum, rtGraph.Bottom, rtGraph.Top));
                         var sz = e.Graphics.MeasureString(s, Font);
-                        var rt = MathTool.MakeRectangle(new Point(0, y), Convert.ToInt32(10), Convert.ToInt32(sz.Height)); 
-                        rt.X = rtValueAxis.Left;    rt.Width = rtValueAxis.Width;
+                        var rt = MathTool.MakeRectangle(new Point(0, y), Convert.ToInt32(10), Convert.ToInt32(sz.Height));
+                        rt.X = rtValueAxis.Left; rt.Width = rtValueAxis.Width;
                         Theme.DrawText(e.Graphics, null, s, Font, GridColor, rt, DvContentAlignment.MiddleRight);
 
                         if (n == Minimum) { p.Color = GridColor; p.Width = 2; p.DashStyle = DashStyle.Solid; e.Graphics.DrawLine(p, rtGraph.Left, y + 2, rtGraph.Right, y + 2); }
@@ -484,81 +431,53 @@ namespace Devinno.Forms.Controls
                 if (Series.Count > 0 && GraphDatas.Count > 0)
                 {
                     var dicSer = Series.ToDictionary(x => x.Name);
-                    if (GraphMode == BarGraphMode.LIST)
+                    var DataW = (float)rtNameAxis.Width / (float)GraphDatas.Count;
+
+                    e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+
+                    foreach (var vk in dicSer.Keys)
                     {
-                        #region List
-                        var DataW = (float)rtNameAxis.Width / (float)GraphDatas.Count;
+                        var ser = dicSer[vk];
+
+                        var ls = new List<LGV>();
 
                         for (int i = 0; i < GraphDatas.Count; i++)
                         {
                             var itm = GraphDatas[i];
-                            var rt = new Rectangle(rtGraph.Left + Convert.ToInt32(DataW * i), rtGraph.Top, Convert.ToInt32(DataW), rtGraph.Height);
-                            rt.Inflate(-BarGap, 0);
-                            var iw = Math.Min(this.BarSize, Convert.ToInt32((double)rt.Width / (double)Series.Count));
-                            var ic = 0;
-
-                            var lgp = (rt.Width - (iw * Series.Count)) / 2;
-                            foreach (var vk in itm.Values.Keys)
-                            {
-                                if (dicSer.ContainsKey(vk))
-                                {
-                                    var n = itm.Values[vk];
-                                    var h = MathTool.Map(n, Minimum, Maximum, 0, rtGraph.Height);
-                                    var rtv = new Rectangle(lgp+rt.Left + (ic * iw), rtGraph.Bottom - Convert.ToInt32(h), iw, Convert.ToInt32(h));
-
-                                    var ser = dicSer[vk];
-                                    Theme.DrawBox(e.Graphics, ser.SeriesColor, bg, rtv, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | (Gradient ? BoxDrawOption.GRADIENT_H : BoxDrawOption.NONE));
-
-                                    if (ValueDraw)
-                                    {
-                                        e.Graphics.SetClip(rtv);
-                                        br.Color = ForeColor;
-                                        var txt = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
-                                        e.Graphics.DrawText(txt, Font, br, new Rectangle(rtv.X, rtv.Y + 5, rtv.Width, rtv.Height), DvContentAlignment.TopCenter);
-                                        e.Graphics.ResetClip();
-                                    }
-                                }
-                                ic++;
-                            }
+                            var x = rtGraph.Left + Convert.ToInt32(DataW * i) + Convert.ToInt32(DataW / 2);
+                            var y = Convert.ToInt32(MathTool.Map(itm.Values[vk], Minimum, Maximum, rtGraph.Bottom, rtGraph.Top));
+                            ls.Add(new LGV() { Position = new Point(x, y), Value = itm.Values[vk] });
                         }
-                        #endregion
-                    }
-                    else if (GraphMode == BarGraphMode.STACK)
-                    {
-                        #region Stack
-                        var DataW = (float)rtNameAxis.Width / (float)GraphDatas.Count;
-                        for (int i = 0; i < GraphDatas.Count; i++)
+
+                        p.Width = 2;
+                        p.DashStyle = DashStyle.Solid;
+
+                        p.Color = ser.SeriesColor;
+                        e.Graphics.DrawLines(p, ls.Select(x => x.Position).ToArray());
+
+                        if (PointDraw || ValueDraw)
                         {
-                            var itm = GraphDatas[i];
-                            var rt = new Rectangle(rtGraph.Left + Convert.ToInt32(DataW * i), rtGraph.Top, Convert.ToInt32(DataW), rtGraph.Height);
-                            rt.Inflate(-BarGap, 0);
-                            var iy = rt.Bottom;
-                            var BarSize = Math.Min(this.BarSize, rt.Width);
-                            foreach (var vk in itm.Values.Keys)
+                            foreach (var v in ls)
                             {
-                                if (dicSer.ContainsKey(vk))
+                                var s = string.IsNullOrWhiteSpace(FormatString) ? v.Value.ToString() : v.Value.ToString(FormatString);
+                                var sz = e.Graphics.MeasureString(s, Font);
+                                var rt = MathTool.MakeRectangle(v.Position, 10);
+                                var rtIN = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtIN.Inflate(-2, -2);
+                                var rtTxt = MathTool.MakeRectangle(v.Position, Convert.ToInt32(sz.Width) + 2, Convert.ToInt32(sz.Height) + 2); rtTxt.Offset(0, -Convert.ToInt32(sz.Height / 2 + 3));
+                                if (PointDraw)
                                 {
-                                    var n = itm.Values[vk];
-                                    var h = MathTool.Map(n, Minimum, Maximum, 0, rtGraph.Height);
-                                    var rtb = new Rectangle(rt.X, iy - Convert.ToInt32(h), rt.Width, Convert.ToInt32(h));
-                                    var rtv = new Rectangle(rt.X + (rt.Width / 2) - (BarSize / 2), iy - Convert.ToInt32(h), BarSize, Convert.ToInt32(h));
+                                    br.Color = ser.SeriesColor;
+                                    e.Graphics.FillEllipse(br, rt);
 
-                                    var ser = dicSer[vk];
-                                    Theme.DrawBox(e.Graphics, ser.SeriesColor, bg, rtv, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | (Gradient ? BoxDrawOption.GRADIENT_H : BoxDrawOption.NONE));
-                                    if (ValueDraw)
-                                    {
-                                        e.Graphics.SetClip(rtv);
-                                        br.Color = ForeColor;
-                                        var txt = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
-                                        e.Graphics.DrawText(txt, Font, br, new RectangleF(rtv.X, rtv.Y + 5, rtv.Width, rtv.Height), DvContentAlignment.TopCenter);
-                                        e.Graphics.ResetClip();
-                                    }
-                                    iy = rtv.Top;
+                                    br.Color = BackColor;
+                                    e.Graphics.FillEllipse(br, rtIN);
                                 }
+                                if (ValueDraw) Theme.DrawTextShadow(e.Graphics, null, s, Font, ser.SeriesColor.BrightnessTransmit(-Theme.BorderBright), BackColor, rtTxt);
                             }
                         }
-                        #endregion
                     }
+
+                    e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
                 }
                 #endregion
                 e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
@@ -583,8 +502,8 @@ namespace Devinno.Forms.Controls
                 var Maximum = this.Maximum;
                 if (GraphDatas.Count > 0)
                 {
-                    var rMinimum = GraphMode == BarGraphMode.LIST ? GraphDatas.Select(x => x.Values.Min(x2 => x2.Value)).Min() : GraphDatas.Select(x => x.Values.Sum(x2 => x2.Value)).Min();
-                    var rMaximum = GraphMode == BarGraphMode.LIST ? GraphDatas.Select(x => x.Values.Max(x2 => x2.Value)).Max() : GraphDatas.Select(x => x.Values.Sum(x2 => x2.Value)).Max();
+                    var rMinimum = GraphDatas.Select(x => x.Values.Min(x2 => x2.Value)).Min();
+                    var rMaximum = GraphDatas.Select(x => x.Values.Max(x2 => x2.Value)).Max();
                     Minimum = Math.Min(this.Minimum, rMinimum);
                     Maximum = Math.Max(this.Maximum, Math.Ceiling(rMaximum / Graduation) * Graduation);
                 }
@@ -607,7 +526,7 @@ namespace Devinno.Forms.Controls
                         var rtBR = DrawingTool.MakeRectangleAlign(new Rectangle(ix, rtRemarkBox.Top, nwbr, rtRemarkBox.Height), new Size(nwbr, nwgp), DvContentAlignment.MiddleCenter);
                         ix += rtBR.Width;
                         ix += nwgp;
-                        var rtTX = new Rectangle(ix, rtRemarkBox.Y, Convert.ToInt32(ls[i].Width)+2, rtRemarkBox.Height);
+                        var rtTX = new Rectangle(ix, rtRemarkBox.Y, Convert.ToInt32(ls[i].Width) +2, rtRemarkBox.Height);
                         ix += rtTX.Width;
                         ix += GP * 2;
 
@@ -656,95 +575,61 @@ namespace Devinno.Forms.Controls
                 #region Data
                 if (Series.Count > 0 && GraphDatas.Count > 0)
                 {
-                    e.Graphics.SetClip(rtGraph);
-
                     var dicSer = Series.ToDictionary(x => x.Name);
-                    if (GraphMode == BarGraphMode.LIST)
+
+                    e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+                    e.Graphics.SetClip(new Rectangle(rtGraph.Left, rtContent.Top, rtGraph.Width, rtGraph.Bottom - rtContent.Top));
+                    foreach (var vk in dicSer.Keys)
                     {
-                        #region List
-                        for (int i = 0; i < GraphDatas.Count; i++)
+                        var ser = dicSer[vk];
+
+                        var ls = new List<LGV>();
+
+                        var sc = scroll.ScrollPosition;
+                        var posoff = scroll.ScrollPositionWithOffset;
+                        var si = Convert.ToInt32(Math.Floor((double)(sc - scroll.TouchOffset) / (double)DataW));
+                        var cnt = Convert.ToInt32(Math.Ceiling((double)(rtGraph.Width - Math.Min(0, scroll.TouchOffset)) / (double)DataW));
+                        var ei = si + cnt;
+
+                        for (int i = Math.Max(0, si - 1); i < ei + 1 && i < GraphDatas.Count; i++)
                         {
                             var itm = GraphDatas[i];
-                            var rt = new Rectangle(scroll.ScrollPositionWithOffset + rtGraph.Left + Convert.ToInt32(DataW * i), rtGraph.Top, Convert.ToInt32(DataW), rtGraph.Height);
-                            rt.Inflate(-BarGap, 0);
-
-                            if (CollisionTool.Check(rt, rtGraph))
-                            {
-                                var iw = Convert.ToInt32((double)rt.Width / (double)Series.Count);
-                                var ic = 0;
-                                foreach (var vk in itm.Values.Keys)
-                                {
-                                    if (dicSer.ContainsKey(vk))
-                                    {
-                                        var n = itm.Values[vk];
-                                        var h = MathTool.Map(n, Minimum, Maximum, 0, rtGraph.Height);
-                                        var rtv = new Rectangle(rt.Left + (ic * iw), rtGraph.Bottom - Convert.ToInt32(h), iw, Convert.ToInt32(h));
-                                        var ser = dicSer[vk];
-                                        Theme.DrawBox(e.Graphics, ser.SeriesColor, bg, rtv, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | (Gradient ? BoxDrawOption.GRADIENT_H : BoxDrawOption.NONE));
-
-                                        if (ValueDraw)
-                                        {
-                                            e.Graphics.ResetClip();
-                                            e.Graphics.SetClip(rtv);
-
-                                            br.Color = ForeColor;
-                                            var txt = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
-                                            e.Graphics.DrawText(txt, Font, br, new Rectangle(rtv.X, rtv.Y + 5, rtv.Width, rtv.Height), DvContentAlignment.TopCenter);
-
-                                            e.Graphics.ResetClip();
-                                            e.Graphics.SetClip(rtGraph);
-                                        }
-                                    }
-                                    ic++;
-                                }
-                            }
+                            var x = scroll.ScrollPositionWithOffset + rtGraph.Left + Convert.ToInt32(DataW * i) + Convert.ToInt32(DataW / 2);
+                            var y = Convert.ToInt32(MathTool.Map(itm.Values[vk], Minimum, Maximum, rtGraph.Bottom, rtGraph.Top));
+                            ls.Add(new LGV() { Position = new Point(x, y), Value = itm.Values[vk] });
                         }
-                        #endregion
-                    }
-                    else if (GraphMode == BarGraphMode.STACK)
-                    {
-                        #region Stack
-                        for (int i = 0; i < GraphDatas.Count; i++)
+
+                        p.Width = 2;
+                        p.DashStyle = DashStyle.Solid;
+
+                        p.Color = ser.SeriesColor;
+                        e.Graphics.DrawLines(p, ls.Select(x => x.Position).ToArray());
+
+                        p.Width = 1;
+                        if (PointDraw || ValueDraw)
                         {
-                            var itm = GraphDatas[i];
-                            var rt = new Rectangle(scroll.ScrollPositionWithOffset + rtGraph.Left + Convert.ToInt32(DataW * i), rtGraph.Top, Convert.ToInt32(DataW), rtGraph.Height);
-                            rt.Inflate(-BarGap, 0);
-                            if (CollisionTool.Check(rt, rtGraph))
+                            foreach (var v in ls)
                             {
-                                var iy = rt.Bottom;
-                                foreach (var vk in itm.Values.Keys)
+                                var s = string.IsNullOrWhiteSpace(FormatString) ? v.Value.ToString() : v.Value.ToString(FormatString);
+                                var sz = e.Graphics.MeasureString(s, Font);
+                                var rt = MathTool.MakeRectangle(v.Position, 10);
+                                var rtIN = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtIN.Inflate(-2, -2);
+                                var rtTxt = MathTool.MakeRectangle(v.Position, Convert.ToInt32(sz.Width) + 2, Convert.ToInt32(sz.Height) + 2); rtTxt.Offset(0, -Convert.ToInt32(sz.Height / 2 + 5));
+
+                                if (PointDraw)
                                 {
-                                    if (dicSer.ContainsKey(vk))
-                                    {
-                                        var n = itm.Values[vk];
-                                        var h = MathTool.Map(n, Minimum, Maximum, 0, rtGraph.Height);
-                                        var rtv = new Rectangle(rt.X, iy - Convert.ToInt32(h), rt.Width, Convert.ToInt32(h));
-                                        var ser = dicSer[vk];
-                                        Theme.DrawBox(e.Graphics, ser.SeriesColor, bg, rtv, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | (Gradient ? BoxDrawOption.GRADIENT_H : BoxDrawOption.NONE));
-                                        if (ValueDraw)
-                                        {
-                                            if (n > 0)
-                                            {
-                                                e.Graphics.ResetClip();
-                                                e.Graphics.SetClip(rtv);
+                                    br.Color = ser.SeriesColor;
+                                    e.Graphics.FillEllipse(br, rt);
 
-                                                br.Color = ForeColor;
-                                                var txt = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
-                                                e.Graphics.DrawText(txt, Font, br, new RectangleF(rtv.X, rtv.Y+5, rtv.Width, rtv.Height), DvContentAlignment.TopCenter);
-
-                                                e.Graphics.ResetClip();
-                                                e.Graphics.SetClip(rtGraph);
-                                            }
-                                        }
-                                        iy = rtv.Top;
-                                    }
+                                    p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
+                                    e.Graphics.DrawEllipse(p, rt);
                                 }
+                                if (ValueDraw) Theme.DrawTextShadow(e.Graphics, null, s, Font, ser.SeriesColor.BrightnessTransmit(-Theme.BorderBright), BackColor, rtTxt);
                             }
                         }
-                        #endregion
                     }
-
                     e.Graphics.ResetClip();
+                    e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
                 }
                 #endregion
                 e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
@@ -803,5 +688,11 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #endregion
+    }
+
+    class LGV
+    {
+        public Point Position { get; set; }
+        public double Value{ get; set; }
     }
 }

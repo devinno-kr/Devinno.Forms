@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,7 +39,18 @@ namespace Devinno.Forms
     {
         public string Name { get; set; }
         public Color Color { get; set; }
-        public Dictionary<string, double> Values { get; } = new Dictionary<string, double>();
+        public Dictionary<string, double> Values
+        {
+            get
+            {
+                var ret = new Dictionary<string, double>();
+                foreach (var vk in Props.Keys) ret.Add(vk, Convert.ToDouble(Props[vk].GetValue(Data)));
+                return ret;
+            }
+        }
+
+        internal Dictionary<string, PropertyInfo> Props { get; set; }
+        internal GraphData Data { get; set; }
     }
 
     class CGV

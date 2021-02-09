@@ -28,7 +28,6 @@ namespace Devinno.Forms
         (DvContentView)
         (DvContentGrid)
        
-        DvLineGraph
         DvTimeGraph
         DvTrendGraph
 

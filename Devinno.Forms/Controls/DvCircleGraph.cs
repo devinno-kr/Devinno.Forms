@@ -227,7 +227,7 @@ namespace Devinno.Forms.Controls
                                             var sz = e.Graphics.MeasureString(str, ft);
                                             var nsz = Math.Max(Convert.ToInt32(sz.Width), Convert.ToInt32(sz.Height));
                                             var rtt = MathTool.MakeRectangle(new Point(Convert.ToInt32(mcp.X), Convert.ToInt32(mcp.Y)), nsz, nsz); rtt.Inflate(1, 1);
-                                            Theme.DrawTextShadow(e.Graphics, null, str, ft, ForeColor, BackColor, rtt, DvContentAlignment.MiddleCenter);
+                                            Theme.DrawTextShadow(e.Graphics, null, str, ft, v.Color, BackColor, rtt, DvContentAlignment.MiddleCenter);
                                             #endregion
 
                                             startAngle += sweepAngle;
@@ -343,11 +343,8 @@ namespace Devinno.Forms.Controls
                     GraphDatas.Clear();
 
                     foreach (var v in values)
-                    {
-                        var r = new GV() { Name = v.Name, Color = v.Color };
-                        foreach (var sv in Series) r.Values.Add(sv.Name, Convert.ToDouble(dic[sv.Name].GetValue(v)));
-                        GraphDatas.Add(r);
-                    }
+                        GraphDatas.Add(new GV() { Name = v.Name, Props = dic, Data = v, Color = v.Color });
+
                     nSelectedIndex = 0;
                     Invalidate();
                 }
