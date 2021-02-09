@@ -127,6 +127,15 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+
+        #region XAxisGridDraw
+        bool bXAxisGridDraw = false;
+        public bool XAxisGridDraw { get => bXAxisGridDraw; set { if (bXAxisGridDraw != value) { bXAxisGridDraw = value; Invalidate(); } } }
+        #endregion
+        #region YAxisGridDraw
+        bool bYAxisGridDraw = true;
+        public bool YAxisGridDraw { get => bYAxisGridDraw; set { if (bYAxisGridDraw != value) { bYAxisGridDraw = value; Invalidate(); } } }
+        #endregion
         #endregion
 
         #region Member Variable
@@ -234,7 +243,7 @@ namespace Devinno.Forms.Controls
             var sz = g.MeasureString(sval, Font);
 
             var rtContent = Areas["rtContent"];
-            var rtRemark = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtContent.Bottom - RemarkAreaHeight, rtContent.Width - (ValueAxisWidth + GP), RemarkAreaHeight);
+            var rtRemark = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtContent.Bottom - RemarkAreaHeight, rtContent.Width - (ValueAxisWidth + GP) - Convert.ToInt32(sz.Width / 2), RemarkAreaHeight);
             var rtNameAxis = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtRemark.Top - GP - scwh - NameAxisHeight - GP, rtContent.Width - (ValueAxisWidth + GP), NameAxisHeight);
             var rtValueAxis = new Rectangle(rtContent.X, rtContent.Y + gpTopMargin, ValueAxisWidth, rtNameAxis.Top - rtContent.Top - gpTopMargin - GP);
             var rtGraphAl = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtContent.Y + gpTopMargin, rtContent.Width - (ValueAxisWidth + GP), rtValueAxis.Height);
@@ -326,7 +335,7 @@ namespace Devinno.Forms.Controls
                     
                     if (i == 0) { p.Color = GridColor; p.Width = 2; p.DashStyle = DashStyle.Solid; e.Graphics.DrawLine(p, rtGraph.Left, y + 2, rtGraph.Right, y + 2); }
                     else if (i == YAxisGraduationCount) { p.Color = GridColor; p.Width = 1; p.DashStyle = DashStyle.Solid; e.Graphics.DrawLine(p, rtGraph.Left, y, rtGraph.Right, y); }
-                    else { p.Color = GridColor; p.Width = 1; p.DashStyle = DashStyle.Dot; e.Graphics.DrawLine(p, rtGraph.Left, y, rtGraph.Right, y); }
+                    else if(YAxisGridDraw) { p.Color = GridColor; p.Width = 1; p.DashStyle = DashStyle.Dot; e.Graphics.DrawLine(p, rtGraph.Left, y, rtGraph.Right, y); }
 
                     foreach(var ser in Series)
                     {
@@ -364,7 +373,7 @@ namespace Devinno.Forms.Controls
                     p.Color = GridColor; p.Width = 1; p.DashStyle = DashStyle.Dot;
                     if (x >= rtGraph.Left && x <= rtGraph.Right)
                     {
-                        if (x > rtGraph.Left && x < rtGraph.Right) e.Graphics.DrawLine(p, x, rtGraph.Top, x, rtGraph.Bottom);
+                        if ( XAxisGridDraw && x > rtGraph.Left && x < rtGraph.Right) e.Graphics.DrawLine(p, x, rtGraph.Top, x, rtGraph.Bottom);
 
                         var sval = i.ToString("yyyy.MM.dd\r\nHH:mm:ss");
                         var sz = e.Graphics.MeasureString(sval, Font);
