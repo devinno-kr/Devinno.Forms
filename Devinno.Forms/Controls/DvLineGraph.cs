@@ -259,7 +259,7 @@ namespace Devinno.Forms.Controls
         {
             if (Scrollable && Areas.ContainsKey("rtScroll") && Areas.ContainsKey("rtGraph"))
             {
-                scroll.MouseUP(e);
+                scroll.MouseUp(e);
                 if (scroll.TouchMode && CollisionTool.Check(Areas["rtGraph"], e.Location)) scroll.TouchUp(e);
             }
             Invalidate();
@@ -494,7 +494,7 @@ namespace Devinno.Forms.Controls
                 #region Draw
                 var rtScroll = Areas["rtScroll"];
                 var DataW = this.DataW;
-
+                var spos = Convert.ToInt32(scroll.ScrollPositionWithOffset);
                 e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
                 #region GraphBG
                 if (GraphBackColor != Color.Transparent)
@@ -570,7 +570,7 @@ namespace Devinno.Forms.Controls
                     for (int i = 0; i < GraphDatas.Count; i++)
                     {
                         var itm = GraphDatas[i];
-                        var rt = new Rectangle(scroll.ScrollPositionWithOffset + rtNameAxis.Left + Convert.ToInt32(DataW * i), rtNameAxis.Top, Convert.ToInt32(DataW), rtNameAxis.Height);
+                        var rt = new Rectangle(spos + rtNameAxis.Left + Convert.ToInt32(DataW * i), rtNameAxis.Top, Convert.ToInt32(DataW), rtNameAxis.Height);
                         if (CollisionTool.Check(rt, rtNameAxis))
                             Theme.DrawTextShadow(e.Graphics, null, itm.Name, Font, GridColor, BackColor, rt, DvContentAlignment.MiddleCenter);
                     }
@@ -592,7 +592,6 @@ namespace Devinno.Forms.Controls
                         var ls = new List<LGV>();
 
                         var sc = scroll.ScrollPosition;
-                        var posoff = scroll.ScrollPositionWithOffset;
                         var si = Convert.ToInt32(Math.Floor((double)(sc - scroll.TouchOffset) / (double)DataW));
                         var cnt = Convert.ToInt32(Math.Ceiling((double)(rtGraph.Width - Math.Min(0, scroll.TouchOffset)) / (double)DataW));
                         var ei = si + cnt;
@@ -600,7 +599,7 @@ namespace Devinno.Forms.Controls
                         for (int i = Math.Max(0, si - 1); i < ei + 1 && i < GraphDatas.Count; i++)
                         {
                             var itm = GraphDatas[i];
-                            var x = scroll.ScrollPositionWithOffset + rtGraph.Left + Convert.ToInt32(DataW * i) + Convert.ToInt32(DataW / 2);
+                            var x = spos + rtGraph.Left + Convert.ToInt32(DataW * i) + Convert.ToInt32(DataW / 2);
                             var y = Convert.ToInt32(MathTool.Map(itm.Values[vk], Minimum, Maximum, rtGraph.Bottom, rtGraph.Top));
                             ls.Add(new LGV() { Position = new Point(x, y), Value = itm.Values[vk] });
                         }
@@ -649,7 +648,10 @@ namespace Devinno.Forms.Controls
 
                 e.Graphics.SetClip(new Rectangle(rtScroll.X + 6, rtScroll.Y + 0, rtScroll.Width - 12, rtScroll.Height - 0));
 
-                var cCur = scroll.IsScrolling ? Theme.ScrollCursorColor.BrightnessTransmit(0.3) : Theme.ScrollCursorColor;
+                var cCur = Theme.ScrollCursorColor;
+                if (scroll.IsScrolling) cCur = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
+                else if (scroll.IsTouchMoving) cCur = Theme.PointColor.BrightnessTransmit(0.3);
+
                 var rtcur = scroll.GetScrollCursorRect(rtScroll);
                 if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
 

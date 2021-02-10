@@ -301,7 +301,7 @@ namespace Devinno.Forms.Controls
         {
             if (Scrollable && Areas.ContainsKey("rtScroll") && Areas.ContainsKey("rtGraph"))
             {
-                scroll.MouseUP(e);
+                scroll.MouseUp(e);
                 if (scroll.TouchMode && CollisionTool.Check(Areas["rtGraph"], e.Location)) scroll.TouchUp(e);
             }
             Invalidate();
@@ -542,7 +542,8 @@ namespace Devinno.Forms.Controls
                 #region Draw
                 var rtScroll = Areas["rtScroll"];
                 var DataH = this.DataH;
-                
+                var spos = Convert.ToInt32(scroll.ScrollPositionWithOffset);
+
                 e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
                 #region GraphBG
                 if (GraphBackColor != Color.Transparent)
@@ -608,7 +609,7 @@ namespace Devinno.Forms.Controls
                     for (int i = 0; i < GraphDatas.Count; i++)
                     {
                         var itm = GraphDatas[i];
-                        var rt = new Rectangle(rtNameAxis.Left, scroll.ScrollPositionWithOffset + rtNameAxis.Top + Convert.ToInt32(DataH * i), rtNameAxis.Width, Convert.ToInt32(DataH));
+                        var rt = new Rectangle(rtNameAxis.Left, spos + rtNameAxis.Top + Convert.ToInt32(DataH * i), rtNameAxis.Width, Convert.ToInt32(DataH));
                         if (CollisionTool.Check(rt, rtNameAxis))
                             Theme.DrawTextShadow(e.Graphics, null, itm.Name, Font, GridColor, BackColor, rt, DvContentAlignment.MiddleRight);
                     }
@@ -628,7 +629,7 @@ namespace Devinno.Forms.Controls
                         for (int i = 0; i < GraphDatas.Count; i++)
                         {
                             var itm = GraphDatas[i];
-                            var rt = new Rectangle(rtGraph.Left, scroll.ScrollPositionWithOffset + rtNameAxis.Top + Convert.ToInt32(DataH * i), rtGraph.Width, Convert.ToInt32(DataH));
+                            var rt = new Rectangle(rtGraph.Left, spos + rtNameAxis.Top + Convert.ToInt32(DataH * i), rtGraph.Width, Convert.ToInt32(DataH));
                             rt.Inflate(0, -BarGap);
                             if (CollisionTool.Check(rt, rtGraph))
                             {
@@ -668,7 +669,7 @@ namespace Devinno.Forms.Controls
                         for (int i = 0; i < GraphDatas.Count; i++)
                         {
                             var itm = GraphDatas[i];
-                            var rt = new Rectangle(rtGraph.Left, scroll.ScrollPositionWithOffset + rtNameAxis.Top + Convert.ToInt32(DataH * i), rtGraph.Width, Convert.ToInt32(DataH));
+                            var rt = new Rectangle(rtGraph.Left, spos + rtNameAxis.Top + Convert.ToInt32(DataH * i), rtGraph.Width, Convert.ToInt32(DataH));
                             rt.Inflate(0, -BarGap);
 
                             if (CollisionTool.Check(rt, rtGraph))
@@ -712,7 +713,10 @@ namespace Devinno.Forms.Controls
 
                 e.Graphics.SetClip(new Rectangle(rtScroll.X + 0, rtScroll.Y + 6, rtScroll.Width - 0, rtScroll.Height - 12));
 
-                var cCur = scroll.IsScrolling ? Theme.ScrollCursorColor.BrightnessTransmit(0.3) : Theme.ScrollCursorColor;
+                var cCur = Theme.ScrollCursorColor;
+                if (scroll.IsScrolling) cCur = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
+                else if (scroll.IsTouchMoving) cCur = Theme.PointColor.BrightnessTransmit(0.3);
+
                 var rtcur = scroll.GetScrollCursorRect(rtScroll);
                 if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
 

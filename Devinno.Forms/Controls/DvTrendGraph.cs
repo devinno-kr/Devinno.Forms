@@ -1,4 +1,5 @@
 ﻿using Devinno.Extensions;
+using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
 using Devinno.Forms.Tools;
 using Devinno.Tools;
@@ -7,13 +8,17 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Thread = System.Threading.Thread;
+using ThreadStart = System.Threading.ThreadStart;
+
 namespace Devinno.Forms.Controls
 {
-    public class DvTimeGraph : DvControl
+    public class DvTrendGraph : DvControl
     {
         #region Properties
         #region GraphBackColor
@@ -133,9 +138,24 @@ namespace Devinno.Forms.Controls
             get => tsXScale;
             set
             {
-                if(tsXScale !=value)
+                if (tsXScale != value)
                 {
                     tsXScale = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #region MaximumXScale
+        private TimeSpan tsMaximumXScale = new TimeSpan(1, 0, 0, 0);
+        public TimeSpan MaximumXScale
+        {
+            get => tsMaximumXScale;
+            set
+            {
+                if (tsMaximumXScale != value)
+                {
+                    tsMaximumXScale = value;
                     Invalidate();
                 }
             }
@@ -150,15 +170,40 @@ namespace Devinno.Forms.Controls
         bool bYAxisGridDraw = true;
         public bool YAxisGridDraw { get => bYAxisGridDraw; set { if (bYAxisGridDraw != value) { bYAxisGridDraw = value; Invalidate(); } } }
         #endregion
+
+        #region Interval
+        private int nInterval = 1000;
+        public int Interval
+        {
+            get => nInterval;
+            set
+            {
+                if (nInterval != value)
+                {
+                    nInterval = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+
+        public bool IsStart { get; private set; } = false;
         #endregion
 
         #region Member Variable
         private List<TGV> GraphDatas = new List<TGV>();
+        private List<TGV> TempGraphDatas = new List<TGV>();
+
         private Scroll scroll = new Scroll();
+
+        private TimeGraphData value = null;
+        private Thread thData, thRefresh;
+        private Dictionary<string, PropertyInfo> dicProps = new Dictionary<string, PropertyInfo>();
+        private object oLock = new object();
         #endregion
 
         #region Constructor
-        public DvTimeGraph()
+        public DvTrendGraph()
         {
             #region SetStyle : Selectable
             SetStyle(ControlStyles.Selectable, true);
@@ -169,17 +214,54 @@ namespace Devinno.Forms.Controls
 
             Size = new System.Drawing.Size(300, 200);
 
+            #region Scroll
             scroll.Direction = ScrollDirection.Horizon;
             scroll.ScrollChanged += (o, s) => Invalidate();
-            //scroll.GetScrollTotal = () => GraphDatas.Count > 1 && Series.Count > 0 && Areas.ContainsKey("rtGraph") ? Convert.ToInt32(Areas["rtGraph"].Width * ((new DateTime(Convert.ToInt64(Math.Ceiling(Convert.ToDouble(GraphDatas.Last().Time.Ticks) / Convert.ToDouble(XAxisGraduation.Ticks))) * XAxisGraduation.Ticks) - new DateTime(GraphDatas.First().Time.Ticks / XAxisGraduation.Ticks * XAxisGraduation.Ticks)).TotalSeconds / XScale.TotalSeconds)) : 0;
-            //scroll.GetScrollTick = () => GraphDatas.Count > 1 && Series.Count > 0 && Areas.ContainsKey("rtGraph") ? Convert.ToInt32(Areas["rtGraph"].Width * (XAxisGraduation.TotalSeconds / XScale.TotalSeconds)) : 0 ;
-            //scroll.GetScrollView = () => Areas.ContainsKey("rtGraph") ? Areas["rtGraph"].Width : 0;
-
-            scroll.GetScrollTotal = () => GraphDatas.Count > 1 && Series.Count > 0 ? (new DateTime(Convert.ToInt64(Math.Ceiling(Convert.ToDouble(GraphDatas.Last().Time.Ticks) / Convert.ToDouble(XAxisGraduation.Ticks))) * XAxisGraduation.Ticks) - new DateTime(GraphDatas.First().Time.Ticks / XAxisGraduation.Ticks * XAxisGraduation.Ticks)).Ticks : 0L;
-            scroll.GetScrollTick = () =>  XAxisGraduation.Ticks;
+            scroll.GetScrollTotal = () =>
+            {
+                lock (oLock)
+                {
+                    return GraphDatas.Count > 1 && Series.Count > 0 ? GraphDatas[GraphDatas.Count - 1].Time.Ticks - GraphDatas[0].Time.Ticks : 0L;
+                }
+            };
+            scroll.GetScrollTick = () => XAxisGraduation.Ticks;
             scroll.GetScrollView = () => XScale.Ticks;
-            scroll.GetScrollScaleFactor = () => 
-            Areas.ContainsKey("rtGraph") ? (double)XScale.Ticks / (double)Areas["rtGraph"].Width : 1D;
+            scroll.GetScrollScaleFactor = () => Areas.ContainsKey("rtGraph") ? (double)XScale.Ticks / (double)Areas["rtGraph"].Width : 1D;
+            #endregion
+            #region Thread
+            #region Data
+            thData = new Thread(new ThreadStart(() =>
+            {
+                while (true)
+                {
+                    if (IsStart && value != null)
+                    {
+                        AddData();
+                    }
+                    Thread.Sleep(Interval);
+                }
+            }))
+            { IsBackground = true };
+            thData.Start();
+            #endregion
+            #region Refresh
+            thRefresh = new Thread(new ThreadStart(() =>
+            {
+                while (true)
+                {
+                    if (IsStart && !scroll.IsTouchMoving)
+                    {
+                        this.Invoke(new Action(() => Invalidate()));
+                    }
+                    Thread.Sleep(Interval);
+                }
+            }))
+            { IsBackground = true };
+            thRefresh.Start();
+            #endregion
+            #endregion
+
+            //scroll.Reverse = false;
         }
         #endregion
 
@@ -196,12 +278,12 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             Focus();
-
             if (Areas.ContainsKey("rtScroll") && Areas.ContainsKey("rtGraph"))
             {
-                scroll.MouseDown(e, Areas["rtScroll"]);
-                if (scroll.TouchMode && CollisionTool.Check(Areas["rtGraph"], e.Location)) scroll.TouchDown(e);
+                scroll.MouseDownR(e, Areas["rtScroll"]);
+                if (scroll.TouchMode && CollisionTool.Check(Areas["rtGraph"], e.Location)) scroll.TouchDownR(e);
             }
+
             Invalidate();
             base.OnMouseDown(e);
         }
@@ -211,8 +293,8 @@ namespace Devinno.Forms.Controls
         {
             if (Areas.ContainsKey("rtScroll") && Areas.ContainsKey("rtGraph"))
             {
-                scroll.MouseMove(e, Areas["rtScroll"]);
-                if (scroll.TouchMode) scroll.TouchMove(e);
+                scroll.MouseMoveR(e, Areas["rtScroll"]);
+                if (scroll.TouchMode) scroll.TouchMoveR(e);
                 if (scroll.IsScrolling) Invalidate();
                 if (scroll.TouchMode && scroll.IsTouchScrolling) Invalidate();
             }
@@ -224,8 +306,8 @@ namespace Devinno.Forms.Controls
         {
             if (Areas.ContainsKey("rtScroll") && Areas.ContainsKey("rtGraph"))
             {
-                scroll.MouseUp(e);
-                if (scroll.TouchMode && CollisionTool.Check(Areas["rtGraph"], e.Location)) scroll.TouchUp(e);
+                scroll.MouseUpR(e);
+                if (scroll.TouchMode && CollisionTool.Check(Areas["rtGraph"], e.Location)) scroll.TouchUpR(e);
             }
             Invalidate();
             base.OnMouseUp(e);
@@ -242,11 +324,11 @@ namespace Devinno.Forms.Controls
             var GP = Convert.ToInt32(6 * f);
 
             int vx = 0;
-            foreach(var x in Series)
+            foreach (var x in Series)
             {
                 var w = Math.Max(Math.Ceiling(g.MeasureString(string.IsNullOrWhiteSpace(ValueFormatString) ? x.Minimum.ToString("0") : x.Minimum.ToString(ValueFormatString), Font).Width) + 1 + GP,
                                  Math.Ceiling(g.MeasureString(string.IsNullOrWhiteSpace(ValueFormatString) ? x.Maximum.ToString("0") : x.Maximum.ToString(ValueFormatString), Font).Width) + 1 + GP) - GP;
-                var vw = Math.Max(Convert.ToInt32(g.MeasureString(x.Alias, Font).Width+2), Convert.ToInt32(w));
+                var vw = Math.Max(Convert.ToInt32(g.MeasureString(x.Alias, Font).Width + 2), Convert.ToInt32(w));
                 SetArea(x.Name, new Rectangle(vx, 0, vw, 1));
                 vx += vw;
                 vx += GP;
@@ -267,7 +349,7 @@ namespace Devinno.Forms.Controls
             var rtNameAxis = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtRemark.Top - GP - scwh - NameAxisHeight - GP, rtContent.Width - (ValueAxisWidth + GP), NameAxisHeight);
             var rtValueAxis = new Rectangle(rtContent.X, rtContent.Y + gpTopMargin, ValueAxisWidth, rtNameAxis.Top - rtContent.Top - gpTopMargin - GP);
             var rtGraphAl = new Rectangle(rtContent.X + ValueAxisWidth + GP, rtContent.Y + gpTopMargin, rtContent.Width - (ValueAxisWidth + GP), rtValueAxis.Height);
-            var rtGraph = new Rectangle(rtGraphAl.Left, rtGraphAl.Top, rtGraphAl.Width - Convert.ToInt32(sz.Width/2) , rtGraphAl.Height);
+            var rtGraph = new Rectangle(rtGraphAl.Left, rtGraphAl.Top, rtGraphAl.Width - Convert.ToInt32(sz.Width / 2), rtGraphAl.Height);
             var rtScroll = new Rectangle(rtGraph.Left, rtRemark.Top - GP - scwh, rtGraph.Width, scwh);
             rtValueAxis.Height = rtGraphAl.Height = rtGraph.Height;
             rtNameAxis.Y += 2;
@@ -279,6 +361,7 @@ namespace Devinno.Forms.Controls
             SetArea("rtGraph", rtGraph);
             SetArea("rtScroll", rtScroll);
             SetArea("rtCHSZ", new Rectangle(0, 0, Convert.ToInt32(Math.Ceiling(CHSZ.Width)), Convert.ToInt32(Math.Ceiling(CHSZ.Height))));
+            SetArea("rtIco", new Rectangle(rtValueAxis.Left, rtScroll.Top, rtValueAxis.Width, rtRemark.Bottom - rtScroll.Top));
         }
         #endregion
         #region OnThemeDraw
@@ -290,14 +373,19 @@ namespace Devinno.Forms.Controls
             #endregion
             #region Set
             var f = DpiRatio;
-            var spos = scroll.ScrollPositionWithOffset;
+            var spos = scroll.ScrollPositionWithOffsetR;
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            var GraphDatas = new List<TGV>();
+            lock (oLock)
+            {
+                GraphDatas.AddRange(this.GraphDatas);
+            }
             #endregion
             #region Init
             var p = new Pen(Color.Black, 2);
             var br = new SolidBrush(Color.Black);
 
-            var ShadowColor = BackColor.BrightnessTransmit(Theme.OutShadowBright);
+            //var ShadowColor = BackColor.BrightnessTransmit(Theme.OutShadowBright);
             #endregion
             #region Bounds
             var rtContent = Areas["rtContent"];
@@ -309,6 +397,7 @@ namespace Devinno.Forms.Controls
             var rtGraphAl = Areas["rtGraphAl"];
             var rtGraph = Areas["rtGraph"];
             var rtScroll = Areas["rtScroll"];
+            var rtIco = Areas["rtIco"];
             var GP = rtGP.Width;
             #endregion
             #region Draw
@@ -385,18 +474,18 @@ namespace Devinno.Forms.Controls
             {
                 p.Color = GridColor; p.Width = 1; p.DashStyle = DashStyle.Dot;
 
-                var st = new DateTime(GraphDatas.First().Time.Ticks / XAxisGraduation.Ticks * XAxisGraduation.Ticks);
-                var ed = new DateTime(Convert.ToInt64(Math.Ceiling(Convert.ToDouble(GraphDatas.Last().Time.Ticks) / Convert.ToDouble(XAxisGraduation.Ticks))) * XAxisGraduation.Ticks);
-
-                for (DateTime i = st; i <= ed; i += XAxisGraduation)
+                var st = GraphDatas.First().Time;
+                var ed = GraphDatas.Last().Time;
+                for (DateTime i = ed; i >= st; i -= XAxisGraduation)
                 {
-                    var x = MathTool.Map(i.Ticks + spos, st.Ticks, st.Ticks + XScale.Ticks, rtGraph.Left, rtGraph.Right);
+                    var ts = ed - i;
+                    var x = MathTool.Map(i.Ticks + spos, ed.Ticks, ed.Ticks - XScale.Ticks, rtGraph.Right, rtGraph.Left);
                     p.Color = GridColor; p.Width = 1; p.DashStyle = DashStyle.Dot;
                     if (x >= rtGraph.Left && x <= rtGraph.Right)
                     {
                         if (XAxisGridDraw && x > rtGraph.Left && x < rtGraph.Right) e.Graphics.DrawLine(p, x, rtGraph.Top, x, rtGraph.Bottom);
 
-                        var sval = i.ToString(string.IsNullOrWhiteSpace(TimeFormatString) ? "yyyy.MM.dd\r\nHH:mm:ss" : TimeFormatString);
+                        var sval = ts.ToString();
                         var sz = e.Graphics.MeasureString(sval, Font);
                         var rt = MathTool.MakeRectangle(new Point(Convert.ToInt32(x), Convert.ToInt32(rtNameAxis.Y + (rtNameAxis.Height / 2))), Convert.ToInt32(sz.Width) + 2, Convert.ToInt32(sz.Height) + 2);
                         Theme.DrawTextShadow(e.Graphics, null, sval, Font, GridColor, BackColor, rt, DvContentAlignment.MiddleCenter);
@@ -407,14 +496,14 @@ namespace Devinno.Forms.Controls
             #region Data
             if (Series.Count > 0 && GraphDatas.Count > 0)
             {
-                var st = new DateTime(GraphDatas.First().Time.Ticks / XAxisGraduation.Ticks * XAxisGraduation.Ticks);
-                var ed = new DateTime(Convert.ToInt64(Math.Ceiling(Convert.ToDouble(GraphDatas.Last().Time.Ticks) / Convert.ToDouble(XAxisGraduation.Ticks))) * XAxisGraduation.Ticks);
+                var st = GraphDatas.First().Time;
+                var ed = GraphDatas.Last().Time;
 
                 e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
                 e.Graphics.SetClip(rtGraph);
                 foreach (var v in Series)
                 {
-                    var pts = GraphDatas.Select(x => new Point(Convert.ToInt32(MathTool.Map(x.Time.Ticks + spos, st.Ticks, st.Ticks + tsXScale.Ticks, rtGraph.Left, rtGraph.Right)),
+                    var pts = GraphDatas.Select(x => new Point(Convert.ToInt32(MathTool.Map(x.Time.Ticks + spos, ed.Ticks, ed.Ticks - tsXScale.Ticks, rtGraph.Right, rtGraph.Left)),
                                                                Convert.ToInt32(MathTool.Map(x.Values[v.Name], v.Minimum, v.Maximum, rtGraph.Bottom, rtGraph.Top)))).ToArray();
 
                     pts = pts.Where(x => x.X >= rtGraph.Left && x.X <= rtGraph.Right).ToArray();
@@ -427,9 +516,13 @@ namespace Devinno.Forms.Controls
                 e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
             }
             #endregion
+            #region Icon
+            {
+            }
+            #endregion
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
             #region Scroll
-            if (scroll.ScrollTotal > scroll.ScrollView)
+            if (MaximumXScale > XScale)
             {
                 Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScroll, RoundType.ALL);
                 Theme.DrawBorder(e.Graphics, BackColor.BrightnessTransmit(-Theme.BorderBright), BackColor, 1, rtScroll, RoundType.ALL, BoxDrawOption.BORDER);
@@ -440,7 +533,7 @@ namespace Devinno.Forms.Controls
                 if (scroll.IsScrolling) cCur = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
                 else if (scroll.IsTouchMoving) cCur = Theme.PointColor.BrightnessTransmit(0.3);
 
-                var rtcur = scroll.GetScrollCursorRect(rtScroll);
+                var rtcur = scroll.GetScrollCursorRectR(rtScroll);
                 if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
 
                 e.Graphics.ResetClip();
@@ -458,38 +551,65 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Method
-        #region SetDataSource
-        public void SetDataSource<T>(IEnumerable<T> values) where T : TimeGraphData
+        #region Start
+        public void Start<T>(T value) where T : TimeGraphData
         {
-            if (Series.Count > 0)
+            if (value != null)
             {
-                var pls = typeof(T).GetProperties();
-                var props = typeof(T).GetProperties().Where(x => x.PropertyType == typeof(double) || x.PropertyType == typeof(float) || x.PropertyType == typeof(decimal) ||
-                                                                 x.PropertyType == typeof(byte) || x.PropertyType == typeof(sbyte) ||
-                                                                 x.PropertyType == typeof(short) || x.PropertyType == typeof(ushort) ||
-                                                                 x.PropertyType == typeof(int) || x.PropertyType == typeof(uint) ||
-                                                                 x.PropertyType == typeof(long) || x.PropertyType == typeof(ulong));
-                var nmls = props.Select(x => x.Name).ToList();
-                int nCnt = Series.Where(x => nmls.Contains(x.Name)).Count();
-                if (nCnt == Series.Count)
+                if (Series.Count > 0)
                 {
-                    var dic = props.ToDictionary(x => x.Name);
+                    var pls = typeof(T).GetProperties();
+                    var props = typeof(T).GetProperties().Where(x => x.PropertyType == typeof(double) || x.PropertyType == typeof(float) || x.PropertyType == typeof(decimal) ||
+                                                                     x.PropertyType == typeof(byte) || x.PropertyType == typeof(sbyte) ||
+                                                                     x.PropertyType == typeof(short) || x.PropertyType == typeof(ushort) ||
+                                                                     x.PropertyType == typeof(int) || x.PropertyType == typeof(uint) ||
+                                                                     x.PropertyType == typeof(long) || x.PropertyType == typeof(ulong));
 
-                    GraphDatas.Clear();
-                    foreach (var v in values)
+                    var nmls = props.Select(x => x.Name).ToList();
+                    int nCnt = Series.Where(x => nmls.Contains(x.Name)).Count();
+                    if (nCnt == Series.Count)
                     {
-                        var tgv = new TGV() { Time = v.Time };
-
-                        foreach (var vk in dic.Keys) tgv.Values.Add(vk, (double)dic[vk].GetValue(v));
-                        
-                        GraphDatas.Add(tgv);
+                        dicProps = props.ToDictionary(x => x.Name);
+                        GraphDatas.Clear();
+                        this.value = value;
+                        IsStart = true;
                     }
-
-                    Invalidate();
+                    else throw new Exception("잘못된 데이터 입니다.");
                 }
-                else throw new Exception("잘못된 데이터 입니다.");
+                else throw new Exception("GraphSeries는 최소 1개 이상이어야 합니다.");
             }
-            else throw new Exception("GraphSeries는 최소 1개 이상이어야 합니다.");
+            else throw new Exception("Data가 Null 일 수 없습니다.");
+        }
+        #endregion
+        #region Stop
+        public void Stop()
+        {
+            IsStart = false;
+        }
+        #endregion
+        #region SetData
+        public void SetData<T>(T Data) where T : TimeGraphData
+        {
+            if (this.value.GetType() == typeof(T))
+                this.value = Data;
+        }
+        #endregion
+        #region AddData
+        void AddData()
+        {
+            if (value != null)
+            {
+                lock (oLock)
+                {
+                    var tgv = new TGV() { Time = DateTime.Now };
+
+                    foreach (var vk in dicProps.Keys) tgv.Values.Add(vk, (double)dicProps[vk].GetValue(value));
+
+                    GraphDatas.Add(tgv);
+
+                    GraphDatas = GraphDatas.Where(x => tgv.Time - MaximumXScale <= x.Time && x.Time <= tgv.Time).ToList();
+                }
+            }
         }
         #endregion
         #endregion

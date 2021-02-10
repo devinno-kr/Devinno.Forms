@@ -129,7 +129,7 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region ScrollPosition
-        public int ScrollPosition { get => scroll.ScrollPosition; set => scroll.ScrollPosition = value; }
+        public long ScrollPosition { get => scroll.ScrollPosition; set => scroll.ScrollPosition = value; }
         #endregion
 
         #region RectMode
@@ -310,7 +310,10 @@ namespace Devinno.Forms.Controls
             br.Color = Theme.ScrollBarColor;
             Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScroll, RectMode ? RoundType.NONE : RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
 
-            var cCur = scroll.IsScrolling ? Theme.ScrollCursorColor.BrightnessTransmit(0.3) : Theme.ScrollCursorColor;
+            var cCur = Theme.ScrollCursorColor;
+            if (scroll.IsScrolling) cCur = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
+            else if (scroll.IsTouchMoving) cCur = Theme.PointColor.BrightnessTransmit(0.3);
+
             var rtcur = scroll.GetScrollCursorRect(rtScroll);
             if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
             #endregion
@@ -372,7 +375,7 @@ namespace Devinno.Forms.Controls
                 var rtBox = Areas["rtBox"];
                 var rtScroll = Areas["rtScroll"];
 
-                scroll.MouseUP(e);
+                scroll.MouseUp(e);
                 if (scroll.TouchMode && CollisionTool.Check(rtBox, e.Location)) scroll.TouchUp(e);
 
                 if (CollisionTool.Check(rtBox, e.Location) && Math.Abs(downPoint.Y - e.Y) < Scroll.GapSize && (DateTime.Now - downTime).TotalSeconds < Scroll.GapTime )
@@ -500,7 +503,7 @@ namespace Devinno.Forms.Controls
             if (Areas.ContainsKey("rtBox"))
             {
                 var sc = scroll.ScrollPosition;
-                var posoff = scroll.ScrollPositionWithOffset;
+                var spos = Convert.ToInt32(scroll.ScrollPositionWithOffset);
 
                 var rtBox = Areas["rtBox"];
                 var si = Convert.ToInt32(Math.Floor((double)(sc - scroll.TouchOffset) / (double)RowHeight));
@@ -510,7 +513,7 @@ namespace Devinno.Forms.Controls
                 for (int i = Math.Max(0, si); i < ei + 1 && i < Items.Count; i++)
                 {
                     var itm = Items[i];
-                    var rt = new Rectangle(rtBox.Left, posoff + rtBox.Top + (RowHeight * i), rtBox.Width, RowHeight);
+                    var rt = new Rectangle(rtBox.Left, spos + rtBox.Top + (RowHeight * i), rtBox.Width, RowHeight);
                     if (CollisionTool.Check(new Rectangle(rt.X + 1, rt.Y + 1, rt.Width - 2, rt.Height - 2), rtBox)) act(i, rt, itm);
                 }
             }

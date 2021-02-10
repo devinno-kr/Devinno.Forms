@@ -438,7 +438,7 @@ namespace Devinno.Forms.Controls
             #region Properties
             internal bool Freeze { get; set; }
             public DvComboBox ComboBox { get; private set; }
-            public int VScrollPosition
+            public long VScrollPosition
             {
                 get => ListBox.ScrollPosition;
                 set

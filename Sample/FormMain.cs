@@ -16,43 +16,41 @@ namespace Sample
 {
     public partial class FormMain : DvForm
     {
+        Timer tmr = new Timer();
+       
         public FormMain()
         {
             InitializeComponent();
 
-            grp.Series.Add(new GraphSeries2() { Name = "Temp", Alias = "온도", SeriesColor = Color.Crimson, Minimum = -20, Maximum = 200 });
-            grp.Series.Add(new GraphSeries2() { Name = "Humidity", Alias = "습도", SeriesColor = Color.DodgerBlue, Minimum = 0, Maximum = 100 });
-            grp.Series.Add(new GraphSeries2() { Name = "Velocity", Alias = "속도", SeriesColor = Color.Teal, Minimum = 0, Maximum = 50 });
+            grp.Series.Add(new GraphSeries2() { Name = "Temp", Alias = "온도", SeriesColor = Color.Crimson, Minimum = 0, Maximum = 100 });
+            grp.Series.Add(new GraphSeries2() { Name = "Humidity", Alias = "습도", SeriesColor = Color.Teal , Minimum = 0, Maximum = 100 });
+            grp.Series.Add(new GraphSeries2() { Name = "Velocity", Alias = "속도", SeriesColor = Color.DodgerBlue, Minimum = 0, Maximum = 100 });
 
-            var t = 30d;
-            var h = 50d;
-            var v = 20d;
-            var rnd = new Random();
+            tmr = new Timer() { Interval = 10 };
+            tmr.Tick += (o, s) => { this.Title = "Sample [ " + this.Width + " x " + this.Height + " ]"; };
+            tmr.Enabled = true;
 
-            var ls = new List<Sens>();
-            for (DateTime i = new DateTime(2021, 2, 10, 15, 0, 0); i <= new DateTime(2021, 2, 10, 20, 0, 0); i += TimeSpan.FromSeconds(10))
-            {
-                t = MathTool.Constrain(t + (rnd.Next() % 2 == 0 ? 1 : -1), -20, 200);
-                h = MathTool.Constrain(h + (rnd.Next() % 2 == 0 ? 1 : -1), 0, 100);
-                v = MathTool.Constrain(v + (rnd.Next() % 2 == 0 ? 0.5 : -0.5), 0, 50);
+            sldTemp.ValueChanged += (o, s) => grp.SetData(new Sens() { Temp = sldTemp.Value, Velocity = sldVelocity.Value, Humidity = sldHumidity.Value });
+            sldVelocity.ValueChanged += (o, s) => grp.SetData(new Sens() { Temp = sldTemp.Value, Velocity = sldVelocity.Value, Humidity = sldHumidity.Value });
+            sldHumidity.ValueChanged += (o, s) => grp.SetData(new Sens() { Temp = sldTemp.Value, Velocity = sldVelocity.Value, Humidity = sldHumidity.Value });
 
-                ls.Add(new Sens() { Time = i, Temp = t, Humidity = h, Velocity = v });
-            }
-            //grp.Scrollable = grp.TouchMode= true;
-            //grp.PointDraw = true;
-            //grp.Gradient = true;
-            //grp.ValueDraw = true;
+            grp.XAxisGridDraw = true;
             grp.TouchMode = true;
-            grp.SetDataSource<Sens>(ls);
+            grp.Interval = 10;
+            grp.MaximumXScale = new TimeSpan(0, 0, 15);
+            grp.XScale = new TimeSpan(0, 0, 10);
+            grp.XAxisGraduation = new TimeSpan(0, 0, 1);
+            grp.Start(new Sens() { Temp = sldTemp.Value, Velocity = sldVelocity.Value, Humidity = sldHumidity.Value });
         }
     }
 
     class Sens : TimeGraphData
     {
-        public override DateTime Time { get; set; }
+        public override DateTime Time{ get; set; }
 
         public double Temp { get; set; }
         public double Humidity { get; set; }
         public double Velocity { get; set; }
+
     }
 }
