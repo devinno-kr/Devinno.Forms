@@ -58,30 +58,16 @@ namespace Devinno.Forms
             {
                 if (TouchMode)
                 {
-                    var ret = 0L;
-                    if (Direction == ScrollDirection.Vertical) ret = tcDown != null && ScrollView < ScrollTotal ? Convert.ToInt64((tcDown.MovePoint.Y - tcDown.DownPoint.Y) * ScrollScaleFactor) : 0;
-                    else ret = tcDown != null && ScrollView < ScrollTotal ? Convert.ToInt64((tcDown.MovePoint.X - tcDown.DownPoint.X) * ScrollScaleFactor) : 0;
-                    return ret;
+                    if (Direction == ScrollDirection.Vertical) return tcDown != null && ScrollView < ScrollTotal ? Convert.ToInt64((tcDown.MovePoint.Y - tcDown.DownPoint.Y) * ScrollScaleFactor) : 0;
+                    else return tcDown != null && ScrollView < ScrollTotal ? Convert.ToInt64((tcDown.MovePoint.Y - tcDown.DownPoint.Y) * ScrollScaleFactor) : 0;
                 }
                 else return 0;
             }
         }
 
-        public long ScrollPositionWithOffset
-        {
-            get
-            {
-                return -ScrollPosition + TouchOffset;
-            }
-        }
-
-        public long ScrollPositionWithOffsetR
-        {
-            get
-            {
-                return -(-ScrollPosition - TouchOffset);
-            }
-        }
+        public long ScrollPositionWithOffset => -ScrollPosition + TouchOffset;
+        public long ScrollPositionWithOffsetR=> -(-ScrollPosition - TouchOffset);
+            
         #endregion
 
         #region Member Variable
@@ -132,6 +118,7 @@ namespace Devinno.Forms
 
                     int x = 0;
                     x = Convert.ToInt32(MathTool.Map(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Left, rtScroll.Right - w));
+
                     return new Rectangle(x, rtScroll.Y, w, rtScroll.Height);
                 }
             }
@@ -209,7 +196,7 @@ namespace Devinno.Forms
                 {
                     if (Direction == ScrollDirection.Vertical)
                     {
-                        ScrollPosition = Convert.ToInt64(MathTool.Constrain(ScrollPosition + ((tcDown.DownPoint.X - e.X) * ScrollScaleFactor), 0, (ScrollTotal - ScrollView)));
+                        ScrollPosition = Convert.ToInt64(MathTool.Constrain(ScrollPosition + ((tcDown.DownPoint.Y - e.Y) * ScrollScaleFactor), 0, (ScrollTotal - ScrollView)));
                         initPos = ScrollPosition;
                         initVel = ((tcDown.DownPoint.Y - e.Y) * ScrollScaleFactor) / ((double)(DateTime.Now - tcDown.DownTime).TotalMilliseconds / 1000.0);
                         destPos = MathTool.Constrain(initPos - initVel / dCoeff, 0, (ScrollTotal - ScrollView));
@@ -349,7 +336,7 @@ namespace Devinno.Forms
                 {
                     if (Direction == ScrollDirection.Vertical)
                     {
-                        ScrollPosition = Convert.ToInt64(MathTool.Constrain(ScrollPosition + ((e.X - tcDown.DownPoint.X) * ScrollScaleFactor), 0, (ScrollTotal - ScrollView)));
+                        ScrollPosition = Convert.ToInt64(MathTool.Constrain(ScrollPosition + ((e.Y - tcDown.DownPoint.Y) * ScrollScaleFactor), 0, (ScrollTotal - ScrollView)));
                         initPos = ScrollPosition;
                         initVel = ((e.Y - tcDown.DownPoint.Y) * ScrollScaleFactor) / ((double)(DateTime.Now - tcDown.DownTime).TotalMilliseconds / 1000.0);
                         destPos = MathTool.Constrain(initPos - initVel / dCoeff, 0, (ScrollTotal - ScrollView));
@@ -396,7 +383,6 @@ namespace Devinno.Forms
         }
         #endregion
         #endregion
-
     }
 
     public enum ScrollDirection { Horizon, Vertical }

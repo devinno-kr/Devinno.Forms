@@ -120,7 +120,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region ShowKeypad
-        public int? ShowKeypad(int? value = null)
+        public int? ShowKeypad(string Title, int? value = null)
         {
             #region UI
             layout.Controls.Clear();
@@ -137,6 +137,7 @@ namespace Devinno.Forms.Dialogs
             svalOrigin = value.HasValue ? value.Value.ToString() : "";
             #endregion
 
+            this.Text = this.Title = string.IsNullOrWhiteSpace(Title) ? "키패드" : Title;
             Theme = GetCallerFormTheme() ?? Theme;
 
             int? ret = null;
@@ -148,7 +149,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region ShowKeypadEx
-        public decimal? ShowKeypadEx(decimal? value = null)
+        public decimal? ShowKeypadEx(string Title, decimal? value = null)
         {
             #region UI
             layout.Controls.Clear();
@@ -165,6 +166,7 @@ namespace Devinno.Forms.Dialogs
             svalOrigin = value.HasValue ? value.Value.ToString() : "";
             #endregion
 
+            this.Text = this.Title = string.IsNullOrWhiteSpace(Title) ? "키패드" : Title;
             Theme = GetCallerFormTheme() ?? Theme;
 
             decimal? ret = null;
@@ -176,7 +178,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region ShowPassword
-        public string ShowPassword(int? value = null)
+        public string ShowPassword(string Title, int? value = null)
         {
             #region UI
             layout.Controls.Clear();
@@ -193,6 +195,7 @@ namespace Devinno.Forms.Dialogs
             svalOrigin = value.HasValue ? value.Value.ToString() : "";
             #endregion
 
+            this.Text = this.Title = string.IsNullOrWhiteSpace(Title) ? "패스워드" : Title;
             Theme = GetCallerFormTheme() ?? Theme;
 
             string ret = null;

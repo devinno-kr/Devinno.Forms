@@ -371,7 +371,6 @@ namespace Devinno.Forms.Controls
                         Value = MathTool.Map(MathTool.Constrain(e.Y, rtBack.Top, rtBack.Bottom), rtBack.Top, rtBack.Bottom, Minimum, Maximum);
 
                     if (Tick != 0) Value = Math.Round(Value / Tick) * Tick;
-                    Invalidate();
                 }
             }
             base.OnMouseMove(e);

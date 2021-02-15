@@ -19,7 +19,7 @@ namespace Devinno.Forms.Controls
     {
         #region Properties
         #region BoxColor
-        private Color cBoxColor = DvTheme.DefaultTheme.Color1;
+        private Color cBoxColor = DvTheme.DefaultTheme.Color2;
         public Color BoxColor
         {
             get => cBoxColor;
@@ -34,7 +34,7 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region ItemColor
-        private Color cItemColor = DvTheme.DefaultTheme.Color2;
+        private Color cItemColor = DvTheme.DefaultTheme.Color3;
         public Color ItemColor
         {
             get => cItemColor;
@@ -534,7 +534,16 @@ namespace Devinno.Forms.Controls
 
         public ListBoxItem(string Text) { this.Text = Text; }
         public ListBoxItem(string Text, Bitmap img) : this(Text) { ico.IconImage = img; }
-        public ListBoxItem(string Text, string IconString, float size) : this(Text) { ico.IconString = IconString; ico.IconSize = size; }
+        public ListBoxItem(string Text, string IconString, float size) : this(Text)
+        {
+            ico.IconString = IconString; ico.IconSize = size;
+            IconGap = string.IsNullOrWhiteSpace(Text) ? 0 : 5;
+        }
+        public ListBoxItem(string Text, string IconString, float size, int Gap) : this(Text)
+        {
+            ico.IconString = IconString; ico.IconSize = size;
+            this.IconGap = Gap;
+        }
     }
     #endregion
     #region class : ListBoxItemClickedEventArgs

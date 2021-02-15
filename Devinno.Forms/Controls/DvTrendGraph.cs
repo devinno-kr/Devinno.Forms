@@ -216,7 +216,6 @@ namespace Devinno.Forms.Controls
 
             #region Scroll
             scroll.Direction = ScrollDirection.Horizon;
-            scroll.ScrollChanged += (o, s) => Invalidate();
             scroll.GetScrollTotal = () =>
             {
                 lock (oLock)
@@ -234,7 +233,7 @@ namespace Devinno.Forms.Controls
             {
                 while (true)
                 {
-                    if (IsStart && value != null)
+                    if (IsStart && value != null && !DesignMode)
                     {
                         AddData();
                     }
@@ -249,19 +248,17 @@ namespace Devinno.Forms.Controls
             {
                 while (true)
                 {
-                    if (IsStart && !scroll.IsTouchMoving)
+                    if (IsStart && !DesignMode)
                     {
                         this.Invoke(new Action(() => Invalidate()));
                     }
-                    Thread.Sleep(Interval);
+                    Thread.Sleep(10);
                 }
             }))
             { IsBackground = true };
             thRefresh.Start();
             #endregion
             #endregion
-
-            //scroll.Reverse = false;
         }
         #endregion
 

@@ -22,23 +22,15 @@ namespace Devinno.Forms
 /*
     Container
         DvNavigation
-        DvTabControl
 
     Control
         (DvContentView)
-        (DvContentGrid)
-       
-        DvTreeView
-        DvToolBox
-
+        
         DvDataGrid
 
     Dialog
         DvSelectorDialog
         DvPropertiesDialog
         DvInputBox
-        DvKeyboard
-        DvSerialPortSetting
-
 
 */

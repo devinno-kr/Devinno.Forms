@@ -546,8 +546,9 @@ namespace Devinno.Forms.Controls
     public class ComboBoxItem : ListBoxItem
     {
         public ComboBoxItem(string Text) : base(Text) { }
-        public ComboBoxItem(string Text, Bitmap img) : base(Text, img) { }
-        public ComboBoxItem(string Text, string iconString, float size) : base(Text, iconString, size) { }
+        public ComboBoxItem(string Text, Bitmap Image) : base(Text, Image) { }
+        public ComboBoxItem(string Text, string IconString, float Size) : base(Text, IconString, Size) { }
+        public ComboBoxItem(string Text, string IconString, float size, int Gap) : base(Text, IconString, size, Gap) { }
     }
     #endregion
     #region enum : DvDropState

@@ -20,6 +20,10 @@ namespace Devinno.Forms.Icons
         internal bool Shadow { get; set; }
 
         public DvIcon() { }
+        public DvIcon(Bitmap ico) => this.IconImage = ico;
         public DvIcon(string iconString) => this.IconString = iconString;
+        public DvIcon(string iconString, int Size) : this(iconString) => this.IconSize = Size;
+        public DvIcon(string iconString, int Size, int gap) :this(iconString, Size) => this.Gap = gap;
+        public DvIcon(string iconString, int Size, DvTextIconAlignment align, int gap) : this(iconString, Size, gap) => this.Alignment = align;
     }
 }
