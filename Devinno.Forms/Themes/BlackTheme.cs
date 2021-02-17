@@ -782,15 +782,10 @@ namespace Devinno.Forms.Themes
             }
         }
 
-        public override void DrawTextBevel(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
-        {
-            if (icon != null) icon.Shadow = true; bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), bounds, align);
-            if (icon != null) icon.Shadow = false; bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, bounds, align);
-        }
-
         public override void DrawTextShadow(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
         {
-            if (icon != null) icon.Shadow = true; bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), bounds, align);
+            var h = bg.GetBrightness() > c.GetBrightness() ? 0.15 : -0.5;
+            if (icon != null) icon.Shadow = true; bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(h)), bounds, align);
             if (icon != null) icon.Shadow = false; bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, bounds, align);
         }
 
@@ -805,15 +800,10 @@ namespace Devinno.Forms.Themes
             }
         }
 
-        public override void DrawTextBevel(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
-        {
-            if (icon != null) icon.Shadow = true; bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), Color.FromArgb(c.A, bg.BrightnessTransmit(0.5)), bounds, align);
-            if (icon != null) icon.Shadow = false; bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, cico, bounds, align);
-        }
-
         public override void DrawTextShadow(Graphics g, DvIcon icon, string Text, Font ft, Color c, Color cico, Color bg, Rectangle bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter)
         {
-            if (icon != null) icon.Shadow = true; bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), Color.FromArgb(c.A, bg.BrightnessTransmit(-0.5)), bounds, align);
+            var h = bg.GetBrightness() > c.GetBrightness() ? 0.15 : -0.5;
+            if (icon != null) icon.Shadow = true; bounds.Offset(0, ShadowGap); DrawText(g, icon, Text, ft, Color.FromArgb(c.A, bg.BrightnessTransmit(h)), Color.FromArgb(c.A, bg.BrightnessTransmit(h)), bounds, align);
             if (icon != null) icon.Shadow = false; bounds.Offset(0, -ShadowGap); DrawText(g, icon, Text, ft, c, cico, bounds, align);
         }
         #endregion

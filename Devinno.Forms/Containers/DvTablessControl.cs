@@ -15,7 +15,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace Devinno.Forms.Containers
 {
-    public class DvTablessControl: TabControl
+    public class DvTablessControl : TabControl
     {
         #region Properties
         #region SelectedTab

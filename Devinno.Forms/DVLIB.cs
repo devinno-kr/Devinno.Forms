@@ -20,13 +20,8 @@ namespace Devinno.Forms
 
 
 /*
-    Container
-        DvNavigation
-
     Control
         (DvContentView)
         
         DvDataGrid
-
-
 */
