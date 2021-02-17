@@ -94,7 +94,7 @@ namespace Devinno.Forms.Dialogs
             this.lblDay.Location = new System.Drawing.Point(355, 353);
             this.lblDay.Name = "lblDay";
             this.lblDay.Size = new System.Drawing.Size(172, 44);
-            this.lblDay.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
+            this.lblDay.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
             this.lblDay.TabIndex = 11;
             this.lblDay.TabStop = false;
             this.lblDay.Text = "일";
@@ -180,7 +180,7 @@ namespace Devinno.Forms.Dialogs
             this.lblMonth.Location = new System.Drawing.Point(179, 353);
             this.lblMonth.Name = "lblMonth";
             this.lblMonth.Size = new System.Drawing.Size(170, 44);
-            this.lblMonth.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
+            this.lblMonth.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
             this.lblMonth.TabIndex = 10;
             this.lblMonth.TabStop = false;
             this.lblMonth.Text = "월";
@@ -203,7 +203,7 @@ namespace Devinno.Forms.Dialogs
             this.lblYear.Location = new System.Drawing.Point(3, 353);
             this.lblYear.Name = "lblYear";
             this.lblYear.Size = new System.Drawing.Size(170, 44);
-            this.lblYear.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
+            this.lblYear.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
             this.lblYear.TabIndex = 9;
             this.lblYear.TabStop = false;
             this.lblYear.Text = "년";

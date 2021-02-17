@@ -193,7 +193,7 @@ namespace Devinno.Forms.Dialogs
             this.lblPort.LongClickTime = 0;
             this.lblPort.Name = "lblPort";
             this.lblPort.Size = new System.Drawing.Size(108, 44);
-            this.lblPort.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
+            this.lblPort.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
             this.lblPort.TabIndex = 0;
             this.lblPort.TabStop = false;
             this.lblPort.Text = "통신 포트";
@@ -218,7 +218,7 @@ namespace Devinno.Forms.Dialogs
             this.lblBaudrate.LongClickTime = 0;
             this.lblBaudrate.Name = "lblBaudrate";
             this.lblBaudrate.Size = new System.Drawing.Size(108, 45);
-            this.lblBaudrate.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
+            this.lblBaudrate.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
             this.lblBaudrate.TabIndex = 1;
             this.lblBaudrate.TabStop = false;
             this.lblBaudrate.Text = "통신 속도";
@@ -243,7 +243,7 @@ namespace Devinno.Forms.Dialogs
             this.lblDataBit.LongClickTime = 0;
             this.lblDataBit.Name = "lblDataBit";
             this.lblDataBit.Size = new System.Drawing.Size(108, 45);
-            this.lblDataBit.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
+            this.lblDataBit.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
             this.lblDataBit.TabIndex = 2;
             this.lblDataBit.TabStop = false;
             this.lblDataBit.Text = "데이터 비트";
@@ -268,7 +268,7 @@ namespace Devinno.Forms.Dialogs
             this.lblParity.LongClickTime = 0;
             this.lblParity.Name = "lblParity";
             this.lblParity.Size = new System.Drawing.Size(108, 45);
-            this.lblParity.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
+            this.lblParity.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
             this.lblParity.TabIndex = 3;
             this.lblParity.TabStop = false;
             this.lblParity.Text = "패리티 비트";
@@ -293,7 +293,7 @@ namespace Devinno.Forms.Dialogs
             this.lblStopBit.LongClickTime = 0;
             this.lblStopBit.Name = "lblStopBit";
             this.lblStopBit.Size = new System.Drawing.Size(108, 45);
-            this.lblStopBit.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
+            this.lblStopBit.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
             this.lblStopBit.TabIndex = 4;
             this.lblStopBit.TabStop = false;
             this.lblStopBit.Text = "정지 비트";

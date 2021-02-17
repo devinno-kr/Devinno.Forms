@@ -68,9 +68,9 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region ButtonStyle
-        private StepButtonStyle eButtonStyle = StepButtonStyle.LeftRight;
+        private DvStepButtonStyle eButtonStyle = DvStepButtonStyle.LeftRight;
         [Category("- 모양")]
-        public StepButtonStyle ButtonStyle
+        public DvStepButtonStyle ButtonStyle
         {
             get => eButtonStyle;
             set
@@ -220,7 +220,7 @@ namespace Devinno.Forms.Controls
                     if (!bLeft)
                     {
                         var c = ButtonColor;
-                        var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-left" : "fa-minus";
+                        var s = ButtonStyle == DvStepButtonStyle.LeftRight ? "fa-chevron-left" : "fa-minus";
                         Theme.DrawBox(e.Graphics, c, BackColor, rtLeft, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
                         Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtLeft.Height / 5 }, null, Font, ForeColor, c, rtLeft, DvContentAlignment.MiddleCenter);
                     }
@@ -228,7 +228,7 @@ namespace Devinno.Forms.Controls
                     {
                         rtLeft.Offset(0, 1);
                         var c = ButtonColor.BrightnessTransmit(Theme.DownBright);
-                        var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-left" : "fa-minus";
+                        var s = ButtonStyle == DvStepButtonStyle.LeftRight ? "fa-chevron-left" : "fa-minus";
                         Theme.DrawBox(e.Graphics, c, BackColor, rtLeft, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
                         Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtLeft.Height / 5 }, null, Font, ForeColor, c, rtLeft, DvContentAlignment.MiddleCenter);
                     }
@@ -236,7 +236,7 @@ namespace Devinno.Forms.Controls
                     if (!bRight)
                     {
                         var c = ButtonColor;
-                        var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-right" : "fa-plus";
+                        var s = ButtonStyle == DvStepButtonStyle.LeftRight ? "fa-chevron-right" : "fa-plus";
                         Theme.DrawBox(e.Graphics, c, BackColor, rtRight, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
                         Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtRight.Height / 5 }, null, Font, ForeColor, c, rtRight, DvContentAlignment.MiddleCenter);
                     }
@@ -244,7 +244,7 @@ namespace Devinno.Forms.Controls
                     {
                         rtRight.Offset(0, 1);
                         var c = ButtonColor.BrightnessTransmit(Theme.DownBright);
-                        var s = ButtonStyle == StepButtonStyle.LeftRight ? "fa-chevron-right" : "fa-plus";
+                        var s = ButtonStyle == DvStepButtonStyle.LeftRight ? "fa-chevron-right" : "fa-plus";
                         Theme.DrawBox(e.Graphics, c, BackColor, rtRight, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
                         Theme.DrawTextShadow(e.Graphics, new DvIcon(s) { IconSize = rtRight.Height / 5 }, null, Font, ForeColor, c, rtRight, DvContentAlignment.MiddleCenter);
                     }
@@ -314,7 +314,7 @@ namespace Devinno.Forms.Controls
         #endregion
     }
 
-    #region enum : StepButtonStyle
-    public enum StepButtonStyle { PlusMinus, LeftRight }
+    #region enum : DvStepButtonStyle
+    public enum DvStepButtonStyle { PlusMinus, LeftRight }
     #endregion
 }

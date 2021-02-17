@@ -54,8 +54,8 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region Style
-        private LabelStyle eStyle = LabelStyle.FlatConvex;
-        public LabelStyle Style
+        private DvLabelStyle eStyle = DvLabelStyle.FlatConvex;
+        public DvLabelStyle Style
         {
             get => eStyle;
             set
@@ -166,16 +166,16 @@ namespace Devinno.Forms.Controls
             {
                 switch (Style)
                 {
-                    case LabelStyle.FlatConcave:
+                    case DvLabelStyle.FlatConcave:
                         Theme.DrawBox(e.Graphics, SelectorColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL);
                         break;
-                    case LabelStyle.FlatConvex:
+                    case DvLabelStyle.FlatConvex:
                         Theme.DrawBox(e.Graphics, SelectorColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
                         break;
-                    case LabelStyle.Concave:
+                    case DvLabelStyle.Concave:
                         Theme.DrawBox(e.Graphics, SelectorColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
                         break;
-                    case LabelStyle.Convex:
+                    case DvLabelStyle.Convex:
                         Theme.DrawBox(e.Graphics, SelectorColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW | BoxDrawOption.IN_BEVEL_LT);
                         break;
                 }

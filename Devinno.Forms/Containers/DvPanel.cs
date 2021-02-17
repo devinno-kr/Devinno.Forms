@@ -128,8 +128,8 @@ namespace Devinno.Forms.Containers
         }
         #endregion
         #region Style
-        private PanelStyle eStyle = PanelStyle.A;
-        public PanelStyle Style
+        private DvPanelStyle eStyle = DvPanelStyle.A;
+        public DvPanelStyle Style
         {
             get => eStyle;
             set
@@ -174,7 +174,7 @@ namespace Devinno.Forms.Containers
             base.LoadAreas(g);
 
             var rtContent = Areas["rtContent"];
-            if (Style == PanelStyle.A)
+            if (Style == DvPanelStyle.A)
             {
                 var rtTitle = new Rectangle(rtContent.X + 2, rtContent.Y, rtContent.Width - 4, TitleHeight);
                 var rtPanel = new Rectangle(rtContent.X, rtTitle.Bottom, rtContent.Width, rtContent.Height - rtTitle.Bottom);
@@ -215,7 +215,7 @@ namespace Devinno.Forms.Containers
             #endregion
             #region Draw
             e.Graphics.Clear(Parent.BackColor);
-            if (Style == PanelStyle.A)
+            if (Style == DvPanelStyle.A)
             {
                 if (DrawTitle)
                 {
@@ -244,5 +244,5 @@ namespace Devinno.Forms.Containers
         #endregion
     }
 
-    public enum PanelStyle { A, B }
+    public enum DvPanelStyle { A, B }
 }

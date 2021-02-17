@@ -48,7 +48,9 @@ namespace Devinno.Forms.Dialogs
         {
             Theme = GetCallerFormTheme() ?? Theme;
             SerialPortSetting ret = null;
+
             #region UI
+            var f = DpiRatio;
             this.Size = new Size(400, 396);
 
             layout.SuspendLayout();
@@ -106,7 +108,7 @@ namespace Devinno.Forms.Dialogs
                 cmbStopBit.SelectedIndex = 1;
             }
 
-            cmbPort.ItemHeight = cmbBaudrate.ItemHeight = cmbDataBit.ItemHeight = cmbParity.ItemHeight = cmbStopBit.ItemHeight = Convert.ToInt32(30 * DeviceDpi);
+            cmbPort.ItemHeight = cmbBaudrate.ItemHeight = cmbDataBit.ItemHeight = cmbParity.ItemHeight = cmbStopBit.ItemHeight = Convert.ToInt32(30 * f);
             #endregion
             #region ShowDialog
             if (this.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -131,6 +133,7 @@ namespace Devinno.Forms.Dialogs
 
             SerialPortSetting ret = null;
             #region UI
+            var f = DpiRatio;
             this.Size = new Size(400, 246);
 
             layout.SuspendLayout();
@@ -181,7 +184,7 @@ namespace Devinno.Forms.Dialogs
                 cmbStopBit.SelectedIndex = 1;
             }
 
-            cmbPort.ItemHeight = cmbBaudrate.ItemHeight = cmbDataBit.ItemHeight = cmbParity.ItemHeight = cmbStopBit.ItemHeight = Convert.ToInt32(30 * DeviceDpi);
+            cmbPort.ItemHeight = cmbBaudrate.ItemHeight = cmbDataBit.ItemHeight = cmbParity.ItemHeight = cmbStopBit.ItemHeight = Convert.ToInt32(30 * f);
             #endregion
             #region ShowDialog
             if (this.ShowDialog() == System.Windows.Forms.DialogResult.OK)

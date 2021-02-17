@@ -99,6 +99,21 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region BorderColor
+        private Color cBorderColor = Color.Red;
+        public Color BorderColor
+        {
+            get => cBorderColor;
+            set
+            {
+                if (cBorderColor != value)
+                {
+                    cBorderColor = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
         #region ItemColor
         private Color cItemColor = DvTheme.DefaultTheme.Color2;
         public Color ItemColor
@@ -345,6 +360,21 @@ namespace Devinno.Forms.Controls
             set { if (strOffText != value) { strOffText = value; Invalidate(); } }
         }
         #endregion
+        #region DrawBorder
+        private bool bDrawBorder = false;
+        public bool DrawBorder
+        {
+            get => bDrawBorder;
+            set
+            {
+                if(bDrawBorder != value)
+                {
+                    bDrawBorder = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
         #endregion
 
         #region Member Variable
@@ -384,6 +414,7 @@ namespace Devinno.Forms.Controls
         #region Event
         public event EventHandler SelectedIndexChanged;
         public event EventHandler OnOffChanged;
+        public event EventHandler ValueTextChanged;
         #endregion
 
         #region Override
@@ -469,19 +500,19 @@ namespace Devinno.Forms.Controls
                         Theme.DrawBox(e.Graphics, TitleColor, BackColor, rtTitle, RoundType.L, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW);
                         #endregion
                         #region ValueBox
-                        var Style = LabelStyle.FlatConcave;
+                        var Style = DvLabelStyle.FlatConcave;
                         switch (Style)
                         {
-                            case LabelStyle.FlatConcave:
+                            case DvLabelStyle.FlatConcave:
                                 Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL);
                                 break;
-                            case LabelStyle.FlatConvex:
+                            case DvLabelStyle.FlatConvex:
                                 Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
                                 break;
-                            case LabelStyle.Concave:
+                            case DvLabelStyle.Concave:
                                 Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
                                 break;
-                            case LabelStyle.Convex:
+                            case DvLabelStyle.Convex:
                                 Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW | BoxDrawOption.IN_BEVEL_LT);
                                 break;
                         }
@@ -600,6 +631,11 @@ namespace Devinno.Forms.Controls
                     break;
                 #endregion
                 default: break;
+            }
+
+            if(DrawBorder)
+            {
+                Theme.DrawBorder(e.Graphics, BorderColor, BackColor, 1, rtContent, RoundType.ALL, BoxDrawOption.BORDER);
             }
             #endregion
             #region Dispose
@@ -755,6 +791,8 @@ namespace Devinno.Forms.Controls
                 textbox.SelectionStart = selectionStart <= textbox.Text.Length ? selectionStart : textbox.Text.Length;
                 #endregion
             }
+
+            ValueTextChanged?.Invoke(this, null);
         }
         #endregion
         #region Center

@@ -179,7 +179,7 @@ namespace Devinno.Forms.Dialogs
             this.Txt.Margin = new System.Windows.Forms.Padding(0);
             this.Txt.Name = "Txt";
             this.Txt.Size = new System.Drawing.Size(800, 74);
-            this.Txt.Style = Devinno.Forms.Controls.LabelStyle.Convex;
+            this.Txt.Style = Devinno.Forms.Controls.DvLabelStyle.Convex;
             this.Txt.TabIndex = 31;
             this.Txt.TabStop = false;
             this.Txt.TextPadding = new System.Windows.Forms.Padding(0);

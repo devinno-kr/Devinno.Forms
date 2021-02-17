@@ -178,8 +178,7 @@ namespace Devinno.Forms.Controls
             scroll.GetScrollTotal = () => GraphDatas.Count > 1 && Series.Count > 0 ? (new DateTime(Convert.ToInt64(Math.Ceiling(Convert.ToDouble(GraphDatas.Last().Time.Ticks) / Convert.ToDouble(XAxisGraduation.Ticks))) * XAxisGraduation.Ticks) - new DateTime(GraphDatas.First().Time.Ticks / XAxisGraduation.Ticks * XAxisGraduation.Ticks)).Ticks : 0L;
             scroll.GetScrollTick = () =>  XAxisGraduation.Ticks;
             scroll.GetScrollView = () => XScale.Ticks;
-            scroll.GetScrollScaleFactor = () => 
-            Areas.ContainsKey("rtGraph") ? (double)XScale.Ticks / (double)Areas["rtGraph"].Width : 1D;
+            scroll.GetScrollScaleFactor = () => Areas.ContainsKey("rtGraph") ? (double)XScale.Ticks / (double)Areas["rtGraph"].Width : 1D;
         }
         #endregion
 

@@ -28,9 +28,5 @@ namespace Devinno.Forms
         
         DvDataGrid
 
-    Dialog
-        DvSelectorDialog
-        DvPropertiesDialog
-        DvInputBox
 
 */

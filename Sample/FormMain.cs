@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,13 +17,17 @@ namespace Sample
 {
     public partial class FormMain : DvForm
     {
-        public DvKeyboard Keyboard = new DvKeyboard();
-        public DvSerialPortSetting dlg = new DvSerialPortSetting();
         public FormMain()
         {
             InitializeComponent();
 
-            btnKeyboard.MouseUp += (o, s) => { var r = dlg.ShowSimpleSerialPortSetting();};
+            btnInputBox.MouseUp += (o, s) =>
+            {
+                Block = true;
+                
+                Block = false;
+            };
+
         }
     }
 }

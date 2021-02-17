@@ -53,8 +53,8 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region Style
-        private NumberBoxStyle eStyle = NumberBoxStyle.Right;
-        public NumberBoxStyle Style
+        private DvNumberBoxStyle eStyle = DvNumberBoxStyle.Right;
+        public DvNumberBoxStyle Style
         {
             get => eStyle;
             set
@@ -206,7 +206,7 @@ namespace Devinno.Forms.Controls
             var rtContent = Areas["rtContent"];
             switch (Style)
             {
-                case NumberBoxStyle.LeftRight:
+                case DvNumberBoxStyle.LeftRight:
                     {
                         var rtMinus = new Rectangle(rtContent.X, rtContent.Y, rtContent.Height, rtContent.Height);
                         var rtPlus = new Rectangle(rtContent.Right - rtContent.Height, rtContent.Y, rtContent.Height, rtContent.Height);
@@ -216,7 +216,7 @@ namespace Devinno.Forms.Controls
                         SetArea("rtValue", rtValue);
                     } 
                     break;
-                case NumberBoxStyle.Right:
+                case DvNumberBoxStyle.Right:
                     {
                         var rtR = new Rectangle(rtContent.Right - rtContent.Height, rtContent.Y, rtContent.Height, rtContent.Height);
 
@@ -228,7 +228,7 @@ namespace Devinno.Forms.Controls
                         SetArea("rtValue", rtValue);
                     }
                     break;
-                case NumberBoxStyle.UpDown:
+                case DvNumberBoxStyle.UpDown:
                     {
                         int h = rtContent.Height / 3;
                         var rtPlus = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width, h);
@@ -267,7 +267,7 @@ namespace Devinno.Forms.Controls
             
             switch(Style)
             {
-                case NumberBoxStyle.LeftRight:
+                case DvNumberBoxStyle.LeftRight:
                     {
                         int isz = rtM.Height / 4;
                         #region Back
@@ -312,7 +312,7 @@ namespace Devinno.Forms.Controls
                     }
                     break;
 
-                case NumberBoxStyle.Right:
+                case DvNumberBoxStyle.Right:
                     {
                         int isz = rtM.Height / 4;
                         #region Back
@@ -357,7 +357,7 @@ namespace Devinno.Forms.Controls
                     }
                     break;
 
-                case NumberBoxStyle.UpDown:
+                case DvNumberBoxStyle.UpDown:
                     {
                         int isz = rtM.Height / 4;
                         #region Back
@@ -458,7 +458,7 @@ namespace Devinno.Forms.Controls
         #endregion
     }
 
-    #region enum : NumberBoxStyle
-    public enum NumberBoxStyle { UpDown, LeftRight, Right};
+    #region enum : DvNumberBoxStyle
+    public enum DvNumberBoxStyle { UpDown, LeftRight, Right};
     #endregion
 }

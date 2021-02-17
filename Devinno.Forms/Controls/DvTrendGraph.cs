@@ -482,7 +482,7 @@ namespace Devinno.Forms.Controls
                     {
                         if (XAxisGridDraw && x > rtGraph.Left && x < rtGraph.Right) e.Graphics.DrawLine(p, x, rtGraph.Top, x, rtGraph.Bottom);
 
-                        var sval = ts.ToString();
+                        var sval = (ts.TotalSeconds == 0 ? "" : "-") + ts.ToString(string.IsNullOrWhiteSpace(TimeFormatString) ? @"d\.hh\:mm\:ss\.fff" : TimeFormatString);
                         var sz = e.Graphics.MeasureString(sval, Font);
                         var rt = MathTool.MakeRectangle(new Point(Convert.ToInt32(x), Convert.ToInt32(rtNameAxis.Y + (rtNameAxis.Height / 2))), Convert.ToInt32(sz.Width) + 2, Convert.ToInt32(sz.Height) + 2);
                         Theme.DrawTextShadow(e.Graphics, null, sval, Font, GridColor, BackColor, rt, DvContentAlignment.MiddleCenter);
@@ -500,10 +500,10 @@ namespace Devinno.Forms.Controls
                 e.Graphics.SetClip(rtGraph);
                 foreach (var v in Series)
                 {
-                    var pts = GraphDatas.Select(x => new Point(Convert.ToInt32(MathTool.Map(x.Time.Ticks + spos, ed.Ticks, ed.Ticks - tsXScale.Ticks, rtGraph.Right, rtGraph.Left)),
-                                                               Convert.ToInt32(MathTool.Map(x.Values[v.Name], v.Minimum, v.Maximum, rtGraph.Bottom, rtGraph.Top)))).ToArray();
+                    var pts = GraphDatas.Select(x => new PointF(Convert.ToSingle(MathTool.Map((double)x.Time.Ticks + (double)spos, ed.Ticks, ed.Ticks - tsXScale.Ticks, rtGraph.Right, rtGraph.Left)),
+                                                               Convert.ToSingle(MathTool.Map(x.Values[v.Name], v.Minimum, v.Maximum, rtGraph.Bottom, rtGraph.Top)))).ToArray();
 
-                    pts = pts.Where(x => x.X >= rtGraph.Left && x.X <= rtGraph.Right).ToArray();
+                    pts = pts.Where(x => x.X >= rtGraph.Left - 10 && x.X <= rtGraph.Right + 10).ToArray();
                     p.Width = 2;
                     p.DashStyle = DashStyle.Solid;
                     p.Color = v.SeriesColor;
@@ -603,8 +603,8 @@ namespace Devinno.Forms.Controls
                     foreach (var vk in dicProps.Keys) tgv.Values.Add(vk, (double)dicProps[vk].GetValue(value));
 
                     GraphDatas.Add(tgv);
-
-                    GraphDatas = GraphDatas.Where(x => tgv.Time - MaximumXScale <= x.Time && x.Time <= tgv.Time).ToList();
+                    var ar = GraphDatas.ToArray();
+                    GraphDatas = ar.Where(x => tgv.Time - MaximumXScale - TimeSpan.FromMilliseconds(Interval * 2) <= x.Time).ToList();
                 }
             }
         }

@@ -67,8 +67,8 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region LampStyle
-        private LampStyle eLampStyle = LampStyle.CIRCLE;
-        public LampStyle LampStyle
+        private DvLampStyle eLampStyle = DvLampStyle.CIRCLE;
+        public DvLampStyle LampStyle
         {
             get => eLampStyle;
             set
@@ -248,7 +248,7 @@ namespace Devinno.Forms.Controls
             if (string.IsNullOrWhiteSpace(Text))
             {
                 var ng = Math.Min(LampSize / 8, 9);
-                var szv = LampStyle == LampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
+                var szv = LampStyle == DvLampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
                 var rtFA = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
                 var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
 
@@ -257,12 +257,12 @@ namespace Devinno.Forms.Controls
             }
             else
             {
-                if (LampStyle == LampStyle.CIRCLE)
+                if (LampStyle == DvLampStyle.CIRCLE)
                 {
                     var ng = Math.Min(LampSize / 8, 9);
                     var gap = LampGap;
                     var f = DpiRatio;
-                    var szFA = LampStyle == LampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
+                    var szFA = LampStyle == DvLampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
                     var szTX = g.MeasureString(Text, Font);
                     var szv = g.MeasureTextIcon(eLampAlignment, szFA, gap, Text, Font);
 
@@ -292,7 +292,7 @@ namespace Devinno.Forms.Controls
                 else
                 {
                     var ng = Math.Min(LampSize / 8, 9);
-                    var szv = LampStyle == LampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
+                    var szv = LampStyle == DvLampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
                     var rtFA = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
                     var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
                    
@@ -326,7 +326,7 @@ namespace Devinno.Forms.Controls
             {
                 try
                 {
-                    if (LampStyle == LampStyle.CIRCLE)
+                    if (LampStyle == DvLampStyle.CIRCLE)
                     {
                         Theme.DrawBox(e.Graphics, LampBackColor, BackColor, rtBack, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
 
@@ -642,7 +642,7 @@ namespace Devinno.Forms.Controls
         #endregion
     }
 
-    #region enum : LampStyle
-    public enum LampStyle { CIRCLE = 0, RECT = 1 }
+    #region enum : DvLampStyle
+    public enum DvLampStyle { CIRCLE = 0, RECT = 1 }
     #endregion
 }

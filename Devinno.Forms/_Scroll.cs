@@ -59,7 +59,7 @@ namespace Devinno.Forms
                 if (TouchMode)
                 {
                     if (Direction == ScrollDirection.Vertical) return tcDown != null && ScrollView < ScrollTotal ? Convert.ToInt64((tcDown.MovePoint.Y - tcDown.DownPoint.Y) * ScrollScaleFactor) : 0;
-                    else return tcDown != null && ScrollView < ScrollTotal ? Convert.ToInt64((tcDown.MovePoint.Y - tcDown.DownPoint.Y) * ScrollScaleFactor) : 0;
+                    else return tcDown != null && ScrollView < ScrollTotal ? Convert.ToInt64((tcDown.MovePoint.X - tcDown.DownPoint.X) * ScrollScaleFactor) : 0;
                 }
                 else return 0;
             }

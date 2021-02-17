@@ -150,7 +150,7 @@ namespace Devinno.Forms.Controls
             var rtText = Areas["rtText"];
             if (CollisionTool.Check(rtBox, e.Location) || CollisionTool.Check(rtText, e.Location))
             {
-                Checked = !Checked;
+                Checked = true;
                 Focus();
             }
             base.OnMouseDown(e);

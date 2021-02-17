@@ -32,8 +32,8 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region ScaleMode
-        private PictureScaleMode eScaleMode = PictureScaleMode.Strech;
-        public PictureScaleMode ScaleMode
+        private DvPictureBoxScaleMode eScaleMode = DvPictureBoxScaleMode.Strech;
+        public DvPictureBoxScaleMode ScaleMode
         {
             get => eScaleMode;
             set
@@ -100,16 +100,16 @@ namespace Devinno.Forms.Controls
                     int cy = rtContent.Y + (rtContent.Height / 2);
                     switch (ScaleMode)
                     {
-                        case PictureScaleMode.Real:
+                        case DvPictureBoxScaleMode.Real:
                             e.Graphics.DrawImage(Image, new Rectangle(rtContent.X, rtContent.Y, Image.Width, Image.Height));
                             break;
-                        case PictureScaleMode.CenterImage:
+                        case DvPictureBoxScaleMode.CenterImage:
                             e.Graphics.DrawImage(Image, new Rectangle(cx - (Image.Width / 2), cy - (Image.Height / 2), Image.Width, Image.Height));
                             break;
-                        case PictureScaleMode.Strech:
+                        case DvPictureBoxScaleMode.Strech:
                             e.Graphics.DrawImage(Image, rtContent);
                             break;
-                        case PictureScaleMode.Zoom:
+                        case DvPictureBoxScaleMode.Zoom:
                             double imgratio = 1D;
                             if ((Image.Width - rtContent.Width) > (Image.Height - rtContent.Height)) imgratio = (double)rtContent.Width / (double)Image.Width;
                             else imgratio = (double)rtContent.Height / (double)Image.Height;
@@ -138,7 +138,7 @@ namespace Devinno.Forms.Controls
         #endregion
     }
 
-    #region enum : PictureScaleMode
-    public enum PictureScaleMode { Real, CenterImage, Strech, Zoom }
+    #region enum : DvPictureBoxScaleMode
+    public enum DvPictureBoxScaleMode { Real, CenterImage, Strech, Zoom }
     #endregion
 }

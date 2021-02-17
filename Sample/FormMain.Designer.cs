@@ -29,38 +29,38 @@ namespace Sample
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnKeyboard = new Devinno.Forms.Controls.DvButton();
+            this.btnInputBox = new Devinno.Forms.Controls.DvButton();
             this.SuspendLayout();
             // 
-            // btnKeyboard
+            // btnInputBox
             // 
-            this.btnKeyboard.BackgroundDraw = true;
-            this.btnKeyboard.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.btnKeyboard.Clickable = true;
-            this.btnKeyboard.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnKeyboard.Gradient = true;
-            this.btnKeyboard.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
-            this.btnKeyboard.IconGap = 3;
-            this.btnKeyboard.IconImage = null;
-            this.btnKeyboard.IconSize = 12F;
-            this.btnKeyboard.IconString = "fa-keyboard";
-            this.btnKeyboard.Location = new System.Drawing.Point(29, 93);
-            this.btnKeyboard.LongClickTime = 0;
-            this.btnKeyboard.Name = "btnKeyboard";
-            this.btnKeyboard.Size = new System.Drawing.Size(225, 45);
-            this.btnKeyboard.TabIndex = 0;
-            this.btnKeyboard.Text = "키보드";
-            this.btnKeyboard.TextPadding = new System.Windows.Forms.Padding(0);
-            this.btnKeyboard.UseLongClick = false;
-            this.btnKeyboard.UseThemeColor = true;
+            this.btnInputBox.BackgroundDraw = true;
+            this.btnInputBox.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.btnInputBox.Clickable = true;
+            this.btnInputBox.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.btnInputBox.Gradient = true;
+            this.btnInputBox.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.btnInputBox.IconGap = 3;
+            this.btnInputBox.IconImage = null;
+            this.btnInputBox.IconSize = 12F;
+            this.btnInputBox.IconString = "";
+            this.btnInputBox.Location = new System.Drawing.Point(29, 93);
+            this.btnInputBox.LongClickTime = 0;
+            this.btnInputBox.Name = "btnInputBox";
+            this.btnInputBox.Size = new System.Drawing.Size(225, 45);
+            this.btnInputBox.TabIndex = 0;
+            this.btnInputBox.Text = "INPUT BOX";
+            this.btnInputBox.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnInputBox.UseLongClick = false;
+            this.btnInputBox.UseThemeColor = true;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.ClientSize = new System.Drawing.Size(737, 690);
-            this.Controls.Add(this.btnKeyboard);
+            this.ClientSize = new System.Drawing.Size(489, 424);
+            this.Controls.Add(this.btnInputBox);
             this.MinimumSize = new System.Drawing.Size(300, 200);
             this.Name = "FormMain";
             this.NoFrame = true;
@@ -78,7 +78,7 @@ namespace Sample
 
         #endregion
 
-        private Devinno.Forms.Controls.DvButton btnKeyboard;
+        private Devinno.Forms.Controls.DvButton btnInputBox;
     }
 }
 

@@ -139,7 +139,7 @@ namespace Devinno.Forms.Dialogs
             this.lblColor.LongClickTime = 0;
             this.lblColor.Name = "lblColor";
             this.lblColor.Size = new System.Drawing.Size(62, 45);
-            this.lblColor.Style = Devinno.Forms.Controls.LabelStyle.FlatConvex;
+            this.lblColor.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
             this.lblColor.TabIndex = 4;
             this.lblColor.TabStop = false;
             this.lblColor.TextPadding = new System.Windows.Forms.Padding(0);
@@ -150,6 +150,7 @@ namespace Devinno.Forms.Dialogs
             // 
             // inR
             // 
+            this.inR.ButtonWidth = 60;
             this.inR.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inR.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
@@ -165,7 +166,9 @@ namespace Devinno.Forms.Dialogs
             this.inR.MaximumViewCount = 10;
             this.inR.MinusInput = false;
             this.inR.Name = "inR";
+            this.inR.OffText = "OFF";
             this.inR.OnOff = false;
+            this.inR.OnText = "ON";
             this.inR.SelectedIndex = -1;
             this.inR.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.inR.Size = new System.Drawing.Size(137, 44);
@@ -183,6 +186,7 @@ namespace Devinno.Forms.Dialogs
             // 
             // inG
             // 
+            this.inG.ButtonWidth = 60;
             this.inG.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inG.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inG.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
@@ -198,7 +202,9 @@ namespace Devinno.Forms.Dialogs
             this.inG.MaximumViewCount = 10;
             this.inG.MinusInput = false;
             this.inG.Name = "inG";
+            this.inG.OffText = "OFF";
             this.inG.OnOff = false;
+            this.inG.OnText = "ON";
             this.inG.SelectedIndex = -1;
             this.inG.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.inG.Size = new System.Drawing.Size(137, 44);
@@ -216,6 +222,7 @@ namespace Devinno.Forms.Dialogs
             // 
             // inB
             // 
+            this.inB.ButtonWidth = 60;
             this.inB.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inB.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
@@ -231,7 +238,9 @@ namespace Devinno.Forms.Dialogs
             this.inB.MaximumViewCount = 10;
             this.inB.MinusInput = false;
             this.inB.Name = "inB";
+            this.inB.OffText = "OFF";
             this.inB.OnOff = false;
+            this.inB.OnText = "ON";
             this.inB.SelectedIndex = -1;
             this.inB.SelectedItemColor = System.Drawing.Color.DarkRed;
             this.inB.Size = new System.Drawing.Size(138, 44);
@@ -261,7 +270,7 @@ namespace Devinno.Forms.Dialogs
             // 
             // DvColorPickerDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(450, 500);
             this.Controls.Add(this.dvContainer1);
