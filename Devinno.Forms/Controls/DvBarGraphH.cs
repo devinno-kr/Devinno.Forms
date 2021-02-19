@@ -253,7 +253,7 @@ namespace Devinno.Forms.Controls
             Size = new System.Drawing.Size(300, 200);
 
             scroll.Direction = ScrollDirection.Vertical;
-            scroll.ScrollChanged += (o, s) => Invalidate();
+            scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
             scroll.GetScrollTotal = () => GraphDatas.Count > 0 && Series.Count > 0 ? GraphDatas.Count * DataH : 0;
             scroll.GetScrollTick = () => DataH;
             scroll.GetScrollView = () => Areas.ContainsKey("rtGraph") ? Areas["rtGraph"].Height : 0;

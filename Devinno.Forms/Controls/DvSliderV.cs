@@ -192,7 +192,7 @@ namespace Devinno.Forms.Controls
             TabStop = true;
             #endregion
 
-            this.Size = new Size(300, 30);
+            this.Size = new Size(30, 300);
         }
         #endregion
 

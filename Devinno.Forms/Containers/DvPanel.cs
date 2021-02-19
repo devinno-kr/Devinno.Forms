@@ -176,7 +176,7 @@ namespace Devinno.Forms.Containers
             var rtContent = Areas["rtContent"];
             if (Style == DvPanelStyle.A)
             {
-                var rtTitle = new Rectangle(rtContent.X + 2, rtContent.Y, rtContent.Width - 4, TitleHeight);
+                var rtTitle = new Rectangle(rtContent.X + 1, rtContent.Y, rtContent.Width - 2, TitleHeight);
                 var rtPanel = new Rectangle(rtContent.X, rtTitle.Bottom, rtContent.Width, rtContent.Height - rtTitle.Bottom);
                 var rtText = new Rectangle(rtTitle.X + TextPadding.Left, rtTitle.Y + TextPadding.Top, rtTitle.Width - (TextPadding.Left + TextPadding.Right), rtTitle.Height - (TextPadding.Top + TextPadding.Bottom));
                 SetArea("rtTitle", rtTitle);

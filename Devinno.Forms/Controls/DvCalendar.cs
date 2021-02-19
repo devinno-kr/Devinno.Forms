@@ -227,9 +227,12 @@ namespace Devinno.Forms.Controls
             #endregion
             #region Draw
             #region BG
-            Theme.DrawBox(e.Graphics, DaysBoxColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.OUT_SHADOW);
-            Theme.DrawBox(e.Graphics, MonthlyBoxColor, BackColor, rtMonthly,  RoundType.T, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.GRADIENT_V);
-            Theme.DrawBox(e.Graphics, WeeklyBoxColor, BackColor, rtWeekly,  RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW);
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+                Theme.DrawBox(e.Graphics, DaysBoxColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                Theme.DrawBox(e.Graphics, MonthlyBoxColor, BackColor, rtMonthly, RoundType.T, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.GRADIENT_V);
+                Theme.DrawBox(e.Graphics, WeeklyBoxColor, BackColor, rtWeekly, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW);
+            }
             #endregion
             #region Month Text / Prev / Next
             {

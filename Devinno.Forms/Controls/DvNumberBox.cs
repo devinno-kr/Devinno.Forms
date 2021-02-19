@@ -133,6 +133,14 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region ButtonWidth
+        int nButtonWidth = 60;
+        public int ButtonWidth
+        {
+            get { return nButtonWidth; }
+            set { if (nButtonWidth != value) { nButtonWidth = value; Invalidate(); } }
+        }
+        #endregion
         #endregion
 
         #region Member variable
@@ -208,9 +216,9 @@ namespace Devinno.Forms.Controls
             {
                 case DvNumberBoxStyle.LeftRight:
                     {
-                        var rtMinus = new Rectangle(rtContent.X, rtContent.Y, rtContent.Height, rtContent.Height);
-                        var rtPlus = new Rectangle(rtContent.Right - rtContent.Height, rtContent.Y, rtContent.Height, rtContent.Height);
-                        var rtValue = new Rectangle(rtContent.X + rtContent.Height, rtContent.Y, rtContent.Width - (rtContent.Height * 2), rtContent.Height);
+                        var rtMinus = new Rectangle(rtContent.X, rtContent.Y, ButtonWidth, rtContent.Height);
+                        var rtPlus = new Rectangle(rtContent.Right - ButtonWidth, rtContent.Y, ButtonWidth, rtContent.Height);
+                        var rtValue = new Rectangle(rtContent.X + ButtonWidth, rtContent.Y, rtContent.Width - (ButtonWidth * 2), rtContent.Height);
                         SetArea("rtMinus", rtMinus);
                         SetArea("rtPlus", rtPlus);
                         SetArea("rtValue", rtValue);
@@ -218,7 +226,7 @@ namespace Devinno.Forms.Controls
                     break;
                 case DvNumberBoxStyle.Right:
                     {
-                        var rtR = new Rectangle(rtContent.Right - rtContent.Height, rtContent.Y, rtContent.Height, rtContent.Height);
+                        var rtR = new Rectangle(rtContent.Right - ButtonWidth, rtContent.Y, ButtonWidth, rtContent.Height);
 
                         var rtPlus = new Rectangle(rtR.X, rtContent.Y, rtR.Width, rtR.Height / 2);
                         var rtMinus = new Rectangle(rtR.X, rtPlus.Bottom, rtR.Width, rtContent.Bottom - rtPlus.Bottom);
@@ -230,7 +238,7 @@ namespace Devinno.Forms.Controls
                     break;
                 case DvNumberBoxStyle.UpDown:
                     {
-                        int h = rtContent.Height / 3;
+                        int h = ButtonWidth;
                         var rtPlus = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width, h);
                         var rtMinus = new Rectangle(rtContent.X, rtContent.Bottom - h, rtContent.Width, h);
                         var rtValue = new Rectangle(rtContent.X, rtPlus.Bottom, rtContent.Width, rtMinus.Top - rtPlus.Bottom);
@@ -269,7 +277,7 @@ namespace Devinno.Forms.Controls
             {
                 case DvNumberBoxStyle.LeftRight:
                     {
-                        int isz = rtM.Height / 4;
+                        int isz = Math.Max(rtM.Height / 4, 1);
                         #region Back
                         Theme.DrawBox(e.Graphics, ValueBoxColor, BackColor, rtTxt, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
                         #endregion
@@ -314,7 +322,7 @@ namespace Devinno.Forms.Controls
 
                 case DvNumberBoxStyle.Right:
                     {
-                        int isz = rtM.Height / 4;
+                        int isz = Math.Max(rtM.Height / 4, 1);
                         #region Back
                         Theme.DrawBox(e.Graphics, ValueBoxColor, BackColor, rtTxt, RoundType.L, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
                         #endregion
@@ -359,7 +367,7 @@ namespace Devinno.Forms.Controls
 
                 case DvNumberBoxStyle.UpDown:
                     {
-                        int isz = rtM.Height / 4;
+                        int isz = Math.Max(rtM.Height / 4, 1);
                         #region Back
                         Theme.DrawBox(e.Graphics, ValueBoxColor, BackColor, rtTxt, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
                         #endregion

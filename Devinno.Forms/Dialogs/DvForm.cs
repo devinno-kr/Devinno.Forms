@@ -23,7 +23,7 @@ namespace Devinno.Forms.Dialogs
     public partial class DvForm : Form
     {
         #region Const
-        public const int BlockAlpha = 150;
+        public const int BlockAlpha = 100;
         #endregion
 
         #region Properties
@@ -257,11 +257,7 @@ namespace Devinno.Forms.Dialogs
                 {
                     bBlock = value;
                     Invalidate();
-                    DvTheme.LoopControl(this, (c) =>
-                    {
-                        if (c is DvTablessControl) ((DvTablessControl)c).SetBlock(bBlock);
-                        c.Invalidate();
-                    });
+                    DvTheme.LoopControl(this, (c) => c.Invalidate());
                 }
             }
         }

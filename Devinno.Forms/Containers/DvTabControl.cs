@@ -2,6 +2,7 @@
 using Devinno.Forms.Dialogs;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
+using Devinno.Forms.Tools;
 using Devinno.Tools;
 using System;
 using System.Collections.Generic;
@@ -75,6 +76,10 @@ namespace Devinno.Forms.Containers
         #endregion
         #endregion
 
+        #region Member Variable
+        List<_TPI> tps = new List<_TPI>();
+        #endregion
+
         #region Constructor
         public DvTabControl()
         {
@@ -139,6 +144,17 @@ namespace Devinno.Forms.Containers
                         e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
                     }
                 }
+
+                foreach (var v in TabPages.Cast<TabPage>().Where(x => !tps.Select(x => x.Page).Contains(x)))
+                {
+                    tps.Add(new _TPI() { Page = v, BackColor = v.BackColor });
+                    v.Paint += (o, s) =>
+                    {
+                        var wnd2 = this.FindForm() as DvForm;
+                        if (wnd2 != null && wnd2.Block)
+                            s.Graphics.Clear(ColorTool.MixColorAlpha(Parent.BackColor, Color.Black, DvForm.BlockAlpha));
+                    };
+                }
             }
         }
         #endregion
@@ -168,6 +184,7 @@ namespace Devinno.Forms.Containers
             var cSelectedTab = TabBarColor.BrightnessTransmit(0.3);
             var cNoSelectText = TabBarColor.BrightnessTransmit(0.6);
             var nPTSZ = Convert.ToInt32(4 * f);
+           
             #region Left
             if (Alignment == TabAlignment.Left)
             {
@@ -286,12 +303,6 @@ namespace Devinno.Forms.Containers
         #endregion
 
         #region Method
-        #region SetBlock
-        internal void SetBlock(bool bBlock)
-        {
-            foreach (var v in TabPages) ((TabPage)v).BackColor = bBlock ? ColorTool.MixColorAlpha(Parent.BackColor, Color.Black, DvForm.BlockAlpha) : Parent.BackColor;
-        }
-        #endregion
         #region GetTheme
         public DvTheme GetTheme()
         {
@@ -315,5 +326,11 @@ namespace Devinno.Forms.Containers
         }
         #endregion
         #endregion
+    }
+
+    internal class _TPI
+    {
+        public TabPage Page { get; set; }
+        public Color BackColor { get; set; }
     }
 }

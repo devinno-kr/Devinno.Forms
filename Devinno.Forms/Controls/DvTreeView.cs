@@ -24,7 +24,7 @@ namespace Devinno.Forms.Controls
 
         #region Properties
         #region BoxColor
-        private Color cBoxColor = DvTheme.DefaultTheme.Color1;
+        private Color cBoxColor = DvTheme.DefaultTheme.Color2;
         public Color BoxColor
         {
             get => cBoxColor;
@@ -39,7 +39,7 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region RadioColor
-        private Color cRadioColor = DvTheme.DefaultTheme.PointColor;
+        private Color cRadioColor = DvTheme.DefaultTheme.Color4;
         public Color RadioColor
         {
             get => cRadioColor;
@@ -117,7 +117,7 @@ namespace Devinno.Forms.Controls
         private DateTime downTime;
         private MouseEventArgs evdown;
         private TreeViewNode first = null;
-        private int ListCount;
+        private List<TreeViewNode> ls = new List<TreeViewNode>();
         #endregion
 
         #region Event
@@ -140,11 +140,9 @@ namespace Devinno.Forms.Controls
 
             Size = new Size(300, 200);
 
-            Nodes.Changed += (o, s) => { Invalidate(); };
-
             scroll.Direction = ScrollDirection.Vertical;
-            scroll.ScrollChanged += (o, s) => Invalidate();
-            scroll.GetScrollTotal = () =>  GetListCount() * RowHeight;
+            scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
+            scroll.GetScrollTotal = () =>  ls.Count * RowHeight;
             scroll.GetScrollTick = () => RowHeight;
             scroll.GetScrollView = () => Areas.ContainsKey("rtBox") ? Areas["rtBox"].Height : 0;
         }
@@ -513,13 +511,10 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region MakeList
-        List<TreeViewNode> MakeList()
+        void MakeList()
         {
-            List<TreeViewNode> ret = new List<TreeViewNode>();
-            for (int i = 0; i < Nodes.Count; i++) MS(Nodes[i], ret);
-
-            ListCount = ret.Count;
-            return ret;
+            ls.Clear();
+            for (int i = 0; i < Nodes.Count; i++) MS(Nodes[i], ls);
         }
 
         void MS(TreeViewNode nd, List<TreeViewNode> lst)
@@ -527,9 +522,6 @@ namespace Devinno.Forms.Controls
             lst.Add(nd);
             if (nd.Expands) for (int i = 0; i < nd.Nodes.Count; i++) MS(nd.Nodes[i], lst);
         }
-        #endregion
-        #region GetListCount
-        int GetListCount() => ListCount;
         #endregion
         #region Loop
         private void Loop(Action<List<TreeViewNode>, int, Rectangle, TreeViewNode, Rectangle, Rectangle, Rectangle, Rectangle> Func)
@@ -543,7 +535,8 @@ namespace Devinno.Forms.Controls
                 var si = Convert.ToInt32(Math.Floor((double)(sc - scroll.TouchOffset) / (double)RowHeight));
                 var cnt = Convert.ToInt32(Math.Ceiling((double)(rtBox.Height - Math.Min(0, scroll.TouchOffset)) / (double)RowHeight));
                 var ei = si + cnt;
-                var ls = MakeList();
+
+                MakeList();
 
                 using (var g = CreateGraphics())
                 {

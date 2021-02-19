@@ -128,7 +128,7 @@ namespace Devinno.Forms.Containers
             var br = new SolidBrush(Color.Black);
             #endregion
             #region Draw
-            e.Graphics.Clear(Parent.BackColor);
+            e.Graphics.Clear(BackColor);
 
             if (BackColor.GetBrightness() > BorderColor.GetBrightness())
                 Theme.DrawBorder(e.Graphics, BorderColor, BackColor, BorderWidth, rtPanel, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | BoxDrawOption.OUT_BEVEL_RB);

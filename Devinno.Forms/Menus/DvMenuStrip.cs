@@ -1,4 +1,6 @@
-﻿using Devinno.Forms.Themes;
+﻿using Devinno.Forms.Dialogs;
+using Devinno.Forms.Themes;
+using Devinno.Tools;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -31,7 +33,23 @@ namespace Devinno.Forms.Menus
         protected override void OnHandleCreated(EventArgs e) { SetRenderer(); base.OnHandleCreated(e); }
         protected override void OnCreateControl() { SetRenderer(); base.OnCreateControl(); }
         protected override void OnParentChanged(EventArgs e) { SetRenderer(); base.OnParentChanged(e); }
-        protected override void OnPaint(PaintEventArgs e) { SetRenderer(); base.OnPaint(e); }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            SetRenderer();
+            var wnd2 = this.FindForm() as DvForm;
+            if (wnd2 != null)
+            {
+                var thm = GetTheme();
+
+                if (wnd2.Block)
+                {
+                    e.Graphics.Clear(ColorTool.MixColorAlpha(BackColor, Color.Black, DvForm.BlockAlpha));
+                    this.ForeColor = ColorTool.MixColorAlpha(thm.MenuColorTable.TextColor, Color.Black, DvForm.BlockAlpha);
+                }
+                else this.ForeColor = thm.MenuColorTable.TextColor;
+            }
+            base.OnPaint(e);
+        }
         #endregion
 
         #region Method
@@ -43,6 +61,8 @@ namespace Devinno.Forms.Menus
             {
                 Renderer = new DvToolStripProfessionalRenderer(v.MenuColorTable);
                 CurrentThemeName = v.ThemeName;
+                this.BackColor = v.MenuColorTable.MenuStripColor;
+                this.ForeColor = v.MenuColorTable.TextColor;
             }
         }
         #endregion

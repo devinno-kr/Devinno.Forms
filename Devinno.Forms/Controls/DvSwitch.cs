@@ -74,10 +74,16 @@ namespace Devinno.Forms.Controls
                 {
                     bOnOff = value;
                     Invalidate();
+                 
+                    OnOffChanged?.Invoke(this, null);
                 }
             }
         }
         #endregion
+        #endregion
+
+        #region Event
+        public event EventHandler OnOffChanged;
         #endregion
 
         #region Constructor

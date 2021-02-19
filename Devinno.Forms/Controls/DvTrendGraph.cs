@@ -216,6 +216,8 @@ namespace Devinno.Forms.Controls
 
             #region Scroll
             scroll.Direction = ScrollDirection.Horizon;
+            scroll.ScrollChanged += (o, s) => { if (!IsStart) Invalidate(); };
+
             scroll.GetScrollTotal = () =>
             {
                 lock (oLock)
@@ -587,7 +589,7 @@ namespace Devinno.Forms.Controls
         #region SetData
         public void SetData<T>(T Data) where T : TimeGraphData
         {
-            if (this.value.GetType() == typeof(T))
+            if (IsStart && this.value.GetType() == typeof(T))
                 this.value = Data;
         }
         #endregion

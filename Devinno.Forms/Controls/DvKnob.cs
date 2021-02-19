@@ -331,20 +331,27 @@ namespace Devinno.Forms.Controls
             e.Graphics.Clear(BackColor);
 
             #region Remark
-            var ng = rtCircle.Width / 20;
-            p.Width = ng;
+            {
+                var ng = rtCircle.Width / 20;
+                p.Width = ng;
 
-            p.Color = EmptyColor;
-            e.Graphics.DrawArc(p, rtGauge, StartAngle, (float)MathTool.Map(Maximum, Minimum, Maximum, 0, Math.Min(SweepAngle, 360)));
+                p.Color = EmptyColor;
+                var mang = (float)MathTool.Map(Maximum, Minimum, Maximum, 0, Math.Min(SweepAngle, 360));
+                e.Graphics.DrawArc(p, rtGauge, StartAngle, mang);
 
-            p.Color = FillColor;
-            e.Graphics.DrawArc(p, rtGauge, StartAngle, (float)MathTool.Map(Value, Minimum, Maximum, 0, Math.Min(SweepAngle, 360)));
+                var vang = (float)MathTool.Map(Value, Minimum, Maximum, 0, Math.Min(SweepAngle, 360));
+                if (vang > 0.1F)
+                {
+                    p.Color = FillColor;
+                    e.Graphics.DrawArc(p, rtGauge, StartAngle, vang);
+                }
+            }
             #endregion
             #region Knob
             #region Shadow
             e.Graphics.TranslateTransform(Theme.ShadowGap, Theme.ShadowGap);
-            br.Color = BackColor.BrightnessTransmit(Theme.OutShadowBright);
-            e.Graphics.FillEllipse(br, rtKnob);
+            br.Color = Color.FromArgb(Theme.ShadowAlpha, Color.Black);
+            e.Graphics.FillEllipse(br, new Rectangle(rtKnob.X - 1, rtKnob.Y - 1, rtKnob.Width + 2, rtKnob.Height + 2));
             e.Graphics.TranslateTransform(-Theme.ShadowGap, -Theme.ShadowGap);
             #endregion
             #region Fill

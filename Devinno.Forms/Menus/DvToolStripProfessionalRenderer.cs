@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Devinno.Forms.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,6 @@ namespace Devinno.Forms.Menus
         public DvToolStripProfessionalRenderer(ProfessionalColorTable c) : base(c)
         {
         }
-
         protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
         {
             ProfessionalColorTable colorTable = this.ColorTable;

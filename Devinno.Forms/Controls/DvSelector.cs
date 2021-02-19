@@ -53,21 +53,6 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region Style
-        private DvLabelStyle eStyle = DvLabelStyle.FlatConvex;
-        public DvLabelStyle Style
-        {
-            get => eStyle;
-            set
-            {
-                if (eStyle != value)
-                {
-                    eStyle = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
         #region Items
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -164,21 +149,7 @@ namespace Devinno.Forms.Controls
             #region Background
             if (BackgroundDraw)
             {
-                switch (Style)
-                {
-                    case DvLabelStyle.FlatConcave:
-                        Theme.DrawBox(e.Graphics, SelectorColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL);
-                        break;
-                    case DvLabelStyle.FlatConvex:
-                        Theme.DrawBox(e.Graphics, SelectorColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
-                        break;
-                    case DvLabelStyle.Concave:
-                        Theme.DrawBox(e.Graphics, SelectorColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
-                        break;
-                    case DvLabelStyle.Convex:
-                        Theme.DrawBox(e.Graphics, SelectorColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW | BoxDrawOption.IN_BEVEL_LT);
-                        break;
-                }
+                Theme.DrawBox(e.Graphics, SelectorColor, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW | BoxDrawOption.IN_BEVEL);
             }
             #endregion
             #region Button

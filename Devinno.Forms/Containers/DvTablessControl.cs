@@ -31,6 +31,7 @@ namespace Devinno.Forms.Containers
 
         #region Member Variable
         List<string> cons = new List<string>();
+        List<TabPage> tps = new List<TabPage>();
         #endregion
 
         #region Constructor
@@ -112,18 +113,23 @@ namespace Devinno.Forms.Containers
                         e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
                     }
                 }
+
+                foreach (var v in TabPages.Cast<TabPage>().Where(x => !tps.Contains(x)))
+                {
+                    tps.Add(v);
+                    v.Paint += (o, s) =>
+                    {
+                        var wnd2 = this.FindForm() as DvForm;
+                        if (wnd2 != null && wnd2.Block)
+                            s.Graphics.Clear(ColorTool.MixColorAlpha(v.BackColor, Color.Black, DvForm.BlockAlpha));
+                    };
+                }
             }
         }
         #endregion
         #endregion
 
         #region Method
-        #region SetBlock
-        internal void SetBlock(bool bBlock)
-        {
-            foreach (var v in TabPages) ((TabPage)v).BackColor = bBlock ? ColorTool.MixColorAlpha(Parent.BackColor, Color.Black, DvForm.BlockAlpha) : Parent.BackColor;
-        }
-        #endregion
         #region GetTheme
         public DvTheme GetTheme()
         {

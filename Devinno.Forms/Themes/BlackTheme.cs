@@ -53,7 +53,7 @@ namespace Devinno.Forms.Themes
         public override double BorderBright { get; set; } = -0.5;
         public override double GradientLightBright { get; set; } = 0.2;
         public override double GradientDarkBright { get; set; } = -0.2;
-        public override double OutShadowBright { get; set; } = -0.4;
+        public override double OutShadowBright { get; set; } = -0.3;
         public override double InShadowBright { get; set; } = -0.3;
         public override double OutBevelBright { get; set; } = 0.2;
         public override double InBevelBright { get; set; } = 0.4;
@@ -744,6 +744,8 @@ namespace Devinno.Forms.Themes
                 #region BORDER
                 if ((option & BoxDrawOption.BORDER) == BoxDrawOption.BORDER)
                 {
+
+                    //p.Color = (bg.GetBrightness() < c.GetBrightness() ? bg : c).BrightnessTransmit(BorderBright);
                     p.Color = bg.BrightnessTransmit(BorderBright);
                     p.Width = 1;
 
@@ -812,6 +814,7 @@ namespace Devinno.Forms.Themes
         #region class : MenuColorTable
         public class BlackThemeMenuColorTable : ThemeMenuColorTable
         {
+            public override Color TextColor { get; set; } = Color.FromArgb(180, 180, 180);
             public override Color MenuStripColor { get; set; } = BlackTheme.StaticColor1;
             public override Color MenuItemPressedColor { get; set; } = BlackTheme.StaticColor1;
             public override Color ToolStripDropDownBackgroundColor { get; set; } = BlackTheme.StaticColor1;

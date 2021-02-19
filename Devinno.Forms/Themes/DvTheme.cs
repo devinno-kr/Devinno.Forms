@@ -93,6 +93,7 @@ namespace Devinno.Forms.Themes
         public abstract Color ToolStripDropDownBackgroundColor { get; set; }
         public abstract Color ImageMarginColor { get; set; }
         public abstract Color SeparatorColor { get; set; }
+        public abstract Color TextColor { get; set; }
         #endregion
         #region Override
         //메뉴바 색상

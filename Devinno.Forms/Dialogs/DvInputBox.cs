@@ -151,7 +151,7 @@ namespace Devinno.Forms.Dialogs
                 var tag = c.Tag as InputBoxTag;
                 var p = tag.p;
                 var info = tag.info;
-                var val = p.GetValue(value);
+                var val = value == null ? null : p.GetValue(value);
 
                 if (c.InputStyle == DvInputType.NUMBER || c.InputStyle == DvInputType.TEXT || c.InputStyle == DvInputType.FLOATING)
                 {

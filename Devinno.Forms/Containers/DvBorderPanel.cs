@@ -140,7 +140,7 @@ namespace Devinno.Forms.Containers
             if (DrawBorder)
             {
                 e.Graphics.Clear(Parent.BackColor);
-
+                br.Color = BackColor;     e.Graphics.FillRoundRectangle(br, rtBorder, Corner);
                 #region Border Shadow
                 //rtBorder.Inflate(-1, -1);
 

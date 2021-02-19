@@ -95,6 +95,7 @@ namespace Devinno.Forms.Controls
         private Point downPoint;
         private DateTime downTime;
         private MouseEventArgs evdown;
+        private List<ListBoxItem> ls = new List<ListBoxItem>();
         #endregion
 
         #region Event
@@ -115,12 +116,10 @@ namespace Devinno.Forms.Controls
             #endregion
 
             Size = new Size(300, 200);
-
-            Categories.Changed += (o, s) => Invalidate();
-
+            
             scroll.Direction = ScrollDirection.Vertical;
-            scroll.ScrollChanged += (o, s) => Invalidate();
-            scroll.GetScrollTotal = () => GetListCount() * RowHeight;
+            scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
+            scroll.GetScrollTotal = () => ls.Count * RowHeight;
             scroll.GetScrollTick = () => RowHeight;
             scroll.GetScrollView = () => Areas.ContainsKey("rtBox") ? Areas["rtBox"].Height : 0;
         }
@@ -532,19 +531,18 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region MakeList
-        List<ListBoxItem> MakeList()
+        void MakeList()
         {
-            var ls = new List<ListBoxItem>();
+            ls.Clear();
             foreach (var v in Categories)
             {
                 if (v.Expands) { ls.Add(v); ls.AddRange(v.Items); }
                 else ls.Add(v);
             }
-            return ls;
         }
         #endregion
         #region GetListCount
-        int GetListCount() => Categories.Select(x => x.Expands ? x.Items.Count + 1 : 1).Sum();
+        int GetListCount() => ls.Count;
         #endregion
         #region Loop
         private void Loop(Action<int, Rectangle, ListBoxItem, Rectangle, Rectangle, Rectangle, Rectangle> Func)
@@ -558,7 +556,8 @@ namespace Devinno.Forms.Controls
                 var si = Convert.ToInt32(Math.Floor((double)(sc - scroll.TouchOffset) / (double)RowHeight));
                 var cnt = Convert.ToInt32(Math.Ceiling((double)(rtBox.Height - Math.Min(0, scroll.TouchOffset)) / (double)RowHeight));
                 var ei = si + cnt;
-                var ls = MakeList();
+
+                if (Categories.Select(x => x.Expands ? x.Items.Count + 1 : 1).Sum() != ls.Count) MakeList();
 
                 using (var g = CreateGraphics())
                 {

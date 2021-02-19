@@ -161,7 +161,7 @@ namespace Devinno.Forms.Controls
             Items.Changed += (o, s) => Invalidate();
 
             scroll.Direction = ScrollDirection.Vertical;
-            scroll.ScrollChanged += (o, s) => Invalidate();
+            scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
             scroll.GetScrollTotal = () => Items.Count * RowHeight;
             scroll.GetScrollTick = () => RowHeight;
             scroll.GetScrollView = () => Areas.ContainsKey("rtBox") ? Areas["rtBox"].Height : 0;
@@ -204,10 +204,11 @@ namespace Devinno.Forms.Controls
             var rtScroll = Areas["rtScroll"];
             #endregion
             #region Draw
+            Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtBox, RectMode ? RoundType.NONE : RoundType.L, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+
             using (var pp = DrawingTool.GetRoundRectPathLT(rtBox, Theme.Corner))
             {
                 if (!RectMode) e.Graphics.SetClip(pp);
-                Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtBox, RectMode ? RoundType.NONE : RoundType.L, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
 
                 Loop((i, rt, itm) =>
                 {

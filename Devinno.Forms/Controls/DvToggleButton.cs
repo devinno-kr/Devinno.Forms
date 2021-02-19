@@ -134,7 +134,10 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        
+
+        #region AutoSet
+        public bool AutoSet { get; set; }
+        #endregion
         #region Gradient
         private bool bGradient = true;
         [Category("- 색상")]
@@ -282,6 +285,7 @@ namespace Devinno.Forms.Controls
             if (bDown)
             {
                 bDown = false;
+                if (AutoSet) Checked = !Checked;
                 Invalidate();
                 ButtonClick?.Invoke(this, null);
             }

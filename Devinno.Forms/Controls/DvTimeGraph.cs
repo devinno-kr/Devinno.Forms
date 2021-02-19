@@ -170,7 +170,7 @@ namespace Devinno.Forms.Controls
             Size = new System.Drawing.Size(300, 200);
 
             scroll.Direction = ScrollDirection.Horizon;
-            scroll.ScrollChanged += (o, s) => Invalidate();
+            scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
             //scroll.GetScrollTotal = () => GraphDatas.Count > 1 && Series.Count > 0 && Areas.ContainsKey("rtGraph") ? Convert.ToInt32(Areas["rtGraph"].Width * ((new DateTime(Convert.ToInt64(Math.Ceiling(Convert.ToDouble(GraphDatas.Last().Time.Ticks) / Convert.ToDouble(XAxisGraduation.Ticks))) * XAxisGraduation.Ticks) - new DateTime(GraphDatas.First().Time.Ticks / XAxisGraduation.Ticks * XAxisGraduation.Ticks)).TotalSeconds / XScale.TotalSeconds)) : 0;
             //scroll.GetScrollTick = () => GraphDatas.Count > 1 && Series.Count > 0 && Areas.ContainsKey("rtGraph") ? Convert.ToInt32(Areas["rtGraph"].Width * (XAxisGraduation.TotalSeconds / XScale.TotalSeconds)) : 0 ;
             //scroll.GetScrollView = () => Areas.ContainsKey("rtGraph") ? Areas["rtGraph"].Width : 0;
@@ -413,8 +413,8 @@ namespace Devinno.Forms.Controls
                 e.Graphics.SetClip(rtGraph);
                 foreach (var v in Series)
                 {
-                    var pts = GraphDatas.Select(x => new Point(Convert.ToInt32(MathTool.Map(x.Time.Ticks + spos, st.Ticks, st.Ticks + tsXScale.Ticks, rtGraph.Left, rtGraph.Right)),
-                                                               Convert.ToInt32(MathTool.Map(x.Values[v.Name], v.Minimum, v.Maximum, rtGraph.Bottom, rtGraph.Top)))).ToArray();
+                    var pts = GraphDatas.Select(x => new PointF(Convert.ToSingle(MathTool.Map((double)x.Time.Ticks + (double)spos, st.Ticks, st.Ticks + tsXScale.Ticks, rtGraph.Left, rtGraph.Right)),
+                                                               Convert.ToSingle(MathTool.Map((double)x.Values[v.Name], v.Minimum, v.Maximum, rtGraph.Bottom, rtGraph.Top)))).ToArray();
 
                     pts = pts.Where(x => x.X >= rtGraph.Left && x.X <= rtGraph.Right).ToArray();
                     p.Width = 2;
