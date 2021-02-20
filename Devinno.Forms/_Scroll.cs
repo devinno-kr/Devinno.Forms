@@ -99,7 +99,8 @@ namespace Devinno.Forms
         #region GetScrollCursorRect(rtScroll)
         public Rectangle? GetScrollCursorRect(Rectangle rtScroll)
         {
-            rtScroll.Inflate(-6, -6);
+            var f = Form.ActiveForm.LogicalToDeviceUnits(1000) / 1000.0;
+            rtScroll.Inflate(-Convert.ToInt32(4 * f), -Convert.ToInt32(4 * f));
             if (ScrollView < ScrollTotal)
             {
                 if (Direction == ScrollDirection.Vertical)
@@ -246,7 +247,8 @@ namespace Devinno.Forms
         #region GetScrollCursorRectR(rtScroll)
         public Rectangle? GetScrollCursorRectR(Rectangle rtScroll)
         {
-            rtScroll.Inflate(-6, -6);
+            var f = Form.ActiveForm.LogicalToDeviceUnits(1000) / 1000.0;
+            rtScroll.Inflate(-Convert.ToInt32(4 * f), -Convert.ToInt32(4 * f));
             if (ScrollView < ScrollTotal)
             {
                 if (Direction == ScrollDirection.Vertical)

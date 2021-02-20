@@ -29,7 +29,7 @@ namespace Devinno.Forms.Dialogs
         /// </summary>
         private void InitializeComponent()
         {
-            this.dvContainer1 = new Devinno.Forms.Containers.DvContainer();
+            this.pnl = new Devinno.Forms.Containers.DvContainer();
             this.tbl = new Devinno.Forms.Containers.DvTableLayoutPanel();
             this.lblDay = new Devinno.Forms.Controls.DvValueLabel();
             this.calendar = new Devinno.Forms.Controls.DvCalendar();
@@ -40,22 +40,22 @@ namespace Devinno.Forms.Dialogs
             this.inSec = new Devinno.Forms.Controls.DvValueInput();
             this.inHour = new Devinno.Forms.Controls.DvValueInput();
             this.inMin = new Devinno.Forms.Controls.DvValueInput();
-            this.dvContainer1.SuspendLayout();
+            this.pnl.SuspendLayout();
             this.tbl.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dvContainer1
+            // pnl
             // 
-            this.dvContainer1.Controls.Add(this.tbl);
-            this.dvContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dvContainer1.Location = new System.Drawing.Point(7, 60);
-            this.dvContainer1.Name = "dvContainer1";
-            this.dvContainer1.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
-            this.dvContainer1.Size = new System.Drawing.Size(536, 513);
-            this.dvContainer1.TabIndex = 0;
-            this.dvContainer1.TabStop = false;
-            this.dvContainer1.Text = "dvContainer1";
-            this.dvContainer1.UseThemeColor = true;
+            this.pnl.Controls.Add(this.tbl);
+            this.pnl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnl.Location = new System.Drawing.Point(7, 60);
+            this.pnl.Name = "pnl";
+            this.pnl.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.pnl.Size = new System.Drawing.Size(536, 513);
+            this.pnl.TabIndex = 0;
+            this.pnl.TabStop = false;
+            this.pnl.Text = "dvContainer1";
+            this.pnl.UseThemeColor = true;
             // 
             // tbl
             // 
@@ -217,9 +217,11 @@ namespace Devinno.Forms.Dialogs
             // 
             // inSec
             // 
+            this.inSec.BorderColor = System.Drawing.Color.Red;
             this.inSec.ButtonWidth = 45;
             this.inSec.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inSec.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inSec.DrawBorder = false;
             this.inSec.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inSec.IconGap = 0;
             this.inSec.IconImage = null;
@@ -254,9 +256,11 @@ namespace Devinno.Forms.Dialogs
             // 
             // inHour
             // 
+            this.inHour.BorderColor = System.Drawing.Color.Red;
             this.inHour.ButtonWidth = 45;
             this.inHour.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inHour.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inHour.DrawBorder = false;
             this.inHour.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inHour.IconGap = 0;
             this.inHour.IconImage = null;
@@ -290,9 +294,11 @@ namespace Devinno.Forms.Dialogs
             // 
             // inMin
             // 
+            this.inMin.BorderColor = System.Drawing.Color.Red;
             this.inMin.ButtonWidth = 45;
             this.inMin.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inMin.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inMin.DrawBorder = false;
             this.inMin.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inMin.IconGap = 0;
             this.inMin.IconImage = null;
@@ -326,10 +332,10 @@ namespace Devinno.Forms.Dialogs
             // 
             // DvDateTimePickerDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(550, 580);
-            this.Controls.Add(this.dvContainer1);
+            this.Controls.Add(this.pnl);
             this.Fixed = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -340,7 +346,7 @@ namespace Devinno.Forms.Dialogs
             this.Title = "날짜 / 시간 입력";
             this.TitleIconSize = 14F;
             this.TitleIconString = "far fa-calendar-alt";
-            this.dvContainer1.ResumeLayout(false);
+            this.pnl.ResumeLayout(false);
             this.tbl.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -348,7 +354,7 @@ namespace Devinno.Forms.Dialogs
 
         #endregion
 
-        private Containers.DvContainer dvContainer1;
+        private Containers.DvContainer pnl;
         private Controls.DvButton btnOK;
         private Controls.DvButton btnCancel;
         private Controls.DvValueInput inSec;

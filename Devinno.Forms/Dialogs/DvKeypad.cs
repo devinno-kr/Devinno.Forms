@@ -91,6 +91,9 @@ namespace Devinno.Forms.Dialogs
                 SetText();
             };
             #endregion
+
+            Fixed = true;
+
         }
 
         #region Method
@@ -122,13 +125,25 @@ namespace Devinno.Forms.Dialogs
         #region ShowKeypad
         public int? ShowKeypad(string Title, int? value = null)
         {
+            #region DPI Size
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            foreach (var c in layout.Controls.Cast<Control>()) c.Margin = new Padding(m3);
+            pnl.Padding = new Padding(m3, m10, m3, m3);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(254 * f), Convert.ToInt32(330 * f));
+            #endregion
+
             #region UI
             layout.Controls.Clear();
-            Add(lbl, 0, 7, 0, 1);
-            Add(btn7, 0, 1, 2, 1); Add(btn8, 2, 1, 2, 1); Add(btn9, 4, 1, 2, 1); Add(btnBack, 6, 1, 2, 1);
-            Add(btn4, 0, 1, 4, 1); Add(btn5, 2, 1, 4, 1); Add(btn6, 4, 1, 4, 1); Add(btnClear, 6, 1, 4, 1);
-            Add(btn1, 0, 1, 6, 1); Add(btn2, 2, 1, 6, 1); Add(btn3, 4, 1, 6, 1); Add(btnEnter, 6, 1, 6, 3);
-            Add(btn0, 0, 5, 8, 1);                                               
+            Add(lbl, 0, 4, 0, 1);
+            Add(btn7, 0, 1, 1, 1); Add(btn8, 1, 1, 1, 1); Add(btn9, 2, 1, 1, 1); Add(btnBack, 3, 1, 1, 1);
+            Add(btn4, 0, 1, 2, 1); Add(btn5, 1, 1, 2, 1); Add(btn6, 2, 1, 2, 1); Add(btnClear, 3, 1, 2, 1);
+            Add(btn1, 0, 1, 3, 1); Add(btn2, 1, 1, 3, 1); Add(btn3, 2, 1, 3, 1); Add(btnEnter, 3, 1, 3, 2);
+            Add(btn0, 0, 3, 4, 1);                                               
             #endregion
             #region Set
             mode = 0;
@@ -151,13 +166,25 @@ namespace Devinno.Forms.Dialogs
         #region ShowKeypadEx
         public decimal? ShowKeypadEx(string Title, decimal? value = null)
         {
+            #region DPI Size
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            foreach (var c in layout.Controls.Cast<Control>()) c.Margin = new Padding(m3);
+            pnl.Padding = new Padding(m3, m10, m3, m3);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(254 * f), Convert.ToInt32(330 * f));
+            #endregion
+
             #region UI
             layout.Controls.Clear();
-            Add(lbl, 0, 7, 0, 1);
-            Add(btn7, 0, 1, 2, 1);  Add(btn8, 2, 1, 2, 1);  Add(btn9, 4, 1, 2, 1);      Add(btnBack, 6, 1, 2, 1);
-            Add(btn4, 0, 1, 4, 1);  Add(btn5, 2, 1, 4, 1);  Add(btn6, 4, 1, 4, 1);      Add(btnSign, 6, 1, 4, 1);
-            Add(btn1, 0, 1, 6, 1);  Add(btn2, 2, 1, 6, 1);  Add(btn3, 4, 1, 6, 1);      Add(btnClear, 6, 1, 6, 1);
-            Add(btn0, 0, 3, 8, 1);                          Add(btnDot, 4, 1, 8, 1);    Add(btnEnter, 6, 1, 8, 1);
+            Add(lbl, 0, 4, 0, 1);
+            Add(btn7, 0, 1, 1, 1);  Add(btn8, 1, 1, 1, 1);  Add(btn9, 2, 1, 1, 1);      Add(btnBack, 3, 1, 1, 1);
+            Add(btn4, 0, 1, 2, 1);  Add(btn5, 1, 1, 2, 1);  Add(btn6, 2, 1, 2, 1);      Add(btnSign, 3, 1, 2, 1);
+            Add(btn1, 0, 1, 3, 1);  Add(btn2, 1, 1, 3, 1);  Add(btn3, 2, 1, 3, 1);      Add(btnClear, 3, 1, 3, 1);
+            Add(btn0, 0, 2, 4, 1);                          Add(btnDot, 2, 1, 4, 1);    Add(btnEnter, 3, 1, 4, 1);
             #endregion
             #region Set
             mode = 1;
@@ -180,13 +207,25 @@ namespace Devinno.Forms.Dialogs
         #region ShowPassword
         public string ShowPassword(string Title, int? value = null)
         {
+            #region DPI Size
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            foreach (var c in layout.Controls.Cast<Control>()) c.Margin = new Padding(m3);
+            pnl.Padding = new Padding(m3, m10, m3, m3);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(254 * f), Convert.ToInt32(330 * f));
+            #endregion
+
             #region UI
             layout.Controls.Clear();
-            Add(lbl, 0, 7, 0, 1);
-            Add(btn7, 0, 1, 2, 1); Add(btn8, 2, 1, 2, 1); Add(btn9, 4, 1, 2, 1); Add(btnBack, 6, 1, 2, 1);
-            Add(btn4, 0, 1, 4, 1); Add(btn5, 2, 1, 4, 1); Add(btn6, 4, 1, 4, 1); Add(btnClear, 6, 1, 4, 1);
-            Add(btn1, 0, 1, 6, 1); Add(btn2, 2, 1, 6, 1); Add(btn3, 4, 1, 6, 1); Add(btnEnter, 6, 1, 6, 3);
-            Add(btn0, 0, 5, 8, 1);
+            Add(lbl, 0, 5, 0, 1);
+            Add(btn7, 0, 1, 1, 1); Add(btn8, 1, 1, 1, 1); Add(btn9, 2, 1, 1, 1); Add(btnBack, 3, 1, 1, 1);
+            Add(btn4, 0, 1, 2, 1); Add(btn5, 1, 1, 2, 1); Add(btn6, 2, 1, 2, 1); Add(btnClear, 3, 1, 2, 1);
+            Add(btn1, 0, 1, 3, 1); Add(btn2, 1, 1, 3, 1); Add(btn3, 2, 1, 3, 1); Add(btnEnter, 3, 1, 3, 2);
+            Add(btn0, 0, 3, 4, 1);
             #endregion
             #region Set
             mode = 2;

@@ -165,6 +165,19 @@ namespace Sample
 
             #endregion
             #region Dialog
+            var strbul = new StringBuilder();
+            strbul.AppendLine("동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세");
+            strbul.AppendLine("무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세");
+            strbul.AppendLine("");
+            strbul.AppendLine("남산 위에 저 소나무 철값을 두른듯 바람서리 불변함은 우리기상 일세");
+            strbul.AppendLine("무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세");
+            strbul.AppendLine("");
+            strbul.AppendLine("가을 하늘 공활한데 놃고 구름없이 밝은달은 우리 가슴 일편담심 일세");
+            strbul.AppendLine("무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세");
+            strbul.AppendLine("");
+            strbul.AppendLine("이 기상과 이 맘으로 충성을 다하여 괴로우나 즐거우나 나라 사랑하세");
+            strbul.AppendLine("무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세");
+
             btnColorPicker.ButtonClick += (o, s) => { Block = true; colorPicker.ShowColorPicker(); Block = false; };
 
             btnDateTimePicker_DateTime.ButtonClick += (o, s) => { Block = true; dateTimePicker.ShowDateTimePicker(); Block = false; };
@@ -194,10 +207,10 @@ namespace Sample
             btnMessageBox_Ok.ButtonClick += (o, s) => { Block = true; messageBox.ShowMessageBoxOk("타이틀", "메시지"); Block = false; };
             btnMessageBox_OkCancel.ButtonClick += (o, s) => { Block = true; messageBox.ShowMessageBoxOkCancel("타이틀", "메시지"); Block = false; };
             btnMessageBox_YesNo.ButtonClick += (o, s) => { Block = true; messageBox.ShowMessageBoxYesNo("타이틀", "메시지"); Block = false; };
-            btnMessageBox_YesNoCancel.ButtonClick += (o, s) => { Block = true; messageBox.ShowMessageBoxYesNoCancel("타이틀", "메시지"); Block = false; };
+            btnMessageBox_YesNoCancel.ButtonClick += (o, s) => { Block = true; messageBox.ShowMessageBoxYesNoCancel("타이틀", strbul.ToString()); Block = false; };
 
             var lsSel = new List<TextIconItem>();
-            for (int i = 1; i <= 8; i++) lsSel.Add(new TextIconItem() { Text = "Test" + i });
+            for (int i = 1; i <= 8; i++) lsSel.Add(new TextIconItem() { Text = "Test " + i });
             btnSelectorBox_Selector.ButtonClick += (o, s) => { Block = true; selectorBox.ShowSelector("셀렉터", lsSel); Block = false; };
             btnSelectorBox_Combo.ButtonClick += (o, s) => { Block = true; selectorBox.ShowComboBox("셀렉터", lsSel); Block = false; };
             btnSelectorBox_Radio.ButtonClick += (o, s) => { Block = true; selectorBox.ShowRadioBox("셀렉터", lsSel, 2); Block = false; };

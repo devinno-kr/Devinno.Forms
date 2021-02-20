@@ -1,4 +1,6 @@
 ﻿using Devinno.Forms.Controls;
+using Devinno.Forms.Extensions;
+using Devinno.Forms.Icons;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,6 +49,9 @@ namespace Devinno.Forms.Dialogs
                 }
             };
             btnCancel.ButtonClick += (o, s) => DialogResult = DialogResult.Cancel;
+
+            Fixed = true;
+
         }
         #endregion
 
@@ -54,12 +59,34 @@ namespace Devinno.Forms.Dialogs
         #region ShowSelector
         public TextIconItem ShowSelector(string Title, List<TextIconItem> List)
         {
-            #region UI
+            #region DPI Size 
             var f = DpiRatio;
-            this.Size = new Size(320, 180);
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
 
+            var w = 264;
+            var gpw = 20;
+            using (var g = CreateGraphics())
+            {
+                var szw = Convert.ToInt32(List.Select(x => g.MeasureTextIcon(x.Icon, x.Text, Font).Width).Max() + gpw);
+                var sz = g.MeasureIcon(new DvIcon("fa-chevron-right") { IconSize = Convert.ToInt32(Font.Size * 1.33) });
+
+                w = Math.Max(w, szw + Convert.ToInt32(sz.Width * 4));
+            }
+
+            pnl.Padding = new Padding(0, m7, 0, 0);
+            pnlBtn.Padding = new Padding(m3);
+            pnlBtn.Height = Convert.ToInt32(f * 36);
+            gpH.Width = gpV.Height = Convert.ToInt32(f * 4);
+            btnOK.Width = btnCancel.Width = Convert.ToInt32(80 * f);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(w * f), Convert.ToInt32((40 + 7 + ((3 + 30 + 3)) + 4 + 36 + 7) * f));
+            #endregion
+            #region UI
             var c = new DvSelector() { Name = "selector", Dock = DockStyle.Fill, UseAnimation = true, BackgroundDraw = false };
             c.Items.AddRange(List);
+            c.Margin = new Padding(m3);
             c.SelectedIndex = c.Items.Count > 0 ? 0 : -1;
 
             layout.ColumnStyles.Clear();
@@ -74,8 +101,6 @@ namespace Devinno.Forms.Dialogs
             layout.Controls.Clear();
             layout.Controls.Add(c, 0, 0);
             foreach (var v in ls) v.Dispose();
-
-            pnl.Height = Convert.ToInt32(30 * f);
             #endregion
             #region Set
             Mode = SelectorBoxMode.Selector;
@@ -97,12 +122,33 @@ namespace Devinno.Forms.Dialogs
         #region ShowComboBox
         public TextIconItem ShowComboBox(string Title, List<TextIconItem> List)
         {
-            #region UI
+            #region DPI Size 
             var f = DpiRatio;
-            this.Size = new Size(320, 180);
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            var w = 264;
+            var gpw = 20;
+            using (var g = CreateGraphics())
+            {
+                var szw = Convert.ToInt32(List.Select(x => g.MeasureTextIcon(x.Icon, x.Text, Font).Width).Max() + gpw + 60);
+                w = Math.Max(w, szw);
+            }
+
+            pnl.Padding = new Padding(0, m7, 0, 0);
+            pnlBtn.Padding = new Padding(m3);
+            pnlBtn.Height = Convert.ToInt32(f * 36);
+            gpH.Width = gpV.Height = Convert.ToInt32(f * 4);
+            btnOK.Width = btnCancel.Width = Convert.ToInt32(80 * f);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(w * f), Convert.ToInt32((40 + 7 + ((3 + 30 + 3)) + 4 + 36 + 7) * f));
+            #endregion
+            #region UI
 
             var c = new DvComboBox() { Name = "selector", Dock = DockStyle.Fill };
             c.Items.AddRange(List.Select(x => (x.IconImage != null ? new ComboBoxItem(x.Text, x.IconImage) { Tag = x } : new ComboBoxItem(x.Text, x.IconString, x.IconSize, x.IconGap) { Tag = x })));
+            c.Margin = new Padding(m3);
             c.SelectedIndex = c.Items.Count > 0 ? 0 : -1;
             c.ItemHeight = Convert.ToInt32(30 * DpiRatio);
 
@@ -118,8 +164,6 @@ namespace Devinno.Forms.Dialogs
             layout.Controls.Clear();
             layout.Controls.Add(c, 0, 0);
             foreach (var v in ls) v.Dispose();
-
-            pnl.Height = Convert.ToInt32(30 * f);
             #endregion
             #region Set
             Mode = SelectorBoxMode.ComboBox;
@@ -141,14 +185,34 @@ namespace Devinno.Forms.Dialogs
         #region ShowRadioBox
         public TextIconItem ShowRadioBox(string Title, List<TextIconItem> List, int ColumnSize = 1)
         {
+            var RowSize = Convert.ToInt32(Math.Ceiling((double)List.Count / (double)ColumnSize));
+
+            #region DPI Size 
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            var w = 264;
+            var gpw = 20;
+            using (var g = CreateGraphics())
+            {
+                var szw = Convert.ToInt32(List.Select(x => g.MeasureTextIcon(x.Icon, x.Text, Font).Width).Max() + gpw + (18 + 5)) * ColumnSize;
+                w = Math.Max(w, szw);
+            }
+
+            pnl.Padding = new Padding(0, m7, 0, 0);
+            pnlBtn.Padding = new Padding(m3);
+            pnlBtn.Height = Convert.ToInt32(f * 36);
+            gpH.Width = gpV.Height = Convert.ToInt32(f * 4);
+            btnOK.Width = btnCancel.Width = Convert.ToInt32(80 * f);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(w * f), Convert.ToInt32((40 + 7 + ((3 + 30 + 3) *RowSize) + 4 + 36 + 7) * f));
+            #endregion
             #region UI
             int nw = 150;
             var last = List.OrderBy(x => x.Text.Length).LastOrDefault();
-            var f = DpiRatio;
             using (var g = CreateGraphics()) { nw = Convert.ToInt32(Math.Ceiling((g.MeasureString(last.Text, Font).Width + 18 + 5 + 10) * f)) + 6; }
-
-            var RowSize = Convert.ToInt32(Math.Ceiling((double)List.Count / (double)ColumnSize));
-            this.Size = new Size(20 + (nw * ColumnSize), 180 + Convert.ToInt32(((30 * DpiRatio)) * RowSize));
 
             layout.ColumnStyles.Clear();
             for (int col = 0; col < ColumnSize; col++)
@@ -174,8 +238,6 @@ namespace Devinno.Forms.Dialogs
                 }
             }
             foreach (var v in ls) v.Dispose();
-
-            pnl.Height = Convert.ToInt32(30 * f);
             #endregion
             #region Set
             Mode = SelectorBoxMode.RadioBox;
@@ -195,14 +257,34 @@ namespace Devinno.Forms.Dialogs
         #region ShwoCheckBox
         public List<TextIconItem> ShowCheckBox(string Title, List<TextIconItem> List, int ColumnSize = 1)
         {
+            var RowSize = Convert.ToInt32(Math.Ceiling((double)List.Count / (double)ColumnSize));
+
+            #region DPI Size 
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            var w = 264;
+            var gpw = 20;
+            using (var g = CreateGraphics())
+            {
+                var szw = Convert.ToInt32(List.Select(x => g.MeasureTextIcon(x.Icon, x.Text, Font).Width).Max() + gpw + (18 + 5)) * ColumnSize;
+                w = Math.Max(w, szw);
+            }
+
+            pnl.Padding = new Padding(0, m7, 0, 0);
+            pnlBtn.Padding = new Padding(m3);
+            pnlBtn.Height = Convert.ToInt32(f * 36);
+            gpH.Width = gpV.Height = Convert.ToInt32(f * 4);
+            btnOK.Width = btnCancel.Width = Convert.ToInt32(80 * f);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(w * f), Convert.ToInt32((40 + 7 + ((3 + 30 + 3) * RowSize) + 4 + 36 + 7) * f));
+            #endregion
             #region UI
             int nw = 150;
             var last = List.OrderBy(x => x.Text.Length).LastOrDefault();
-            var f = DpiRatio;
             using (var g = CreateGraphics()) { nw = Convert.ToInt32(Math.Ceiling((g.MeasureString(last.Text, Font).Width + 18 + 5 + 10) * f)) + 6; }
-
-            var RowSize = Convert.ToInt32(Math.Ceiling((double)List.Count / (double)ColumnSize));
-            this.Size = new Size(20 + (nw * ColumnSize), 180 + Convert.ToInt32(((30 * DpiRatio)) * RowSize));
 
             layout.ColumnStyles.Clear();
             for (int col = 0; col < ColumnSize; col++)
@@ -228,8 +310,6 @@ namespace Devinno.Forms.Dialogs
                 }
             }
             foreach (var v in ls) v.Dispose();
-
-            pnl.Height = Convert.ToInt32(30 * f);
             #endregion
             #region Set
             Mode = SelectorBoxMode.CheckBox;

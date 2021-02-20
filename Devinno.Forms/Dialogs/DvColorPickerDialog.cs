@@ -58,6 +58,8 @@ namespace Devinno.Forms.Dialogs
             inR.OriginalTextBox.MaxLength = inG.OriginalTextBox.MaxLength = inB.OriginalTextBox.MaxLength = 3;
             #endregion
 
+            Fixed = true;
+
             btnOK.ButtonClick += (o, s) => DialogResult = DialogResult.OK;
             btnCancel.ButtonClick += (o, s) => DialogResult = DialogResult.Cancel;
         }
@@ -457,6 +459,20 @@ namespace Devinno.Forms.Dialogs
             Color? ret = null;
            
             Theme = GetCallerFormTheme() ?? Theme;
+
+            #region DPI Size 
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+            
+            foreach (var c in tbl.Controls.Cast<Control>()) c.Margin = new Padding(m3);
+            pnl.Padding = new Padding(m3, m10, m3, m3);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(300 * f), Convert.ToInt32(350 * f));
+
+            lblColor.Width = inR.TitleWidth = inG.TitleWidth = inB.TitleWidth = Convert.ToInt32(30 * f);
+            #endregion
 
             #region Set
             {

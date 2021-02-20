@@ -31,11 +31,11 @@ namespace Devinno.Forms.Dialogs
         {
             this.pnl = new Devinno.Forms.Containers.DvContainer();
             this.layout = new Devinno.Forms.Containers.DvTableLayoutPanel();
-            this.lblMessage = new Devinno.Forms.Controls.DvLabel();
             this.btnOk = new Devinno.Forms.Controls.DvButton();
             this.btnCancel = new Devinno.Forms.Controls.DvButton();
             this.btnYes = new Devinno.Forms.Controls.DvButton();
             this.btnNo = new Devinno.Forms.Controls.DvButton();
+            this.lblMessage = new Devinno.Forms.Controls.DvLabel();
             this.pnl.SuspendLayout();
             this.layout.SuspendLayout();
             this.SuspendLayout();
@@ -47,7 +47,7 @@ namespace Devinno.Forms.Dialogs
             this.pnl.Location = new System.Drawing.Point(7, 60);
             this.pnl.Name = "pnl";
             this.pnl.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
-            this.pnl.Size = new System.Drawing.Size(586, 233);
+            this.pnl.Size = new System.Drawing.Size(252, 99);
             this.pnl.TabIndex = 0;
             this.pnl.TabStop = false;
             this.pnl.Text = "dvContainer1";
@@ -55,62 +55,29 @@ namespace Devinno.Forms.Dialogs
             // 
             // layout
             // 
-            this.layout.ColumnCount = 13;
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.layout.ColumnCount = 8;
+            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.layout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.layout.Controls.Add(this.btnOk, 1, 1);
+            this.layout.Controls.Add(this.btnCancel, 2, 1);
+            this.layout.Controls.Add(this.btnYes, 3, 1);
+            this.layout.Controls.Add(this.btnNo, 4, 1);
             this.layout.Controls.Add(this.lblMessage, 0, 0);
-            this.layout.Controls.Add(this.btnOk, 1, 2);
-            this.layout.Controls.Add(this.btnCancel, 3, 2);
-            this.layout.Controls.Add(this.btnYes, 5, 2);
-            this.layout.Controls.Add(this.btnNo, 7, 2);
             this.layout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layout.Location = new System.Drawing.Point(3, 10);
             this.layout.Margin = new System.Windows.Forms.Padding(0);
             this.layout.Name = "layout";
-            this.layout.RowCount = 3;
-            this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.layout.Size = new System.Drawing.Size(580, 220);
+            this.layout.RowCount = 2;
+            this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.layout.Size = new System.Drawing.Size(246, 86);
             this.layout.TabIndex = 0;
-            // 
-            // lblMessage
-            // 
-            this.lblMessage.BackgroundDraw = false;
-            this.layout.SetColumnSpan(this.lblMessage, 13);
-            this.lblMessage.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblMessage.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
-            this.lblMessage.IconGap = 0;
-            this.lblMessage.IconImage = null;
-            this.lblMessage.IconSize = 10F;
-            this.lblMessage.IconString = null;
-            this.lblMessage.LabelColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblMessage.Location = new System.Drawing.Point(0, 0);
-            this.lblMessage.LongClickTime = 0;
-            this.lblMessage.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(580, 147);
-            this.lblMessage.Style = Devinno.Forms.Controls.DvLabelStyle.Convex;
-            this.lblMessage.TabIndex = 0;
-            this.lblMessage.TabStop = false;
-            this.lblMessage.TextPadding = new System.Windows.Forms.Padding(0);
-            this.lblMessage.Unit = "";
-            this.lblMessage.UnitWidth = 36;
-            this.lblMessage.UseLongClick = false;
-            this.lblMessage.UseThemeColor = true;
             // 
             // btnOk
             // 
@@ -125,11 +92,10 @@ namespace Devinno.Forms.Dialogs
             this.btnOk.IconImage = null;
             this.btnOk.IconSize = 10F;
             this.btnOk.IconString = "fa-check";
-            this.btnOk.Location = new System.Drawing.Point(106, 157);
+            this.btnOk.Location = new System.Drawing.Point(37, 53);
             this.btnOk.LongClickTime = 0;
-            this.btnOk.Margin = new System.Windows.Forms.Padding(0);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(53, 63);
+            this.btnOk.Size = new System.Drawing.Size(23, 30);
             this.btnOk.TabIndex = 1;
             this.btnOk.Text = "확인";
             this.btnOk.TextPadding = new System.Windows.Forms.Padding(0);
@@ -149,11 +115,10 @@ namespace Devinno.Forms.Dialogs
             this.btnCancel.IconImage = null;
             this.btnCancel.IconSize = 10F;
             this.btnCancel.IconString = "fa-times";
-            this.btnCancel.Location = new System.Drawing.Point(169, 157);
+            this.btnCancel.Location = new System.Drawing.Point(66, 53);
             this.btnCancel.LongClickTime = 0;
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(0);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(53, 63);
+            this.btnCancel.Size = new System.Drawing.Size(23, 30);
             this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "취소";
             this.btnCancel.TextPadding = new System.Windows.Forms.Padding(0);
@@ -173,11 +138,10 @@ namespace Devinno.Forms.Dialogs
             this.btnYes.IconImage = null;
             this.btnYes.IconSize = 10F;
             this.btnYes.IconString = "far fa-check-circle";
-            this.btnYes.Location = new System.Drawing.Point(232, 157);
+            this.btnYes.Location = new System.Drawing.Point(95, 53);
             this.btnYes.LongClickTime = 0;
-            this.btnYes.Margin = new System.Windows.Forms.Padding(0);
             this.btnYes.Name = "btnYes";
-            this.btnYes.Size = new System.Drawing.Size(53, 63);
+            this.btnYes.Size = new System.Drawing.Size(23, 30);
             this.btnYes.TabIndex = 4;
             this.btnYes.Text = "예";
             this.btnYes.TextPadding = new System.Windows.Forms.Padding(0);
@@ -197,21 +161,45 @@ namespace Devinno.Forms.Dialogs
             this.btnNo.IconImage = null;
             this.btnNo.IconSize = 10F;
             this.btnNo.IconString = "far fa-times-circle";
-            this.btnNo.Location = new System.Drawing.Point(295, 157);
+            this.btnNo.Location = new System.Drawing.Point(124, 53);
             this.btnNo.LongClickTime = 0;
-            this.btnNo.Margin = new System.Windows.Forms.Padding(0);
             this.btnNo.Name = "btnNo";
-            this.btnNo.Size = new System.Drawing.Size(53, 63);
+            this.btnNo.Size = new System.Drawing.Size(23, 30);
             this.btnNo.TabIndex = 5;
             this.btnNo.Text = "아니요";
             this.btnNo.TextPadding = new System.Windows.Forms.Padding(0);
             this.btnNo.UseLongClick = false;
             this.btnNo.UseThemeColor = true;
             // 
+            // lblMessage
+            // 
+            this.lblMessage.BackgroundDraw = false;
+            this.layout.SetColumnSpan(this.lblMessage, 8);
+            this.lblMessage.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMessage.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.lblMessage.IconGap = 0;
+            this.lblMessage.IconImage = null;
+            this.lblMessage.IconSize = 10F;
+            this.lblMessage.IconString = null;
+            this.lblMessage.LabelColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblMessage.Location = new System.Drawing.Point(3, 3);
+            this.lblMessage.LongClickTime = 0;
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(240, 44);
+            this.lblMessage.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
+            this.lblMessage.TabIndex = 6;
+            this.lblMessage.TabStop = false;
+            this.lblMessage.TextPadding = new System.Windows.Forms.Padding(0);
+            this.lblMessage.Unit = "";
+            this.lblMessage.UnitWidth = 36;
+            this.lblMessage.UseLongClick = false;
+            this.lblMessage.UseThemeColor = true;
+            // 
             // DvMessageBox
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(600, 300);
+            this.ClientSize = new System.Drawing.Size(266, 166);
             this.Controls.Add(this.pnl);
             this.Fixed = true;
             this.MaximizeBox = false;
@@ -240,5 +228,6 @@ namespace Devinno.Forms.Dialogs
         private Controls.DvButton btnCancel;
         private Controls.DvButton btnYes;
         private Controls.DvButton btnNo;
+        private Controls.DvLabel lblMessagge;
     }
 }

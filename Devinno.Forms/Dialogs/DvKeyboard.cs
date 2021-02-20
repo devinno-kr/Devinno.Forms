@@ -307,21 +307,21 @@ namespace Devinno.Forms.Dialogs
             #region Event
             for (int i = 0; i < 10; i++)
             {
-                if (i < 10) Us[i].MouseUp += new MouseEventHandler(Key_MouseUp);
-                if (i < 9) Ms[i].MouseUp += new MouseEventHandler(Key_MouseUp);
-                if (i < 7) Ds[i].MouseUp += new MouseEventHandler(Key_MouseUp);
+                if (i < 10) Us[i].ButtonClick += new EventHandler(Key_MouseUp);
+                if (i < 9) Ms[i].ButtonClick += new EventHandler(Key_MouseUp);
+                if (i < 7) Ds[i].ButtonClick += new EventHandler(Key_MouseUp);
             }
-            Space.MouseUp += Space_MouseUp;
-            Shift.MouseUp += Shift_MouseUp;
-            Back.MouseUp += Back_MouseUp;
-            Clear.MouseUp += Cancel_MouseUp;
-            Enter.MouseUp += Enter_MouseUp;
-            Exit.MouseUp += Exit_MouseUp;
+            Space.ButtonClick += Space_MouseUp;
+            Shift.ButtonClick += Shift_MouseUp;
+            Back.ButtonClick += Back_MouseUp;
+            Clear.ButtonClick += Cancel_MouseUp;
+            Enter.ButtonClick += Enter_MouseUp;
+            Exit.ButtonClick += Exit_MouseUp;
 
-            Han.MouseUp += Mode_CheckedChanged;
-            Eng.MouseUp += Mode_CheckedChanged;
-            Num.MouseUp += Mode_CheckedChanged;
-            Sym.MouseUp += Mode_CheckedChanged;
+            Han.ButtonClick += Mode_CheckedChanged;
+            Eng.ButtonClick += Mode_CheckedChanged;
+            Num.ButtonClick += Mode_CheckedChanged;
+            Sym.ButtonClick += Mode_CheckedChanged;
             #endregion
             #region Text Set
             for (int i = 0; i < 10; i++)
@@ -332,12 +332,15 @@ namespace Devinno.Forms.Dialogs
             }
             Han.Checked = true;
             #endregion
+
+            Fixed = true;
+
         }
         #endregion
 
         #region Event
         #region Key_MouseUp             : Key
-        void Key_MouseUp(object sender, MouseEventArgs e)
+        void Key_MouseUp(object sender, EventArgs e)
         {
             DvButton d = (DvButton)sender;
             if (PState == HANGUL || PState == HANGUL_SHIFT)
@@ -358,7 +361,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region Enter_MouseUp           : Enter
-        void Enter_MouseUp(object sender, MouseEventArgs e)
+        void Enter_MouseUp(object sender, EventArgs e)
         {
             if (str.Length != Txt.Text.Length && str.Length == 0)
             {
@@ -372,7 +375,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region Back_MouseUp            : Back
-        void Back_MouseUp(object sender, MouseEventArgs e)
+        void Back_MouseUp(object sender, EventArgs e)
         {
             if (str.Length > 0)
             {
@@ -384,7 +387,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region Space_MouseUp           : Space
-        void Space_MouseUp(object sender, MouseEventArgs e)
+        void Space_MouseUp(object sender, EventArgs e)
         {
             parseHangul.InitState();
             str += " ";
@@ -393,7 +396,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region Shift_MouseUp           : Shift
-        void Shift_MouseUp(object sender, MouseEventArgs e)
+        void Shift_MouseUp(object sender, EventArgs e)
         {
             if (Shift.Checked) PState = PState + 10;
             else PState = PState - 10;
@@ -402,7 +405,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region Cancel_MouseUp          : Clear
-        void Cancel_MouseUp(object sender, MouseEventArgs e)
+        void Cancel_MouseUp(object sender, EventArgs e)
         {
             str = "";
             parseHangul.InitState();
@@ -410,7 +413,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region Exit_MouseUp            : Exit
-        void Exit_MouseUp(object sender, MouseEventArgs e)
+        void Exit_MouseUp(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }
@@ -463,6 +466,18 @@ namespace Devinno.Forms.Dialogs
                 if (i < 9) Ms[i].Text = KeyMap[PState][Ms[i].Name];
                 if (i < 7) Ds[i].Text = KeyMap[PState][Ds[i].Name];
             }
+            #endregion
+
+            #region DPI Size
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            foreach (var c in layout.Controls.Cast<Control>()) c.Margin = new Padding(m3);
+            pnl.Padding = new Padding(m3, m10, m3, m3);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(640 * f), Convert.ToInt32(300 * f));
             #endregion
 
             Han.OffButtonColor = Eng.OffButtonColor = Num.OffButtonColor = Sym.OffButtonColor = Theme.Color3;

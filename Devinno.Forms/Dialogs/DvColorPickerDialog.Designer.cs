@@ -29,7 +29,7 @@ namespace Devinno.Forms.Dialogs
         /// </summary>
         private void InitializeComponent()
         {
-            this.dvContainer1 = new Devinno.Forms.Containers.DvContainer();
+            this.pnl = new Devinno.Forms.Containers.DvContainer();
             this.tbl = new Devinno.Forms.Containers.DvTableLayoutPanel();
             this.btnCancel = new Devinno.Forms.Controls.DvButton();
             this.btnOK = new Devinno.Forms.Controls.DvButton();
@@ -38,22 +38,22 @@ namespace Devinno.Forms.Dialogs
             this.inG = new Devinno.Forms.Controls.DvValueInput();
             this.inB = new Devinno.Forms.Controls.DvValueInput();
             this.draw = new Devinno.Forms.Controls.DvControl();
-            this.dvContainer1.SuspendLayout();
+            this.pnl.SuspendLayout();
             this.tbl.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dvContainer1
+            // pnl
             // 
-            this.dvContainer1.Controls.Add(this.tbl);
-            this.dvContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dvContainer1.Location = new System.Drawing.Point(7, 60);
-            this.dvContainer1.Name = "dvContainer1";
-            this.dvContainer1.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
-            this.dvContainer1.Size = new System.Drawing.Size(436, 433);
-            this.dvContainer1.TabIndex = 0;
-            this.dvContainer1.TabStop = false;
-            this.dvContainer1.Text = "dvContainer1";
-            this.dvContainer1.UseThemeColor = true;
+            this.pnl.Controls.Add(this.tbl);
+            this.pnl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnl.Location = new System.Drawing.Point(7, 60);
+            this.pnl.Name = "pnl";
+            this.pnl.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.pnl.Size = new System.Drawing.Size(436, 433);
+            this.pnl.TabIndex = 0;
+            this.pnl.TabStop = false;
+            this.pnl.Text = "dvContainer1";
+            this.pnl.UseThemeColor = true;
             // 
             // tbl
             // 
@@ -150,9 +150,11 @@ namespace Devinno.Forms.Dialogs
             // 
             // inR
             // 
+            this.inR.BorderColor = System.Drawing.Color.Red;
             this.inR.ButtonWidth = 60;
             this.inR.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inR.DrawBorder = false;
             this.inR.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inR.IconGap = 0;
             this.inR.IconImage = null;
@@ -186,9 +188,11 @@ namespace Devinno.Forms.Dialogs
             // 
             // inG
             // 
+            this.inG.BorderColor = System.Drawing.Color.Red;
             this.inG.ButtonWidth = 60;
             this.inG.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inG.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inG.DrawBorder = false;
             this.inG.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inG.IconGap = 0;
             this.inG.IconImage = null;
@@ -222,9 +226,11 @@ namespace Devinno.Forms.Dialogs
             // 
             // inB
             // 
+            this.inB.BorderColor = System.Drawing.Color.Red;
             this.inB.ButtonWidth = 60;
             this.inB.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.inB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inB.DrawBorder = false;
             this.inB.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inB.IconGap = 0;
             this.inB.IconImage = null;
@@ -273,7 +279,7 @@ namespace Devinno.Forms.Dialogs
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(450, 500);
-            this.Controls.Add(this.dvContainer1);
+            this.Controls.Add(this.pnl);
             this.Fixed = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -284,14 +290,14 @@ namespace Devinno.Forms.Dialogs
             this.Title = "색상 선택";
             this.TitleIconSize = 14F;
             this.TitleIconString = "fa-palette";
-            this.dvContainer1.ResumeLayout(false);
+            this.pnl.ResumeLayout(false);
             this.tbl.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private Containers.DvContainer dvContainer1;
+        private Containers.DvContainer pnl;
         private Containers.DvTableLayoutPanel tbl;
         private Controls.DvButton btnCancel;
         private Controls.DvButton btnOK;

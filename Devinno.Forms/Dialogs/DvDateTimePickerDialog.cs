@@ -40,6 +40,9 @@ namespace Devinno.Forms.Dialogs
                 inSec.Items.Add(new ComboBoxItem(i.ToString()));
             }
             #endregion
+
+            Fixed = true;
+
         }
 
         #region Method
@@ -48,8 +51,23 @@ namespace Devinno.Forms.Dialogs
         {
             DateTime? ret = null;
 
+            #region DPI Size 
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            foreach (var c in tbl.Controls.Cast<Control>()) c.Margin = new Padding(m3);
+            pnl.Padding = new Padding(m3, m10, m3, m3);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(370 * f), Convert.ToInt32(420 * f));
+
+            lblYear.TitleWidth = lblMonth.TitleWidth = lblDay.TitleWidth = inHour.TitleWidth = inMin.TitleWidth = inSec.TitleWidth = Convert.ToInt32(30 * f);
+            inHour.ButtonWidth = inMin.ButtonWidth = inSec.ButtonWidth = Convert.ToInt32(f * 30);
+            inHour.ItemHeight = inMin.ItemHeight = inSec.ItemHeight = inHour.Height;
+            #endregion
+
             #region UI
-            this.Size = new Size(550, 580);
             tbl.Controls.Clear();
             tbl.ColumnStyles.Clear();
             tbl.RowStyles.Clear();
@@ -94,8 +112,23 @@ namespace Devinno.Forms.Dialogs
         {
             DateTime? ret = null;
 
+            #region DPI Size 
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            foreach (var c in tbl.Controls.Cast<Control>()) c.Margin = new Padding(m3);
+            pnl.Padding = new Padding(m3, m10, m3, m3);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(370 * f), Convert.ToInt32(360 * f));
+
+            lblYear.TitleWidth = lblMonth.TitleWidth = lblDay.TitleWidth = inHour.TitleWidth = inMin.TitleWidth = inSec.TitleWidth = Convert.ToInt32(30 * f);
+            inHour.ButtonWidth = inMin.ButtonWidth = inSec.ButtonWidth = Convert.ToInt32(f * 30);
+            inHour.ItemHeight = inMin.ItemHeight = inSec.ItemHeight = inHour.Height;
+            #endregion
+
             #region UI
-            this.Size = new Size(550, 500);
             tbl.Controls.Clear();
             tbl.ColumnStyles.Clear();
             tbl.RowStyles.Clear();
@@ -137,9 +170,23 @@ namespace Devinno.Forms.Dialogs
         public DateTime? ShowTimePicker(DateTime? datetime = null)
         {
             DateTime? ret = null;
+            #region DPI Size 
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            foreach (var c in tbl.Controls.Cast<Control>()) c.Margin = new Padding(m3);
+            pnl.Padding = new Padding(m3, m10, m3, m3);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(370 * f), Convert.ToInt32(132 * f));
+          
+            lblYear.TitleWidth = lblMonth.TitleWidth = lblDay.TitleWidth = inHour.TitleWidth = inMin.TitleWidth = inSec.TitleWidth = Convert.ToInt32(33.333333 * f);
+            inHour.ButtonWidth = inMin.ButtonWidth = inSec.ButtonWidth = Convert.ToInt32(f * 30);
+            inHour.ItemHeight = inMin.ItemHeight = inSec.ItemHeight = inHour.Height;
+            #endregion
 
             #region UI
-            this.Size = new Size(550, 180);
             tbl.Controls.Clear();
             tbl.ColumnStyles.Clear();
             tbl.RowStyles.Clear();

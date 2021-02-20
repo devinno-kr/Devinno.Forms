@@ -31,10 +31,10 @@ namespace Devinno.Forms.Dialogs
         {
             this.pnl = new Devinno.Forms.Containers.DvContainer();
             this.layout = new Devinno.Forms.Containers.DvTableLayoutPanel();
-            this.dvControl1 = new Devinno.Forms.Controls.DvControl();
+            this.gpV = new Devinno.Forms.Controls.DvControl();
             this.pnlBtn = new Devinno.Forms.Containers.DvContainer();
             this.btnOK = new Devinno.Forms.Controls.DvButton();
-            this.dvControl2 = new Devinno.Forms.Controls.DvControl();
+            this.gpH = new Devinno.Forms.Controls.DvControl();
             this.btnCancel = new Devinno.Forms.Controls.DvButton();
             this.pnl.SuspendLayout();
             this.pnlBtn.SuspendLayout();
@@ -43,7 +43,7 @@ namespace Devinno.Forms.Dialogs
             // pnl
             // 
             this.pnl.Controls.Add(this.layout);
-            this.pnl.Controls.Add(this.dvControl1);
+            this.pnl.Controls.Add(this.gpV);
             this.pnl.Controls.Add(this.pnlBtn);
             this.pnl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl.Location = new System.Drawing.Point(7, 60);
@@ -67,21 +67,21 @@ namespace Devinno.Forms.Dialogs
             this.layout.Size = new System.Drawing.Size(466, 51);
             this.layout.TabIndex = 4;
             // 
-            // dvControl1
+            // gpV
             // 
-            this.dvControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dvControl1.Location = new System.Drawing.Point(0, 58);
-            this.dvControl1.Name = "dvControl1";
-            this.dvControl1.Size = new System.Drawing.Size(466, 4);
-            this.dvControl1.TabIndex = 2;
-            this.dvControl1.TabStop = false;
-            this.dvControl1.Text = "dvControl1";
-            this.dvControl1.UseThemeColor = true;
+            this.gpV.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.gpV.Location = new System.Drawing.Point(0, 58);
+            this.gpV.Name = "gpV";
+            this.gpV.Size = new System.Drawing.Size(466, 4);
+            this.gpV.TabIndex = 2;
+            this.gpV.TabStop = false;
+            this.gpV.Text = "dvControl1";
+            this.gpV.UseThemeColor = true;
             // 
             // pnlBtn
             // 
             this.pnlBtn.Controls.Add(this.btnOK);
-            this.pnlBtn.Controls.Add(this.dvControl2);
+            this.pnlBtn.Controls.Add(this.gpH);
             this.pnlBtn.Controls.Add(this.btnCancel);
             this.pnlBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlBtn.Location = new System.Drawing.Point(0, 62);
@@ -106,7 +106,7 @@ namespace Devinno.Forms.Dialogs
             this.btnOK.IconImage = null;
             this.btnOK.IconSize = 10F;
             this.btnOK.IconString = null;
-            this.btnOK.Location = new System.Drawing.Point(217, 3);
+            this.btnOK.Location = new System.Drawing.Point(219, 3);
             this.btnOK.LongClickTime = 0;
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(120, 45);
@@ -116,16 +116,16 @@ namespace Devinno.Forms.Dialogs
             this.btnOK.UseLongClick = false;
             this.btnOK.UseThemeColor = true;
             // 
-            // dvControl2
+            // gpH
             // 
-            this.dvControl2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.dvControl2.Location = new System.Drawing.Point(337, 3);
-            this.dvControl2.Name = "dvControl2";
-            this.dvControl2.Size = new System.Drawing.Size(6, 45);
-            this.dvControl2.TabIndex = 3;
-            this.dvControl2.TabStop = false;
-            this.dvControl2.Text = "dvControl2";
-            this.dvControl2.UseThemeColor = true;
+            this.gpH.Dock = System.Windows.Forms.DockStyle.Right;
+            this.gpH.Location = new System.Drawing.Point(339, 3);
+            this.gpH.Name = "gpH";
+            this.gpH.Size = new System.Drawing.Size(4, 45);
+            this.gpH.TabIndex = 3;
+            this.gpH.TabStop = false;
+            this.gpH.Text = "dvControl2";
+            this.gpH.UseThemeColor = true;
             // 
             // btnCancel
             // 
@@ -175,10 +175,10 @@ namespace Devinno.Forms.Dialogs
 
         private Containers.DvContainer pnl;
         private Containers.DvTableLayoutPanel layout;
-        private Controls.DvControl dvControl1;
+        private Controls.DvControl gpV;
         private Containers.DvContainer pnlBtn;
         private Controls.DvButton btnOK;
-        private Controls.DvControl dvControl2;
+        private Controls.DvControl gpH;
         private Controls.DvButton btnCancel;
     }
 }

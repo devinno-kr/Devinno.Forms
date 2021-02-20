@@ -20,6 +20,8 @@ namespace Devinno.Forms.Dialogs
         {
             InitializeComponent();
 
+            Fixed = true;
+
             #region ComboBox
             cmbBaudrate.Items.AddRange(new int[] { 4800, 9600, 19200, 38400, 57600, 115200 }.Select(x => new ComboBoxItem(x.ToString()) { Tag = x }));
             cmbDataBit.Items.AddRange(new int[] { 5, 6, 7, 8 }.Select(x => new ComboBoxItem(x.ToString()) { Tag = x }));
@@ -48,10 +50,19 @@ namespace Devinno.Forms.Dialogs
         {
             Theme = GetCallerFormTheme() ?? Theme;
             SerialPortSetting ret = null;
+            #region DPI Size
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            foreach (var c in layout.Controls.Cast<Control>()) c.Margin = new Padding(m3);
+            pnl.Padding = new Padding(m3, m10, m3, m3);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(300 * f), Convert.ToInt32((40 + 10 + (36 * 6) + 10) * f) + 10);
+            #endregion
 
             #region UI
-            var f = DpiRatio;
-            this.Size = new Size(400, 396);
 
             layout.SuspendLayout();
             layout.ColumnStyles.Clear();
@@ -108,7 +119,7 @@ namespace Devinno.Forms.Dialogs
                 cmbStopBit.SelectedIndex = 1;
             }
 
-            cmbPort.ItemHeight = cmbBaudrate.ItemHeight = cmbDataBit.ItemHeight = cmbParity.ItemHeight = cmbStopBit.ItemHeight = Convert.ToInt32(30 * f);
+            cmbPort.ItemHeight = cmbBaudrate.ItemHeight = cmbDataBit.ItemHeight = cmbParity.ItemHeight = cmbStopBit.ItemHeight = cmbPort.Height;
             #endregion
             #region ShowDialog
             if (this.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -132,10 +143,18 @@ namespace Devinno.Forms.Dialogs
             Theme = GetCallerFormTheme() ?? Theme;
 
             SerialPortSetting ret = null;
-            #region UI
+            #region DPI Size
             var f = DpiRatio;
-            this.Size = new Size(400, 246);
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
 
+            foreach (var c in layout.Controls.Cast<Control>()) c.Margin = new Padding(m3);
+            pnl.Padding = new Padding(m3, m10, m3, m3);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(300 * f), Convert.ToInt32((40 + 10 + (36 * 3) + 10) * f) + 10);
+            #endregion
+            #region UI
             layout.SuspendLayout();
 
             layout.ColumnStyles.Clear();
@@ -184,7 +203,7 @@ namespace Devinno.Forms.Dialogs
                 cmbStopBit.SelectedIndex = 1;
             }
 
-            cmbPort.ItemHeight = cmbBaudrate.ItemHeight = cmbDataBit.ItemHeight = cmbParity.ItemHeight = cmbStopBit.ItemHeight = Convert.ToInt32(30 * f);
+            cmbPort.ItemHeight = cmbBaudrate.ItemHeight = cmbDataBit.ItemHeight = cmbParity.ItemHeight = cmbStopBit.ItemHeight = cmbPort.Height;
             #endregion
             #region ShowDialog
             if (this.ShowDialog() == System.Windows.Forms.DialogResult.OK)

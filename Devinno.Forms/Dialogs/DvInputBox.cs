@@ -19,6 +19,8 @@ namespace Devinno.Forms.Dialogs
         {
             InitializeComponent();
 
+            Fixed = true;
+
             btnOK.ButtonClick += (o, s) => { if (ValidCheck()) DialogResult = DialogResult.OK; };
             btnCancel.ButtonClick += (o, s) => DialogResult = DialogResult.Cancel;
         }
@@ -67,9 +69,20 @@ namespace Devinno.Forms.Dialogs
         public T ShowInputBox<T>(string Title, T value = default(T), Dictionary<string, InputBoxInfo> infos = null)
         {
             #region UI
-            var f = DpiRatio;
             var props = typeof(T).GetProperties().Where(x => x.Name != "Id" && x.CanRead && x.CanWrite && !Attribute.IsDefined(x, typeof(InputBoxIgnoreAttribute))).ToList();
-            this.Size = new Size(450, 180 + Convert.ToInt32(((30 * DpiRatio)) * props.Count));
+            #region DPI Size 
+            var f = DpiRatio;
+            var m3 = Convert.ToInt32(3 * f);
+            var m7 = Convert.ToInt32(7 * f);
+            var m10 = Convert.ToInt32(10 * f);
+
+            pnl.Padding = new Padding(0, m7, 0, 0);
+            pnlBtn.Padding = new Padding(m3);
+            pnlBtn.Height = Convert.ToInt32(f * 36);
+            gpH.Width = gpV.Height = Convert.ToInt32(f * 4);
+            this.Padding = new Padding(m7, Convert.ToInt32(f * 40), m7, m7);
+            this.Size = new Size(Convert.ToInt32(300 * f), Convert.ToInt32((40 + 7 + ((3 + 30 + 3) * props.Count) + 4 + 36 + 7) * f));
+            #endregion
 
             #region Column / Row
             layout.ColumnStyles.Clear();
@@ -91,6 +104,7 @@ namespace Devinno.Forms.Dialogs
                     var p = props[i];
                     var info = infos != null && infos.ContainsKey(p.Name) ? infos[p.Name] : null;
                     var c = new DvValueInput() { Name = "in" + p.Name, Dock = DockStyle.Fill, Tag = new InputBoxTag() { p = p, info = info } };
+                    c.Margin = new Padding(m3);
                     c.Text = info != null && !string.IsNullOrWhiteSpace(info.Alias) ? info.Alias : p.Name;
                     c.ValueTextChanged += (o, s) => ((DvValueInput)o).DrawBorder = false;
                     c.SelectedIndexChanged += (o, s) => ((DvValueInput)o).DrawBorder = false;
@@ -143,6 +157,7 @@ namespace Devinno.Forms.Dialogs
             }
             #endregion
 
+            btnOK.Width = btnCancel.Width = Convert.ToInt32(80 * f);
             pnl.Height = Convert.ToInt32(30 * f);
             #endregion
             #region Set
