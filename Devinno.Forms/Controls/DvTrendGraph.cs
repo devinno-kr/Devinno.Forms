@@ -216,7 +216,7 @@ namespace Devinno.Forms.Controls
 
             #region Scroll
             scroll.Direction = ScrollDirection.Horizon;
-            scroll.ScrollChanged += (o, s) => { if (!IsStart) Invalidate(); };
+            scroll.ScrollChanged += (o, s) => { if (!IsStart) this.Invoke(new Action(() => Invalidate())); };
 
             scroll.GetScrollTotal = () =>
             {

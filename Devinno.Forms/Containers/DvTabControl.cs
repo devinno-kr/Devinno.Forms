@@ -145,7 +145,7 @@ namespace Devinno.Forms.Containers
                     }
                 }
 
-                foreach (var v in TabPages.Cast<TabPage>().Where(x => !tps.Select(x => x.Page).Contains(x)))
+                foreach (var v in TabPages.Cast<TabPage>().Where(x => !tps.Select(x2 => x2.Page).Contains(x)))
                 {
                     tps.Add(new _TPI() { Page = v, BackColor = v.BackColor });
                     v.Paint += (o, s) =>

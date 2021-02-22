@@ -1,7 +1,9 @@
 ﻿using Devinno.Forms;
 using Devinno.Forms.Controls;
 using Devinno.Forms.Dialogs;
+using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
+using Devinno.Forms.Themes;
 using Devinno.Tools;
 using System;
 using System.Collections.Generic;
@@ -219,6 +221,15 @@ namespace Sample
             btnSerialPortSetting_Normal.ButtonClick += (o, s) => { Block = true; serialPortSetting.ShowSerialPortSetting(); Block = false; };
             btnSerialPortSetting_Simple.ButtonClick += (o, s) => { Block = true; serialPortSetting.ShowSimpleSerialPortSetting(); Block = false; };
             #endregion
+            #region ContentView / ContentGrid
+            contentView.TouchMode = true;
+            contentView.DragSelect = false;
+            contentView.ScrollDirection = ScrollDirection.Vertical;
+            for (int i = 0; i < 200; i++)
+            {
+                contentView.Items.Add(new TContent(contentView) { Num = contentView.Items.Count + 1, RowSpan = i % 10 == 0 ? 2 : 1, ColSpan = i % 10 == 0 ? 2 : 1, Tag = contentView.Items.Count + 1 });
+            }
+            #endregion
         }
 
         #region GraphSet
@@ -300,5 +311,33 @@ namespace Sample
         public bool OnOff { get; set; }
     }
     #endregion
+    #region class : TContent
+    public class TContent : DvContent
+    {
+        public int Num { get; set; }
+        public bool OnOff { get; set; }
+        public TContent(DvContentView Control) : base(Control) { }
 
+        public override void Draw(Graphics g, DvTheme Theme, Rectangle Bounds)
+        {
+            if (Control != null)
+            {
+                var rt = GetBounds(Bounds);
+
+                Theme.DrawBox(g, (OnOff ? Theme.PointColor : Theme.Color3), Control.BackColor, rt, RoundType.ALL, BoxDrawOption.BORDER);
+                Theme.DrawText(g, null, Num.ToString(), Control.Font, Color.White, rt);
+            }
+            base.Draw(g, Theme, Bounds);
+        }
+
+        public override void MouseDoubleClick(Rectangle Bounds, Point p)
+        {
+            if (Collision(Bounds, p)) { OnOff = !OnOff; Control?.Invalidate(); }
+            base.MouseDoubleClick(Bounds, p);
+        }
+
+        public override bool Collision(Rectangle Bounds, Point p) => CollisionTool.Check(GetBounds(Bounds), p);
+        public override Rectangle GetBounds(Rectangle Bounds) => MathTool.MakeRectangle(Bounds, new Size(Bounds.Width - 10, Bounds.Height - 10));
+    }
+    #endregion
 }

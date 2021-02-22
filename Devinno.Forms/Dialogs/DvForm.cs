@@ -309,7 +309,8 @@ namespace Devinno.Forms.Dialogs
         public DvForm()
         {
             InitializeComponent();
-
+            SetStyle(ControlStyles.ResizeRedraw, true);
+            UpdateStyles();
             #region Default Property
             FormBorderStyle = FormBorderStyle.None;
             StartPosition = FormStartPosition.CenterScreen;

@@ -165,6 +165,10 @@ namespace Sample
             this.btnInputBox = new Devinno.Forms.Controls.DvButton();
             this.btnDateTimePicker_DateTime = new Devinno.Forms.Controls.DvButton();
             this.btnColorPicker = new Devinno.Forms.Controls.DvButton();
+            this.tpContents = new System.Windows.Forms.TabPage();
+            this.dvTableLayoutPanel2 = new Devinno.Forms.Containers.DvTableLayoutPanel();
+            this.contentView = new Devinno.Forms.Controls.DvContentView();
+            this.tpDataGrid = new System.Windows.Forms.TabPage();
             this.ms = new Devinno.Forms.Menus.DvMenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiNewFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -174,8 +178,6 @@ namespace Sample
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tpContents = new System.Windows.Forms.TabPage();
-            this.tpDataGrid = new System.Windows.Forms.TabPage();
             this.tab.SuspendLayout();
             this.tpControl.SuspendLayout();
             this.tpContainer.SuspendLayout();
@@ -190,6 +192,8 @@ namespace Sample
             this.tpGraph.SuspendLayout();
             this.tpTimeGraph.SuspendLayout();
             this.tpDialog.SuspendLayout();
+            this.tpContents.SuspendLayout();
+            this.dvTableLayoutPanel2.SuspendLayout();
             this.ms.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -2370,6 +2374,7 @@ namespace Sample
             this.btnTrendStop.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnTrendStop.Clickable = true;
             this.btnTrendStop.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.btnTrendStop.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnTrendStop.Gradient = true;
             this.btnTrendStop.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnTrendStop.IconGap = 0;
@@ -2392,6 +2397,7 @@ namespace Sample
             this.btnTrendStart.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnTrendStart.Clickable = true;
             this.btnTrendStart.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.btnTrendStart.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnTrendStart.Gradient = true;
             this.btnTrendStart.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnTrendStart.IconGap = 0;
@@ -2598,6 +2604,7 @@ namespace Sample
             this.btnTimeGraphRefresh.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnTimeGraphRefresh.Clickable = true;
             this.btnTimeGraphRefresh.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.btnTimeGraphRefresh.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnTimeGraphRefresh.Gradient = true;
             this.btnTimeGraphRefresh.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnTimeGraphRefresh.IconGap = 0;
@@ -3196,6 +3203,58 @@ namespace Sample
             this.btnColorPicker.UseLongClick = false;
             this.btnColorPicker.UseThemeColor = true;
             // 
+            // tpContents
+            // 
+            this.tpContents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpContents.Controls.Add(this.dvTableLayoutPanel2);
+            this.tpContents.Location = new System.Drawing.Point(204, 4);
+            this.tpContents.Name = "tpContents";
+            this.tpContents.Padding = new System.Windows.Forms.Padding(10);
+            this.tpContents.Size = new System.Drawing.Size(1712, 967);
+            this.tpContents.TabIndex = 5;
+            this.tpContents.Text = "Contents";
+            // 
+            // dvTableLayoutPanel2
+            // 
+            this.dvTableLayoutPanel2.ColumnCount = 2;
+            this.dvTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.dvTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.dvTableLayoutPanel2.Controls.Add(this.contentView, 0, 0);
+            this.dvTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dvTableLayoutPanel2.Location = new System.Drawing.Point(10, 10);
+            this.dvTableLayoutPanel2.Name = "dvTableLayoutPanel2";
+            this.dvTableLayoutPanel2.RowCount = 1;
+            this.dvTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.dvTableLayoutPanel2.Size = new System.Drawing.Size(1692, 947);
+            this.dvTableLayoutPanel2.TabIndex = 0;
+            // 
+            // contentView
+            // 
+            this.contentView.ContentSize = new System.Drawing.Size(100, 100);
+            this.contentView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contentView.DragSelect = true;
+            this.contentView.Gap = 3;
+            this.contentView.Location = new System.Drawing.Point(3, 3);
+            this.contentView.Name = "contentView";
+            this.contentView.ScrollDirection = Devinno.Forms.ScrollDirection.Vertical;
+            this.contentView.SelectedColor = System.Drawing.Color.DarkRed;
+            this.contentView.SelectionMode = Devinno.Forms.Controls.ItemSelectionMode.SINGLE;
+            this.contentView.Size = new System.Drawing.Size(840, 941);
+            this.contentView.TabIndex = 1;
+            this.contentView.Text = "dvContentView1";
+            this.contentView.TouchMode = false;
+            this.contentView.UseThemeColor = true;
+            // 
+            // tpDataGrid
+            // 
+            this.tpDataGrid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpDataGrid.Location = new System.Drawing.Point(204, 4);
+            this.tpDataGrid.Name = "tpDataGrid";
+            this.tpDataGrid.Padding = new System.Windows.Forms.Padding(3);
+            this.tpDataGrid.Size = new System.Drawing.Size(1712, 967);
+            this.tpDataGrid.TabIndex = 6;
+            this.tpDataGrid.Text = "DataGrid";
+            // 
             // ms
             // 
             this.ms.AutoSize = false;
@@ -3269,26 +3328,6 @@ namespace Sample
             this.tsmiEdit.Size = new System.Drawing.Size(84, 41);
             this.tsmiEdit.Text = "편집(&E)";
             // 
-            // tpContents
-            // 
-            this.tpContents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.tpContents.Location = new System.Drawing.Point(204, 4);
-            this.tpContents.Name = "tpContents";
-            this.tpContents.Padding = new System.Windows.Forms.Padding(3);
-            this.tpContents.Size = new System.Drawing.Size(1712, 967);
-            this.tpContents.TabIndex = 5;
-            this.tpContents.Text = "Contents";
-            // 
-            // tpDataGrid
-            // 
-            this.tpDataGrid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.tpDataGrid.Location = new System.Drawing.Point(204, 4);
-            this.tpDataGrid.Name = "tpDataGrid";
-            this.tpDataGrid.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDataGrid.Size = new System.Drawing.Size(1712, 967);
-            this.tpDataGrid.TabIndex = 6;
-            this.tpDataGrid.Text = "DataGrid";
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
@@ -3322,6 +3361,8 @@ namespace Sample
             this.tpGraph.ResumeLayout(false);
             this.tpTimeGraph.ResumeLayout(false);
             this.tpDialog.ResumeLayout(false);
+            this.tpContents.ResumeLayout(false);
+            this.dvTableLayoutPanel2.ResumeLayout(false);
             this.ms.ResumeLayout(false);
             this.ms.PerformLayout();
             this.ResumeLayout(false);
@@ -3477,6 +3518,8 @@ namespace Sample
         private Devinno.Forms.Controls.DvButton btnSelectorBox_Combo;
         private System.Windows.Forms.TabPage tpContents;
         private System.Windows.Forms.TabPage tpDataGrid;
+        private Devinno.Forms.Containers.DvTableLayoutPanel dvTableLayoutPanel2;
+        private Devinno.Forms.Controls.DvContentView contentView;
     }
 }
 
