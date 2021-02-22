@@ -3232,7 +3232,6 @@ namespace Sample
             // 
             this.contentView.ContentSize = new System.Drawing.Size(100, 100);
             this.contentView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contentView.DragSelect = true;
             this.contentView.Gap = 3;
             this.contentView.Location = new System.Drawing.Point(3, 3);
             this.contentView.Name = "contentView";

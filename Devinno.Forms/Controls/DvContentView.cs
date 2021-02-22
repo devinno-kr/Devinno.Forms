@@ -1,5 +1,6 @@
 ﻿using Devinno.Collections;
 using Devinno.Extensions;
+using Devinno.Forms.Extensions;
 using Devinno.Forms.Themes;
 using Devinno.Tools;
 using System;
@@ -53,9 +54,6 @@ namespace Devinno.Forms.Controls
         #region SelectionMode
         public ItemSelectionMode SelectionMode { get; set; } = ItemSelectionMode.SINGLE;
         #endregion
-        #region DragSelect
-        public bool DragSelect { get; set; } = true;
-        #endregion
 
         #region TouchMode
         public bool TouchMode
@@ -87,6 +85,9 @@ namespace Devinno.Forms.Controls
         #endregion
         #region Gap
         public int Gap { get; set; } = 3;
+        #endregion
+        #region TouchAreaSize
+        public int TouchAreaSize { get; set; } = 60;
         #endregion
         #endregion
 
@@ -133,17 +134,23 @@ namespace Devinno.Forms.Controls
             var rtContent = Areas["rtContent"];
             if (ScrollDirection == ScrollDirection.Vertical)
             {
-                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width - scwh, rtContent.Height);
-                var rtScroll = new Rectangle(rtBox.Right, rtBox.Top, scwh, rtBox.Height);
+                var twh = TouchMode ? TouchAreaSize : 0;
+                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width - twh - scwh, rtContent.Height);
+                var rtTouchArea = new Rectangle(rtBox.Right, rtBox.Top, twh, rtBox.Height);
+                var rtScroll = new Rectangle(rtTouchArea.Right, rtBox.Top, scwh, rtBox.Height);
                 SetArea("rtBox", rtBox);
                 SetArea("rtScroll", rtScroll);
+                SetArea("rtTouchArea", rtTouchArea);
             }
             else
             {
-                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - scwh);
-                var rtScroll = new Rectangle(rtBox.Left, rtBox.Bottom, rtBox.Width, scwh );
+                var twh = TouchMode ? TouchAreaSize : 0;
+                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - twh - scwh);
+                var rtTouchArea = new Rectangle(rtBox.Left, rtBox.Bottom, rtBox.Width, twh);
+                var rtScroll = new Rectangle(rtBox.Left, rtTouchArea.Bottom, rtBox.Width, scwh );
                 SetArea("rtBox", rtBox);
                 SetArea("rtScroll", rtScroll);
+                SetArea("rtTouchArea", rtTouchArea);
             }
 
             var rtb = Areas["rtBox"];
@@ -173,6 +180,7 @@ namespace Devinno.Forms.Controls
             var rtBox = Areas["rtBox"];
             var rtScroll = Areas["rtScroll"];
             var rtView = Areas["rtView"];
+            var rtTouchArea = Areas["rtTouchArea"];
             #endregion
             #region Draw
             #region Items
@@ -206,8 +214,22 @@ namespace Devinno.Forms.Controls
             var rtcur = scroll.GetScrollCursorRect(rtScroll);
             if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
             #endregion
+            #region TouchArea
+            if (TouchMode)
+            {
+                var scw = ScrollDirection == ScrollDirection.Vertical ? 10 : 0;
+                var sch = ScrollDirection == ScrollDirection.Horizon ? 10 : 0;
+                var rtTA = new Rectangle(rtTouchArea.X, rtTouchArea.Y, rtTouchArea.Width - scw, rtTouchArea.Height - sch);
+
+                br.Color = Color.FromArgb(30, Color.Black); 
+                e.Graphics.FillRoundRectangle(br, rtTA, Theme.Corner);
+               
+                p.Color = Color.FromArgb(30, Color.White); p.Width = 1;
+                e.Graphics.DrawRoundRectangle(p, rtTA, Theme.Corner);
+                Theme.DrawText(e.Graphics, null, "TOUCH\r\nAREA", Font, p.Color, rtTA);
+            }
+            #endregion
             #region Drag
-            if (DragSelect)
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
                 if (downPoint.HasValue && movePoint.HasValue)
@@ -249,32 +271,13 @@ namespace Devinno.Forms.Controls
                 var rtBox = Areas["rtBox"];
                 var rtScroll = Areas["rtScroll"];
 
-                var sel = false;
-                Loop((ls, i, rt, itm) =>
-                {
-                    if(itm.Item != null && CollisionTool.Check(rt, e.Location))
-                    {
-                        sel = true;
-                    }
-                });
+                scroll.MouseDown(e, Areas["rtScroll"]);
+                if (scroll.TouchMode && CollisionTool.Check(Areas["rtTouchArea"], e.Location)) scroll.TouchDown(e);
 
-                if (DragSelect)
+                if (CollisionTool.Check(rtBox, e.Location))
                 {
-                    if (!sel)
-                    {
-                        scroll.MouseDown(e, Areas["rtScroll"]);
-                        if (scroll.TouchMode && CollisionTool.Check(Areas["rtBox"], e.Location)) scroll.TouchDown(e);
-                    }
-                    else
-                    {
-                        downPoint = e.Location;
-                        movePoint = null;
-                    }
-                }
-                else
-                {
-                    scroll.MouseDown(e, Areas["rtScroll"]);
-                    if (scroll.TouchMode && CollisionTool.Check(Areas["rtBox"], e.Location)) scroll.TouchDown(e);
+                    downPoint = e.Location;
+                    movePoint = null;
                 }
             }
             Invalidate();
@@ -291,7 +294,7 @@ namespace Devinno.Forms.Controls
                 if (scroll.IsScrolling) Invalidate();
                 if (scroll.TouchMode && scroll.IsTouchScrolling) Invalidate();
 
-                if (DragSelect && downPoint.HasValue) movePoint = e.Location;
+                if (downPoint.HasValue) movePoint = e.Location;
 
                 Invalidate();
             }
@@ -305,54 +308,52 @@ namespace Devinno.Forms.Controls
             {
                 var rtBox = Areas["rtBox"];
                 var rtScroll = Areas["rtScroll"];
+                var rtTouchArea = Areas["rtTouchArea"];
 
                 scroll.MouseUp(e);
-                if (scroll.TouchMode && CollisionTool.Check(rtBox, e.Location)) scroll.TouchUp(e);
+                if (scroll.TouchMode) scroll.TouchUp(e);
             }
 
-            if(downPoint.HasValue)
+            if (downPoint.HasValue)
             {
-                if (DragSelect)
+                if (Math.Abs(downPoint.Value.X - e.X) >= 5 || Math.Abs(downPoint.Value.Y - e.Y) >= 5)
                 {
-                    if (Math.Abs(downPoint.Value.X - e.X) >= 5 || Math.Abs(downPoint.Value.Y - e.Y) >= 5)
+                    var rtdrag = MathTool.MakeRectangle(e.Location, downPoint.Value);
+                    #region SelectedClear
+                    if ((ModifierKeys & Keys.Shift) != Keys.Shift) { SelectedItems.Clear(); Invalidate(); }
+                    #endregion
+                    #region Selected
+                    bool bChange = false;
+                    Loop((ls, i, rt, itm) =>
                     {
-                        var rtdrag = MathTool.MakeRectangle(e.Location, downPoint.Value);
-                        #region SelectedClear
-                        if ((ModifierKeys & Keys.Shift) != Keys.Shift) { SelectedItems.Clear(); Invalidate(); }
-                        #endregion
-                        #region Selected
-                        bool bChange = false;
-                        Loop((ls, i, rt, itm) =>
+                        var v = itm.Item;
+                        if (v.Enabled && v.Collision(rt, rtdrag))
                         {
-                            var v = itm.Item;
-                            if (v.Enabled && v.Collision(rt, rtdrag))
-                            {
-                                bChange = true;
-                                SelectedItems.Add(v);
-                            }
-                        });
-                        if (bChange) { SelectedChanged?.Invoke(this, null); Invalidate(); }
-                        #endregion
-                    }
-                    else
+                            bChange = true;
+                            SelectedItems.Add(v);
+                        }
+                    });
+                    if (bChange) { SelectedChanged?.Invoke(this, null); Invalidate(); }
+                    #endregion
+                }
+                else
+                {
+                    #region SelectedClear
+                    if ((ModifierKeys & Keys.Shift) != Keys.Shift) { SelectedItems.Clear(); Invalidate(); }
+                    #endregion
+                    #region Selected
+                    bool bChange = false;
+                    Loop((ls, i, rt, itm) =>
                     {
-                        #region SelectedClear
-                        if ((ModifierKeys & Keys.Shift) != Keys.Shift) { SelectedItems.Clear(); Invalidate(); }
-                        #endregion
-                        #region Selected
-                        bool bChange = false;
-                        Loop((ls, i, rt, itm) =>
+                        var v = itm.Item;
+                        if (v.Enabled && v.Collision(rt, e.Location))
                         {
-                            var v = itm.Item;
-                            if (v.Enabled && v.Collision(rt, e.Location))
-                            {
-                                bChange = true;
-                                SelectedItems.Add(v);
-                            }
-                        });
-                        if (bChange) { SelectedChanged?.Invoke(this, null); Invalidate(); }
-                        #endregion
-                    }
+                            bChange = true;
+                            SelectedItems.Add(v);
+                        }
+                    });
+                    if (bChange) { SelectedChanged?.Invoke(this, null); Invalidate(); }
+                    #endregion
                 }
                 downPoint = movePoint = null;
             }

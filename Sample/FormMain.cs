@@ -223,8 +223,8 @@ namespace Sample
             #endregion
             #region ContentView / ContentGrid
             contentView.TouchMode = true;
-            contentView.DragSelect = false;
-            contentView.ScrollDirection = ScrollDirection.Vertical;
+            contentView.TouchAreaSize = 100;
+            contentView.ScrollDirection = ScrollDirection.Horizon;
             for (int i = 0; i < 200; i++)
             {
                 contentView.Items.Add(new TContent(contentView) { Num = contentView.Items.Count + 1, RowSpan = i % 10 == 0 ? 2 : 1, ColSpan = i % 10 == 0 ? 2 : 1, Tag = contentView.Items.Count + 1 });
