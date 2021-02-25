@@ -2,6 +2,7 @@
 using Devinno.Extensions;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Themes;
+using Devinno.Forms.Tools;
 using Devinno.Tools;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ namespace Devinno.Forms.Controls
         private Size szContent = new Size(100, 100);
         public Size ContentSize
         {
-            get => szContent; 
+            get => szContent;
             set
             {
                 if (szContent != value) { szContent = value; Invalidate(); }
@@ -47,12 +48,9 @@ namespace Devinno.Forms.Controls
         #region SelectedItems
         public EventList<DvContent> SelectedItems { get; } = new EventList<DvContent>();
         #endregion
+
         #region Items
         public EventList<DvContent> Items { get; } = new EventList<DvContent>();
-        #endregion
-
-        #region SelectionMode
-        public ItemSelectionMode SelectionMode { get; set; } = ItemSelectionMode.SINGLE;
         #endregion
 
         #region TouchMode
@@ -69,6 +67,19 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region Gap
+        public int Gap { get; set; } = 3;
+        #endregion
+        #region AutoArrange
+        public bool AutoArrange { get; set; } = true;
+        #endregion
+        #region TouchAreaSize
+        public int TouchAreaSize { get; set; } = 60;
+        #endregion
+        #region Selectable
+        public bool Selectable { get; set; } = false;
+        #endregion
+
         #region ScrollDirection
         public ScrollDirection ScrollDirection
         {
@@ -83,17 +94,11 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region Gap
-        public int Gap { get; set; } = 3;
-        #endregion
-        #region TouchAreaSize
-        public int TouchAreaSize { get; set; } = 60;
-        #endregion
         #endregion
 
         #region Member Variable
         private Scroll scroll = new Scroll();
-        private List<CI> vls = new List<CI>();
+        private List<DvContent> vls = new List<DvContent>();
         private Size szprev;
         private MouseEventArgs evdown;
         private Point? downPoint = null;
@@ -120,7 +125,7 @@ namespace Devinno.Forms.Controls
             scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
             scroll.GetScrollTotal = () => ScrollDirection == ScrollDirection.Vertical ? (vls.Count > 0 ? vls.Max(x => x.Bounds.Bottom) : 0) : (vls.Count > 0 ? vls.Max(x => x.Bounds.Right) : 0);
             scroll.GetScrollTick = () => ScrollDirection == ScrollDirection.Vertical? ContentSize.Height : ContentSize.Width;
-            scroll.GetScrollView = () => ScrollDirection == ScrollDirection.Vertical ? (Areas.ContainsKey("rtView") ? Areas["rtView"].Height : 0) : (Areas.ContainsKey("rtView") ? Areas["rtView"].Width : 0);
+            scroll.GetScrollView = () => ScrollDirection == ScrollDirection.Vertical ? (Areas.ContainsKey("rtBox") ? Areas["rtBox"].Height : 0) : (Areas.ContainsKey("rtBox") ? Areas["rtBox"].Width : 0);
         }
         #endregion
 
@@ -131,34 +136,29 @@ namespace Devinno.Forms.Controls
             base.LoadAreas(g);
 
             var scwh = Convert.ToInt32(Scroll.SC_WH * DpiRatio);
+            var gp = Convert.ToInt32(10 * DpiRatio);
             var rtContent = Areas["rtContent"];
+
             if (ScrollDirection == ScrollDirection.Vertical)
             {
-                var twh = TouchMode ? TouchAreaSize : 0;
-                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width - twh - scwh, rtContent.Height);
-                var rtTouchArea = new Rectangle(rtBox.Right, rtBox.Top, twh, rtBox.Height);
-                var rtScroll = new Rectangle(rtTouchArea.Right, rtBox.Top, scwh, rtBox.Height);
+                var twh = TouchMode && Selectable ? TouchAreaSize : 0;
+                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width - twh - scwh - (gp * 2), rtContent.Height); rtBox.Inflate(-1, -1);
+                var rtTouchArea = new Rectangle(rtBox.Right + gp, rtBox.Top, twh, rtBox.Height);
+                var rtScroll = new Rectangle(rtTouchArea.Right + gp, rtBox.Top, scwh, rtBox.Height);
                 SetArea("rtBox", rtBox);
                 SetArea("rtScroll", rtScroll);
                 SetArea("rtTouchArea", rtTouchArea);
             }
             else
             {
-                var twh = TouchMode ? TouchAreaSize : 0;
-                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - twh - scwh);
-                var rtTouchArea = new Rectangle(rtBox.Left, rtBox.Bottom, rtBox.Width, twh);
-                var rtScroll = new Rectangle(rtBox.Left, rtTouchArea.Bottom, rtBox.Width, scwh );
+                var twh = TouchMode && Selectable ? TouchAreaSize : 0;
+                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - twh - scwh - (gp * 2)); rtBox.Inflate(-1, -1);
+                var rtTouchArea = new Rectangle(rtBox.Left, rtBox.Bottom + gp, rtBox.Width, twh);
+                var rtScroll = new Rectangle(rtBox.Left, rtTouchArea.Bottom + gp, rtBox.Width, scwh);
                 SetArea("rtBox", rtBox);
                 SetArea("rtScroll", rtScroll);
                 SetArea("rtTouchArea", rtTouchArea);
             }
-
-            var rtb = Areas["rtBox"];
-            var rtc = new Rectangle(rtb.X, rtb.Y, rtb.Width, rtb.Height);
-            int cw = (int)Math.Floor((double)(rtc.Width) / (double)ContentSize.Width);
-            int ch = (int)Math.Floor((double)(rtc.Height) / (double)ContentSize.Height);
-            var rtView = MathTool.MakeRectangle(rtc, new Size(cw * ContentSize.Width, ch * ContentSize.Height));
-            SetArea("rtView", rtView);
         }
         #endregion
         #region OnThemeDraw
@@ -179,24 +179,21 @@ namespace Devinno.Forms.Controls
             var rtContent = Areas["rtContent"];
             var rtBox = Areas["rtBox"];
             var rtScroll = Areas["rtScroll"];
-            var rtView = Areas["rtView"];
             var rtTouchArea = Areas["rtTouchArea"];
             #endregion
             #region Draw
             #region Items
-            e.Graphics.SetClip(rtView);
+            e.Graphics.SetClip(new Rectangle(rtBox.X - 1, rtBox.Y - 1, rtBox.Width + 2, rtBox.Height + 2));
             Loop((ls, i, rt, itm) =>
             {
-                if (itm.Item.Visible)
+                if (itm.Visible)
                 {
-                    if (SelectedItems.Contains(itm.Item))
+                    if (SelectedItems.Contains(itm))
                     {
                         var rtv = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtv.Inflate(Gap, Gap);
-                        br.Color = Color.FromArgb(180, Color.Black);
-                        e.Graphics.FillRectangle(br, rtv);
                         Theme.DrawBorder(e.Graphics, SelectedColor, BackColor, 3, rtv, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
                     }
-                    itm.Item.Draw(e.Graphics, Theme, rt);
+                    itm.Draw(e.Graphics, Theme, rt);
                 }
             });
             e.Graphics.ResetClip();
@@ -215,21 +212,24 @@ namespace Devinno.Forms.Controls
             if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
             #endregion
             #region TouchArea
-            if (TouchMode)
+            if (TouchMode && Selectable)
             {
-                var scw = ScrollDirection == ScrollDirection.Vertical ? 10 : 0;
-                var sch = ScrollDirection == ScrollDirection.Horizon ? 10 : 0;
-                var rtTA = new Rectangle(rtTouchArea.X, rtTouchArea.Y, rtTouchArea.Width - scw, rtTouchArea.Height - sch);
+                var rtTA = new Rectangle(rtTouchArea.X, rtTouchArea.Y, rtTouchArea.Width, rtTouchArea.Height);
 
-                br.Color = Color.FromArgb(30, Color.Black); 
+                br.Color = Color.FromArgb(30, Color.Black);
                 e.Graphics.FillRoundRectangle(br, rtTA, Theme.Corner);
-               
+
                 p.Color = Color.FromArgb(30, Color.White); p.Width = 1;
                 e.Graphics.DrawRoundRectangle(p, rtTA, Theme.Corner);
-                Theme.DrawText(e.Graphics, null, "TOUCH\r\nAREA", Font, p.Color, rtTA);
+
+                using (var ft = new Font(Font.FontFamily, 7, FontStyle.Bold))
+                {
+                    Theme.DrawText(e.Graphics, null, "TOUCH\r\nAREA", ft, p.Color, rtTA);
+                }
             }
             #endregion
             #region Drag
+            if(Selectable)
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
                 if (downPoint.HasValue && movePoint.HasValue)
@@ -256,7 +256,12 @@ namespace Devinno.Forms.Controls
         #region OnMouseWheel
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            scroll.MouseWheel(e);
+            if (TouchMode)
+            {
+                if(!scroll.IsTouchMoving) scroll.MouseWheel(e);
+            }
+            else scroll.MouseWheel(e);
+
             Invalidate();
             base.OnMouseWheel(e);
         }
@@ -271,13 +276,24 @@ namespace Devinno.Forms.Controls
                 var rtBox = Areas["rtBox"];
                 var rtScroll = Areas["rtScroll"];
 
-                scroll.MouseDown(e, Areas["rtScroll"]);
-                if (scroll.TouchMode && CollisionTool.Check(Areas["rtTouchArea"], e.Location)) scroll.TouchDown(e);
-
-                if (CollisionTool.Check(rtBox, e.Location))
+                Loop((ls, i, rt, itm) =>
                 {
-                    downPoint = e.Location;
-                    movePoint = null;
+                    if (itm.Enabled && itm.Visible && itm.Collision(rt, e.Location)) itm.MouseDown(rt, e.Location);
+                });
+
+                scroll.MouseDown(e, Areas["rtScroll"]);
+                if (Selectable)
+                {
+                    if (scroll.TouchMode && CollisionTool.Check(Areas["rtTouchArea"], e.Location)) scroll.TouchDown(e);
+                    if (CollisionTool.Check(rtBox, e.Location))
+                    {
+                        downPoint = e.Location;
+                        movePoint = null;
+                    }
+                }
+                else
+                {
+                    if (scroll.TouchMode && CollisionTool.Check(Areas["rtBox"], e.Location)) scroll.TouchDown(e);
                 }
             }
             Invalidate();
@@ -294,7 +310,12 @@ namespace Devinno.Forms.Controls
                 if (scroll.IsScrolling) Invalidate();
                 if (scroll.TouchMode && scroll.IsTouchScrolling) Invalidate();
 
-                if (downPoint.HasValue) movePoint = e.Location;
+                Loop((ls, i, rt, itm) =>
+                {
+                    if (itm.Enabled && itm.Visible) itm.MouseMove(rt, e.Location);
+                });
+
+                if (Selectable && downPoint.HasValue) movePoint = e.Location;
 
                 Invalidate();
             }
@@ -314,7 +335,12 @@ namespace Devinno.Forms.Controls
                 if (scroll.TouchMode) scroll.TouchUp(e);
             }
 
-            if (downPoint.HasValue)
+            Loop((ls, i, rt, itm) =>
+            {
+                if (itm.Enabled && itm.Visible) itm.MouseUp(rt, e.Location);
+            });
+
+            if (Selectable && downPoint.HasValue)
             {
                 if (Math.Abs(downPoint.Value.X - e.X) >= 5 || Math.Abs(downPoint.Value.Y - e.Y) >= 5)
                 {
@@ -326,7 +352,7 @@ namespace Devinno.Forms.Controls
                     bool bChange = false;
                     Loop((ls, i, rt, itm) =>
                     {
-                        var v = itm.Item;
+                        var v = itm;
                         if (v.Enabled && v.Collision(rt, rtdrag))
                         {
                             bChange = true;
@@ -345,7 +371,7 @@ namespace Devinno.Forms.Controls
                     bool bChange = false;
                     Loop((ls, i, rt, itm) =>
                     {
-                        var v = itm.Item;
+                        var v = itm;
                         if (v.Enabled && v.Collision(rt, e.Location))
                         {
                             bChange = true;
@@ -362,114 +388,131 @@ namespace Devinno.Forms.Controls
             base.OnMouseUp(e);
         }
         #endregion
+        #region OnMouseDoubleClick
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            if (Areas.ContainsKey("rtScroll") && Areas.ContainsKey("rtBox"))
+            {
+                Loop((ls, i, rt, itm) =>
+                {
+                    if (itm.Enabled && itm.Visible) itm.MouseDoubleClick(rt, e.Location);
+                });
+
+                Invalidate();
+            }
+            base.OnMouseDoubleClick(e);
+        }
+        #endregion
         #endregion
 
         #region Method
-        #region MakeList
-        void MakeList()
+        #region Arrange
+        public void Arrange()
         {
+            LoadAreas(null);
             if (Areas.Count > 1)
             {
                 var ls = this.Items.Where(x => x.Visible).ToList();
-                var rtView = Areas["rtView"];
-                var cw = (int)Math.Floor((double)(rtView.Width) / (double)ContentSize.Width);
-                var ch = (int)Math.Floor((double)(rtView.Height) / (double)ContentSize.Height);
-
+                var rtBox = Areas["rtBox"];
+              
                 if (vls.Count != ls.Count || szprev.Width != this.Size.Width || szprev.Height != this.Size.Height)
                 {
                     szprev = this.Size;
 
-                    if (ScrollDirection == ScrollDirection.Vertical)
+                    #region Arrange
+                    if (ScrollDirection == ScrollDirection.Horizon)
                     {
-                        var colcnt = cw;
+                        var ch = (int)Math.Floor((double)(rtBox.Height) / (double)ContentSize.Height);
+
+                        int ir = 0, ic = 0;
                         vls.Clear();
-                        foreach (var v in ls)
+                        for (int i = 0; i < ls.Count; i++)
                         {
-                            var itm = new CI() { Item = v, ColSpan = v.ColSpan, RowSpan = v.RowSpan };
+                            var itm = ls[i];
 
-                            var last = vls.LastOrDefault();
-                            if (last == null) { itm.ColIndex = 0; itm.RowIndex = 0; }
-                            else
-                            {
-                                var rls = vls.Where(x => last.RowIndex >= x.RowIndex && last.RowIndex < x.RowIndex + x.RowSpan && last.ColIndex + last.ColSpan >= x.ColIndex && last.ColIndex + last.ColSpan < x.ColIndex + x.ColSpan);
-                                itm.ColIndex = (rls.Count() > 0 ? rls.Max(x => x.ColIndex + x.ColSpan) : last.ColIndex + last.ColSpan);
-                                itm.RowIndex = last.RowIndex;
-
-                                if (itm.ColIndex + itm.ColSpan - 1 >= colcnt)
-                                {
-                                    itm.RowIndex = last.RowIndex + 1;
-                                    var cls = vls.Where(x => last.RowIndex + 1 >= x.RowIndex && last.RowIndex + 1 < x.RowIndex + x.RowSpan && 0 >= x.ColIndex && 0 < x.ColIndex + x.ColSpan);
-                                    itm.ColIndex = (cls.Count() > 0 ? cls.Max(x => x.ColIndex + x.ColSpan) : 0);
-                                }
-                            }
-
-                            int vx = (itm.ColIndex * ContentSize.Width);
-                            int vy = (itm.RowIndex * ContentSize.Height);
-                            itm.Bounds = new Rectangle(vx, vy, ContentSize.Width * v.ColSpan, ContentSize.Height * v.RowSpan);
-
+                            itm.ColIndex = ic;
+                            itm.RowIndex = ir;
+                           
                             vls.Add(itm);
+
+                            var vitm = i + 1 < ls.Count ? ls[i + 1] : null;
+                            do
+                            {
+                                ir++;
+                                if (vitm != null && ir + vitm.RowSpan > ch) { ic++; ir = 0; }
+
+                            } while (vitm != null && vls.Where(x =>x.Check(ic, ir, vitm.ColSpan, vitm.RowSpan)).Count() > 0);
                         }
                     }
                     else
                     {
-                        var rowcnt = ch;
+                        var cw = (int)Math.Floor((double)(rtBox.Width) / (double)ContentSize.Width);
+
+                        int ir = 0, ic = 0;
                         vls.Clear();
-                        foreach (var v in ls)
+                        for (int i = 0; i < ls.Count; i++)
                         {
-                            var itm = new CI() { Item = v, ColSpan = v.ColSpan, RowSpan = v.RowSpan };
+                            var itm = ls[i];
 
-                            var last = vls.LastOrDefault();
-                            if (last == null) { itm.ColIndex = 0; itm.RowIndex = 0; }
-                            else
-                            {
-                                var rls = vls.Where(x => last.ColIndex >= x.ColIndex && last.ColIndex < x.ColIndex + x.ColSpan && last.RowIndex + last.RowSpan >= x.RowIndex && last.RowIndex + last.RowSpan < x.RowIndex + x.RowSpan);
-                                itm.RowIndex = (rls.Count() > 0 ? rls.Max(x => x.RowIndex + x.RowSpan) : last.RowIndex + last.RowSpan);
-                                itm.ColIndex = last.ColIndex;
-
-                                if (itm.RowIndex + itm.RowSpan - 1 >= rowcnt)
-                                {
-                                    itm.ColIndex = last.ColIndex + 1;
-                                    var cls = vls.Where(x => last.ColIndex + 1 >= x.ColIndex && last.ColIndex + 1 < x.ColIndex + x.ColSpan && 0 >= x.RowIndex && 0 < x.RowIndex + x.RowSpan);
-                                    itm.RowIndex = (cls.Count() > 0 ? cls.Max(x => x.RowIndex + x.RowSpan) : 0);
-                                }
-                            }
-
-                            int vx = (itm.ColIndex * ContentSize.Width);
-                            int vy = (itm.RowIndex * ContentSize.Height);
-                            itm.Bounds = new Rectangle(vx, vy, ContentSize.Width * v.ColSpan, ContentSize.Height * v.RowSpan);
+                            itm.ColIndex = ic;
+                            itm.RowIndex = ir;
 
                             vls.Add(itm);
+
+                            var vitm = i + 1 < ls.Count ? ls[i + 1] : null;
+                            do
+                            {
+                                ic++;
+                                if (vitm != null && ic + vitm.ColSpan > cw) { ir++; ic = 0; }
+
+                            } while (vitm != null && vls.Where(x => x.Check(ic, ir, vitm.ColSpan, vitm.RowSpan)).Count() > 0);
                         }
                     }
+                    #endregion
+                }
+            }
+        }
+
+        void NoArrange()
+        {
+            if (Areas.Count > 1)
+            {
+                var ls = this.Items.Where(x => x.Visible).ToList();
+
+                if (vls.Count != ls.Count || szprev.Width != this.Size.Width || szprev.Height != this.Size.Height)
+                {
+                    szprev = this.Size;
+                    vls.Clear();
+                    vls.AddRange(ls);
                 }
             }
         }
         #endregion
-
         #region Loop
-        private void Loop(Action<List<CI>, int, Rectangle, CI> Func)
+        private void Loop(Action<List<DvContent>, int, Rectangle, DvContent> Func)
         {
-            if (Areas.ContainsKey("rtView"))
+            if (Areas.ContainsKey("rtBox"))
             {
-                var rtView = Areas["rtView"];
+                var rtBox = Areas["rtBox"];
                 var sc = scroll.ScrollPosition;
                 var spos = Convert.ToInt32(scroll.ScrollPositionWithOffset);
 
                 var CWRH = ScrollDirection == ScrollDirection.Vertical ? ContentSize.Height : ContentSize.Width;
-                var MaxWH = ScrollDirection == ScrollDirection.Vertical ? rtView.Height : rtView.Width;
+                var MaxWH = ScrollDirection == ScrollDirection.Vertical ? rtBox.Height : rtBox.Width;
 
-                int cw = (int)Math.Floor((double)(rtView.Width) / (double)ContentSize.Width);
-                int ch = (int)Math.Floor((double)(rtView.Height) / (double)ContentSize.Height);
+                int cw = (int)Math.Floor((double)(rtBox.Width) / (double)ContentSize.Width);
+                int ch = (int)Math.Floor((double)(rtBox.Height) / (double)ContentSize.Height);
 
-                MakeList();
+                if (AutoArrange) Arrange();
+                else NoArrange();
 
-                var ls = vls.Where(itm => CollisionTool.Check(rtView, new Rectangle(rtView.X + itm.Bounds.X + (ScrollDirection == ScrollDirection.Horizon ? spos : 0), rtView.Y + itm.Bounds.Y + (ScrollDirection == ScrollDirection.Vertical ? spos : 0), itm.Bounds.Width, itm.Bounds.Height))).ToList();
-                foreach(var itm in ls)
+                var ls = vls.Where(itm => CollisionTool.Check(rtBox, new Rectangle(rtBox.X + itm.Bounds.X + (ScrollDirection == ScrollDirection.Horizon ? spos : 0), rtBox.Y + itm.Bounds.Y + (ScrollDirection == ScrollDirection.Vertical ? spos : 0), itm.Bounds.Width, itm.Bounds.Height))).ToList();
+                foreach (var itm in ls)
                 {
                     var i = vls.IndexOf(itm);
-                    var rt = new Rectangle(rtView.X + itm.Bounds.X + (ScrollDirection == ScrollDirection.Horizon ? spos : 0), rtView.Y + itm.Bounds.Y + (ScrollDirection == ScrollDirection.Vertical ? spos : 0), itm.Bounds.Width, itm.Bounds.Height);
+                    var rt = new Rectangle(rtBox.X + itm.Bounds.X + (ScrollDirection == ScrollDirection.Horizon ? spos : 0), rtBox.Y + itm.Bounds.Y + (ScrollDirection == ScrollDirection.Vertical ? spos : 0), itm.Bounds.Width, itm.Bounds.Height);
                     rt.Inflate(-Gap, -Gap);
-                    if (CollisionTool.Check(new Rectangle(rt.X + 1, rt.Y + 1, rt.Width - 2, rt.Height - 2), rtView))
+                    if (CollisionTool.Check(new Rectangle(rt.X + 1, rt.Y + 1, rt.Width - 2, rt.Height - 2), rtBox))
                     {
                         Func(vls, i, rt, itm);
                     }
@@ -479,23 +522,17 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
     }
-
-
-    #region class : CI
-    internal class CI
-    {
-        internal int RowIndex { get; set; }
-        internal int ColIndex { get; set; }
-        internal int RowSpan { get; set; }
-        internal int ColSpan { get; set; }
-        internal Rectangle Bounds { get; set; }
-        internal DvContent Item { get; set; }
-    }
-    #endregion
+        
     #region class : DvContent
     public abstract class DvContent
     {
         #region Properties
+        #region ColIndex
+        public int ColIndex { get; set; }
+        #endregion
+        #region RowIndex
+        public int RowIndex { get; set; }
+        #endregion
         #region RowSpan
         private int nRowSpan = 1;
         public int RowSpan { get => nRowSpan; set { var n = value; if (n < 1) n = 1; nRowSpan = n; } }
@@ -504,19 +541,33 @@ namespace Devinno.Forms.Controls
         private int nColSpan = 1;
         public int ColSpan { get => nColSpan; set { var n = value; if (n < 1) n = 1; nColSpan = n; } }
         #endregion
+
         #region Control
-        public DvContentView Control { get; private set; }
+        public DvControl Control { get; private set; }
         #endregion
         #region Selected
         public bool Selected
         {
-            get { return (Control != null ? Control.SelectedItems.Contains(this) : false); }
+            get
+            {
+                if (Control != null && Control is DvContentView) return ((DvContentView)Control).SelectedItems.Contains(this);
+                else if (Control != null && Control is DvContentGrid) return ((DvContentGrid)Control).SelectedItems.Contains(this);
+                else return false;
+            }
             set
             {
                 if (Control != null)
                 {
-                    if (value && !Control.SelectedItems.Contains(this)) { Control.SelectedItems.Add(this); Control.Invalidate(); }
-                    if (!value && Control.SelectedItems.Contains(this)) { Control.SelectedItems.Remove(this); Control.Invalidate(); }
+                    if (Control is DvContentView)
+                    {
+                        if (value && !((DvContentView)Control).SelectedItems.Contains(this)) { ((DvContentView)Control).SelectedItems.Add(this); Control.Invalidate(); }
+                        if (!value && ((DvContentView)Control).SelectedItems.Contains(this)) { ((DvContentView)Control).SelectedItems.Remove(this); Control.Invalidate(); }
+                    }
+                    else if (Control is DvContentGrid)
+                    {
+                        if (value && !((DvContentGrid)Control).SelectedItems.Contains(this)) { ((DvContentGrid)Control).SelectedItems.Add(this); Control.Invalidate(); }
+                        if (!value && ((DvContentGrid)Control).SelectedItems.Contains(this)) { ((DvContentGrid)Control).SelectedItems.Remove(this); Control.Invalidate(); }
+                    }
                 }
             }
         }
@@ -534,7 +585,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
         #region Constructor
-        public DvContent(DvContentView Control) { this.Control = Control; }
+        public DvContent(DvControl Control) { this.Control = Control; }
         #endregion
         #region Abstract
         public abstract Rectangle GetBounds(Rectangle Bounds);
@@ -547,6 +598,44 @@ namespace Devinno.Forms.Controls
         public virtual void MouseDoubleClick(Rectangle Bounds, Point p) { }
         public virtual bool Collision(Rectangle Bounds, Point p) { return CollisionTool.Check(GetBounds(Bounds), p); }
         public virtual bool Collision(Rectangle Bounds, Rectangle Bounds2) { return CollisionTool.Check(GetBounds(Bounds), Bounds2); }
+        #endregion
+
+        #region Internal
+        internal Rectangle Bounds
+        {
+            get
+            {
+                if (Control is DvContentView)
+                {
+                    var ContentSize = ((DvContentView)Control).ContentSize;
+                    return new Rectangle((ColIndex * ContentSize.Width), (RowIndex * ContentSize.Height), ContentSize.Width * ColSpan, ContentSize.Height * RowSpan);
+                }
+                if (Control is DvContentGrid)
+                {
+                    var ContentSize = ((DvContentGrid)Control).ContentSize;
+                    return new Rectangle((ColIndex * ContentSize.Width), (RowIndex * ContentSize.Height), ContentSize.Width * ColSpan, ContentSize.Height * RowSpan);
+                }
+                else
+                {
+                    return new Rectangle(0, 0, 0, 0);
+                }
+            }
+        }
+        internal Rectangle GridBounds => new Rectangle(ColIndex, RowIndex, ColSpan, RowSpan);
+        internal bool Check(int col, int row, int colspan, int rowspan)
+        {
+            var Left1 = ColIndex;
+            var Right1 = ColIndex + ColSpan;
+            var Top1 = RowIndex;
+            var Bottom1 = RowIndex + RowSpan;
+
+            var Left2 = col;
+            var Right2 = col + colspan;
+            var Top2 = row;
+            var Bottom2 = row + rowspan;
+
+            return Right2 > Left1 && Right1 > Left2 && Bottom2 > Top1 && Bottom1 > Top2;
+        }
         #endregion
     }
     #endregion

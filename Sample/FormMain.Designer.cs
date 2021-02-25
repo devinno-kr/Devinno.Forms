@@ -168,6 +168,7 @@ namespace Sample
             this.tpContents = new System.Windows.Forms.TabPage();
             this.dvTableLayoutPanel2 = new Devinno.Forms.Containers.DvTableLayoutPanel();
             this.contentView = new Devinno.Forms.Controls.DvContentView();
+            this.contentGrid = new Devinno.Forms.Controls.DvContentGrid();
             this.tpDataGrid = new System.Windows.Forms.TabPage();
             this.ms = new Devinno.Forms.Menus.DvMenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -3220,6 +3221,7 @@ namespace Sample
             this.dvTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.dvTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.dvTableLayoutPanel2.Controls.Add(this.contentView, 0, 0);
+            this.dvTableLayoutPanel2.Controls.Add(this.contentGrid, 1, 0);
             this.dvTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dvTableLayoutPanel2.Location = new System.Drawing.Point(10, 10);
             this.dvTableLayoutPanel2.Name = "dvTableLayoutPanel2";
@@ -3237,12 +3239,26 @@ namespace Sample
             this.contentView.Name = "contentView";
             this.contentView.ScrollDirection = Devinno.Forms.ScrollDirection.Vertical;
             this.contentView.SelectedColor = System.Drawing.Color.DarkRed;
-            this.contentView.SelectionMode = Devinno.Forms.Controls.ItemSelectionMode.SINGLE;
             this.contentView.Size = new System.Drawing.Size(840, 941);
             this.contentView.TabIndex = 1;
             this.contentView.Text = "dvContentView1";
+            this.contentView.TouchAreaSize = 60;
             this.contentView.TouchMode = false;
             this.contentView.UseThemeColor = true;
+            // 
+            // contentGrid
+            // 
+            this.contentGrid.ContentSize = new System.Drawing.Size(100, 100);
+            this.contentGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contentGrid.Gap = 3;
+            this.contentGrid.Location = new System.Drawing.Point(849, 3);
+            this.contentGrid.Name = "contentGrid";
+            this.contentGrid.SelectedColor = System.Drawing.Color.DarkRed;
+            this.contentGrid.Size = new System.Drawing.Size(840, 941);
+            this.contentGrid.TabIndex = 2;
+            this.contentGrid.Text = "dvContentGrid1";
+            this.contentGrid.TouchMode = false;
+            this.contentGrid.UseThemeColor = true;
             // 
             // tpDataGrid
             // 
@@ -3336,7 +3352,7 @@ namespace Sample
             this.Controls.Add(this.tab);
             this.Controls.Add(this.ms);
             this.MainMenuStrip = this.ms;
-            this.MinimumSize = new System.Drawing.Size(300, 200);
+            this.MinimumSize = new System.Drawing.Size(1920, 1080);
             this.Name = "FormMain";
             this.Padding = new System.Windows.Forms.Padding(0, 60, 0, 0);
             this.Text = "Sample";
@@ -3519,6 +3535,7 @@ namespace Sample
         private System.Windows.Forms.TabPage tpDataGrid;
         private Devinno.Forms.Containers.DvTableLayoutPanel dvTableLayoutPanel2;
         private Devinno.Forms.Controls.DvContentView contentView;
+        private Devinno.Forms.Controls.DvContentGrid contentGrid;
     }
 }
 

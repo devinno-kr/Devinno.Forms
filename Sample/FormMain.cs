@@ -128,7 +128,7 @@ namespace Sample
             #endregion
             #region Time Graph / Trend Graph 
             btnTimeGraphRefresh.ButtonClick += (o, s) => TimeGraphSet();
-
+            dvTimeGraph1.XAxisGridDraw = true;
             dvTimeGraph1.Series.Add(new GraphSeries2() { Name = "Cpp", Alias = "C++", SeriesColor = Color.Crimson, Minimum = 0, Maximum = 100 });
             dvTimeGraph1.Series.Add(new GraphSeries2() { Name = "Java", Alias = "Java", SeriesColor = Color.Teal, Minimum = 0, Maximum = 100 });
             dvTimeGraph1.Series.Add(new GraphSeries2() { Name = "CSharp", Alias = "C#", SeriesColor = Color.DodgerBlue, Minimum = 0, Maximum = 100 });
@@ -154,9 +154,10 @@ namespace Sample
             dvTrendGraph1.Series.Add(new GraphSeries2() { Name = "CSharp", Alias = "C#", SeriesColor = Color.DodgerBlue, Minimum = 0, Maximum = 100 });
             dvTrendGraph1.TouchMode = true;
             dvTrendGraph1.Interval = 10;
-            dvTrendGraph1.MaximumXScale = TimeSpan.FromSeconds(10);
-            dvTrendGraph1.XScale = TimeSpan.FromSeconds(3);
-            dvTrendGraph1.XAxisGraduation = TimeSpan.FromSeconds(0.5);
+            dvTrendGraph1.MaximumXScale = TimeSpan.FromSeconds(5);
+            dvTrendGraph1.XScale = TimeSpan.FromSeconds(1);
+            dvTrendGraph1.XAxisGraduation = TimeSpan.FromSeconds(0.1);
+            dvTrendGraph1.XAxisGridDraw = true;
 
             btnTrendStart.Enabled = !dvTrendGraph1.IsStart;
             btnTrendStop.Enabled = dvTrendGraph1.IsStart;
@@ -222,15 +223,39 @@ namespace Sample
             btnSerialPortSetting_Simple.ButtonClick += (o, s) => { Block = true; serialPortSetting.ShowSimpleSerialPortSetting(); Block = false; };
             #endregion
             #region ContentView / ContentGrid
+            contentView.ScrollDirection = ScrollDirection.Vertical;
+            contentView.ContentSize = new Size(100, 100);
+            contentView.Gap = 6;
+            contentView.UseThemeColor = false;
+            contentView.SelectedColor = Color.Goldenrod;
+            contentView.AutoArrange = true;
+            contentView.TouchAreaSize = 80;
             contentView.TouchMode = true;
-            contentView.TouchAreaSize = 100;
-            contentView.ScrollDirection = ScrollDirection.Horizon;
+            contentView.Selectable = true;
             for (int i = 0; i < 200; i++)
+                contentView.Items.Add(new TContent(contentView) { Num = contentView.Items.Count + 1, RowSpan = i % 10 == 0 ? 2 : 1, ColSpan = i % 10 == 0 ? 2 : 1 });
+
+
+
+            contentGrid.ContentSize = new Size(100, 100);
+            contentGrid.Gap = 6;
+            contentGrid.UseThemeColor = false;
+            contentGrid.SelectedColor = Color.Goldenrod;
+            contentGrid.AutoArrange = true;
+            contentGrid.TouchAreaSize = 80;
+            contentGrid.TouchMode = true;
+            contentGrid.Selectable = true;
+            for (int i = 1; i <= 7; i++) contentGrid.Pages.Add(new DvContentGridPage() { PageName = "Test" + i });
+            foreach (var page in contentGrid.Pages)
             {
-                contentView.Items.Add(new TContent(contentView) { Num = contentView.Items.Count + 1, RowSpan = i % 10 == 0 ? 2 : 1, ColSpan = i % 10 == 0 ? 2 : 1, Tag = contentView.Items.Count + 1 });
+                var n = contentGrid.Pages.IndexOf(page);
+                for (int i = 0; i < 5 * (contentGrid.Pages.IndexOf(page)+1); i++)
+                    page.Items.Add(new TContent(contentGrid) { Num = i + 1, ColSpan = 1, RowSpan = 1 });
             }
+            contentGrid.CurrentPageIndex = 0;
             #endregion
         }
+
 
         #region GraphSet
         void GraphSet()
@@ -316,7 +341,7 @@ namespace Sample
     {
         public int Num { get; set; }
         public bool OnOff { get; set; }
-        public TContent(DvContentView Control) : base(Control) { }
+        public TContent(DvControl Control) : base(Control) { }
 
         public override void Draw(Graphics g, DvTheme Theme, Rectangle Bounds)
         {
@@ -324,7 +349,7 @@ namespace Sample
             {
                 var rt = GetBounds(Bounds);
 
-                Theme.DrawBox(g, (OnOff ? Theme.PointColor : Theme.Color3), Control.BackColor, rt, RoundType.ALL, BoxDrawOption.BORDER);
+                Theme.DrawBox(g, (OnOff ? Theme.PointColor : Theme.Color2), Control.BackColor, rt, RoundType.ALL, BoxDrawOption.BORDER);
                 Theme.DrawText(g, null, Num.ToString(), Control.Font, Color.White, rt);
             }
             base.Draw(g, Theme, Bounds);
@@ -337,7 +362,7 @@ namespace Sample
         }
 
         public override bool Collision(Rectangle Bounds, Point p) => CollisionTool.Check(GetBounds(Bounds), p);
-        public override Rectangle GetBounds(Rectangle Bounds) => MathTool.MakeRectangle(Bounds, new Size(Bounds.Width - 10, Bounds.Height - 10));
+        public override Rectangle GetBounds(Rectangle Bounds) => Bounds;
     }
     #endregion
 }

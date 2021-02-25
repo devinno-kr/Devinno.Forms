@@ -17,6 +17,7 @@ namespace Devinno.Forms
         public const int GapSize = 10;
         public const int GapTime = 1;
         const double decelerationRate = 0.997;
+        const int ThreadInterval = 10;
         #endregion
 
         #region Properties
@@ -229,7 +230,7 @@ namespace Devinno.Forms
                                 var newV = MathTool.Constrain(Convert.ToInt64(initPos + (Math.Pow(decelerationRate, time) - 1) / dCoeff * initVel), 0, tot);
                                 if (oldV != newV) { ScrollPosition = newV; try { ScrollChanged?.Invoke(this, null); } catch { } }
 
-                                Thread.Sleep(10);
+                                Thread.Sleep(ThreadInterval);
                             }
 
                             IsTouhcStart = false;
@@ -372,7 +373,7 @@ namespace Devinno.Forms
                                 var newV = MathTool.Constrain(Convert.ToInt64(initPos + (Math.Pow(decelerationRate, time) - 1) / dCoeff * initVel), 0, tot);
                                 if (oldV != newV) { ScrollPosition = newV; try { ScrollChanged?.Invoke(this, null); } catch { } }
 
-                                Thread.Sleep(10);
+                                Thread.Sleep(ThreadInterval);
                             }
 
                             IsTouhcStart = false;

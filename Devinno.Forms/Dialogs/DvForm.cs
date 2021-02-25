@@ -297,20 +297,26 @@ namespace Devinno.Forms.Dialogs
 
         #region Member Variable
         internal bool bdExit = false, bdMax = false, bdMin = false;
-        internal bool bExit = false, bMax = false, bMin = false;
 
-        bool useTrayicon = false;
-        NotifyIcon notifyIcon;
-
-        WNDMV mvdown = null;
+        private bool useTrayicon = false;
+        private NotifyIcon notifyIcon;
+        private WNDMV mvdown = null;
         #endregion
 
         #region Constructor
         public DvForm()
         {
             InitializeComponent();
-            SetStyle(ControlStyles.ResizeRedraw, true);
+            #region Styles
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, false);
+            this.SetStyle(ControlStyles.Opaque, false);
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
             UpdateStyles();
+            #endregion
             #region Default Property
             FormBorderStyle = FormBorderStyle.None;
             StartPosition = FormStartPosition.CenterScreen;
@@ -318,64 +324,31 @@ namespace Devinno.Forms.Dialogs
             Padding = new Padding(0, 40, 0, 0);
             BackColor = BlackTheme.StaticBackColor;
             #endregion
+            #region Thread
+            var th = new System.Threading.Thread(new System.Threading.ThreadStart(() => {
 
-            #region Timer
-            var th = new System.Threading.Thread(new System.Threading.ThreadStart(() =>
-            {
-                Size sz = new Size(0, 0);
-                while (true)
+                var sz = this.Size;
+                var st = this.WindowState;
+                while(true)
                 {
-                    if (this.IsHandleCreated && !this.IsDisposed && !DesignMode && Areas.Count == 7 && !BlankForm)
+                    try
                     {
-                        try
+                        if (sz != this.Size)
                         {
-                            this.Invoke(new EventHandler((o, s) =>
-                            {
-                                #region Rectangle
-                                var c = this;
-                                var rt = new Rectangle(0, 0, c.Width - 1, c.Height - 1);
-                                var rtContent = new Rectangle(c.Padding.Left, c.Padding.Top, rt.Width - (c.Padding.Right + c.Padding.Left) + 1, rt.Height - (c.Padding.Top + c.Padding.Bottom) + 1);
-                                var rtTitle = new Rectangle(rt.X, rt.Y, rt.Width, c.Padding.Top);
-                                var rtExit = Areas["rtExit"];
-                                var rtMax = Areas["rtMax"];
-                                var rtMin = Areas["rtMin"];
-                                #endregion
-                                #region Min/Max/Exit
-                                if (!DesignMode)
-                                {
-                                    var e = this.PointToClient(MousePosition);
-
-                                    if (ExitBox)
-                                    {
-                                        if (!bExit && CollisionTool.Check(rtExit, e.X, e.Y)) { bExit = true; Invalidate(); }
-                                        if (bExit && !CollisionTool.Check(rtExit, e.X, e.Y)) { bExit = false; Invalidate(); }
-                                    }
-                                    if (MaximizeBox)
-                                    {
-                                        if (!bMax && CollisionTool.Check(rtMax, e.X, e.Y)) { bMax = true; Invalidate(); }
-                                        if (bMax && !CollisionTool.Check(rtMax, e.X, e.Y)) { bMax = false; Invalidate(); }
-                                    }
-                                    if (MinimizeBox)
-                                    {
-                                        if (!bMin && CollisionTool.Check(rtMin, e.X, e.Y)) { bMin = true; Invalidate(); }
-                                        if (bMin && !CollisionTool.Check(rtMin, e.X, e.Y)) { bMin = false; Invalidate(); }
-                                    }
-                                }
-                                #endregion
-                                if(sz != this.Size)
-                                {
-                                    sz = this.Size;
-                                    Invalidate();
-                                }
-
-                            }));
+                            sz = this.Size;
+                            this.Invoke(new Action(() => Invalidate()));
                         }
-                        catch (Exception) { }
+                        else if(st != this.WindowState)
+                        {
+                            st = this.WindowState;
+                            this.Invoke(new Action(() => Invalidate()));
+                        }
                     }
-                    System.Threading.Thread.Sleep(100);
+                    catch { }
+                    System.Threading.Thread.Sleep(10);
                 }
-            }));
-            th.IsBackground = true;
+
+            })) { IsBackground = true };
             th.Start();
             #endregion
         }
@@ -455,6 +428,27 @@ namespace Devinno.Forms.Dialogs
                 #region Draw Exit / Max / Min
                 int cn = 4;
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+
+                var mp = this.PointToClient(MousePosition);
+
+                bool bExit = false, bMax = false, bMin = false;
+
+                if (ExitBox)
+                {
+                    if (!bExit && CollisionTool.Check(rtExit, mp.X, mp.Y)) { bExit = true; Invalidate(); }
+                    if (bExit && !CollisionTool.Check(rtExit, mp.X, mp.Y)) { bExit = false; Invalidate(); }
+                }
+                if (MaximizeBox)
+                {
+                    if (!bMax && CollisionTool.Check(rtMax, mp.X, mp.Y)) { bMax = true; Invalidate(); }
+                    if (bMax && !CollisionTool.Check(rtMax, mp.X, mp.Y)) { bMax = false; Invalidate(); }
+                }
+                if (MinimizeBox)
+                {
+                    if (!bMin && CollisionTool.Check(rtMin, mp.X, mp.Y)) { bMin = true; Invalidate(); }
+                    if (bMin && !CollisionTool.Check(rtMin, mp.X, mp.Y)) { bMin = false; Invalidate(); }
+                }
+
                 #region Exit
                 if (ExitBox)
                 {
@@ -543,6 +537,11 @@ namespace Devinno.Forms.Dialogs
             base.OnPaint(e);
         }
         #endregion
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            e.Graphics.Clear(BackColor);
+            base.OnPaintBackground(e);
+        }
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -602,7 +601,6 @@ namespace Devinno.Forms.Dialogs
                     }
 
                     bdExit = bdMax = bdMin = false;
-                    bExit = bMax = bMin = false;
                     Invalidate();
                 }
                 #endregion
@@ -635,6 +633,7 @@ namespace Devinno.Forms.Dialogs
                 if (Math.Abs(gx) > 5 || Math.Abs(gy) > 5) this.Location = new Point(mvdown.Location.X + gx, mvdown.Location.Y + gy);
             }
             #endregion
+            Invalidate();
             base.OnMouseMove(e);
         }
         #endregion
@@ -664,22 +663,21 @@ namespace Devinno.Forms.Dialogs
             base.OnMouseDoubleClick(e);
         }
         #endregion
-        #region OnResize
-        protected override void OnResize(EventArgs e)
+        #region OnClientSizeChanged
+        protected override void OnClientSizeChanged(EventArgs e)
         {
             Invalidate();
-            base.OnResize(e);
-        }
-        #endregion
-        #region OnSizeChanged
-        protected override void OnSizeChanged(EventArgs e)
-        {
-            Invalidate();
-            base.OnSizeChanged(e);
+            base.OnClientSizeChanged(e);
         }
         #endregion
         #region OnThemeDraw
         protected virtual void OnThemeDraw(PaintEventArgs e, DvTheme Theme) { }
+        #endregion
+        #region OnShown
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+        }
         #endregion
         #region WndProc
         protected override void WndProc(ref Message m)
