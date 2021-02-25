@@ -488,6 +488,11 @@ namespace Devinno.Forms.Controls
         public event EventHandler SelectedIndexChanged;
         public event EventHandler OnOffChanged;
         public event EventHandler ValueTextChanged;
+
+        public event EventHandler LongClick;
+        public event EventHandler ButtonClick;
+        public event EventHandler ButtonDown;
+        public event EventHandler ButtonUp;
         #endregion
 
         #region Override
@@ -736,14 +741,6 @@ namespace Devinno.Forms.Controls
             base.OnThemeDraw(e, Theme);
         }
         #endregion
-        #region OnGotFocus
-        protected override void OnGotFocus(EventArgs e)
-        {
-            OriginalTextBox.Focus();
-            Invalidate();
-            base.OnGotFocus(e);
-        }
-        #endregion
         #region OnResize
         protected override void OnResize(EventArgs e)
         {
@@ -763,8 +760,9 @@ namespace Devinno.Forms.Controls
         {
             if (Areas.Count > 1)
             {
+                var rtButton = Areas["rtButton"];
                 this.Focus();
-                OriginalTextBox.Focus();
+                if (Areas.ContainsKey("rtValueAll") && CollisionTool.Check(Areas["rtValueAll"], e.Location)) OriginalTextBox.Focus(); 
 
                 if (InputStyle == DvInputType.BOOL)
                 {
@@ -774,6 +772,15 @@ namespace Devinno.Forms.Controls
                 else if (InputStyle == DvInputType.COMBO)
                 {
                     if (CollisionTool.Check(Areas["rtValue"], e.Location)) bDownCombo = true;
+                }
+
+                if (Areas.ContainsKey("rtButton") && CollisionTool.Check(Areas["rtButton"], e.Location))
+                {
+                    bDown = true;
+                    ButtonDown?.Invoke(this, null);
+                    Invalidate();
+
+                    click.MouseDown(e);
                 }
 
                 Invalidate();
@@ -808,6 +815,16 @@ namespace Devinno.Forms.Controls
                         bDownCombo = false;
                     }
                 }
+
+                click.MouseUp(e);
+                if (Areas.ContainsKey("rtButton") && CollisionTool.Check(Areas["rtButton"], e.Location)) ButtonUp?.Invoke(this, null);
+                if (bDown)
+                {
+                    bDown = false;
+                    Invalidate();
+                    if (Areas.ContainsKey("rtButton") && CollisionTool.Check(Areas["rtButton"], e.Location)) ButtonClick?.Invoke(this, null);
+                }
+
                 Invalidate();
             }
             base.OnMouseUp(e);

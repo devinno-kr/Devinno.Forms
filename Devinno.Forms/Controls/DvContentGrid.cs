@@ -149,10 +149,11 @@ namespace Devinno.Forms.Controls
         {
             base.LoadAreas(g);
 
+            var scwh = Convert.ToInt32(Scroll.SC_WH * DpiRatio);
             var gp = Convert.ToInt32(10 * DpiRatio);
             var twh = TouchMode && Selectable ? TouchAreaSize : 0;
             var pw = Convert.ToInt32(30 * DpiRatio);
-            var ph = Convert.ToInt32(20 * DpiRatio);
+            var ph = scwh;
             var rtContent = Areas["rtContent"];
 
             var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - twh - ph - (gp * 2));
@@ -221,7 +222,7 @@ namespace Devinno.Forms.Controls
             for (int i = 0; i < Pages.Count; i++)
             {
                 var rtNavi = Areas["rtPageNavi" + i];
-                var wh = Convert.ToInt32(rtNavi.Height * 0.5);
+                var wh = Convert.ToInt32(rtNavi.Height * 0.75);
                 var rt = DrawingTool.MakeRectangleAlign(rtNavi, new Size(wh, wh), DvContentAlignment.MiddleCenter);
                 Theme.DrawBorder(e.Graphics, PageSelectorColor, BackColor, 2, rt, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
 
@@ -505,7 +506,7 @@ namespace Devinno.Forms.Controls
             {
                 szprev = c.Size;
 
-                var cw = (int)Math.Floor((double)(rtBox.Width) / (double)c.ContentSize.Width);
+                var cw = (int)Math.Round((double)(rtBox.Width) / (double)c.ContentSize.Width);
                 int ir = 0, ic = 0;
                 vls.Clear();
                 for (int i = 0; i < ls.Count; i++)

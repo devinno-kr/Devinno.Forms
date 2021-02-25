@@ -229,7 +229,7 @@ namespace Sample
             contentView.UseThemeColor = false;
             contentView.SelectedColor = Color.Goldenrod;
             contentView.AutoArrange = true;
-            contentView.TouchAreaSize = 80;
+            contentView.TouchAreaSize = 100;
             contentView.TouchMode = true;
             contentView.Selectable = true;
             for (int i = 0; i < 200; i++)
@@ -242,7 +242,7 @@ namespace Sample
             contentGrid.UseThemeColor = false;
             contentGrid.SelectedColor = Color.Goldenrod;
             contentGrid.AutoArrange = true;
-            contentGrid.TouchAreaSize = 80;
+            contentGrid.TouchAreaSize = 100;
             contentGrid.TouchMode = true;
             contentGrid.Selectable = true;
             for (int i = 1; i <= 7; i++) contentGrid.Pages.Add(new DvContentGridPage() { PageName = "Test" + i });
@@ -268,9 +268,10 @@ namespace Sample
             for (int y = 2018; y <= 2021; y++)
                 for (int m = 1; m <= 12; m++)
                 {
-                    cpp = MathTool.Constrain(cpp + (rnd.Next() % 2 == 0 ? 3 : -3), 0, 100);
-                    java = MathTool.Constrain(java + (rnd.Next() % 2 == 0 ? 3 : -3), 0, 100);
-                    csharp = MathTool.Constrain(csharp + (rnd.Next() % 2 == 0 ? 3 : -3), 0, 100);
+                    int n = 5;
+                    cpp = MathTool.Constrain(cpp + (rnd.Next() % 2 == 0 ? n : -n), 0, 100);
+                    java = MathTool.Constrain(java + (rnd.Next() % 2 == 0 ? n : -n), 0, 100);
+                    csharp = MathTool.Constrain(csharp + (rnd.Next() % 2 == 0 ? n : -n), 0, 100);
 
                     ls1.Add(new Data1() { Name = y + "." + m, Cpp = cpp, CSharp = csharp, Java = java, Color = vcs[m - 1] });
                 }

@@ -142,7 +142,7 @@ namespace Devinno.Forms.Controls
             if (ScrollDirection == ScrollDirection.Vertical)
             {
                 var twh = TouchMode && Selectable ? TouchAreaSize : 0;
-                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width - twh - scwh - (gp * 2), rtContent.Height); rtBox.Inflate(-1, -1);
+                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width - twh - scwh - (gp * 2), rtContent.Height); //rtBox.Inflate(-1, -1);
                 var rtTouchArea = new Rectangle(rtBox.Right + gp, rtBox.Top, twh, rtBox.Height);
                 var rtScroll = new Rectangle(rtTouchArea.Right + gp, rtBox.Top, scwh, rtBox.Height);
                 SetArea("rtBox", rtBox);
@@ -152,7 +152,7 @@ namespace Devinno.Forms.Controls
             else
             {
                 var twh = TouchMode && Selectable ? TouchAreaSize : 0;
-                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - twh - scwh - (gp * 2)); rtBox.Inflate(-1, -1);
+                var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - twh - scwh - (gp * 2)); //rtBox.Inflate(-1, -1);
                 var rtTouchArea = new Rectangle(rtBox.Left, rtBox.Bottom + gp, rtBox.Width, twh);
                 var rtScroll = new Rectangle(rtBox.Left, rtTouchArea.Bottom + gp, rtBox.Width, scwh);
                 SetArea("rtBox", rtBox);
@@ -422,7 +422,7 @@ namespace Devinno.Forms.Controls
                     #region Arrange
                     if (ScrollDirection == ScrollDirection.Horizon)
                     {
-                        var ch = (int)Math.Floor((double)(rtBox.Height) / (double)ContentSize.Height);
+                        var ch = Math.Round((double)(rtBox.Height) / (double)ContentSize.Height);
 
                         int ir = 0, ic = 0;
                         vls.Clear();
@@ -446,7 +446,7 @@ namespace Devinno.Forms.Controls
                     }
                     else
                     {
-                        var cw = (int)Math.Floor((double)(rtBox.Width) / (double)ContentSize.Width);
+                        var cw = Math.Round((double)(rtBox.Width) / (double)ContentSize.Width);
 
                         int ir = 0, ic = 0;
                         vls.Clear();
@@ -607,13 +607,40 @@ namespace Devinno.Forms.Controls
             {
                 if (Control is DvContentView)
                 {
-                    var ContentSize = ((DvContentView)Control).ContentSize;
-                    return new Rectangle((ColIndex * ContentSize.Width), (RowIndex * ContentSize.Height), ContentSize.Width * ColSpan, ContentSize.Height * RowSpan);
+                    var c = Control as DvContentView;
+                    var ContentSize = new SizeF(c.ContentSize.Width, c.ContentSize.Height);
+                    if (c.Areas.ContainsKey("rtBox"))
+                    {
+                        var rtBox = c.Areas["rtBox"];
+
+                        if (c.ScrollDirection == ScrollDirection.Vertical)
+                        {
+                            var cw = (int)Math.Round((double)(rtBox.Width) / (double)ContentSize.Width);
+                            var sw = rtBox.Width / (float)cw;
+                            ContentSize.Width = sw;
+                        }
+                        else
+                        {
+                            var ch = (int)Math.Round((double)(rtBox.Height) / (double)ContentSize.Height);
+                            var sh = rtBox.Height / (float)ch;
+                            ContentSize.Height = sh;
+                        }
+                    }
+                    return new Rectangle(Convert.ToInt32(ColIndex * ContentSize.Width), Convert.ToInt32(RowIndex * ContentSize.Height), Convert.ToInt32(ContentSize.Width * ColSpan), Convert.ToInt32(ContentSize.Height * RowSpan));
                 }
                 if (Control is DvContentGrid)
                 {
-                    var ContentSize = ((DvContentGrid)Control).ContentSize;
-                    return new Rectangle((ColIndex * ContentSize.Width), (RowIndex * ContentSize.Height), ContentSize.Width * ColSpan, ContentSize.Height * RowSpan);
+                    var c = Control as DvContentGrid;
+                    var ContentSize = new SizeF(c.ContentSize.Width, c.ContentSize.Height);
+                    if (c.Areas.ContainsKey("rtBox"))
+                    {
+                        var rtBox = c.Areas["rtBox"];
+
+                        var cw = (int)Math.Round((double)(rtBox.Width) / (double)ContentSize.Width);
+                        var sw = rtBox.Width / (float)cw;
+                        ContentSize.Width = sw;
+                    }
+                    return new Rectangle(Convert.ToInt32(ColIndex * ContentSize.Width), Convert.ToInt32(RowIndex * ContentSize.Height), Convert.ToInt32(ContentSize.Width * ColSpan), Convert.ToInt32(ContentSize.Height * RowSpan));
                 }
                 else
                 {

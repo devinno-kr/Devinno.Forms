@@ -645,14 +645,6 @@ namespace Devinno.Forms.Controls
             base.OnThemeDraw(e, Theme);
         }
         #endregion
-        #region OnGotFocus
-        protected override void OnGotFocus(EventArgs e)
-        {
-            OriginalTextBox.Focus();
-            Invalidate();
-            base.OnGotFocus(e);
-        }
-        #endregion
         #region OnResize
         protected override void OnResize(EventArgs e)
         {
@@ -673,7 +665,7 @@ namespace Devinno.Forms.Controls
             if (Areas.Count > 1)
             {
                 this.Focus();
-                OriginalTextBox.Focus();
+                if (Areas.ContainsKey("rtValueAll") && CollisionTool.Check(Areas["rtValueAll"], e.Location)) OriginalTextBox.Focus();
 
                 if (InputStyle == DvInputType.BOOL)
                 {
