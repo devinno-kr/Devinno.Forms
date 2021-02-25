@@ -506,7 +506,7 @@ namespace Devinno.Forms.Controls
             {
                 szprev = c.Size;
 
-                var cw = (int)Math.Round((double)(rtBox.Width) / (double)c.ContentSize.Width);
+                var cw = (int)Math.Round((double)(rtBox.Width - (c.Gap * 4)) / (double)c.ContentSize.Width);
                 int ir = 0, ic = 0;
                 vls.Clear();
                 for (int i = 0; i < ls.Count; i++)

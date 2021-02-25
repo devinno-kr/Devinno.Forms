@@ -636,11 +636,11 @@ namespace Devinno.Forms.Controls
                     {
                         var rtBox = c.Areas["rtBox"];
 
-                        var cw = (int)Math.Round((double)(rtBox.Width) / (double)ContentSize.Width);
-                        var sw = rtBox.Width / (float)cw;
+                        var cw = (int)Math.Round((double)(rtBox.Width -(c.Gap * 4)) / (double)ContentSize.Width);
+                        var sw = (rtBox.Width - (c.Gap * 4)) / (float)cw;
                         ContentSize.Width = sw;
                     }
-                    return new Rectangle(Convert.ToInt32(ColIndex * ContentSize.Width), Convert.ToInt32(RowIndex * ContentSize.Height), Convert.ToInt32(ContentSize.Width * ColSpan), Convert.ToInt32(ContentSize.Height * RowSpan));
+                    return new Rectangle(Convert.ToInt32(ColIndex * ContentSize.Width)+ (c.Gap*2), Convert.ToInt32(RowIndex * ContentSize.Height), Convert.ToInt32(ContentSize.Width * ColSpan), Convert.ToInt32(ContentSize.Height * RowSpan));
                 }
                 else
                 {
