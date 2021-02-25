@@ -102,6 +102,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #region Gap
         public int Gap { get; set; } = 3;
+        public int PageGap { get; set; } = 10;
         #endregion
         #region AutoArrange
         public bool AutoArrange { get; set; } = true;
@@ -157,7 +158,7 @@ namespace Devinno.Forms.Controls
             var rtContent = Areas["rtContent"];
 
             var rtBox = new Rectangle(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - twh - ph - (gp * 2));
-            var rtTouchArea = new Rectangle(rtBox.Left, rtBox.Bottom + gp, rtBox.Width, twh);
+            var rtTouchArea = new Rectangle(rtBox.Left, rtBox.Bottom + gp, rtBox.Width, twh); rtTouchArea.Inflate(-PageGap, 0);
             var rtPageNaviBar = new Rectangle(rtBox.Left, rtTouchArea.Bottom + gp, rtBox.Width, ph);
             var rtPageNavi = DrawingTool.MakeRectangleAlign(rtPageNaviBar, new Size(pw * Pages.Count, ph), DvContentAlignment.MiddleCenter);
             SetArea("rtBox", rtBox);
@@ -327,7 +328,6 @@ namespace Devinno.Forms.Controls
 
                 if (Selectable && downPoint.HasValue) movePoint = e.Location;
             }
-            Invalidate();
             base.OnMouseMove(e);
         }
         #endregion
@@ -389,6 +389,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #region Member Variable
         private Size szprev;
+        private int pcw;
         List<DvContent> vls = new List<DvContent>();
         #endregion
 
@@ -501,12 +502,10 @@ namespace Devinno.Forms.Controls
         private void Arrange(DvContentGrid c, Rectangle rtPage, Rectangle rtBox)
         {
             var ls = this.Items.Where(x => x.Visible).ToList();
+            var cw = (int)Math.Round((double)(rtBox.Width - (c.PageGap * 2)) / (double)c.ContentSize.Width);
 
-            if (vls.Count != ls.Count || szprev.Width != c.Size.Width || szprev.Height != c.Size.Height)
+            if (vls.Count != ls.Count || szprev.Width != c.Size.Width || szprev.Height != c.Size.Height || pcw != cw)
             {
-                szprev = c.Size;
-
-                var cw = (int)Math.Round((double)(rtBox.Width - (c.Gap * 4)) / (double)c.ContentSize.Width);
                 int ir = 0, ic = 0;
                 vls.Clear();
                 for (int i = 0; i < ls.Count; i++)
@@ -526,18 +525,22 @@ namespace Devinno.Forms.Controls
 
                     } while (vitm != null && vls.Where(x => x.Check(ic, ir, vitm.ColSpan, vitm.RowSpan)).Count() > 0);
                 }
+                szprev = c.Size;
+                pcw = cw;
             }
         }
 
         private void NoArrange(DvContentGrid c, Rectangle rtPage, Rectangle rtBox)
         {
             var ls = this.Items.Where(x => x.Visible).ToList();
+            var cw = (int)Math.Round((double)(rtBox.Width - (c.PageGap * 2)) / (double)c.ContentSize.Width);
 
-            if (vls.Count != ls.Count || szprev.Width != c.Size.Width || szprev.Height != c.Size.Height)
+            if (vls.Count != ls.Count || szprev.Width != c.Size.Width || szprev.Height != c.Size.Height || pcw != cw)
             {
-                szprev = c.Size;
                 vls.Clear();
                 vls.AddRange(ls);
+                szprev = c.Size;
+                pcw = cw;
             }
         }
         #endregion

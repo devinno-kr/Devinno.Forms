@@ -103,6 +103,7 @@ namespace Devinno.Forms.Controls
         private MouseEventArgs evdown;
         private Point? downPoint = null;
         private Point? movePoint = null;
+        private double pcw, pch;
         #endregion
 
         #region Event
@@ -316,8 +317,6 @@ namespace Devinno.Forms.Controls
                 });
 
                 if (Selectable && downPoint.HasValue) movePoint = e.Location;
-
-                Invalidate();
             }
             base.OnMouseMove(e);
         }
@@ -414,15 +413,16 @@ namespace Devinno.Forms.Controls
             {
                 var ls = this.Items.Where(x => x.Visible).ToList();
                 var rtBox = Areas["rtBox"];
-              
-                if (vls.Count != ls.Count || szprev.Width != this.Size.Width || szprev.Height != this.Size.Height)
-                {
-                    szprev = this.Size;
 
+                var ch = Math.Round((double)(rtBox.Height) / (double)ContentSize.Height);
+                var cw = Math.Round((double)(rtBox.Width) / (double)ContentSize.Width);
+
+                if (vls.Count != ls.Count || szprev.Width != this.Size.Width || szprev.Height != this.Size.Height || (ScrollDirection == ScrollDirection.Horizon ? ch != pch : cw != pcw ))
+                {
                     #region Arrange
                     if (ScrollDirection == ScrollDirection.Horizon)
                     {
-                        var ch = Math.Round((double)(rtBox.Height) / (double)ContentSize.Height);
+                        //var ch = Math.Round((double)(rtBox.Height) / (double)ContentSize.Height);
 
                         int ir = 0, ic = 0;
                         vls.Clear();
@@ -432,7 +432,7 @@ namespace Devinno.Forms.Controls
 
                             itm.ColIndex = ic;
                             itm.RowIndex = ir;
-                           
+
                             vls.Add(itm);
 
                             var vitm = i + 1 < ls.Count ? ls[i + 1] : null;
@@ -441,12 +441,13 @@ namespace Devinno.Forms.Controls
                                 ir++;
                                 if (vitm != null && ir + vitm.RowSpan > ch) { ic++; ir = 0; }
 
-                            } while (vitm != null && vls.Where(x =>x.Check(ic, ir, vitm.ColSpan, vitm.RowSpan)).Count() > 0);
+                            } while (vitm != null && vls.Where(x => x.Check(ic, ir, vitm.ColSpan, vitm.RowSpan)).Count() > 0);
                         }
+                        pch = ch;
                     }
                     else
                     {
-                        var cw = Math.Round((double)(rtBox.Width) / (double)ContentSize.Width);
+                        //var cw = Math.Round((double)(rtBox.Width) / (double)ContentSize.Width);
 
                         int ir = 0, ic = 0;
                         vls.Clear();
@@ -467,8 +468,11 @@ namespace Devinno.Forms.Controls
 
                             } while (vitm != null && vls.Where(x => x.Check(ic, ir, vitm.ColSpan, vitm.RowSpan)).Count() > 0);
                         }
+                        pcw = cw;
                     }
                     #endregion
+
+                    szprev = this.Size;
                 }
             }
         }
@@ -481,9 +485,9 @@ namespace Devinno.Forms.Controls
 
                 if (vls.Count != ls.Count || szprev.Width != this.Size.Width || szprev.Height != this.Size.Height)
                 {
-                    szprev = this.Size;
                     vls.Clear();
                     vls.AddRange(ls);
+                    szprev = this.Size;
                 }
             }
         }
@@ -636,11 +640,11 @@ namespace Devinno.Forms.Controls
                     {
                         var rtBox = c.Areas["rtBox"];
 
-                        var cw = (int)Math.Round((double)(rtBox.Width -(c.Gap * 4)) / (double)ContentSize.Width);
-                        var sw = (rtBox.Width - (c.Gap * 4)) / (float)cw;
+                        var cw = (int)Math.Round((double)(rtBox.Width - (c.PageGap * 2)) / (double)ContentSize.Width);
+                        var sw = (rtBox.Width - (c.PageGap * 2)) / (float)cw;
                         ContentSize.Width = sw;
                     }
-                    return new Rectangle(Convert.ToInt32(ColIndex * ContentSize.Width)+ (c.Gap*2), Convert.ToInt32(RowIndex * ContentSize.Height), Convert.ToInt32(ContentSize.Width * ColSpan), Convert.ToInt32(ContentSize.Height * RowSpan));
+                    return new Rectangle(Convert.ToInt32(ColIndex * ContentSize.Width) + c.PageGap, Convert.ToInt32(RowIndex * ContentSize.Height), Convert.ToInt32(ContentSize.Width * ColSpan), Convert.ToInt32(ContentSize.Height * RowSpan));
                 }
                 else
                 {
