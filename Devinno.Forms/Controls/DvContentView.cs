@@ -104,6 +104,7 @@ namespace Devinno.Forms.Controls
         private Point? downPoint = null;
         private Point? movePoint = null;
         private double pcw, pch;
+        private int ScrollMaxV, ScrollMaxH;
         #endregion
 
         #region Event
@@ -124,7 +125,7 @@ namespace Devinno.Forms.Controls
 
             scroll.Direction = ScrollDirection;
             scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
-            scroll.GetScrollTotal = () => ScrollDirection == ScrollDirection.Vertical ? (vls.Count > 0 ? vls.Max(x => x.Bounds.Bottom) : 0) : (vls.Count > 0 ? vls.Max(x => x.Bounds.Right) : 0);
+            scroll.GetScrollTotal = () => ScrollDirection == ScrollDirection.Vertical ? ScrollMaxV : ScrollMaxH;
             scroll.GetScrollTick = () => ScrollDirection == ScrollDirection.Vertical? ContentSize.Height : ContentSize.Width;
             scroll.GetScrollView = () => ScrollDirection == ScrollDirection.Vertical ? (Areas.ContainsKey("rtBox") ? Areas["rtBox"].Height : 0) : (Areas.ContainsKey("rtBox") ? Areas["rtBox"].Width : 0);
         }
@@ -189,7 +190,7 @@ namespace Devinno.Forms.Controls
             {
                 if (itm.Visible)
                 {
-                    if (SelectedItems.Contains(itm))
+                    if (!itm.SelectedDraw && SelectedItems.Contains(itm))
                     {
                         var rtv = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtv.Inflate(Gap, Gap);
                         Theme.DrawBorder(e.Graphics, SelectedColor, BackColor, 3, rtv, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
@@ -306,17 +307,19 @@ namespace Devinno.Forms.Controls
         {
             if (Areas.ContainsKey("rtScroll") && Areas.ContainsKey("rtBox"))
             {
+                if (Selectable && downPoint.HasValue) movePoint = e.Location;
+                
                 scroll.MouseMove(e, Areas["rtScroll"]);
                 if (scroll.TouchMode) scroll.TouchMove(e);
+                
                 if (scroll.IsScrolling) Invalidate();
-                if (scroll.TouchMode && scroll.IsTouchScrolling) Invalidate();
+                else if (scroll.TouchMode && scroll.IsTouchScrolling) Invalidate();
+                else if (downPoint.HasValue) Invalidate();
 
                 Loop((ls, i, rt, itm) =>
                 {
                     if (itm.Enabled && itm.Visible) itm.MouseMove(rt, e.Location);
                 });
-
-                if (Selectable && downPoint.HasValue) movePoint = e.Location;
             }
             base.OnMouseMove(e);
         }
@@ -444,6 +447,7 @@ namespace Devinno.Forms.Controls
                             } while (vitm != null && vls.Where(x => x.Check(ic, ir, vitm.ColSpan, vitm.RowSpan)).Count() > 0);
                         }
                         pch = ch;
+                        ScrollMaxH = vls.Count > 0 ? vls.Max(x => x.Bounds.Right) : 0;
                     }
                     else
                     {
@@ -469,6 +473,7 @@ namespace Devinno.Forms.Controls
                             } while (vitm != null && vls.Where(x => x.Check(ic, ir, vitm.ColSpan, vitm.RowSpan)).Count() > 0);
                         }
                         pcw = cw;
+                        ScrollMaxV = vls.Count > 0 ? vls.Max(x => x.Bounds.Bottom) : 0;
                     }
                     #endregion
 
@@ -487,6 +492,10 @@ namespace Devinno.Forms.Controls
                 {
                     vls.Clear();
                     vls.AddRange(ls);
+
+                    ScrollMaxH = vls.Count > 0 ? vls.Max(x => x.Bounds.Right) : 0;
+                    ScrollMaxV = vls.Count > 0 ? vls.Max(x => x.Bounds.Bottom) : 0;
+
                     szprev = this.Size;
                 }
             }
@@ -592,6 +601,7 @@ namespace Devinno.Forms.Controls
         public DvContent(DvControl Control) { this.Control = Control; }
         #endregion
         #region Abstract
+        public abstract bool SelectedDraw { get; }
         public abstract Rectangle GetBounds(Rectangle Bounds);
         #endregion
         #region Virtual

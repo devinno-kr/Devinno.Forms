@@ -71,8 +71,8 @@ namespace Devinno.Forms.Controls
         #endregion
         
         #region DateTimeStyle
-        private DvDateTimeStyle eDateTimeStyle = DvDateTimeStyle.DateTime;
-        public DvDateTimeStyle DateTimeStyle
+        private DvDateTimePickerStyle eDateTimeStyle = DvDateTimePickerStyle.DateTime;
+        public DvDateTimePickerStyle DateTimeStyle
         {
             get => eDateTimeStyle;
             set
@@ -165,15 +165,15 @@ namespace Devinno.Forms.Controls
             #region Text
             #region String
             string str = "";
-            if (DateTimeStyle == DvDateTimeStyle.DateTime)
+            if (DateTimeStyle == DvDateTimePickerStyle.DateTime)
             {
                 str = Value.ToString("yyyy-MM-dd HH:mm:ss");
             }
-            else if (DateTimeStyle == DvDateTimeStyle.Time)
+            else if (DateTimeStyle == DvDateTimePickerStyle.Time)
             {
                 str = Value.ToString("HH:mm:ss");
             }
-            else if (DateTimeStyle == DvDateTimeStyle.Date)
+            else if (DateTimeStyle == DvDateTimePickerStyle.Date)
             {
                 str = Value.ToString("yyyy-MM-dd");
             }
@@ -208,7 +208,7 @@ namespace Devinno.Forms.Controls
             if (bDown)
             {
                 bDown = false;
-                if (DateTimeStyle == DvDateTimeStyle.DateTime)
+                if (DateTimeStyle == DvDateTimePickerStyle.DateTime)
                 {
                     var frm = this.FindForm() as DvForm;
                     if (frm != null) frm.Block = true;
@@ -218,7 +218,7 @@ namespace Devinno.Forms.Controls
 
                     if (frm != null) frm.Block = false;
                 }
-                else if (DateTimeStyle == DvDateTimeStyle.Date)
+                else if (DateTimeStyle == DvDateTimePickerStyle.Date)
                 {
                     var frm = this.FindForm() as DvForm;
                     if (frm != null) frm.Block = true;
@@ -228,7 +228,7 @@ namespace Devinno.Forms.Controls
 
                     if (frm != null) frm.Block = false;
                 }
-                else if (DateTimeStyle == DvDateTimeStyle.Time)
+                else if (DateTimeStyle == DvDateTimePickerStyle.Time)
                 {
                     var frm = this.FindForm() as DvForm;
                     if (frm != null) frm.Block = true;
@@ -246,7 +246,7 @@ namespace Devinno.Forms.Controls
         #endregion
     }
 
-    #region enum : DvDateTimeStyle 
-    public enum DvDateTimeStyle { DateTime, Date, Time }
+    #region enum : DvDateTimePickerStyle 
+    public enum DvDateTimePickerStyle { DateTime, Date, Time }
     #endregion
 }

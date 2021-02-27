@@ -71,7 +71,7 @@ namespace Devinno.Forms.Controls
         public int CurrentPageIndex
         {
             get => swipe.CurrentPage;
-            set  
+            set
             {
                 swipe.CurrentPage = value;
                 Invalidate();
@@ -230,7 +230,7 @@ namespace Devinno.Forms.Controls
                 if (i == CurrentPageIndex)
                 {
                     rt.Inflate(-3, -3);
-                    Theme.DrawBox(e.Graphics, PageSelectorColor, BackColor, rt, RoundType.ELLIPSE, BoxDrawOption.OUT_SHADOW);
+                    Theme.DrawBox(e.Graphics, swipe.IsPageChanging ? Theme.PointColor : PageSelectorColor, BackColor, rt, RoundType.ELLIPSE, BoxDrawOption.OUT_SHADOW);
                 }
             }
             #endregion
@@ -324,9 +324,10 @@ namespace Devinno.Forms.Controls
                 }
 
                 if (swipe.TouchMode) swipe.TouchMove(e);
-                if (swipe.TouchMode && swipe.IsTouchScrolling) Invalidate();
-
                 if (Selectable && downPoint.HasValue) movePoint = e.Location;
+
+                if (swipe.TouchMode && swipe.IsTouchScrolling) Invalidate();
+                else if (downPoint.HasValue) Invalidate();
             }
             base.OnMouseMove(e);
         }
@@ -407,7 +408,7 @@ namespace Devinno.Forms.Controls
 
                 if (itm.Visible)
                 {
-                    if (c.SelectedItems.Contains(itm))
+                    if (!itm.SelectedDraw && c.SelectedItems.Contains(itm))
                     {
                         var rtv = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtv.Inflate(c.Gap, c.Gap);
                         Theme.DrawBorder(e.Graphics, SelectedColor, c.BackColor, 3, rtv, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);

@@ -193,7 +193,7 @@ namespace Sample
                 var dic = new Dictionary<string, InputBoxInfo>();
                 dic.Add("PortName", new InputBoxInfo() { Items = SerialPort.GetPortNames().Select(x => new ComboBoxItem(x)).ToList() });
                 dic.Add("Baudrate", new InputBoxInfo() { Items = new int[] { 4800, 9600, 19200, 38400, 57600, 115200 }.Select(x => new ComboBoxItem(x.ToString())).ToList() });
-                inputBox.ShowInputBox<Data3>("입력", null, dic);  
+                inputBox.ShowInputBox<Data3>("입력", null, dic);
                 Block = false;
             };
 
@@ -226,21 +226,17 @@ namespace Sample
             contentView.ScrollDirection = ScrollDirection.Vertical;
             contentView.ContentSize = new Size(100, 100);
             contentView.Gap = 6;
-            contentView.UseThemeColor = false;
-            contentView.SelectedColor = Color.Goldenrod;
             contentView.AutoArrange = true;
             contentView.TouchAreaSize = 100;
             contentView.TouchMode = true;
             contentView.Selectable = true;
             for (int i = 0; i < 200; i++)
-                contentView.Items.Add(new TContent(contentView) { Num = contentView.Items.Count + 1, RowSpan = i % 10 == 0 ? 2 : 1, ColSpan = i % 10 == 0 ? 2 : 1 });
+                contentView.Items.Add(new TContent(contentView) { Num = contentView.Items.Count + 1, RowSpan = (i % 10 == 0 || i % 10 == 5) ? 2 : 1, ColSpan = i % 10 == 0 ? 2 : 1 });
 
 
 
             contentGrid.ContentSize = new Size(100, 100);
             contentGrid.Gap = 6;
-            contentGrid.UseThemeColor = false;
-            contentGrid.SelectedColor = Color.Goldenrod;
             contentGrid.AutoArrange = true;
             contentGrid.TouchAreaSize = 100;
             contentGrid.TouchMode = true;
@@ -249,11 +245,30 @@ namespace Sample
             foreach (var page in contentGrid.Pages)
             {
                 var n = contentGrid.Pages.IndexOf(page);
-                for (int i = 0; i < 5 * (contentGrid.Pages.IndexOf(page)+1); i++)
+                for (int i = 0; i < 5 * (contentGrid.Pages.IndexOf(page) + 1); i++)
                     page.Items.Add(new TContent(contentGrid) { Num = i + 1, ColSpan = 1, RowSpan = 1 });
             }
             contentGrid.CurrentPageIndex = 0;
             #endregion
+            #region DataGrid
+            dg.ColumnGroups.Add(new DvDataGridColumn(dg) { Name = "Port", HeaderText = "포트" });
+            dg.ColumnGroups.Add(new DvDataGridColumn(dg) { Name = "Properties", HeaderText = "속성" });
+
+            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "PortName", GroupName = "Port", HeaderText = "통신 포트", SizeMode = SizeMode.Percent, Width = 12.5M });
+            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Baudrate", GroupName = "Port", HeaderText = "통신 속도", SizeMode = SizeMode.Percent, Width = 12.5M });
+            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Number1", GroupName = "Properties", HeaderText = "숫자1", SizeMode = SizeMode.Percent, Width = 15M });
+            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Number2", GroupName = "Properties", HeaderText = "숫자2", SizeMode = SizeMode.Percent, Width = 15M });
+            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Text", GroupName = "Properties", HeaderText = "텍스트", SizeMode = SizeMode.Percent, Width = 15M });
+            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "DayOfWeek", GroupName = "Properties", HeaderText = "요일", SizeMode = SizeMode.Percent, Width = 15M });
+            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "OnOff", HeaderText = "스위치", SizeMode = SizeMode.Percent, Width = 15M });
+            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Time", HeaderText = "시간", SizeMode = SizeMode.Percent, Width = 20M });
+
+            dg.SummaryRows.Add(new DvDataGridSummaryRow(dg) { });
+
+            dg.RowHeight = dg.ColumnHeight = 45;
+            dg.ScrollMode = ScrollMode.Both;
+            #endregion
+
         }
 
 
@@ -335,6 +350,8 @@ namespace Sample
         public string Text { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public bool OnOff { get; set; }
+
+        public DateTime Time { get; set; }
     }
     #endregion
     #region class : TContent
@@ -342,6 +359,8 @@ namespace Sample
     {
         public int Num { get; set; }
         public bool OnOff { get; set; }
+        public override bool SelectedDraw => true;
+        
         public TContent(DvControl Control) : base(Control) { }
 
         public override void Draw(Graphics g, DvTheme Theme, Rectangle Bounds)
@@ -352,6 +371,8 @@ namespace Sample
 
                 Theme.DrawBox(g, (OnOff ? Theme.PointColor : Theme.Color2), Control.BackColor, rt, RoundType.ALL, BoxDrawOption.BORDER);
                 Theme.DrawText(g, null, Num.ToString(), Control.Font, Color.White, rt);
+
+                if (Selected) Theme.DrawBorder(g, Color.Goldenrod, Control.BackColor, 2, rt, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
             }
             base.Draw(g, Theme, Bounds);
         }

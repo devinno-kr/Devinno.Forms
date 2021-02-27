@@ -393,6 +393,7 @@ namespace Devinno.Forms
     }
 
     public enum ScrollDirection { Horizon, Vertical }
+    public enum ScrollMode { Horizon, Vertical, Both }
 
     internal class SCDI
     {

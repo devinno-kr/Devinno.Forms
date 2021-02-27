@@ -170,6 +170,7 @@ namespace Sample
             this.contentView = new Devinno.Forms.Controls.DvContentView();
             this.contentGrid = new Devinno.Forms.Controls.DvContentGrid();
             this.tpDataGrid = new System.Windows.Forms.TabPage();
+            this.dg = new Devinno.Forms.Controls.DvDataGrid();
             this.ms = new Devinno.Forms.Menus.DvMenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiNewFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -195,6 +196,7 @@ namespace Sample
             this.tpDialog.SuspendLayout();
             this.tpContents.SuspendLayout();
             this.dvTableLayoutPanel2.SuspendLayout();
+            this.tpDataGrid.SuspendLayout();
             this.ms.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -773,7 +775,7 @@ namespace Sample
             this.dvDateTimePicker1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.dvDateTimePicker1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvDateTimePicker1.ButtonWidth = 60;
-            this.dvDateTimePicker1.DateTimeStyle = Devinno.Forms.Controls.DvDateTimeStyle.DateTime;
+            this.dvDateTimePicker1.DateTimeStyle = Devinno.Forms.Controls.DvDateTimePickerStyle.DateTime;
             this.dvDateTimePicker1.Location = new System.Drawing.Point(836, 433);
             this.dvDateTimePicker1.Name = "dvDateTimePicker1";
             this.dvDateTimePicker1.Size = new System.Drawing.Size(285, 45);
@@ -3232,12 +3234,14 @@ namespace Sample
             // 
             // contentView
             // 
+            this.contentView.AutoArrange = true;
             this.contentView.ContentSize = new System.Drawing.Size(100, 100);
             this.contentView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentView.Gap = 3;
             this.contentView.Location = new System.Drawing.Point(3, 3);
             this.contentView.Name = "contentView";
             this.contentView.ScrollDirection = Devinno.Forms.ScrollDirection.Vertical;
+            this.contentView.Selectable = false;
             this.contentView.SelectedColor = System.Drawing.Color.DarkRed;
             this.contentView.Size = new System.Drawing.Size(840, 941);
             this.contentView.TabIndex = 1;
@@ -3248,27 +3252,55 @@ namespace Sample
             // 
             // contentGrid
             // 
+            this.contentGrid.AutoArrange = true;
             this.contentGrid.ContentSize = new System.Drawing.Size(100, 100);
+            this.contentGrid.CurrentPage = null;
+            this.contentGrid.CurrentPageIndex = -1;
             this.contentGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentGrid.Gap = 3;
             this.contentGrid.Location = new System.Drawing.Point(849, 3);
             this.contentGrid.Name = "contentGrid";
+            this.contentGrid.PageGap = 10;
+            this.contentGrid.PageSelectorColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.contentGrid.Selectable = false;
             this.contentGrid.SelectedColor = System.Drawing.Color.DarkRed;
             this.contentGrid.Size = new System.Drawing.Size(840, 941);
             this.contentGrid.TabIndex = 2;
             this.contentGrid.Text = "dvContentGrid1";
+            this.contentGrid.TouchAreaSize = 60;
             this.contentGrid.TouchMode = false;
             this.contentGrid.UseThemeColor = true;
             // 
             // tpDataGrid
             // 
             this.tpDataGrid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpDataGrid.Controls.Add(this.dg);
             this.tpDataGrid.Location = new System.Drawing.Point(204, 4);
             this.tpDataGrid.Name = "tpDataGrid";
-            this.tpDataGrid.Padding = new System.Windows.Forms.Padding(3);
+            this.tpDataGrid.Padding = new System.Windows.Forms.Padding(20);
             this.tpDataGrid.Size = new System.Drawing.Size(1712, 967);
             this.tpDataGrid.TabIndex = 6;
             this.tpDataGrid.Text = "DataGrid";
+            // 
+            // dg
+            // 
+            this.dg.AutoSet = false;
+            this.dg.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dg.ColumnColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.dg.ColumnHeight = 30;
+            this.dg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dg.Location = new System.Drawing.Point(20, 20);
+            this.dg.Name = "dg";
+            this.dg.RowColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dg.RowHeight = 30;
+            this.dg.SelectedRowColor = System.Drawing.Color.DarkRed;
+            this.dg.SelectionMode = Devinno.Forms.Controls.DvDataGridSelectionMode.SINGLE;
+            this.dg.Size = new System.Drawing.Size(1672, 927);
+            this.dg.SummaryRowColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.dg.TabIndex = 0;
+            this.dg.Text = "dvDataGrid1";
+            this.dg.TouchMode = false;
+            this.dg.UseThemeColor = true;
             // 
             // ms
             // 
@@ -3378,6 +3410,7 @@ namespace Sample
             this.tpDialog.ResumeLayout(false);
             this.tpContents.ResumeLayout(false);
             this.dvTableLayoutPanel2.ResumeLayout(false);
+            this.tpDataGrid.ResumeLayout(false);
             this.ms.ResumeLayout(false);
             this.ms.PerformLayout();
             this.ResumeLayout(false);
@@ -3536,6 +3569,7 @@ namespace Sample
         private Devinno.Forms.Containers.DvTableLayoutPanel dvTableLayoutPanel2;
         private Devinno.Forms.Controls.DvContentView contentView;
         private Devinno.Forms.Controls.DvContentGrid contentGrid;
+        private Devinno.Forms.Controls.DvDataGrid dg;
     }
 }
 
