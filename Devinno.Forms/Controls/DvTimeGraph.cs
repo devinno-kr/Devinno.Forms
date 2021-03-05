@@ -389,7 +389,7 @@ namespace Devinno.Forms.Controls
 
                 for (DateTime i = st; i <= ed; i += XAxisGraduation)
                 {
-                    var x = MathTool.Map(i.Ticks + spos, st.Ticks, st.Ticks + XScale.Ticks, rtGraph.Left, rtGraph.Right);
+                    var x = Convert.ToSingle(MathTool.Map(Convert.ToDouble(i.Ticks + spos), st.Ticks, st.Ticks + XScale.Ticks, rtGraph.Left, rtGraph.Right));
                     p.Color = GridColor; p.Width = 1; p.DashStyle = DashStyle.Dot;
                     if (x >= rtGraph.Left && x <= rtGraph.Right)
                     {

@@ -230,7 +230,7 @@ namespace Devinno.Forms.Controls
                     var cv = ButtonColor;
                     if (BackgroundDraw)
                     {
-                        Theme.DrawBox(e.Graphics, cv, ButtonBackColor, rtButton, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | BoxDrawOption.OUT_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_LT : BoxDrawOption.NONE));
+                        Theme.DrawBox(e.Graphics, cv, ButtonBackColor, rtButton, RoundType.ELLIPSE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT2 | BoxDrawOption.OUT_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_LT : BoxDrawOption.NONE));
 
                         using (var pth = new GraphicsPath())
                         {
@@ -243,7 +243,7 @@ namespace Devinno.Forms.Controls
 
                                 e.Graphics.FillEllipse(pbr, rtButton);
                             }
-                            Theme.DrawBorder(e.Graphics, cv.BrightnessTransmit(Theme.BorderBright), cv, 1, rtButton, RoundType.ELLIPSE, BoxDrawOption.BORDER);
+                            //Theme.DrawBorder(e.Graphics, ButtonBackColor.BrightnessTransmit(Theme.BorderBright), cv, 1, rtButton, RoundType.ELLIPSE, BoxDrawOption.BORDER);
                         }
                     }
                     Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, BackgroundDraw ? cv : BackColor, new Rectangle(rtText.X, rtText.Y + 0, rtText.Width, rtText.Height), DvContentAlignment.MiddleCenter);

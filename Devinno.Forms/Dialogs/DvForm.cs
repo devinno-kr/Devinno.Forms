@@ -301,6 +301,7 @@ namespace Devinno.Forms.Dialogs
         private bool useTrayicon = false;
         private NotifyIcon notifyIcon;
         private WNDMV mvdown = null;
+        private bool bMod = false;
         #endregion
 
         #region Constructor
@@ -341,6 +342,10 @@ namespace Devinno.Forms.Dialogs
                         else if(st != this.WindowState)
                         {
                             st = this.WindowState;
+                            this.Invoke(new Action(() => Invalidate()));
+                        }
+                        else if(mvdown != null)
+                        {
                             this.Invoke(new Action(() => Invalidate()));
                         }
                     }

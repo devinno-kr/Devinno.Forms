@@ -29,6 +29,7 @@ namespace Devinno.Forms.Themes
         public abstract Color FrameColor { get; set; }
         public abstract Color ScrollBarColor { get; set; }
         public abstract Color ScrollCursorColor { get; set; }
+        public abstract Color ColumnColor { get; set; }
 
         public abstract int Corner { get; set; }
         public abstract int TextOffsetX { get; set; }

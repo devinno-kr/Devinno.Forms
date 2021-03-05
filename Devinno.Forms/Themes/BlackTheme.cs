@@ -1,6 +1,7 @@
 ﻿using Devinno.Extensions;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
+using Devinno.Tools;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,6 +27,7 @@ namespace Devinno.Forms.Themes
         public static Color StaticFrameColor { get; } = Color.FromArgb(30, 30, 30);
         public static Color StaticScrollBarColor { get; } = Color.FromArgb(30, 30, 30);
         public static Color StaticScrollCursorColor { get; } = Color.FromArgb(180, 180, 180);
+        public static Color StaticColumnColor { get; } = Color.FromArgb(40, 45, 50);
         #endregion
 
         #region Properties
@@ -43,7 +45,8 @@ namespace Devinno.Forms.Themes
         public override Color FrameColor { get; set; } = BlackTheme.StaticFrameColor;
         public override Color ScrollBarColor { get; set; } = BlackTheme.StaticScrollBarColor;
         public override Color ScrollCursorColor { get; set; } = BlackTheme.StaticScrollCursorColor;
-
+        public override Color ColumnColor { get; set; } = BlackTheme.StaticColumnColor;
+        
         public override int Corner { get; set; } = 5;
         public override int TextOffsetX { get; set; } = 0;
         public override int TextOffsetY { get; set; } = 1;
@@ -649,14 +652,26 @@ namespace Devinno.Forms.Themes
                     var oldclip = g.Clip.GetBounds(g);
                     var rt = new Rectangle(bounds.X + 1, bounds.Y + 1, bounds.Width - 1, bounds.Height - 1);
                     var rtex = new Rectangle(rt.X, rt.Y, rt.Width - 1, rt.Height - 1);
-                    g.SetClip(rtex, CombineMode.Intersect);
+                    var cp = MathTool.CenterPoint(rtex);
+                    var ang = Convert.ToSingle(MathTool.GetAngle(rtex.Location, cp));
+
                     var c1 = c.BrightnessTransmit(InBevelBright);
                     var c2 = Color.Transparent;
                     if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
-                        using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 75))
+                    {
+                        using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 90 - ang))
                         {
                             using (var p2 = new Pen(lgbr, 1F))
+                            //using (var p2 = new Pen(c1, 1F))
                             {
+                                var pth = new GraphicsPath();
+                                if (round == RoundType.ELLIPSE)
+                                {
+                                    pth.AddEllipse(new Rectangle(rtex.X, rtex.Y, rtex.Width, rtex.Height));
+                                    g.SetClip(pth, CombineMode.Intersect);
+                                }
+                                else g.SetClip(rtex, CombineMode.Intersect);
+                                
                                 switch (round)
                                 {
                                     case RoundType.NONE: g.DrawRectangle(p2, rt); break;
@@ -672,9 +687,12 @@ namespace Devinno.Forms.Themes
                                     case RoundType.ELLIPSE: g.DrawEllipse(p2, rt); break;
                                     case RoundType.FULL_HORIZON: g.DrawRoundRectangle(p2, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
                                 }
+
+                                g.SetClip(oldclip, CombineMode.Replace);
+                                pth.Dispose();
                             }
                         }
-                    g.SetClip(oldclip, CombineMode.Replace);
+                    }
                 }
                 #endregion
                 #region IN BEVEL2
@@ -713,14 +731,26 @@ namespace Devinno.Forms.Themes
                     var oldclip = g.Clip.GetBounds(g);
                     var rt = new Rectangle(bounds.X + 1, bounds.Y + 1, bounds.Width - 1, bounds.Height - 1);
                     var rtex = new Rectangle(rt.X, rt.Y, rt.Width - 1, rt.Height - 1);
-                    g.SetClip(rtex, CombineMode.Intersect);
+                    var cp = MathTool.CenterPoint(rtex);
+                    var ang = Convert.ToSingle(MathTool.GetAngle(rtex.Location, cp));
+
                     var c1 = c.BrightnessTransmit(InBevelBright);
                     var c2 = Color.Transparent;
                     if (bounds.Width + 2 > 0 && bounds.Height + 2 > 0)
-                        using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 75))
+                    {
+                        using (var lgbr = new LinearGradientBrush(rtex, c1, c2, 90 - ang))
                         {
                             using (var p2 = new Pen(lgbr, 2F))
+                            //using (var p2 = new Pen(c1, 2F))
                             {
+                                var pth = new GraphicsPath();
+                                if (round == RoundType.ELLIPSE)
+                                {
+                                    pth.AddEllipse(new Rectangle(rtex.X-1, rtex.Y-1, rtex.Width+1, rtex.Height+1));
+                                    g.SetClip(pth, CombineMode.Intersect);
+                                }
+                                else g.SetClip(rtex, CombineMode.Intersect);
+
                                 switch (round)
                                 {
                                     case RoundType.NONE: g.DrawRectangle(p2, rt); break;
@@ -736,9 +766,12 @@ namespace Devinno.Forms.Themes
                                     case RoundType.ELLIPSE: g.DrawEllipse(p2, rt); break;
                                     case RoundType.FULL_HORIZON: g.DrawRoundRectangle(p2, rt, Math.Max(bounds.Height, bounds.Width) * 2); break;
                                 }
+                 
+                                g.SetClip(oldclip, CombineMode.Replace);
+                                pth.Dispose();
                             }
                         }
-                    g.SetClip(oldclip, CombineMode.Replace);
+                    }
                 }
                 #endregion
                 #region BORDER

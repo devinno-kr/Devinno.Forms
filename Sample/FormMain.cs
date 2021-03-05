@@ -240,7 +240,7 @@ namespace Sample
             contentGrid.AutoArrange = true;
             contentGrid.TouchAreaSize = 100;
             contentGrid.TouchMode = true;
-            contentGrid.Selectable = true;
+            contentGrid.Selectable = false;
             for (int i = 1; i <= 7; i++) contentGrid.Pages.Add(new DvContentGridPage() { PageName = "Test" + i });
             foreach (var page in contentGrid.Pages)
             {
@@ -251,22 +251,43 @@ namespace Sample
             contentGrid.CurrentPageIndex = 0;
             #endregion
             #region DataGrid
-            dg.ColumnGroups.Add(new DvDataGridColumn(dg) { Name = "Port", HeaderText = "포트" });
-            dg.ColumnGroups.Add(new DvDataGridColumn(dg) { Name = "Properties", HeaderText = "속성" });
+            var f = DpiRatio;
 
-            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "PortName", GroupName = "Port", HeaderText = "통신 포트", SizeMode = SizeMode.Percent, Width = 12.5M });
-            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Baudrate", GroupName = "Port", HeaderText = "통신 속도", SizeMode = SizeMode.Percent, Width = 12.5M });
-            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Number1", GroupName = "Properties", HeaderText = "숫자1", SizeMode = SizeMode.Percent, Width = 15M });
-            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Number2", GroupName = "Properties", HeaderText = "숫자2", SizeMode = SizeMode.Percent, Width = 15M });
-            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Text", GroupName = "Properties", HeaderText = "텍스트", SizeMode = SizeMode.Percent, Width = 15M });
-            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "DayOfWeek", GroupName = "Properties", HeaderText = "요일", SizeMode = SizeMode.Percent, Width = 15M });
-            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "OnOff", HeaderText = "스위치", SizeMode = SizeMode.Percent, Width = 15M });
-            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Time", HeaderText = "시간", SizeMode = SizeMode.Percent, Width = 20M });
-
-            dg.SummaryRows.Add(new DvDataGridSummaryRow(dg) { });
-
-            dg.RowHeight = dg.ColumnHeight = 45;
+            dg.Font = new Font("나눔고딕", 7);
+            dg.TextShadow = true;
+            dg.RowBevel = true;
+            dg.TouchMode = true;
             dg.ScrollMode = ScrollMode.Both;
+            dg.RowHeight = dg.ColumnHeight = 45;
+            dg.ColumnGroups.Add(new DvDataGridColumn(dg) { Name = "G1", HeaderText = "기본사항", Fixed = true });
+            dg.ColumnGroups.Add(new DvDataGridColumn(dg) { Name = "G2", HeaderText = "일일 수집량" });
+            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Name", GroupName = "G1", HeaderText = "이름", SizeMode = SizeMode.Pixel, Width = Convert.ToInt32(150 * f), Fixed = true, UseFilter = true, CellType = typeof(DvDataGridLabelCell) });
+            dg.Columns.Add(new DvDataGridColumn(dg) { Name = "State", GroupName = "G1", HeaderText = "상태", SizeMode = SizeMode.Pixel, Width = Convert.ToInt32(70 * f), Fixed = true, CellType = typeof(DvDataGridLabelCell) });
+            for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++) 
+                dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Day" + i, GroupName = "G2", HeaderText = i + "일", SizeMode = SizeMode.Pixel, Width = Convert.ToInt32(80 * f), CellType = typeof(DvDataGridLabelCell) });
+
+            var srow = new DvDataGridSummaryRow(dg);
+            var srow2 = new DvDataGridSummaryRow(dg);
+            srow.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "합계", ColumnIndex = 0, ColumnSpan = 2 }); 
+            srow.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "", ColumnIndex = 0, ColumnSpan = 1, Visible = false });
+            srow2.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "평균", ColumnIndex = 0, ColumnSpan = 2 }); 
+            srow2.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "", ColumnIndex = 0, ColumnSpan = 1, Visible = false });
+            for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
+            {
+                srow.Cells.Add(new DvDataGridSummarySumCell(dg, srow) { ColumnIndex = 1 + i, ColumnSpan = 1, Format = "N0" });
+                srow2.Cells.Add(new DvDataGridSummaryAverageCell(dg, srow) { ColumnIndex = 1 + i, ColumnSpan = 1, Format = "N0" });
+            }
+            dg.SummaryRows.Add(srow);
+            dg.SummaryRows.Add(srow2);
+
+            var Items = new List<GridItem>();
+            for (int i = 0; i <= 100; i++)
+            {
+                var lsv = new List<int>();
+                for (int j = 1; j <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); j++) lsv.Add(rnd.Next(0, 100));
+                Items.Add(new GridItem() { Name = "NM" + i, State = "NORMAL", Days = lsv.ToArray() });
+            }
+            dg.SetDataSource<GridItem>(Items);
             #endregion
 
         }
@@ -385,6 +406,47 @@ namespace Sample
 
         public override bool Collision(Rectangle Bounds, Point p) => CollisionTool.Check(GetBounds(Bounds), p);
         public override Rectangle GetBounds(Rectangle Bounds) => Bounds;
+    }
+    #endregion
+    #region class : GridItem
+    public class GridItem
+    {
+        public string Name { get; set; }
+        public string State { get; set; }
+
+        public int Day1 { get => Days[0]; }
+        public int Day2 { get => Days[1]; }
+        public int Day3 { get => Days[2]; }
+        public int Day4 { get => Days[3]; }
+        public int Day5 { get => Days[4]; }
+        public int Day6 { get => Days[5]; }
+        public int Day7 { get => Days[6]; }
+        public int Day8 { get => Days[7]; }
+        public int Day9 { get => Days[8]; }
+        public int Day10 { get => Days[9]; }
+        public int Day11 { get => Days[10]; }
+        public int Day12 { get => Days[11]; }
+        public int Day13 { get => Days[12]; }
+        public int Day14 { get => Days[13]; }
+        public int Day15 { get => Days[14]; }
+        public int Day16 { get => Days[15]; }
+        public int Day17 { get => Days[16]; }
+        public int Day18 { get => Days[17]; }
+        public int Day19 { get => Days[18]; }
+        public int Day20 { get => Days[19]; }
+        public int Day21 { get => Days[20]; }
+        public int Day22 { get => Days[21]; }
+        public int Day23 { get => Days[22]; }
+        public int Day24 { get => Days[23]; }
+        public int Day25 { get => Days[24]; }
+        public int Day26 { get => Days[25]; }
+        public int Day27 { get => Days[26]; }
+        public int Day28 { get => Days[27]; }
+        public int Day29 { get => Days[28]; }
+        public int Day30 { get => Days[29]; }
+        public int Day31 { get => Days[30]; }
+
+        public int[] Days { get; set; } = new int[31];
     }
     #endregion
 }
