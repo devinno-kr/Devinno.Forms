@@ -170,7 +170,6 @@ namespace Sample
             this.contentView = new Devinno.Forms.Controls.DvContentView();
             this.contentGrid = new Devinno.Forms.Controls.DvContentGrid();
             this.tpDataGrid = new System.Windows.Forms.TabPage();
-            this.dg = new Devinno.Forms.Controls.DvDataGrid();
             this.ms = new Devinno.Forms.Menus.DvMenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiNewFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -180,6 +179,13 @@ namespace Sample
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.dvContainer2 = new Devinno.Forms.Containers.DvContainer();
+            this.dvContainer3 = new Devinno.Forms.Containers.DvContainer();
+            this.dvControl1 = new Devinno.Forms.Controls.DvControl();
+            this.dg = new Devinno.Forms.Controls.DvDataGrid();
+            this.btnGridCells = new Devinno.Forms.Controls.DvButton();
+            this.btnGridMonth = new Devinno.Forms.Controls.DvButton();
+            this.dvControl2 = new Devinno.Forms.Controls.DvControl();
             this.tab.SuspendLayout();
             this.tpControl.SuspendLayout();
             this.tpContainer.SuspendLayout();
@@ -198,6 +204,7 @@ namespace Sample
             this.dvTableLayoutPanel2.SuspendLayout();
             this.tpDataGrid.SuspendLayout();
             this.ms.SuspendLayout();
+            this.dvContainer3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab
@@ -227,6 +234,7 @@ namespace Sample
             // tpControl
             // 
             this.tpControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpControl.Controls.Add(this.dvContainer2);
             this.tpControl.Controls.Add(this.dvSliderv2);
             this.tpControl.Controls.Add(this.dvSliderv1);
             this.tpControl.Controls.Add(this.dvProgressv2);
@@ -3275,32 +3283,14 @@ namespace Sample
             // 
             this.tpDataGrid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
             this.tpDataGrid.Controls.Add(this.dg);
+            this.tpDataGrid.Controls.Add(this.dvControl1);
+            this.tpDataGrid.Controls.Add(this.dvContainer3);
             this.tpDataGrid.Location = new System.Drawing.Point(204, 4);
             this.tpDataGrid.Name = "tpDataGrid";
             this.tpDataGrid.Padding = new System.Windows.Forms.Padding(20);
             this.tpDataGrid.Size = new System.Drawing.Size(1712, 967);
             this.tpDataGrid.TabIndex = 6;
             this.tpDataGrid.Text = "DataGrid";
-            // 
-            // dg
-            // 
-            this.dg.AutoSet = false;
-            this.dg.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.dg.ColumnColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.dg.ColumnHeight = 30;
-            this.dg.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dg.Location = new System.Drawing.Point(20, 20);
-            this.dg.Name = "dg";
-            this.dg.RowColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.dg.RowHeight = 30;
-            this.dg.SelectedRowColor = System.Drawing.Color.DarkRed;
-            this.dg.SelectionMode = Devinno.Forms.Controls.DvDataGridSelectionMode.SINGLE;
-            this.dg.Size = new System.Drawing.Size(1672, 927);
-            this.dg.SummaryRowColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.dg.TabIndex = 0;
-            this.dg.Text = "dvDataGrid1";
-            this.dg.TouchMode = false;
-            this.dg.UseThemeColor = true;
             // 
             // ms
             // 
@@ -3375,6 +3365,121 @@ namespace Sample
             this.tsmiEdit.Size = new System.Drawing.Size(84, 41);
             this.tsmiEdit.Text = "편집(&E)";
             // 
+            // dvContainer2
+            // 
+            this.dvContainer2.Location = new System.Drawing.Point(8, 113);
+            this.dvContainer2.Name = "dvContainer2";
+            this.dvContainer2.Size = new System.Drawing.Size(112, 34);
+            this.dvContainer2.TabIndex = 66;
+            this.dvContainer2.TabStop = false;
+            this.dvContainer2.Text = "dvContainer2";
+            this.dvContainer2.UseThemeColor = true;
+            // 
+            // dvContainer3
+            // 
+            this.dvContainer3.Controls.Add(this.btnGridCells);
+            this.dvContainer3.Controls.Add(this.dvControl2);
+            this.dvContainer3.Controls.Add(this.btnGridMonth);
+            this.dvContainer3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dvContainer3.Location = new System.Drawing.Point(20, 20);
+            this.dvContainer3.Name = "dvContainer3";
+            this.dvContainer3.Size = new System.Drawing.Size(1672, 45);
+            this.dvContainer3.TabIndex = 1;
+            this.dvContainer3.TabStop = false;
+            this.dvContainer3.Text = "dvContainer3";
+            this.dvContainer3.UseThemeColor = true;
+            // 
+            // dvControl1
+            // 
+            this.dvControl1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dvControl1.Location = new System.Drawing.Point(20, 65);
+            this.dvControl1.Name = "dvControl1";
+            this.dvControl1.Size = new System.Drawing.Size(1672, 8);
+            this.dvControl1.TabIndex = 2;
+            this.dvControl1.TabStop = false;
+            this.dvControl1.Text = "dvControl1";
+            this.dvControl1.UseThemeColor = true;
+            // 
+            // dg
+            // 
+            this.dg.AutoSet = false;
+            this.dg.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dg.ColumnColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.dg.ColumnHeight = 30;
+            this.dg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dg.Location = new System.Drawing.Point(20, 73);
+            this.dg.Name = "dg";
+            this.dg.RowBevel = true;
+            this.dg.RowColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dg.RowHeight = 30;
+            this.dg.ScrollMode = Devinno.Forms.ScrollMode.Vertical;
+            this.dg.SelectedRowColor = System.Drawing.Color.DarkRed;
+            this.dg.SelectionMode = Devinno.Forms.Controls.DvDataGridSelectionMode.SINGLE;
+            this.dg.Size = new System.Drawing.Size(1672, 874);
+            this.dg.SummaryRowColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.dg.TabIndex = 6;
+            this.dg.Text = "dvDataGrid1";
+            this.dg.TextShadow = true;
+            this.dg.TouchMode = false;
+            this.dg.UseThemeColor = true;
+            // 
+            // btnGridCells
+            // 
+            this.btnGridCells.BackgroundDraw = true;
+            this.btnGridCells.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.btnGridCells.Clickable = true;
+            this.btnGridCells.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.btnGridCells.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnGridCells.Gradient = true;
+            this.btnGridCells.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.btnGridCells.IconGap = 0;
+            this.btnGridCells.IconImage = null;
+            this.btnGridCells.IconSize = 10F;
+            this.btnGridCells.IconString = null;
+            this.btnGridCells.Location = new System.Drawing.Point(233, 0);
+            this.btnGridCells.LongClickTime = 0;
+            this.btnGridCells.Name = "btnGridCells";
+            this.btnGridCells.Size = new System.Drawing.Size(225, 45);
+            this.btnGridCells.TabIndex = 0;
+            this.btnGridCells.Text = "Cells";
+            this.btnGridCells.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnGridCells.UseLongClick = false;
+            this.btnGridCells.UseThemeColor = true;
+            // 
+            // btnGridMonth
+            // 
+            this.btnGridMonth.BackgroundDraw = true;
+            this.btnGridMonth.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.btnGridMonth.Clickable = true;
+            this.btnGridMonth.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.btnGridMonth.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnGridMonth.Gradient = true;
+            this.btnGridMonth.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.btnGridMonth.IconGap = 0;
+            this.btnGridMonth.IconImage = null;
+            this.btnGridMonth.IconSize = 10F;
+            this.btnGridMonth.IconString = null;
+            this.btnGridMonth.Location = new System.Drawing.Point(0, 0);
+            this.btnGridMonth.LongClickTime = 0;
+            this.btnGridMonth.Name = "btnGridMonth";
+            this.btnGridMonth.Size = new System.Drawing.Size(225, 45);
+            this.btnGridMonth.TabIndex = 1;
+            this.btnGridMonth.Text = "Scroll / Touch";
+            this.btnGridMonth.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnGridMonth.UseLongClick = false;
+            this.btnGridMonth.UseThemeColor = true;
+            // 
+            // dvControl2
+            // 
+            this.dvControl2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dvControl2.Location = new System.Drawing.Point(225, 0);
+            this.dvControl2.Name = "dvControl2";
+            this.dvControl2.Size = new System.Drawing.Size(8, 45);
+            this.dvControl2.TabIndex = 3;
+            this.dvControl2.TabStop = false;
+            this.dvControl2.Text = "dvControl2";
+            this.dvControl2.UseThemeColor = true;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
@@ -3413,6 +3518,7 @@ namespace Sample
             this.tpDataGrid.ResumeLayout(false);
             this.ms.ResumeLayout(false);
             this.ms.PerformLayout();
+            this.dvContainer3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -3569,7 +3675,13 @@ namespace Sample
         private Devinno.Forms.Containers.DvTableLayoutPanel dvTableLayoutPanel2;
         private Devinno.Forms.Controls.DvContentView contentView;
         private Devinno.Forms.Controls.DvContentGrid contentGrid;
+        private Devinno.Forms.Containers.DvContainer dvContainer2;
         private Devinno.Forms.Controls.DvDataGrid dg;
+        private Devinno.Forms.Controls.DvControl dvControl1;
+        private Devinno.Forms.Containers.DvContainer dvContainer3;
+        private Devinno.Forms.Controls.DvButton btnGridCells;
+        private Devinno.Forms.Controls.DvControl dvControl2;
+        private Devinno.Forms.Controls.DvButton btnGridMonth;
     }
 }
 

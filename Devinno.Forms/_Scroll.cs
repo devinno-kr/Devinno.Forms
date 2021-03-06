@@ -25,6 +25,7 @@ namespace Devinno.Forms
         public bool IsTouchScrolling => tcDown != null;
         public bool IsTouchMoving => IsTouhcStart;
         public bool TouchMode { get; set; } = false;
+        public bool Cut { get; set; } = false;
 
         public ScrollDirection Direction { get; set; } = ScrollDirection.Vertical;
 
@@ -66,9 +67,8 @@ namespace Devinno.Forms
             }
         }
 
-        public long ScrollPositionWithOffset => -ScrollPosition + TouchOffset;
-        public long ScrollPositionWithOffsetR=> -(-ScrollPosition - TouchOffset);
-            
+        public long ScrollPositionWithOffset => !Cut ? -ScrollPosition + TouchOffset : (ScrollTotal > ScrollView ? (MathTool.Constrain((-ScrollPosition + TouchOffset), -(ScrollTotal - ScrollView), 0)) : 0);
+        public long ScrollPositionWithOffsetR => !Cut ? -(-ScrollPosition - TouchOffset) : (ScrollTotal > ScrollView ? (MathTool.Constrain(-(-ScrollPosition - TouchOffset), 0, (ScrollTotal - ScrollView))) : 0);
         #endregion
 
         #region Member Variable
@@ -112,7 +112,8 @@ namespace Devinno.Forms
                     h = Math.Max(h, 30);
 
                     int y = 0;
-                    y = Convert.ToInt32(MathTool.Map(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Top, rtScroll.Bottom - h));
+                    y = !Cut ? Convert.ToInt32(MathTool.Map(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Top, rtScroll.Bottom - h))
+                             : Convert.ToInt32(MathTool.Map(MathTool.Constrain(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView), 0, ScrollTotal - ScrollView, rtScroll.Top, rtScroll.Bottom - h));
                     return new Rectangle(rtScroll.X, y, rtScroll.Width, h);
                 }
                 else
@@ -121,8 +122,8 @@ namespace Devinno.Forms
                     w = Math.Max(w, 30);
 
                     int x = 0;
-                    x = Convert.ToInt32(MathTool.Map(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Left, rtScroll.Right - w));
-
+                    x = !Cut ? Convert.ToInt32(MathTool.Map(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Left, rtScroll.Right - w))
+                             : Convert.ToInt32(MathTool.Map(MathTool.Constrain(ScrollPosition - TouchOffset, 0, ScrollTotal - ScrollView), 0, ScrollTotal - ScrollView, rtScroll.Left, rtScroll.Right - w));
                     return new Rectangle(x, rtScroll.Y, w, rtScroll.Height);
                 }
             }
@@ -262,7 +263,8 @@ namespace Devinno.Forms
                     h = Math.Max(h, 30);
 
                     int y = 0;
-                    y = Convert.ToInt32(MathTool.Map(ScrollPosition + TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Bottom - h, rtScroll.Top));
+                    y = !Cut ? Convert.ToInt32(MathTool.Map(ScrollPosition + TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Bottom - h, rtScroll.Top))
+                             : Convert.ToInt32(MathTool.Map(MathTool.Constrain(ScrollPosition + TouchOffset, 0, ScrollTotal - ScrollView), 0, ScrollTotal - ScrollView, rtScroll.Bottom - h, rtScroll.Top));
                     return new Rectangle(rtScroll.X, y, rtScroll.Width, h);
                 }
                 else
@@ -271,7 +273,8 @@ namespace Devinno.Forms
                     w = Math.Max(w, 30);
 
                     int x = 0;
-                    x = Convert.ToInt32(MathTool.Map(ScrollPosition + TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Right - w, rtScroll.Left));
+                    x = !Cut ? Convert.ToInt32(MathTool.Map(ScrollPosition + TouchOffset, 0, ScrollTotal - ScrollView, rtScroll.Right - w, rtScroll.Left))
+                             : Convert.ToInt32(MathTool.Map(MathTool.Constrain(ScrollPosition + TouchOffset, 0, ScrollTotal - ScrollView), 0, ScrollTotal - ScrollView, rtScroll.Right - w, rtScroll.Left));
                     return new Rectangle(x, rtScroll.Y, w, rtScroll.Height);
                 }
             }
