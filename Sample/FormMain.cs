@@ -22,6 +22,7 @@ namespace Sample
     {
         Random rnd = new Random();
         Timer tmr;
+
         #region Grid
         int GridMode = 1;
         List<GridItem2> Items2 = new List<GridItem2>();
