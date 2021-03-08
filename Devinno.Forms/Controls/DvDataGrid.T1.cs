@@ -124,14 +124,14 @@ namespace Devinno.Forms.Controls
                 var SummaryRowColor = nc.GetSummaryRowColor(Theme);
                 #endregion
 
-                var rt = DvDataGrid.RTI(Bounds);
+                var rt = DvDataGridTool.RTI(Bounds);
                 if(Grid.TextShadow) Theme.DrawTextShadow(g, null, HeaderText, Grid.Font, Grid.ForeColor, ColumnColor, rt);
                 else Theme.DrawText(g, null, HeaderText, Grid.Font, Grid.ForeColor, ColumnColor, rt);
 
                 if (UseSort)
                 {
                     var sizewh = Convert.ToInt32(12 * Grid.DpiRatio);
-                    var rtSort = DvDataGrid.RTI(new RectangleF(Bounds.Right - Bounds.Height, Bounds.Y, Bounds.Height, Bounds.Height));
+                    var rtSort = DvDataGridTool.RTI(new RectangleF(Bounds.Right - Bounds.Height, Bounds.Y, Bounds.Height, Bounds.Height));
                     Theme.DrawTextShadow(g, new DvIcon("fa-sort"), null, Grid.Font, Grid.ForeColor.BrightnessTransmit(-0.7), ColumnColor, rtSort);
 
                     switch (SortState)
@@ -280,7 +280,7 @@ namespace Devinno.Forms.Controls
         }
         public virtual void MouseUp(Rectangle CellBounds, int x, int y)
         {
-            if (Enabled && CollisionTool.Check(CellBounds, x, y))
+            if (Enabled)
                 CellMouseUp(CellBounds, x, y);
         }
         public virtual void MouseDoubleClick(Rectangle CellBounds, int x, int y)

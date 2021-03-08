@@ -21,6 +21,11 @@ namespace Sample
     public partial class FormMain : DvForm
     {
         Random rnd = new Random();
+        Timer tmr;
+        #region Grid
+        int GridMode = 1;
+        List<GridItem2> Items2 = new List<GridItem2>();
+        #endregion
 
         DvColorPickerDialog colorPicker = new DvColorPickerDialog();
         DvDateTimePickerDialog dateTimePicker = new DvDateTimePickerDialog();
@@ -254,6 +259,7 @@ namespace Sample
             #region actMonth
             var actMonth = new Action(() =>
             {
+                GridMode = 1;
                 var f = DpiRatio;
                 dg.ColumnGroups.Clear();
                 dg.Columns.Clear();
@@ -297,9 +303,66 @@ namespace Sample
                 dg.SetDataSource<GridItem>(Items);
             });
             #endregion
+            #region actCells
+            var actCells = new Action(() =>
+            {
+                GridMode = 2;
+                var f = DpiRatio;
+                dg.ColumnGroups.Clear();
+                dg.Columns.Clear();
+                dg.Rows.Clear();
+                dg.SummaryRows.Clear();
+
+                dg.Font = new Font("나눔고딕", 8);
+                dg.TextShadow = false;
+                dg.RowBevel = true;
+                dg.TouchMode = true;
+                dg.ScrollMode = ScrollMode.Vertical;
+                dg.RowHeight = dg.ColumnHeight = Convert.ToInt32(30 * f);
+                dg.Columns.Add(new DvDataGridColumn(dg) { Name = "DeviceName", HeaderText = "장치명", SizeMode = SizeMode.Percent, Width = 15M });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Time", HeaderText = "날짜", SizeMode = SizeMode.Percent, Width = 20M, Format = "yyyy.MM.dd" });
+                dg.Columns.Add(new DvDataGridTextConverterColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = SizeMode.Percent, Width = 15M, Converter = GetDOW });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Temperature", HeaderText = "온도", SizeMode = SizeMode.Percent, Width =15M, Format = "0.0 ℃" });
+                dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmT", HeaderText = "온도 알람", SizeMode = SizeMode.Percent, Width = 5M, Simple = false });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Humidity", HeaderText = "습도", SizeMode = SizeMode.Percent, Width = 15M, Format = "0 '%'" });
+                dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmH", HeaderText = "습도 알람", SizeMode = SizeMode.Percent, Width = 5M, Simple = false });
+                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "ButtonText", HeaderText = "습도 알람", SizeMode = SizeMode.Percent, Width = 10M, ButtonText = "SET", IconString = "fa-cog" });
+
+                var Items = new List<GridItem2>();
+                for (int i = 1; i <= 100; i++)
+                {
+                    Items.Add(new GridItem2()
+                    {
+                        DeviceName = "DEV" + i,
+                        Time = DateTime.Now.Date + TimeSpan.FromDays(i),
+                        Humidity = rnd.Next(0, 100),
+                        Temperature = rnd.Next(0, 1000) / 10D,
+                    });
+                }
+                Items2 = Items;
+                dg.SetDataSource<GridItem2>(Items);
+            });
+            #endregion
+            #region refresh
+            tmr = new Timer() { Interval = 10 };
+            tmr.Tick += (o, s) =>
+              {
+                  if (GridMode == 2)
+                  {
+                      var ar = Items2.ToArray();
+                      foreach(var v in ar)
+                      {
+                          v.Humidity = Convert.ToInt32(MathTool.Constrain(v.Humidity + (rnd.Next() % 2 == 0 ? 1 : -1), 0, 100));
+                          v.Temperature = Convert.ToDouble(MathTool.Constrain(v.Temperature + (rnd.Next() % 2 == 0 ? 0.1 : -0.1), 0, 100));
+                      }
+                      dg.RefreshValues();
+                  }
+              };
+            tmr.Enabled = true;
+            #endregion
 
             btnGridMonth.ButtonClick += (o, s) => actMonth();
-
+            btnGridCells.ButtonClick += (o, s) => actCells();
             actMonth();
             #endregion
 
@@ -348,6 +411,26 @@ namespace Sample
             }
 
             dvTimeGraph1.SetDataSource<Data2>(ls1);
+        }
+        #endregion
+        #region GetDOW
+        string GetDOW(object dow)
+        {
+            var s = "";
+            if (dow is DayOfWeek)
+            {
+                switch (dow)
+                {
+                    case DayOfWeek.Monday: s = "월"; break;
+                    case DayOfWeek.Tuesday: s = "화"; break;
+                    case DayOfWeek.Wednesday: s = "수"; break;
+                    case DayOfWeek.Thursday: s = "목"; break;
+                    case DayOfWeek.Friday: s = "금"; break;
+                    case DayOfWeek.Saturday: s = "토"; break;
+                    case DayOfWeek.Sunday: s = "일"; break;
+                }
+            }
+            return s;
         }
         #endregion
     }
@@ -460,6 +543,21 @@ namespace Sample
         public int Day31 { get => Days[30]; }
 
         public int[] Days { get; set; } = new int[31];
+    }
+    #endregion
+    #region class : GridItem2
+    public class GridItem2
+    {
+        public string DeviceName { get; set; }
+
+        public DateTime Time { get; set; }
+        public DayOfWeek DOW => Time.DayOfWeek;
+        public double Temperature { get; set; }
+        public int Humidity { get; set; }
+        public bool AlarmH => Humidity < 15;
+        public bool AlarmT => Temperature > 80;
+
+        public string ButtonText => "SET";
     }
     #endregion
 }
