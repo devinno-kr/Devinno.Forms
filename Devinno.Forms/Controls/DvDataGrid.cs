@@ -21,10 +21,10 @@ namespace Devinno.Forms.Controls
     public partial class DvDataGrid : DvControl
     {
         #region Const 
-        private const int SPECIAL_CELL_WIDTH = 30;
-        private const int SELECTOR_BOX_WIDTH = 18;
+        internal const int SPECIAL_CELL_WIDTH = 30;
+        internal const int SELECTOR_BOX_WIDTH = 18;
         internal const double InputBright = -0.2;
-        internal const double BoxBright = -0.3;
+        internal const double BoxBright = -0.5;
         internal const double ColumnBevelBright = 0.3;
         #endregion
 
@@ -449,6 +449,7 @@ namespace Devinno.Forms.Controls
                 e.Graphics.DrawLine(p, rtScrollContent.Left + spw, rtColumn.Top, rtScrollContent.Left + spw, rtColumn.Bottom);
             }
             #endregion
+
             e.Graphics.SetClip(rtColumnV);
             #region Column
             {
@@ -594,6 +595,54 @@ namespace Devinno.Forms.Controls
                 e.Graphics.SetClip(rtScrollContent);
                 Loop((i, rtROW, v) =>
                 {
+                    #region Selector
+                    if (SelectionMode == DvDataGridSelectionMode.SELECTOR)
+                    {
+                        var rt = DvDataGridTool.RTI(new RectangleF(rtROW.X, rtROW.Y, spw, rtROW.Height));
+
+                        var old = e.Graphics.ClipBounds;
+                        var oldsm = e.Graphics.SmoothingMode;
+                        e.Graphics.SetClip(new RectangleF(rt.X, rtScrollContent.Y, rt.Width, rtScrollContent.Height), CombineMode.Intersect);
+                        e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+
+                        #region Background
+                        var bg = BoxColor;
+                        var c = v.Selected ? SelectedRowColor : RowColor;
+
+                        br.Color = c; e.Graphics.FillRectangle(br, rt);
+                        if (RowBevel)
+                        {
+                            int n = 1;
+                            var pts = new Point[] { new Point(rt.Right - n, rt.Top + n), new Point(rt.Left + n, rt.Top + n), new Point(rt.Left + n, rt.Bottom - n) };
+                            p.Color = c.BrightnessTransmit(DvDataGrid.ColumnBevelBright);
+                            e.Graphics.DrawLines(p, pts);
+                        }
+                        p.Color = bg.BrightnessTransmit(Theme.BorderBright);
+                        e.Graphics.DrawRectangle(p, rt);
+                        #endregion
+                        #region CheckBox
+                        var rtSelectorBox = MathTool.MakeRectangle(rt, new Size(sbw, sbw));
+                        Theme.DrawBox(e.Graphics, RowColor.BrightnessTransmit(BoxBright), c, rtSelectorBox, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+                        #endregion
+                        #region Check
+                        if (v.Selected)
+                        {
+                            Rectangle rtCheck = new Rectangle(rtSelectorBox.X, rtSelectorBox.Y - 0, rtSelectorBox.Width, rtSelectorBox.Height); rtCheck.Inflate(-Convert.ToInt32(4 * f), -Convert.ToInt32(4 * f));
+                            Rectangle rtCheckSH = new Rectangle(rtCheck.X, rtCheck.Y + 1, rtCheck.Width, rtCheck.Height);
+
+                            p.Width = Convert.ToInt32(3 * f);
+                            p.Color = ForeColor;
+                            e.Graphics.DrawLine(p, rtCheck.X, rtCheck.Y + rtCheck.Height / 2, rtCheck.X + rtCheck.Width / 2, rtCheck.Y + rtCheck.Height);
+                            e.Graphics.DrawLine(p, rtCheck.X + rtCheck.Width / 2 - 1, rtCheck.Y + rtCheck.Height, rtCheck.X + rtCheck.Width, rtCheck.Y);
+                            p.Width = 1;
+                        }
+                        #endregion
+
+                        e.Graphics.ResetClip();
+                        e.Graphics.SetClip(rtScrollContent);
+                        e.Graphics.SmoothingMode = oldsm;
+                    }
+                    #endregion
                     #region !Fixed
                     if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                     {
@@ -752,6 +801,10 @@ namespace Devinno.Forms.Controls
                     #endregion
             }
             #endregion
+            #region Column Border
+            p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
+            e.Graphics.DrawLine(p, rtColumn.Left, rtColumn.Bottom, rtColumn.Right, rtColumn.Bottom);
+            #endregion
             #endregion
 
             #region Dispose
@@ -790,6 +843,7 @@ namespace Devinno.Forms.Controls
                 var rtScrollH = Areas["rtScrollH"];
                 var rts = GetColumnBounds(rtColumn, rtScrollContent);
                 var spw = Convert.ToInt32(f * SPECIAL_CELL_WIDTH);
+                var sbw = Convert.ToInt32(f * SELECTOR_BOX_WIDTH);
 
                 var rtColumnV = new Rectangle(rtColumn.X, rtColumn.Y, rtScrollContent.Width, rtColumn.Height);
                 var ColWidths = GetColumnsWidths(rtScrollContent);
@@ -822,7 +876,8 @@ namespace Devinno.Forms.Controls
 
                     if (CollisionTool.Check(rtSelectorBox, e.Location))
                     {
-
+                        var bAllSelect = GetRows().Where(x => x.Selected).Count() > 0;
+                        foreach (var v in GetRows()) v.Selected = !bAllSelect;
                     }
                 }
                 #endregion
@@ -890,6 +945,17 @@ namespace Devinno.Forms.Controls
 
                 Loop((i, rtROW, v) =>
                 {
+                    #region Selector
+                    if(SelectionMode == DvDataGridSelectionMode.SELECTOR)
+                    {
+                        var rt = DvDataGridTool.RTI(new RectangleF(rtROW.X, rtROW.Y, spw, rtROW.Height));
+                        var rtSelectorBox = MathTool.MakeRectangle(rt, new Size(sbw, sbw));
+                        if (CollisionTool.Check(rtSelectorBox, e.Location))
+                        {
+                            v.Selected = !v.Selected;
+                        }
+                    }
+                    #endregion
                     #region !Fixed
                     if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                     {

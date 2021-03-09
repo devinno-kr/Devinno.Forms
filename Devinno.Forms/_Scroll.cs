@@ -23,7 +23,7 @@ namespace Devinno.Forms
         #region Properties
         public bool IsScrolling => scDown != null;
         public bool IsTouchScrolling => tcDown != null;
-        public bool IsTouchMoving => IsTouhcStart;
+        public bool IsTouchMoving => IsTouchStart;
         public bool TouchMode { get; set; } = false;
         public bool Cut { get; set; } = false;
 
@@ -82,7 +82,7 @@ namespace Devinno.Forms
         double dCoeff = 1000 * Math.Log(decelerationRate);
         double threshold = 0.1;
 
-        bool IsTouhcStart;
+        bool IsTouchStart;
         #endregion
 
         #region Event
@@ -142,7 +142,7 @@ namespace Devinno.Forms
         public void MouseDown(MouseEventArgs e, Rectangle rtScroll)
         {
             var rtcur = GetScrollCursorRect(rtScroll);
-            if (!IsTouhcStart && rtcur.HasValue && CollisionTool.Check(rtcur.Value, e.Location)) scDown = new SCDI() { DownPoint = e.Location, CursorBounds = rtcur.Value };
+            if (!IsTouchStart && rtcur.HasValue && CollisionTool.Check(rtcur.Value, e.Location)) scDown = new SCDI() { DownPoint = e.Location, CursorBounds = rtcur.Value };
         }
         #endregion
         #region MouseUp
@@ -178,7 +178,7 @@ namespace Devinno.Forms
             if (TouchMode)
             {
                 tcDown = new TCDI() { DownPoint = e.Location, MovePoint = e.Location, DownTime = DateTime.Now };
-                IsTouhcStart = false;
+                IsTouchStart = false;
             }
         }
         #endregion
@@ -219,12 +219,12 @@ namespace Devinno.Forms
                     {
                         var th = new Thread(new ThreadStart(() =>
                         {
-                            IsTouhcStart = true;
+                            IsTouchStart = true;
 
                             var stime = DateTime.Now;
                             var time = 0.0;
                             var tot = (ScrollTotal - ScrollView);
-                            while (IsTouhcStart && time < destTime * 1000 && Convert.ToInt64(ScrollPosition / ScrollScaleFactor) != Convert.ToInt64(destPos / ScrollScaleFactor))
+                            while (IsTouchStart && time < destTime * 1000 && Convert.ToInt64(ScrollPosition / ScrollScaleFactor) != Convert.ToInt64(destPos / ScrollScaleFactor))
                             {
                                 time = (DateTime.Now - stime).TotalMilliseconds;
                                 var oldV = ScrollPosition;
@@ -234,7 +234,7 @@ namespace Devinno.Forms
                                 Thread.Sleep(ThreadInterval);
                             }
 
-                            IsTouhcStart = false;
+                            IsTouchStart = false;
                             try { ScrollChanged?.Invoke(this, null); } catch { }
 
                         }))
@@ -245,6 +245,12 @@ namespace Devinno.Forms
                 }
                 tcDown = null;
             }
+        }
+        #endregion
+        #region TouchStop
+        public void TouchStop()
+        {
+            IsTouchStart = false;
         }
         #endregion
 
@@ -287,7 +293,7 @@ namespace Devinno.Forms
         public void MouseDownR(MouseEventArgs e, Rectangle rtScroll)
         {
             var rtcur = GetScrollCursorRectR(rtScroll);
-            if (!IsTouhcStart && rtcur.HasValue && CollisionTool.Check(rtcur.Value, e.Location)) scDown = new SCDI() { DownPoint = e.Location, CursorBounds = rtcur.Value };
+            if (!IsTouchStart && rtcur.HasValue && CollisionTool.Check(rtcur.Value, e.Location)) scDown = new SCDI() { DownPoint = e.Location, CursorBounds = rtcur.Value };
         }
         #endregion
         #region MouseUpR
@@ -323,7 +329,7 @@ namespace Devinno.Forms
             if (TouchMode)
             {
                 tcDown = new TCDI() { DownPoint = e.Location, MovePoint = e.Location, DownTime = DateTime.Now };
-                IsTouhcStart = false;
+                IsTouchStart = false;
             }
         }
         #endregion
@@ -364,12 +370,12 @@ namespace Devinno.Forms
                     {
                         var th = new Thread(new ThreadStart(() =>
                         {
-                            IsTouhcStart = true;
+                            IsTouchStart = true;
 
                             var stime = DateTime.Now;
                             var time = 0.0;
                             var tot = (ScrollTotal - ScrollView);
-                            while (IsTouhcStart && time < destTime * 1000 && Convert.ToInt64(ScrollPosition / ScrollScaleFactor) != Convert.ToInt64(destPos / ScrollScaleFactor))
+                            while (IsTouchStart && time < destTime * 1000 && Convert.ToInt64(ScrollPosition / ScrollScaleFactor) != Convert.ToInt64(destPos / ScrollScaleFactor))
                             {
                                 time = (DateTime.Now - stime).TotalMilliseconds;
                                 var oldV = ScrollPosition;
@@ -379,7 +385,7 @@ namespace Devinno.Forms
                                 Thread.Sleep(ThreadInterval);
                             }
 
-                            IsTouhcStart = false;
+                            IsTouchStart = false;
                             try { ScrollChanged?.Invoke(this, null); } catch { }
 
                         }))

@@ -376,10 +376,12 @@ namespace Devinno.Forms.Themes
                 #endregion
                 #region FILL / GRADIENT
                 {
+                    var nInSH = 2;
+                    var rt = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                    if ((option & BoxDrawOption.IN_SHADOW) == BoxDrawOption.IN_SHADOW) rt.Inflate(-nInSH, -nInSH);
+
                     if ((option & BoxDrawOption.GRADIENT_V) == BoxDrawOption.GRADIENT_V)
                     {
-                        var nInSH = 2;
-                        var rt = (((option & BoxDrawOption.IN_SHADOW) == BoxDrawOption.IN_SHADOW) ? new Rectangle(bounds.X + nInSH, bounds.Y + nInSH, bounds.Width - (nInSH * 2), bounds.Height - (nInSH * 2)) : bounds);
                         var c1 = c.BrightnessTransmit(GradientLightBright);
                         var c2 = c.BrightnessTransmit(GradientDarkBright);
 
@@ -405,8 +407,6 @@ namespace Devinno.Forms.Themes
                     }
                     else if ((option & BoxDrawOption.GRADIENT_V_REVERSE) == BoxDrawOption.GRADIENT_V_REVERSE)
                     {
-                        var nInSH = 2;
-                        var rt = (((option & BoxDrawOption.IN_SHADOW) == BoxDrawOption.IN_SHADOW) ? new Rectangle(bounds.X + nInSH, bounds.Y + nInSH, bounds.Width - (nInSH * 2), bounds.Height - (nInSH * 2)) : bounds);
                         var c1 = c.BrightnessTransmit(GradientDarkBright);
                         var c2 = c.BrightnessTransmit(GradientLightBright);
 
@@ -432,8 +432,6 @@ namespace Devinno.Forms.Themes
                     }
                     else if ((option & BoxDrawOption.GRADIENT_H) == BoxDrawOption.GRADIENT_H)
                     {
-                        var nInSH = 2;
-                        var rt = (((option & BoxDrawOption.IN_SHADOW) == BoxDrawOption.IN_SHADOW) ? new Rectangle(bounds.X + nInSH, bounds.Y + nInSH, bounds.Width - (nInSH * 2), bounds.Height - (nInSH * 2)) : bounds);
                         var c1 = c.BrightnessTransmit(GradientDarkBright);
                         var c2 = c.BrightnessTransmit(GradientLightBright);
 
@@ -459,8 +457,6 @@ namespace Devinno.Forms.Themes
                     }
                     else if ((option & BoxDrawOption.GRADIENT_H_REVERSE) == BoxDrawOption.GRADIENT_H_REVERSE)
                     {
-                        var nInSH = 2;
-                        var rt = (((option & BoxDrawOption.IN_SHADOW) == BoxDrawOption.IN_SHADOW) ? new Rectangle(bounds.X + nInSH, bounds.Y + nInSH, bounds.Width - (nInSH * 2), bounds.Height - (nInSH * 2)) : bounds);
                         var c1 = c.BrightnessTransmit(GradientDarkBright);
                         var c2 = c.BrightnessTransmit(GradientLightBright);
 
@@ -486,8 +482,6 @@ namespace Devinno.Forms.Themes
                     }
                     else if ((option & BoxDrawOption.GRADIENT_LT) == BoxDrawOption.GRADIENT_LT)
                     {
-                        var nInSH = 2;
-                        var rt = (((option & BoxDrawOption.IN_SHADOW) == BoxDrawOption.IN_SHADOW) ? new Rectangle(bounds.X + nInSH, bounds.Y + nInSH, bounds.Width - (nInSH * 2), bounds.Height - (nInSH * 2)) : bounds);
                         var c1 = c.BrightnessTransmit(GradientLightBright);
                         var c2 = c.BrightnessTransmit(GradientDarkBright);
 
@@ -513,8 +507,6 @@ namespace Devinno.Forms.Themes
                     }
                     else if ((option & BoxDrawOption.GRADIENT_RT) == BoxDrawOption.GRADIENT_RT)
                     {
-                        var nInSH = 2;
-                        var rt = (((option & BoxDrawOption.IN_SHADOW) == BoxDrawOption.IN_SHADOW) ? new Rectangle(bounds.X + nInSH, bounds.Y + nInSH, bounds.Width - (nInSH * 2), bounds.Height - (nInSH * 2)) : bounds);
                         var c1 = c.BrightnessTransmit(GradientLightBright);
                         var c2 = c.BrightnessTransmit(GradientDarkBright);
 
@@ -540,8 +532,6 @@ namespace Devinno.Forms.Themes
                     }
                     else if ((option & BoxDrawOption.GRADIENT_RB) == BoxDrawOption.GRADIENT_RB)
                     {
-                        var nInSH = 2;
-                        var rt = (((option & BoxDrawOption.IN_SHADOW) == BoxDrawOption.IN_SHADOW) ? new Rectangle(bounds.X + nInSH, bounds.Y + nInSH, bounds.Width - (nInSH * 2), bounds.Height - (nInSH * 2)) : bounds);
                         var c1 = c.BrightnessTransmit(GradientLightBright);
                         var c2 = c.BrightnessTransmit(GradientDarkBright);
 
@@ -567,8 +557,6 @@ namespace Devinno.Forms.Themes
                     }
                     else if ((option & BoxDrawOption.GRADIENT_LB) == BoxDrawOption.GRADIENT_LB)
                     {
-                        var nInSH = 2;
-                        var rt = (((option & BoxDrawOption.IN_SHADOW) == BoxDrawOption.IN_SHADOW) ? new Rectangle(bounds.X + nInSH, bounds.Y + nInSH, bounds.Width - (nInSH * 2), bounds.Height - (nInSH * 2)) : bounds);
                         var c1 = c.BrightnessTransmit(GradientLightBright);
                         var c2 = c.BrightnessTransmit(GradientDarkBright);
 
@@ -594,9 +582,6 @@ namespace Devinno.Forms.Themes
                     }
                     else
                     {
-                        var nInSH = 2;
-                        var rt = (((option & BoxDrawOption.IN_SHADOW) == BoxDrawOption.IN_SHADOW) ? new Rectangle(bounds.X + nInSH, bounds.Y + nInSH, bounds.Width - (nInSH * 2), bounds.Height - (nInSH * 2)) : bounds);
-
                         br.Color = c;
                         switch (round)
                         {

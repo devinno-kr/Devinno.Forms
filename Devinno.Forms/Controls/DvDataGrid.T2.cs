@@ -1,4 +1,5 @@
 ﻿using Devinno.Extensions;
+using Devinno.Forms.Dialogs;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
@@ -11,6 +12,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Devinno.Forms.Controls
 {
@@ -251,6 +253,66 @@ namespace Devinno.Forms.Controls
         public DvDataGridButtonColumn(DvDataGrid dataGrid) : base(dataGrid)
         {
             CellType = typeof(DvDataGridButtonCell);
+        }
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridImageColumn
+    public class DvDataGridImageColumn : DvDataGridColumn
+    {
+        #region Properties
+        public PictureScaleMode ImageSizeMode { get; set; }
+        #endregion
+        #region Constructor
+        public DvDataGridImageColumn(DvDataGrid dataGrid) : base(dataGrid)
+        {
+            ImageSizeMode = PictureScaleMode.Strech;
+            CellType = typeof(DvDataGridImageCell);
+        }
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridCheckBoxColumn
+    public class DvDataGridCheckBoxColumn : DvDataGridColumn
+    {
+        #region Properties
+        public Color BoxColor { get; set; }
+        public Color CheckColor { get; set; }
+        #endregion
+        #region Constructor
+        public DvDataGridCheckBoxColumn(DvDataGrid dataGrid) : base(dataGrid)
+        {
+            var Theme = dataGrid.GetTheme();
+            BoxColor = dataGrid.GetRowColor(Theme).BrightnessTransmit(DvDataGrid.BoxBright);
+            CheckColor = dataGrid.ForeColor;
+            CellType = typeof(DvDataGridCheckBoxCell);
+        }
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridComboBoxColumn
+    #region class : DvDataGridComboBoxItem
+    public class DvDataGridComboBoxItem : ListBoxItem
+    {
+        public object Source { get; set; }
+
+        public DvDataGridComboBoxItem(string Text) : base(Text) { }
+        public DvDataGridComboBoxItem(string Text, Bitmap Image) : base(Text, Image) { }
+        public DvDataGridComboBoxItem(string Text, string IconString, float Size) : base(Text, IconString, Size) { }
+        public DvDataGridComboBoxItem(string Text, string IconString, float size, int Gap) : base(Text, IconString, size, Gap) { }
+    }
+    #endregion
+
+    public class DvDataGridComboBoxColumn : DvDataGridColumn
+    {
+        #region Properties
+        public List<DvDataGridComboBoxItem> Items { get; set; }
+        #endregion
+        #region Constructor
+        public DvDataGridComboBoxColumn(DvDataGrid dataGrid) : base(dataGrid)
+        {
+            Items = new List<DvDataGridComboBoxItem>();
+            CellType = typeof(DvDataGridComboBoxCell);
         }
         #endregion
     }
@@ -547,6 +609,592 @@ namespace Devinno.Forms.Controls
             }
             base.CellMouseUp(CellBounds, x, y);
         }
+        #endregion
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridImageCell
+    public class DvDataGridImageCell : DvDataGridCell
+    {
+        #region Properties
+        public PictureScaleMode ImageSizeMode { get; set; }
+        #endregion
+        #region Constructor
+        public DvDataGridImageCell(DvDataGrid Grid, DvDataGridRow Row, IDvDataGridColumn Column) : base(Grid, Row, Column)
+        {
+            if (Column is DvDataGridImageColumn)
+            {
+                this.ImageSizeMode = ((DvDataGridImageColumn)Column).ImageSizeMode;
+            }
+        }
+        #endregion
+        #region Override
+        #region CellPaint
+        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        {
+            #region Init
+            var br = new SolidBrush(Color.Black);
+            var p = new Pen(Color.Black);
+            #endregion
+            #region Draw
+            if (Value is Bitmap)
+            {
+                var rtv = DvDataGridTool.RTI(new RectangleF(CellBounds.X+1, CellBounds.Y+1, CellBounds.Width, CellBounds.Height));
+                var old = g.ClipBounds;
+                g.SetClip(rtv, CombineMode.Intersect);
+
+                var Image = (Bitmap)Value;
+                var rtContent = new Rectangle((int)CellBounds.X, (int)CellBounds.Y, (int)CellBounds.Width, (int)CellBounds.Height);
+                int cx = rtContent.X + (rtContent.Width / 2);
+                int cy = rtContent.Y + (rtContent.Height / 2);
+                switch (ImageSizeMode)
+                {
+                    case PictureScaleMode.Real:
+                        g.DrawImage(Image, new Rectangle(rtContent.X, rtContent.Y, Image.Width, Image.Height));
+                        break;
+                    case PictureScaleMode.CenterImage:
+                        g.DrawImage(Image, new Rectangle(cx - (Image.Width / 2), cy - (Image.Height / 2), Image.Width, Image.Height));
+                        break;
+                    case PictureScaleMode.Strech:
+                        g.DrawImage(Image, rtContent);
+                        break;
+                    case PictureScaleMode.Zoom:
+                        double imgratio = 1D;
+                        if ((Image.Width - rtContent.Width) > (Image.Height - rtContent.Height)) imgratio = (double)rtContent.Width / (double)Image.Width;
+                        else imgratio = (double)rtContent.Height / (double)Image.Height;
+
+                        int szw = Convert.ToInt32((double)Image.Width * imgratio);
+                        int szh = Convert.ToInt32((double)Image.Height * imgratio);
+
+                        g.DrawImage(Image, new Rectangle(rtContent.X + (rtContent.Width / 2) - (szw / 2), rtContent.Y + (rtContent.Height / 2) - (szh / 2), szw, szh));
+                        break;
+                }
+
+                g.ResetClip();
+                g.SetClip(old);
+            }
+            #endregion
+            #region Dispose
+            br.Dispose();
+            p.Dispose();
+            #endregion
+            base.CellPaint(Theme, g, CellBounds);
+        }
+        #endregion
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridCheckBoxCell
+    public class DvDataGridCheckBoxCell : DvDataGridCell
+    {
+        #region Properties
+        public Color CheckBoxColor { get; set; }
+        public Color CheckColor { get; set; }
+        #endregion
+        #region Constructor
+        public DvDataGridCheckBoxCell(DvDataGrid Grid, DvDataGridRow Row, IDvDataGridColumn Column) : base(Grid, Row, Column)
+        {
+            if (Column is DvDataGridCheckBoxColumn)
+            {
+                CheckBoxColor = ((DvDataGridCheckBoxColumn)Column).BoxColor;
+                CheckColor = ((DvDataGridCheckBoxColumn)Column).CheckColor;
+            }
+        }
+        #endregion
+        #region Override
+        #region CellPaint
+        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        {
+            if (Grid != null)
+            {
+                var oldsm = g.SmoothingMode;
+                g.SmoothingMode = SmoothingMode.HighQuality;
+
+                #region Var
+                var f = Grid.DpiRatio;
+                var sbw = Convert.ToInt32(f * DvDataGrid.SELECTOR_BOX_WIDTH);
+                var BoxBright = DvDataGrid.BoxBright;
+                var RowColor = Grid.GetRowColor(Theme);
+                var SelectedRowColor = Grid.GetSelectedRowColor(Theme);
+                #endregion
+                #region Init
+                var br = new SolidBrush(Color.Black);
+                var p = new Pen(Color.Black);
+                #endregion
+                #region Draw
+                var Value = this.Value is bool ? (bool)this.Value : false;
+                {
+                    var Checked = Value;
+                    var c = Row.Selected ? SelectedRowColor : RowColor;
+                    var rtSelectorBox = MathTool.MakeRectangle(DvDataGridTool.RTI(CellBounds), new Size(sbw, sbw));
+                    Theme.DrawBox(g, RowColor.BrightnessTransmit(BoxBright), c, rtSelectorBox, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+
+                    if (Checked)
+                    {
+                        Rectangle rtCheck = new Rectangle(rtSelectorBox.X, rtSelectorBox.Y - 0, rtSelectorBox.Width, rtSelectorBox.Height); rtCheck.Inflate(-Convert.ToInt32(4 * f), -Convert.ToInt32(4 * f));
+                        Rectangle rtCheckSH = new Rectangle(rtCheck.X, rtCheck.Y + 1, rtCheck.Width, rtCheck.Height);
+
+                        p.Width = Convert.ToInt32(3 * f);
+                        p.Color = CheckColor;
+                        g.DrawLine(p, rtCheck.X, rtCheck.Y + rtCheck.Height / 2, rtCheck.X + rtCheck.Width / 2, rtCheck.Y + rtCheck.Height);
+                        g.DrawLine(p, rtCheck.X + rtCheck.Width / 2 - 1, rtCheck.Y + rtCheck.Height, rtCheck.X + rtCheck.Width, rtCheck.Y);
+                        p.Width = 1;
+                    }
+                }
+                #endregion
+                #region Dispose
+                br.Dispose();
+                p.Dispose();
+                #endregion
+
+                g.SmoothingMode = oldsm;
+            }
+            base.CellPaint(Theme, g, CellBounds);
+        }
+        #endregion
+        #region CellMouseDown
+        public override void CellMouseDown(Rectangle CellBounds, int x, int y)
+        {
+            if (CollisionTool.Check(CellBounds, x, y))
+            {
+                var Value = this.Value is bool ? (bool)this.Value : false;
+                var v = !((bool)Value);
+                if (v != (bool)Value)
+                {
+                    #region Value Set
+                    var old = Value;
+                    this.Value = v;
+                    Grid.InvokeValueChanged(this, old, v);
+                    #endregion
+                }
+            }
+            base.CellMouseDown(CellBounds, x, y);
+        }
+        #endregion
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridComboBoxCell
+    public class DvDataGridComboBoxCell : DvDataGridCell
+    {
+        #region Properties
+        public override object Value
+        {
+            get
+            {
+                return base.Value;
+            }
+            set
+            {
+                var old = base.Value;
+                if (!object.Equals(old, value))
+                {
+                    base.Value = value;
+                    Grid.InvokeValueChanged(this, old, value);
+                }
+            }
+        }
+        #endregion
+
+        #region Properties : Local
+        #region MaximumViewCount
+        int nMaximumViewCount = 10;
+        public int MaximumViewCount
+        {
+            get { return nMaximumViewCount; }
+            set { nMaximumViewCount = value; }
+        }
+        #endregion
+        #region ItemHeight
+        private int nItemHeight = 30;
+        public int ItemHeight
+        {
+            get => nItemHeight;
+            set
+            {
+                if (nItemHeight != value)
+                {
+                    nItemHeight = value;
+                    Grid?.InvalidateTH();
+                }
+            }
+        }
+        #endregion
+        #region Items
+        public List<DvDataGridComboBoxItem> Items { get; } = new List<DvDataGridComboBoxItem>();
+        #endregion
+        #region ItemPadding
+        private Padding padItem = new Padding(0, 0, 0, 0);
+        public Padding ItemPadding
+        {
+            get => padItem;
+            set
+            {
+                if (padItem != value)
+                {
+                    padItem = value;
+                    Grid?.InvalidateTH();
+                }
+            }
+        }
+        #endregion
+        #region ContentAlignment
+        private DvContentAlignment eContentAlignment = DvContentAlignment.MiddleCenter;
+        public DvContentAlignment ContentAlignment
+        {
+            get { return eContentAlignment; }
+            set
+            {
+                if (eContentAlignment != value)
+                {
+                    eContentAlignment = value; 
+                    Grid?.InvalidateTH();
+                }
+            }
+        }
+        #endregion
+        #endregion
+
+        #region Constructor
+        public DvDataGridComboBoxCell(DvDataGrid Grid, DvDataGridRow Row, IDvDataGridColumn Column) : base(Grid, Row, Column)
+        {
+            if (Column is DvDataGridComboBoxColumn)
+            {
+                Items.AddRange(((DvDataGridComboBoxColumn)Column).Items);
+                ItemHeight = Grid.RowHeight;
+            }
+        }
+        #endregion
+
+        #region Override
+        #region CellPaint
+        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        {
+            #region Init
+            var br = new SolidBrush(Color.Black);
+            var p = new Pen(Color.Black);
+            #endregion
+            #region Draw
+            {
+                var rtContent = DvDataGridTool.RTI(CellBounds); rtContent.Inflate(-1, 0);
+                var BoxColor = CellBackColor;
+                var ForeColor = CellTextColor;
+                var SelectedColor = Grid.GetSelectedRowColor(Theme);
+                var c = (Row.Selected ? SelectedColor : CellBackColor);
+                var ButtonWidth = 60;
+                var rtIco = new Rectangle(rtContent.Right - ButtonWidth, rtContent.Y, ButtonWidth, rtContent.Height);
+                var rtBox = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width - rtIco.Width, rtContent.Height);
+                var rtText = new Rectangle(rtBox.X + ItemPadding.Left, rtBox.Y + ItemPadding.Top, rtBox.Width - (ItemPadding.Left + ItemPadding.Right), rtBox.Height - (ItemPadding.Top + ItemPadding.Bottom));
+
+                p.Color = CellBackColor.BrightnessTransmit(Theme.BorderBright);
+                g.DrawLine(p, rtContent.Left, rtContent.Top, rtContent.Left, rtContent.Bottom);
+                g.DrawLine(p, rtContent.Right, rtContent.Top, rtContent.Right, rtContent.Bottom);
+
+                p.Color = c.BrightnessTransmit(DvDataGrid.ColumnBevelBright);
+                g.DrawLine(p, rtContent.Left + 1, rtContent.Top + 1, rtContent.Left + 1, rtContent.Bottom - 1);
+
+                #region Text
+                var ls = Items.Where(x => x.Source != null && x.Source.Equals(Value));
+                if (ls.Count() > 0)
+                {
+                    var v = ls.FirstOrDefault();
+                    if (v != null)
+                    {
+                        Theme.DrawTextShadow(g, v.Icon, v.Text, Grid.Font, ForeColor, c, rtText, ContentAlignment);
+                    }
+                }
+                #endregion
+                #region Seperate
+                var szh = Convert.ToInt32(rtIco.Height / 2);
+
+                p.Width = 1;
+
+                p.Color = c.BrightnessTransmit(Theme.OutBevelBright);
+                g.DrawLine(p, rtIco.X, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtIco.X, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+
+                p.Color = c.BrightnessTransmit(Theme.BorderBright);
+                g.DrawLine(p, rtIco.X - 1, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtIco.X - 1, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+                #endregion
+                #region Icon
+                var nisz = rtIco.Height / 4;
+                if (DropState == DvDropState.Dropped || DropState == DvDropState.Dropping)
+                {
+                    Theme.DrawTextShadow(g, new DvIcon("fa-chevron-up") { IconSize = nisz, Gap = 0 }, "", Grid.Font, ForeColor, BoxColor, rtIco);
+                }
+                else
+                {
+                    Theme.DrawTextShadow(g, new DvIcon("fa-chevron-down") { IconSize = nisz, Gap = 0 }, "", Grid.Font, ForeColor, BoxColor, rtIco);
+                }
+                #endregion
+            }
+            #endregion
+            #region Dispose
+            br.Dispose();
+            p.Dispose();
+            #endregion
+            base.CellPaint(Theme, g, CellBounds);
+        }
+        #endregion
+        #region CellMouseUp
+        public override void CellMouseUp(Rectangle CellBounds, int x, int y)
+        {
+            if (CollisionTool.Check(CellBounds, x, y))
+            {
+                if (Items != null && Items.Count > 0) OpenDropDown(CellBounds);
+            }
+            base.CellMouseUp(CellBounds, x, y);
+        }
+        #endregion
+        #endregion
+
+        #region DropDown
+        #region Member Variable
+        private bool closedWhileInControl;
+        private DropDownContainer dropContainer;
+        #endregion
+
+        #region Properties
+        #region CanDrop
+        protected virtual bool CanDrop
+        {
+            get
+            {
+                if (dropContainer != null)
+                    return false;
+
+                if (dropContainer == null && closedWhileInControl)
+                {
+                    closedWhileInControl = false;
+                    return false;
+                }
+
+                return !closedWhileInControl;
+            }
+        }
+        #endregion
+        #region DropState
+        public DvDropState DropState { get; private set; }
+        #endregion
+        #endregion
+
+        #region Method
+        #region FreezeDropDown
+        internal void FreezeDropDown(bool remainVisible)
+        {
+            if (dropContainer != null)
+            {
+                dropContainer.Freeze = true;
+                if (!remainVisible)
+                    dropContainer.Visible = false;
+            }
+        }
+        #endregion
+        #region UnFreezeDropDown
+        internal void UnFreezeDropDown()
+        {
+            if (dropContainer != null)
+            {
+                dropContainer.Freeze = false;
+                if (!dropContainer.Visible)
+                    dropContainer.Visible = true;
+            }
+        }
+        #endregion
+        #region OpenDropDown
+        private void OpenDropDown(Rectangle rt)
+        {
+            //Grid.Move += (o, s) => { if (dropContainer != null) dropContainer.Bounds = GetDropDownBounds(); };
+
+            var vls = Items.Select(x => x.Source).ToList();
+            var SelectedIndex = vls.IndexOf(Value);
+            var vpos = SelectedIndex == -1 ? 0 : SelectedIndex * ItemHeight;
+            vpos = (int)MathTool.Constrain(vpos - (ItemHeight * 2), 0, (Items.Count * ItemHeight));
+
+            dropContainer = new DropDownContainer(this);
+            dropContainer.Bounds = GetDropDownBounds(rt);
+            dropContainer.DropStateChanged += (o, s) => { DropState = s.DropState; };
+            dropContainer.FormClosed += (o, s) =>
+            {
+                if (!dropContainer.IsDisposed) dropContainer.Dispose();
+                dropContainer = null;
+                closedWhileInControl = (Grid.RectangleToScreen(Grid.ClientRectangle).Contains(Cursor.Position));
+                DropState = DvDropState.Closed;
+                Grid.InvalidateTH();
+            };
+            DropState = DvDropState.Dropping;
+            dropContainer.VScrollPosition = vpos;
+            dropContainer.Show(Grid);
+            DropState = DvDropState.Dropped;
+            Grid.InvalidateTH();
+        }
+        #endregion
+        #region GetDropDownBounds
+        private Rectangle GetDropDownBounds(Rectangle rt)
+        {
+            int n = Items.Count;
+            Point ptu = Grid.PointToScreen(new Point(rt.Left, rt.Top));
+            Point pt = Grid.PointToScreen(new Point(rt.Left, rt.Bottom));
+            Point ptEnd = Grid.Parent.PointToScreen(new Point(0, Grid.Bounds.Bottom));
+
+            if (pt.Y > ptEnd.Y - 2) pt.Y = ptEnd.Y - 2;
+
+            if (MaximumViewCount != -1) n = Items.Count > MaximumViewCount ? MaximumViewCount : Items.Count;
+            Size inflatedDropSize = new Size(rt.Width, n * ItemHeight + 2);
+            Rectangle screenBounds = new Rectangle(pt, inflatedDropSize);
+            Rectangle workingArea = Screen.GetWorkingArea(screenBounds);
+
+            if (screenBounds.X < workingArea.X) screenBounds.X = workingArea.X;
+            if (screenBounds.Y < workingArea.Y) screenBounds.Y = workingArea.Y;
+
+            if (screenBounds.Right > workingArea.Right && workingArea.Width > screenBounds.Width) screenBounds.X = workingArea.Right - screenBounds.Width;
+            if (screenBounds.Bottom > workingArea.Bottom && workingArea.Height > screenBounds.Height) screenBounds.Y = ptu.Y - screenBounds.Height + 1;
+            return screenBounds;
+        }
+        #endregion
+        #region CloseDropDown
+        public void CloseDropDown()
+        {
+            if (dropContainer != null)
+            {
+                DropState = DvDropState.Closing;
+                dropContainer.Freeze = false;
+                dropContainer.Close();
+            }
+        }
+        #endregion
+        #region GetDropDownContainerDir
+        internal int GetDropDownContainerDir()
+        {
+            int ret = -1;
+            if (DropState == DvDropState.Dropping || DropState == DvDropState.Dropped)
+            {
+                var p1 = Grid.PointToScreen(new Point(0, 0));
+                var p2 = dropContainer.Location;
+
+                ret = p1.Y < p2.Y ? 1 : 2;
+            }
+            return ret;
+        }
+        #endregion
+        #endregion
+
+        #region Class
+        #region DropWindowEventArgs
+        internal class DropWindowEventArgs : EventArgs
+        {
+            internal DvDropState DropState { get; private set; }
+            public DropWindowEventArgs(DvDropState DropState)
+            {
+                this.DropState = DropState;
+            }
+        }
+        #endregion
+        #region DropDownContainer
+        public class DropDownContainer : DvForm, IMessageFilter
+        {
+            #region Properties
+            internal bool Freeze { get; set; }
+            public DvDataGridComboBoxCell ComboBox { get; private set; }
+            public long VScrollPosition
+            {
+                get => ListBox.ScrollPosition;
+                set
+                {
+                    if (ListBox.ScrollPosition != value)
+                    {
+                        ListBox.ScrollPosition = value;
+                        ListBox.Invalidate();
+                    }
+                }
+            }
+            #endregion
+
+            #region Member Variable
+            private DvListBox ListBox = new DvListBox();
+            #endregion
+
+            #region Event
+            internal event EventHandler<DropWindowEventArgs> DropStateChanged;
+            #endregion
+
+            public DropDownContainer(DvDataGridComboBoxCell c)
+            {
+                #region Init
+                this.BlankForm = true;
+                this.DoubleBuffered = true;
+                this.StartPosition = FormStartPosition.Manual;
+                this.ShowInTaskbar = false;
+                this.ControlBox = false;
+                this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+                this.AutoSize = false;
+                this.AutoScroll = false;
+                this.MinimumSize = new Size(10, 10);
+                this.Padding = new Padding(0, 0, 0, 0);
+                #endregion
+                #region Set
+                var Theme = c.Grid.GetTheme();
+                var RowColor = c.Grid.GetRowColor(Theme);
+                var SelectedRowColor = c.Grid.GetSelectedRowColor(Theme);
+                var cBack = RowColor;
+                var cFore = c.Grid.ForeColor;
+                var cBox = cBack;
+                this.ComboBox = c;
+                this.Font = c.Grid.Font;
+                this.BackColor = cBack;
+                Application.AddMessageFilter(this);
+                #endregion
+                #region ListBox
+                ListBox.Dock = DockStyle.Fill;
+                ListBox.ForeColor = cFore;
+                ListBox.BackColor = cBack;
+                ListBox.BoxColor = cBox;
+                ListBox.RectMode = true;
+                ListBox.Items.AddRange(c.Items);
+                ListBox.SelectionMode = ItemSelectionMode.SINGLE;
+                //ListBox.Corner = 0;
+                ListBox.RowHeight = c.ItemHeight;
+                ListBox.TouchMode = c.Grid.TouchMode;
+                ListBox.ItemClicked += (o, s) =>
+                {
+                    if (s.Item != null)
+                    {
+                        if (DropStateChanged != null) DropStateChanged.Invoke(this, new DropWindowEventArgs(DvDropState.Closing));
+                        c.Value = ((DvDataGridComboBoxItem)s.Item).Source;
+
+                        this.Close();
+                    }
+                };
+
+                if (c.Value != null && c.Value is DvDataGridComboBoxItem && ListBox.SelectedItems.Contains(c.Value)) ListBox.SelectedItems.Add((DvDataGridComboBoxItem)c.Value);
+
+                this.Controls.Add(ListBox);
+                #endregion
+
+                this.BackColor = ListBox.BackColor = cBack;
+                this.ForeColor = ListBox.ForeColor = cFore;
+                ListBox.UseThemeColor = false;
+                ListBox.BoxColor = cBox;
+                ListBox.ItemColor = RowColor;
+                ListBox.SelectedItemColor = SelectedRowColor;
+                ListBox.RowHeight = c.Grid.RowHeight;
+            }
+
+            #region Implements
+            #region PreFilterMessage
+            public bool PreFilterMessage(ref Message m)
+            {
+                if (!Freeze && this.Visible && (Form.ActiveForm == null || !Form.ActiveForm.Equals(this)))
+                {
+                    if (DropStateChanged != null) DropStateChanged.Invoke(this, new DropWindowEventArgs(DvDropState.Closing));
+                    this.Close();
+                }
+                return false;
+            }
+            #endregion
+            #endregion
+        }
+        #endregion
         #endregion
         #endregion
     }
