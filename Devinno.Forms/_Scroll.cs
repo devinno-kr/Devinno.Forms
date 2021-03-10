@@ -16,8 +16,8 @@ namespace Devinno.Forms
         public const int SC_WH = 16;
         public const int GapSize = 10;
         public const int GapTime = 1;
-        const double decelerationRate = 0.997;
-        const int ThreadInterval = 10;
+        public const double decelerationRate = 0.997;
+        public const int ThreadInterval = 5;
         #endregion
 
         #region Properties
@@ -69,6 +69,8 @@ namespace Devinno.Forms
 
         public long ScrollPositionWithOffset => !Cut ? -ScrollPosition + TouchOffset : (ScrollTotal > ScrollView ? (MathTool.Constrain((-ScrollPosition + TouchOffset), -(ScrollTotal - ScrollView), 0)) : 0);
         public long ScrollPositionWithOffsetR => !Cut ? -(-ScrollPosition - TouchOffset) : (ScrollTotal > ScrollView ? (MathTool.Constrain(-(-ScrollPosition - TouchOffset), 0, (ScrollTotal - ScrollView))) : 0);
+
+        public bool UseExternalThread { get; set; } = false;
         #endregion
 
         #region Member Variable
@@ -195,7 +197,7 @@ namespace Devinno.Forms
         #region TouchUp
         public void TouchUp(MouseEventArgs e)
         {
-            if(TouchMode && tcDown != null)
+            if (TouchMode && tcDown != null)
             {
                 if (ScrollView < ScrollTotal)
                 {
@@ -311,13 +313,13 @@ namespace Devinno.Forms
                 {
                     var h = Convert.ToInt64(MathTool.Map(ScrollView, 0, ScrollTotal, 0, rtScroll.Height));
                     h = Math.Max(h, 30);
-                    ScrollPosition = Convert.ToInt64(MathTool.Map(e.Y - (scDown.DownPoint.Y - scDown.CursorBounds.Y), rtScroll.Bottom - h, rtScroll.Top,  0, ScrollTotal - ScrollView));
+                    ScrollPosition = Convert.ToInt64(MathTool.Map(e.Y - (scDown.DownPoint.Y - scDown.CursorBounds.Y), rtScroll.Bottom - h, rtScroll.Top, 0, ScrollTotal - ScrollView));
                 }
                 else if (Direction == ScrollDirection.Horizon)
                 {
                     var w = Convert.ToInt64(MathTool.Map(ScrollView, 0, ScrollTotal, 0, rtScroll.Width));
                     w = Math.Max(w, 30);
-                    ScrollPosition = Convert.ToInt64(MathTool.Map(e.X - (scDown.DownPoint.X - scDown.CursorBounds.X), rtScroll.Right - w, rtScroll.Left,  0, ScrollTotal - ScrollView));
+                    ScrollPosition = Convert.ToInt64(MathTool.Map(e.X - (scDown.DownPoint.X - scDown.CursorBounds.X), rtScroll.Right - w, rtScroll.Left, 0, ScrollTotal - ScrollView));
                 }
             }
         }
@@ -397,6 +399,12 @@ namespace Devinno.Forms
                 tcDown = null;
             }
         }
+
+        internal void ThStart()
+        {
+
+        }
+
         #endregion
         #endregion
     }

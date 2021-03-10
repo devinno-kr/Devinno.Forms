@@ -440,18 +440,18 @@ namespace Devinno.Forms.Dialogs
 
                 if (ExitBox)
                 {
-                    if (!bExit && CollisionTool.Check(rtExit, mp.X, mp.Y)) { bExit = true; Invalidate(); }
-                    if (bExit && !CollisionTool.Check(rtExit, mp.X, mp.Y)) { bExit = false; Invalidate(); }
+                    if (!bExit && CollisionTool.Check(rtExit, mp.X, mp.Y)) { bExit = true; }
+                    if (bExit && !CollisionTool.Check(rtExit, mp.X, mp.Y)) { bExit = false; }
                 }
                 if (MaximizeBox)
                 {
-                    if (!bMax && CollisionTool.Check(rtMax, mp.X, mp.Y)) { bMax = true; Invalidate(); }
-                    if (bMax && !CollisionTool.Check(rtMax, mp.X, mp.Y)) { bMax = false; Invalidate(); }
+                    if (!bMax && CollisionTool.Check(rtMax, mp.X, mp.Y)) { bMax = true; }
+                    if (bMax && !CollisionTool.Check(rtMax, mp.X, mp.Y)) { bMax = false; }
                 }
                 if (MinimizeBox)
                 {
-                    if (!bMin && CollisionTool.Check(rtMin, mp.X, mp.Y)) { bMin = true; Invalidate(); }
-                    if (bMin && !CollisionTool.Check(rtMin, mp.X, mp.Y)) { bMin = false; Invalidate(); }
+                    if (!bMin && CollisionTool.Check(rtMin, mp.X, mp.Y)) { bMin = true; }
+                    if (bMin && !CollisionTool.Check(rtMin, mp.X, mp.Y)) { bMin = false; }
                 }
 
                 #region Exit
@@ -542,11 +542,6 @@ namespace Devinno.Forms.Dialogs
             base.OnPaint(e);
         }
         #endregion
-        protected override void OnPaintBackground(PaintEventArgs e)
-        {
-            e.Graphics.Clear(BackColor);
-            base.OnPaintBackground(e);
-        }
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {

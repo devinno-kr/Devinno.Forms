@@ -50,7 +50,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #region Override
         #region CellPaint
-        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
             var rt = DvDataGridTool.RTI(CellBounds);
             var s = !string.IsNullOrWhiteSpace(Text) ? Text : "";
@@ -78,7 +78,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #region Virtual Method
         #region CellPaint
-        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
             var rt = DvDataGridTool.RTI(CellBounds);
             var s = string.IsNullOrWhiteSpace(Format) ? Value.ToString() : Value.ToString(Format);
@@ -113,7 +113,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #region Virtual Method
         #region CellPaint
-        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
             var rt = DvDataGridTool.RTI(CellBounds);
             var s = string.IsNullOrWhiteSpace(Format) ? Value.ToString() : Value.ToString(Format);
@@ -329,7 +329,7 @@ namespace Devinno.Forms.Controls
 
         #region Override
         #region CellPaint
-        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
             var s = "";
             
@@ -376,7 +376,7 @@ namespace Devinno.Forms.Controls
 
         #region Override
         #region CellPaint
-        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
             #region Init
             var br = new SolidBrush(Color.Black);
@@ -549,7 +549,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #region Override
         #region CellPaint
-        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
             #region Init
             var br = new SolidBrush(Color.Black);
@@ -593,7 +593,7 @@ namespace Devinno.Forms.Controls
             if (CollisionTool.Check(CellBounds, x, y))
             {
                 bDown = true;
-                Grid.Invalidate();
+                Grid.InvalidateTH();
             }
             base.CellMouseDown(CellBounds, x, y);
         }
@@ -604,7 +604,7 @@ namespace Devinno.Forms.Controls
             if (bDown)
             {
                 bDown = false;
-                Grid.Invalidate();
+                Grid.InvalidateTH();
                 if (CollisionTool.Check(CellBounds, x, y)) Grid.InvokeCellButtonClick(this);
             }
             base.CellMouseUp(CellBounds, x, y);
@@ -630,7 +630,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #region Override
         #region CellPaint
-        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
             #region Init
             var br = new SolidBrush(Color.Black);
@@ -639,7 +639,7 @@ namespace Devinno.Forms.Controls
             #region Draw
             if (Value is Bitmap)
             {
-                var rtv = DvDataGridTool.RTI(new RectangleF(CellBounds.X+1, CellBounds.Y+1, CellBounds.Width, CellBounds.Height));
+                var rtv = DvDataGridTool.RTI(new Rectangle(CellBounds.X+1, CellBounds.Y+1, CellBounds.Width, CellBounds.Height));
                 var old = g.ClipBounds;
                 g.SetClip(rtv, CombineMode.Intersect);
 
@@ -703,7 +703,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #region Override
         #region CellPaint
-        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
             if (Grid != null)
             {
@@ -868,7 +868,7 @@ namespace Devinno.Forms.Controls
 
         #region Override
         #region CellPaint
-        public override void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
             #region Init
             var br = new SolidBrush(Color.Black);

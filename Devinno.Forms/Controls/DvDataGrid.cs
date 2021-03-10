@@ -257,12 +257,14 @@ namespace Devinno.Forms.Controls
                 }
                 else return 0;
             };
+            //hscroll.ScrollChanged += (o, s) => bInv = true;
             #endregion
             #region vscroll
             vscroll.Direction = ScrollDirection.Vertical;
             vscroll.GetScrollTotal = () => GetRows().Sum(x => x.RowHeight);
             vscroll.GetScrollTick = () => RowHeight;
             vscroll.GetScrollView = () => Areas.ContainsKey("rtScrollContent") ? Areas["rtScrollContent"].Height : 0;
+            //vscroll.ScrollChanged += (o, s) => bInv = true;
             #endregion
             #endregion
 
@@ -273,6 +275,7 @@ namespace Devinno.Forms.Controls
                 {
                     try
                     {
+                        //if (bInv)
                         if (bInv || vscroll.IsTouchMoving || hscroll.IsTouchMoving || vscroll.IsScrolling || hscroll.IsScrolling || vscroll.IsTouchScrolling || hscroll.IsTouchScrolling)
                         {
                             this.Invoke(new Action(Invalidate));
@@ -280,7 +283,7 @@ namespace Devinno.Forms.Controls
                         }
                     }
                     catch { }
-                    Thread.Sleep(10);
+                    Thread.Sleep(Scroll.ThreadInterval);
                 }
             
             })) { IsBackground = true };
@@ -369,64 +372,66 @@ namespace Devinno.Forms.Controls
             var sbw = Convert.ToInt32(f * SELECTOR_BOX_WIDTH);
             var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
             var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
+
+            var bAllSelect = GetRows().Where(x => x.Selected).Count() > 0;
+
             #endregion
-            
             #region Draw
             #region Column Index 
 
             var rtnm = "rtColumn";
-            var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (RectangleF?)null;
+            var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (Rectangle?)null;
             int? isnf = null, ienf = null;
             if (vsnf != null && venf != null && rts.ContainsKey(rtnm + vsnf.Name) && rts.ContainsKey(rtnm + venf.Name))
             {
                 var rtsv = rts[rtnm + vsnf.Name];
                 var rtev = rts[rtnm + venf.Name];
-                var mrt = new RectangleF(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
+                var mrt = new Rectangle(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
 
-                var vls = lsnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                var vls = lsnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                 isnf = Columns.IndexOf(vls.FirstOrDefault());
                 ienf = Columns.IndexOf(vls.LastOrDefault());
                 mrtNF = mrt;
             }
 
-            var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (RectangleF?)null;
+            var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (Rectangle?)null;
             int? isf = null, ief = null;
             if (vsf != null && vef != null && rts.ContainsKey(rtnm + vsf.Name) && rts.ContainsKey(rtnm + vef.Name))
             {
                 var rtsv = rts[rtnm + vsf.Name];
                 var rtev = rts[rtnm + vef.Name];
-                var mrt = new RectangleF(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+                var mrt = new Rectangle(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
 
-                var vls = lsf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                var vls = lsf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                 isf = Columns.IndexOf(vls.FirstOrDefault());
                 ief = Columns.IndexOf(vls.LastOrDefault());
                 mrtF = mrt;
             }
 
             rtnm = "rtColumnGroup";
-            var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (RectangleF?)null;
+            var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (Rectangle?)null;
             int? isgnf = null, iegnf = null;
             if (vsgnf != null && vegnf != null && rts.ContainsKey(rtnm + vsgnf.Name) && rts.ContainsKey(rtnm + vegnf.Name))
             {
                 var rtsv = rts[rtnm + vsgnf.Name];
                 var rtev = rts[rtnm + vegnf.Name];
-                var mrt = new RectangleF(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
+                var mrt = new Rectangle(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
 
-                var vls = lsgnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                var vls = lsgnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                 isgnf = ColumnGroups.IndexOf(vls.FirstOrDefault());
                 iegnf = ColumnGroups.IndexOf(vls.LastOrDefault());
                 mrtGNF = mrt;
             }
 
-            var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (RectangleF?)null;
+            var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (Rectangle?)null;
             int? isgf = null, iegf = null;
             if (vsgf != null && vegf != null && rts.ContainsKey(rtnm + vsgf.Name) && rts.ContainsKey(rtnm + vegf.Name))
             {
                 var rtsv = rts[rtnm + vsgf.Name];
                 var rtev = rts[rtnm + vegf.Name];
-                var mrt = new RectangleF(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+                var mrt = new Rectangle(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
 
-                var vls = lsgf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                var vls = lsgf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                 isgf = ColumnGroups.IndexOf(vls.FirstOrDefault());
                 iegf = ColumnGroups.IndexOf(vls.LastOrDefault());
                 mrtGF = mrt;
@@ -451,14 +456,15 @@ namespace Devinno.Forms.Controls
             #endregion
 
             e.Graphics.SetClip(rtColumnV);
+
             #region Column
             {
                 #region !Fixed
                 if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                 {
                     var vls = Columns.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
-                    var mrt = new RectangleF(mrtNF.Value.X, rtColumn.Y, mrtNF.Value.Width, rtColumn.Height);
-                    e.Graphics.SetClip(new RectangleF(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
+                    var mrt = new Rectangle(mrtNF.Value.X, rtColumn.Y, mrtNF.Value.Width, rtColumn.Height);
+                    e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
                     foreach (var col in vls)
                     {
                         #region Column
@@ -472,7 +478,7 @@ namespace Devinno.Forms.Controls
                         {
                             var rt = DvDataGridTool.RTI(rts["rtFilter" + col.Name]); rt.Offset(hspos, 0);
                             var n2 = Convert.ToInt32(f * 2);
-                            var rtin = new RectangleF(rt.X, rt.Y, rt.Width, rt.Height); rtin.Inflate(-n2, -n2);
+                            var rtin = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtin.Inflate(-n2, -n2);
                             DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
                             if (col.UseFilter)
                             {
@@ -491,8 +497,8 @@ namespace Devinno.Forms.Controls
                 if (mrtF.HasValue && isf.HasValue && ief.HasValue)
                 {
                     var vls = Columns.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
-                    var mrt = new RectangleF(mrtF.Value.X, rtColumn.Y, mrtF.Value.Width, rtColumn.Height);
-                    e.Graphics.SetClip(new RectangleF(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
+                    var mrt = new Rectangle(mrtF.Value.X, rtColumn.Y, mrtF.Value.Width, rtColumn.Height);
+                    e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
                     foreach (var col in vls)
                     {
                         #region Column
@@ -506,7 +512,7 @@ namespace Devinno.Forms.Controls
                         {
                             var rt = rts["rtFilter" + col.Name];
                             var n2 = Convert.ToInt32(f * 2);
-                            var rtin = new RectangleF(rt.X, rt.Y, rt.Width, rt.Height); rtin.Inflate(-n2, -n2);
+                            var rtin = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtin.Inflate(-n2, -n2);
                             DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
                             if (col.UseFilter)
                             {
@@ -529,8 +535,8 @@ namespace Devinno.Forms.Controls
                 if (mrtGNF.HasValue && isgnf.HasValue && iegnf.HasValue)
                 {
                     var vls = ColumnGroups.GetRange(isgnf.Value, iegnf.Value - isgnf.Value + 1).ToList();
-                    var mrt = new RectangleF(mrtGNF.Value.X, rtColumn.Y, mrtGNF.Value.Width, rtColumn.Height);
-                    e.Graphics.SetClip(new RectangleF(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
+                    var mrt = new Rectangle(mrtGNF.Value.X, rtColumn.Y, mrtGNF.Value.Width, rtColumn.Height);
+                    e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
                     foreach (var colgroup in vls)
                     {
                         var rt = DvDataGridTool.RTI(rts["rtColumnGroup" + colgroup.Name]); rt.Offset(hspos, 0);
@@ -545,8 +551,8 @@ namespace Devinno.Forms.Controls
                 if (mrtGF.HasValue && isgf.HasValue && iegf.HasValue)
                 {
                     var vls = ColumnGroups.GetRange(isgf.Value, iegf.Value - isgf.Value + 1).ToList();
-                    var mrt = new RectangleF(mrtGF.Value.X, rtColumn.Y, mrtGF.Value.Width, rtColumn.Height);
-                    e.Graphics.SetClip(new RectangleF(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
+                    var mrt = new Rectangle(mrtGF.Value.X, rtColumn.Y, mrtGF.Value.Width, rtColumn.Height);
+                    e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
                     foreach (var colgroup in vls)
                     {
                         var rt = rts["rtColumnGroup" + colgroup.Name];
@@ -562,13 +568,12 @@ namespace Devinno.Forms.Controls
             #region ColumnSelector
             if (SelectionMode == DvDataGridSelectionMode.SELECTOR)
             {
-                var rtSelector = new RectangleF(rtColumn.X, rtColumn.Y, spw, rtColumn.Height);
+                var rtSelector = new Rectangle(rtColumn.X, rtColumn.Y, spw, rtColumn.Height);
                 DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rtSelector);
 
                 var rtSelectorBox = MathTool.MakeRectangle(DvDataGridTool.RTI(rtSelector), new Size(sbw, sbw));
                 Theme.DrawBox(e.Graphics, ColumnColor.BrightnessTransmit(BoxBright), ColumnColor, rtSelectorBox, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
 
-                var bAllSelect = GetRows().Where(x => x.Selected).Count() > 0;
                 if (bAllSelect)
                 {
                     Rectangle rtCheck = new Rectangle(rtSelectorBox.X, rtSelectorBox.Y - 0, rtSelectorBox.Width, rtSelectorBox.Height); rtCheck.Inflate(-Convert.ToInt32(4 * f), -Convert.ToInt32(4 * f));
@@ -582,6 +587,7 @@ namespace Devinno.Forms.Controls
                 }
             }
             #endregion
+
             e.Graphics.ResetClip();
             #endregion
             #region Box
@@ -598,11 +604,11 @@ namespace Devinno.Forms.Controls
                     #region Selector
                     if (SelectionMode == DvDataGridSelectionMode.SELECTOR)
                     {
-                        var rt = DvDataGridTool.RTI(new RectangleF(rtROW.X, rtROW.Y, spw, rtROW.Height));
+                        var rt = DvDataGridTool.RTI(new Rectangle(rtROW.X, rtROW.Y, spw, rtROW.Height));
 
                         var old = e.Graphics.ClipBounds;
                         var oldsm = e.Graphics.SmoothingMode;
-                        e.Graphics.SetClip(new RectangleF(rt.X, rtScrollContent.Y, rt.Width, rtScrollContent.Height), CombineMode.Intersect);
+                        e.Graphics.SetClip(new Rectangle(rt.X, rtScrollContent.Y, rt.Width, rtScrollContent.Height), CombineMode.Intersect);
                         e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
                         #region Background
@@ -647,14 +653,14 @@ namespace Devinno.Forms.Controls
                     if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                     {
                         var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
-                        var mrt = new RectangleF(mrtNF.Value.X, rtScrollContent.Y, mrtNF.Value.Width, rtScrollContent.Height);
+                        var mrt = new Rectangle(mrtNF.Value.X, rtScrollContent.Y, mrtNF.Value.Width, rtScrollContent.Height);
                         e.Graphics.SetClip(mrt, CombineMode.Intersect);
                         foreach (var cell in vls)
                         {
                             if (cell.Visible)
                             {
                                 var rtCol = rts["rtColumn" + cell.Column.Name];
-                                var rt = new RectangleF(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
+                                var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
 
                                 if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
                                 if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
@@ -668,14 +674,14 @@ namespace Devinno.Forms.Controls
                     if (mrtF.HasValue && isf.HasValue && ief.HasValue)
                     {
                         var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
-                        var mrt = new RectangleF(mrtF.Value.X, rtScrollContent.Y, mrtF.Value.Width + 1, rtScrollContent.Height);
+                        var mrt = new Rectangle(mrtF.Value.X, rtScrollContent.Y, mrtF.Value.Width + 1, rtScrollContent.Height);
                         e.Graphics.SetClip(mrt, CombineMode.Intersect);
                         foreach (var cell in vls)
                         {
                             if (cell.Visible)
                             {
                                 var rtCol = rts["rtColumn" + cell.Column.Name];
-                                var rt = new RectangleF(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
+                                var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
                                 if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
                                 if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
                                 cell.Paint(Theme, e.Graphics, rt);
@@ -698,14 +704,14 @@ namespace Devinno.Forms.Controls
                         if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                         {
                             var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
-                            var mrt = new RectangleF(mrtNF.Value.X, rtSummary.Y, mrtNF.Value.Width, rtSummary.Height);
+                            var mrt = new Rectangle(mrtNF.Value.X, rtSummary.Y, mrtNF.Value.Width, rtSummary.Height);
                             e.Graphics.SetClip(mrt, CombineMode.Intersect);
                             foreach (var cell in vls)
                             {
                                 if (cell.Visible)
                                 {
                                     var rtCol = rts["rtColumn" + Columns[cell.ColumnIndex].Name];
-                                    var rt = new RectangleF(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
+                                    var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
                                     if (cell.ColumnSpan > 1 && cell.ColumnIndex + cell.ColumnSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColumnSpan).Sum();
                                     cell.Paint(Theme, e.Graphics, rt);
                                 }
@@ -717,14 +723,14 @@ namespace Devinno.Forms.Controls
                         if (mrtF.HasValue && isf.HasValue && ief.HasValue)
                         {
                             var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
-                            var mrt = new RectangleF(mrtF.Value.X, rtSummary.Y, mrtF.Value.Width + 1, rtSummary.Height);
+                            var mrt = new Rectangle(mrtF.Value.X, rtSummary.Y, mrtF.Value.Width + 1, rtSummary.Height);
                             e.Graphics.SetClip(mrt, CombineMode.Intersect);
                             foreach (var cell in vls)
                             {
                                 if (cell.Visible)
                                 {
                                     var rtCol = rts["rtColumn" + Columns[cell.ColumnIndex].Name];
-                                    var rt = new RectangleF(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
+                                    var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
                                     if (cell.ColumnSpan > 1 && cell.ColumnIndex + cell.ColumnSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColumnSpan).Sum();
                                     cell.Paint(Theme, e.Graphics, rt);
                                 }
@@ -806,7 +812,6 @@ namespace Devinno.Forms.Controls
             e.Graphics.DrawLine(p, rtColumn.Left, rtColumn.Bottom, rtColumn.Right, rtColumn.Bottom);
             #endregion
             #endregion
-
             #region Dispose
             br.Dispose();
             p.Dispose();
@@ -885,58 +890,58 @@ namespace Devinno.Forms.Controls
                 #region Column Index 
 
                 var rtnm = "rtColumn";
-                var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (RectangleF?)null;
+                var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (Rectangle?)null;
                 int? isnf = null, ienf = null;
                 if (vsnf != null && venf != null && rts.ContainsKey(rtnm + vsnf.Name) && rts.ContainsKey(rtnm + venf.Name))
                 {
                     var rtsv = rts[rtnm + vsnf.Name];
                     var rtev = rts[rtnm + venf.Name];
-                    var mrt = new RectangleF(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
+                    var mrt = new Rectangle(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
 
-                    var vls = lsnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    var vls = lsnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                     isnf = Columns.IndexOf(vls.FirstOrDefault());
                     ienf = Columns.IndexOf(vls.LastOrDefault());
                     mrtNF = mrt;
                 }
 
-                var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (RectangleF?)null;
+                var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (Rectangle?)null;
                 int? isf = null, ief = null;
                 if (vsf != null && vef != null && rts.ContainsKey(rtnm + vsf.Name) && rts.ContainsKey(rtnm + vef.Name))
                 {
                     var rtsv = rts[rtnm + vsf.Name];
                     var rtev = rts[rtnm + vef.Name];
-                    var mrt = new RectangleF(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+                    var mrt = new Rectangle(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
 
-                    var vls = lsf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    var vls = lsf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                     isf = Columns.IndexOf(vls.FirstOrDefault());
                     ief = Columns.IndexOf(vls.LastOrDefault());
                     mrtF = mrt;
                 }
 
                 rtnm = "rtColumnGroup";
-                var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (RectangleF?)null;
+                var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (Rectangle?)null;
                 int? isgnf = null, iegnf = null;
                 if (vsgnf != null && vegnf != null && rts.ContainsKey(rtnm + vsgnf.Name) && rts.ContainsKey(rtnm + vegnf.Name))
                 {
                     var rtsv = rts[rtnm + vsgnf.Name];
                     var rtev = rts[rtnm + vegnf.Name];
-                    var mrt = new RectangleF(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
+                    var mrt = new Rectangle(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
 
-                    var vls = lsgnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    var vls = lsgnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                     isgnf = ColumnGroups.IndexOf(vls.FirstOrDefault());
                     iegnf = ColumnGroups.IndexOf(vls.LastOrDefault());
                     mrtGNF = mrt;
                 }
 
-                var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (RectangleF?)null;
+                var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (Rectangle?)null;
                 int? isgf = null, iegf = null;
                 if (vsgf != null && vegf != null && rts.ContainsKey(rtnm + vsgf.Name) && rts.ContainsKey(rtnm + vegf.Name))
                 {
                     var rtsv = rts[rtnm + vsgf.Name];
                     var rtev = rts[rtnm + vegf.Name];
-                    var mrt = new RectangleF(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+                    var mrt = new Rectangle(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
 
-                    var vls = lsgf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    var vls = lsgf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                     isgf = ColumnGroups.IndexOf(vls.FirstOrDefault());
                     iegf = ColumnGroups.IndexOf(vls.LastOrDefault());
                     mrtGF = mrt;
@@ -948,7 +953,7 @@ namespace Devinno.Forms.Controls
                     #region Selector
                     if(SelectionMode == DvDataGridSelectionMode.SELECTOR)
                     {
-                        var rt = DvDataGridTool.RTI(new RectangleF(rtROW.X, rtROW.Y, spw, rtROW.Height));
+                        var rt = DvDataGridTool.RTI(new Rectangle(rtROW.X, rtROW.Y, spw, rtROW.Height));
                         var rtSelectorBox = MathTool.MakeRectangle(rt, new Size(sbw, sbw));
                         if (CollisionTool.Check(rtSelectorBox, e.Location))
                         {
@@ -960,13 +965,13 @@ namespace Devinno.Forms.Controls
                     if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                     {
                         var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
-                        var mrt = new RectangleF(mrtNF.Value.X, rtScrollContent.Y, mrtNF.Value.Width, rtScrollContent.Height);
+                        var mrt = new Rectangle(mrtNF.Value.X, rtScrollContent.Y, mrtNF.Value.Width, rtScrollContent.Height);
                         foreach (var cell in vls)
                         {
                             if (cell.Visible)
                             {
                                 var rtCol = rts["rtColumn" + cell.Column.Name];
-                                var rt = new RectangleF(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
+                                var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
 
                                 if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
                                 if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
@@ -979,13 +984,13 @@ namespace Devinno.Forms.Controls
                     if (mrtF.HasValue && isf.HasValue && ief.HasValue)
                     {
                         var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
-                        var mrt = new RectangleF(mrtF.Value.X, rtScrollContent.Y, mrtF.Value.Width + 1, rtScrollContent.Height);
+                        var mrt = new Rectangle(mrtF.Value.X, rtScrollContent.Y, mrtF.Value.Width + 1, rtScrollContent.Height);
                         foreach (var cell in vls)
                         {
                             if (cell.Visible)
                             {
                                 var rtCol = rts["rtColumn" + cell.Column.Name];
-                                var rt = new RectangleF(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
+                                var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
                                 if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
                                 if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
                                 cell.MouseDown(DvDataGridTool.RTI(rt), e.X, e.Y);
@@ -1120,58 +1125,58 @@ namespace Devinno.Forms.Controls
                 #region Column Index 
 
                 var rtnm = "rtColumn";
-                var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (RectangleF?)null;
+                var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (Rectangle?)null;
                 int? isnf = null, ienf = null;
                 if (vsnf != null && venf != null && rts.ContainsKey(rtnm + vsnf.Name) && rts.ContainsKey(rtnm + venf.Name))
                 {
                     var rtsv = rts[rtnm + vsnf.Name];
                     var rtev = rts[rtnm + venf.Name];
-                    var mrt = new RectangleF(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
+                    var mrt = new Rectangle(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
 
-                    var vls = lsnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    var vls = lsnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                     isnf = Columns.IndexOf(vls.FirstOrDefault());
                     ienf = Columns.IndexOf(vls.LastOrDefault());
                     mrtNF = mrt;
                 }
 
-                var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (RectangleF?)null;
+                var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (Rectangle?)null;
                 int? isf = null, ief = null;
                 if (vsf != null && vef != null && rts.ContainsKey(rtnm + vsf.Name) && rts.ContainsKey(rtnm + vef.Name))
                 {
                     var rtsv = rts[rtnm + vsf.Name];
                     var rtev = rts[rtnm + vef.Name];
-                    var mrt = new RectangleF(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+                    var mrt = new Rectangle(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
 
-                    var vls = lsf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    var vls = lsf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                     isf = Columns.IndexOf(vls.FirstOrDefault());
                     ief = Columns.IndexOf(vls.LastOrDefault());
                     mrtF = mrt;
                 }
 
                 rtnm = "rtColumnGroup";
-                var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (RectangleF?)null;
+                var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (Rectangle?)null;
                 int? isgnf = null, iegnf = null;
                 if (vsgnf != null && vegnf != null && rts.ContainsKey(rtnm + vsgnf.Name) && rts.ContainsKey(rtnm + vegnf.Name))
                 {
                     var rtsv = rts[rtnm + vsgnf.Name];
                     var rtev = rts[rtnm + vegnf.Name];
-                    var mrt = new RectangleF(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
+                    var mrt = new Rectangle(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
 
-                    var vls = lsgnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    var vls = lsgnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                     isgnf = ColumnGroups.IndexOf(vls.FirstOrDefault());
                     iegnf = ColumnGroups.IndexOf(vls.LastOrDefault());
                     mrtGNF = mrt;
                 }
 
-                var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (RectangleF?)null;
+                var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (Rectangle?)null;
                 int? isgf = null, iegf = null;
                 if (vsgf != null && vegf != null && rts.ContainsKey(rtnm + vsgf.Name) && rts.ContainsKey(rtnm + vegf.Name))
                 {
                     var rtsv = rts[rtnm + vsgf.Name];
                     var rtev = rts[rtnm + vegf.Name];
-                    var mrt = new RectangleF(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+                    var mrt = new Rectangle(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
 
-                    var vls = lsgf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new RectangleF(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    var vls = lsgf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
                     isgf = ColumnGroups.IndexOf(vls.FirstOrDefault());
                     iegf = ColumnGroups.IndexOf(vls.LastOrDefault());
                     mrtGF = mrt;
@@ -1184,13 +1189,13 @@ namespace Devinno.Forms.Controls
                     if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                     {
                         var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
-                        var mrt = new RectangleF(mrtNF.Value.X, rtScrollContent.Y, mrtNF.Value.Width, rtScrollContent.Height);
+                        var mrt = new Rectangle(mrtNF.Value.X, rtScrollContent.Y, mrtNF.Value.Width, rtScrollContent.Height);
                         foreach (var cell in vls)
                         {
                             if (cell.Visible)
                             {
                                 var rtCol = rts["rtColumn" + cell.Column.Name];
-                                var rt = new RectangleF(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
+                                var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
 
                                 if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
                                 if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
@@ -1203,13 +1208,13 @@ namespace Devinno.Forms.Controls
                     if (mrtF.HasValue && isf.HasValue && ief.HasValue)
                     {
                         var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
-                        var mrt = new RectangleF(mrtF.Value.X, rtScrollContent.Y, mrtF.Value.Width + 1, rtScrollContent.Height);
+                        var mrt = new Rectangle(mrtF.Value.X, rtScrollContent.Y, mrtF.Value.Width + 1, rtScrollContent.Height);
                         foreach (var cell in vls)
                         {
                             if (cell.Visible)
                             {
                                 var rtCol = rts["rtColumn" + cell.Column.Name];
-                                var rt = new RectangleF(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
+                                var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
                                 if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
                                 if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
                                 cell.MouseUp(DvDataGridTool.RTI(rt), e.X, e.Y);
@@ -1229,7 +1234,7 @@ namespace Devinno.Forms.Controls
         #region Method
         #region Draw
         #region DrawColumnBox
-        void DrawColumnBox(Graphics g, DvTheme Theme, RectangleF rtColumn, Rectangle rtScrollContent, RectangleF rt)
+        void DrawColumnBox(Graphics g, DvTheme Theme, Rectangle rtColumn, Rectangle rtScrollContent, Rectangle rt)
         {
             var ColumnColor = GetColumnColor(Theme);
             var spw = Convert.ToInt32(DpiRatio * SPECIAL_CELL_WIDTH);
@@ -1250,16 +1255,19 @@ namespace Devinno.Forms.Controls
                
                 if (rnd == RoundType.LT)
                 {
-                    using (var pth = new GraphicsPath())
+                    if (RowBevel)
                     {
-                        var rtk = new RectangleF(rt.Left + 1, rt.Top + 1, Theme.Corner * 2, Theme.Corner * 2);
+                        using (var pth = new GraphicsPath())
+                        {
+                            var rtk = new Rectangle(rt.Left + 1, rt.Top + 1, Theme.Corner * 2, Theme.Corner * 2);
 
-                        pth.AddLine(rt.Right - 1, rt.Top + 1, rt.Left + 1 + Theme.Corner, rt.Top + 1);
-                        pth.AddArc(rtk, 270, -90);
-                        pth.AddLine(rt.Left + 1, rt.Top + 1 + Theme.Corner, rt.Left + 1, rt.Bottom - 1);
+                            pth.AddLine(rt.Right - 1, rt.Top + 1, rt.Left + 1 + Theme.Corner, rt.Top + 1);
+                            pth.AddArc(rtk, 270, -90);
+                            pth.AddLine(rt.Left + 1, rt.Top + 1 + Theme.Corner, rt.Left + 1, rt.Bottom - 1);
 
-                        p.Color = ColumnColor.BrightnessTransmit(ColumnBevelBright);
-                        g.DrawPath(p, pth);
+                            p.Color = ColumnColor.BrightnessTransmit(ColumnBevelBright);
+                            g.DrawPath(p, pth);
+                        }
                     }
 
                     p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
@@ -1268,8 +1276,11 @@ namespace Devinno.Forms.Controls
                 }
                 else
                 {
-                    p.Color = ColumnColor.BrightnessTransmit(ColumnBevelBright);
-                    g.DrawLines(p, new PointF[] { new PointF(rt.Right - 1, rt.Top + 1), new PointF(rt.Left + 1, rt.Top + 1), new PointF(rt.Left + 1, rt.Bottom - 1) });
+                    if (RowBevel)
+                    {
+                        p.Color = ColumnColor.BrightnessTransmit(ColumnBevelBright);
+                        g.DrawLines(p, new PointF[] { new PointF(rt.Right - 1, rt.Top + 1), new PointF(rt.Left + 1, rt.Top + 1), new PointF(rt.Left + 1, rt.Bottom - 1) });
+                    }
 
                     p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
                     g.DrawLine(p, rt.Left, rt.Bottom, rt.Right, rt.Bottom);
@@ -1381,24 +1392,24 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region GetColumnBounds
-        Dictionary<string, RectangleF> GetColumnBounds(Rectangle rtColumn, Rectangle rtScrollContent)
+        Dictionary<string, Rectangle> GetColumnBounds(Rectangle rtColumn, Rectangle rtScrollContent)
         {
-            var ret = new Dictionary<string, RectangleF>();
+            var ret = new Dictionary<string, Rectangle>();
             var colrc = GetColumnRowCount();
             var spw = Convert.ToInt32(DpiRatio * SPECIAL_CELL_WIDTH);
 
             #region Column
-            var xws = new List<RectangleF>();
+            var xws = new List<Rectangle>();
             #region XWs
             var cws = GetColumnsWidths(rtScrollContent);
             if (cws.Count == Columns.Count)
             {
-                decimal x = rtScrollContent.X + (SelectionMode == DvDataGridSelectionMode.SELECTOR ? spw : 0);
+                int x = rtScrollContent.X + (SelectionMode == DvDataGridSelectionMode.SELECTOR ? spw : 0);
 
                 for (int i = 0; i < cws.Count; i++)
                 {
                     var w = cws[i];
-                    xws.Add(new RectangleF(Convert.ToSingle(x), rtColumn.Y, Convert.ToSingle(w), 0));
+                    xws.Add(new Rectangle(x, rtColumn.Y, w, 0));
                     x += w;
                 }
             }
@@ -1415,8 +1426,8 @@ namespace Devinno.Forms.Controls
                     ReentCol(col, ls);
                     var nc = colrc - ls.Count + 1;
 
-                    var rtFilterV = new RectangleF((rt.X), rtColumn.Bottom - ColumnHeight, (rt.Width), ColumnHeight);
-                    var rtColumnV = new RectangleF((rt.X), rtFilterV.Top - (ColumnHeight * nc), (rt.Width), (ColumnHeight * nc));
+                    var rtFilterV = new Rectangle((rt.X), rtColumn.Bottom - ColumnHeight, (rt.Width), ColumnHeight);
+                    var rtColumnV = new Rectangle((rt.X), rtFilterV.Top - (ColumnHeight * nc), (rt.Width), (ColumnHeight * nc));
 
                     ret.Add("rtColumn" + col.Name, rtColumnV);
                     ret.Add("rtFilter" + col.Name, rtFilterV);
@@ -1432,10 +1443,10 @@ namespace Devinno.Forms.Controls
                     ReentCol(col, ls);
                     var nc = colrc - ls.Count + 1;
 
-                    var rtColumnV = new RectangleF((rt.X), rtColumn.Bottom - (ColumnHeight * nc), (rt.Width), (ColumnHeight * nc));
+                    var rtColumnV = new Rectangle((rt.X), rtColumn.Bottom - (ColumnHeight * nc), (rt.Width), (ColumnHeight * nc));
 
                     ret.Add("rtColumn" + col.Name, rtColumnV);
-                    ret.Add("rtFilter" + col.Name, new RectangleF(rtColumnV.X, rtColumnV.Y, rtColumnV.Width, 0));
+                    ret.Add("rtFilter" + col.Name, new Rectangle(rtColumnV.X, rtColumnV.Y, rtColumnV.Width, 0));
                 }
             }
             #endregion
@@ -1457,7 +1468,7 @@ namespace Devinno.Forms.Controls
                 var w = (xws[imax].Right) - Convert.ToInt32(xws[imin].Left);
                 var h = ColumnHeight;
 
-                ret.Add("rtColumnGroup" + v.Name, new RectangleF(x, y, w, h));
+                ret.Add("rtColumnGroup" + v.Name, new Rectangle(x, y, w, h));
             }
             #endregion
             #endregion
@@ -1744,6 +1755,14 @@ namespace Devinno.Forms.Controls
             else return idx;
         }
         #endregion
+        #endregion
+
+        #region MovingStop
+        public void MovingStop()
+        {
+            vscroll.TouchStop();
+            hscroll.TouchStop();
+        }
         #endregion
 
         #region InvalidateTH

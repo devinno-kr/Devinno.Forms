@@ -265,6 +265,7 @@ namespace Sample
             {
                 GridMode = 1;
                 var f = DpiRatio;
+                dg.MovingStop();
                 dg.ColumnGroups.Clear();
                 dg.Columns.Clear();
                 dg.Rows.Clear();
@@ -281,7 +282,7 @@ namespace Sample
                 dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Name", GroupName = "G1", HeaderText = "이름", SizeMode = SizeMode.Pixel, Width = Convert.ToInt32(150 * f), Fixed = true, UseFilter = true, CellType = typeof(DvDataGridLabelCell) });
                 dg.Columns.Add(new DvDataGridColumn(dg) { Name = "State", GroupName = "G1", HeaderText = "상태", SizeMode = SizeMode.Pixel, Width = Convert.ToInt32(70 * f), Fixed = true, CellType = typeof(DvDataGridLabelCell) });
                 for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
-                    dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Day" + i, GroupName = "G2", HeaderText = i + "일", SizeMode = SizeMode.Pixel, Width = Convert.ToInt32(80 * f), CellType = typeof(DvDataGridLabelCell) });
+                    dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Day" + i, GroupName = "G2", HeaderText = i + "일", SizeMode = SizeMode.Pixel, Width = Convert.ToInt32(70 * f), CellType = typeof(DvDataGridLabelCell) });
 
                 var srow = new DvDataGridSummaryRow(dg);
                 var srow2 = new DvDataGridSummaryRow(dg);
@@ -312,6 +313,7 @@ namespace Sample
             {
                 GridMode = 2;
                 var f = DpiRatio;
+                dg.MovingStop();
                 dg.SelectionMode = DvDataGridSelectionMode.SELECTOR;
                 dg.ColumnGroups.Clear();
                 dg.Columns.Clear();
@@ -322,7 +324,7 @@ namespace Sample
                 dg.Font = new Font("나눔고딕", 8);
                 dg.TextShadow = false;
                 dg.RowBevel = true;
-                dg.TouchMode = false;
+                dg.TouchMode = true;
                 dg.ScrollMode = ScrollMode.Vertical;
                 dg.RowHeight = dg.ColumnHeight = Convert.ToInt32(30 * f);
                 dg.Columns.Add(new DvDataGridColumn(dg) { Name = "DeviceName", HeaderText = "장치명", SizeMode = SizeMode.Percent, Width = 10M });

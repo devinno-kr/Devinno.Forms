@@ -42,9 +42,9 @@ namespace Devinno.Forms.Controls
         Type CellType { get; set; }
         bool Fixed { get; set; }
 
-        void Paint(DvTheme Theme, Graphics g, RectangleF ColumnBounds);
-        void MouseDown(RectangleF ColumnBounds, Point MousePosition);
-        void MouseUp(RectangleF ColumnBounds, Point MousePosition);
+        void Paint(DvTheme Theme, Graphics g, Rectangle ColumnBounds);
+        void MouseDown(Rectangle ColumnBounds, Point MousePosition);
+        void MouseUp(Rectangle ColumnBounds, Point MousePosition);
     }
     #endregion
     #region interface : IDvDataGridCell
@@ -69,7 +69,7 @@ namespace Devinno.Forms.Controls
         DvDataGridRow Row { get; }
         IDvDataGridColumn Column { get; }
 
-        void Paint(DvTheme Theme, Graphics g, RectangleF CellBounds);
+        void Paint(DvTheme Theme, Graphics g, Rectangle CellBounds);
         void MouseDown(Rectangle CellBounds, int x, int y);
         void MouseDoubleClick(Rectangle CellBounds, int x, int y);
         void MouseUp(Rectangle CellBounds, int x, int y);
@@ -111,7 +111,7 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Paint
-        public virtual void Paint(DvTheme Theme, Graphics g, RectangleF Bounds)
+        public virtual void Paint(DvTheme Theme, Graphics g, Rectangle Bounds)
         {
             if (Grid != null)
             {
@@ -131,7 +131,7 @@ namespace Devinno.Forms.Controls
                 if (UseSort)
                 {
                     var sizewh = Convert.ToInt32(12 * Grid.DpiRatio);
-                    var rtSort = DvDataGridTool.RTI(new RectangleF(Bounds.Right - Bounds.Height, Bounds.Y, Bounds.Height, Bounds.Height));
+                    var rtSort = DvDataGridTool.RTI(new Rectangle(Bounds.Right - Bounds.Height, Bounds.Y, Bounds.Height, Bounds.Height));
                     Theme.DrawTextShadow(g, new DvIcon("fa-sort"), null, Grid.Font, Grid.ForeColor.BrightnessTransmit(-0.7), ColumnColor, rtSort);
 
                     switch (SortState)
@@ -144,13 +144,13 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region MouseDown
-        public virtual void MouseDown(RectangleF Bounds, Point MousePosition)
+        public virtual void MouseDown(Rectangle Bounds, Point MousePosition)
         {
             bool b = false;
             if (UseSort)
             {
                 var sizewh = Convert.ToInt32(12 * Grid.DpiRatio);
-                var rtSort = new RectangleF(Bounds.Right - Bounds.Height, Bounds.Y, Bounds.Height, Bounds.Height);
+                var rtSort = new Rectangle(Bounds.Right - Bounds.Height, Bounds.Y, Bounds.Height, Bounds.Height);
 
                 if (CollisionTool.Check(rtSort, MousePosition.X, MousePosition.Y))
                 {
@@ -176,7 +176,7 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region MouseUp
-        public virtual void MouseUp(RectangleF Bounds, Point MousePosition)
+        public virtual void MouseUp(Rectangle Bounds, Point MousePosition)
         {
         }
         #endregion
@@ -241,11 +241,11 @@ namespace Devinno.Forms.Controls
 
         #region Virtual Method
         #region Paint
-        public virtual void Paint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public virtual void Paint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
             if (Grid != null)
             {
-                var rt = new Rectangle((int)CellBounds.X, (int)CellBounds.Y, (int)CellBounds.Width, (int)CellBounds.Height);
+                var rt = new Rectangle(CellBounds.X, CellBounds.Y, CellBounds.Width, CellBounds.Height);
                 var bg = Grid.GetBoxColor(Theme);
                 var c = Row.Selected ? SelectedCellBackColor : CellBackColor;
 
@@ -270,7 +270,7 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region CellPaint
-        public virtual void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds) { }
+        public virtual void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds) { }
         #endregion
         #region MouseDown / MouseUp
         public virtual void MouseDown(Rectangle CellBounds, int x, int y)
@@ -343,9 +343,9 @@ namespace Devinno.Forms.Controls
 
         #region Virtual Method
         #region Paint
-        public virtual void Paint(DvTheme Theme, Graphics g, RectangleF CellBounds)
+        public virtual void Paint(DvTheme Theme, Graphics g, Rectangle CellBounds)
         {
-            var rt = new Rectangle((int)CellBounds.X, (int)CellBounds.Y, (int)CellBounds.Width, (int)CellBounds.Height);
+            var rt = new Rectangle(CellBounds.X, CellBounds.Y, CellBounds.Width, CellBounds.Height);
             var bg = Grid.GetBoxColor(Theme);
             var c = CellBackColor;
             
@@ -370,7 +370,7 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region CellPaint
-        public virtual void CellPaint(DvTheme Theme, Graphics g, RectangleF CellBounds) { }
+        public virtual void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds) { }
         #endregion
 
         public virtual void Calc() { }
