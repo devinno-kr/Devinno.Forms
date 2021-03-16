@@ -47,10 +47,10 @@ namespace Devinno.Forms.Dialogs
 
         #region Method
         #region ShowDateTimePicker
-        public DateTime? ShowDateTimePicker(DateTime? datetime = null)
+        public DateTime? ShowDateTimePicker(string Title, DateTime? datetime = null)
         {
             DateTime? ret = null;
-
+            this.Title = this.Text = Title;
             #region DPI Size 
             var f = DpiRatio;
             var m3 = Convert.ToInt32(3 * f);
@@ -108,10 +108,10 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region ShowDatePicker
-        public DateTime? ShowDatePicker(DateTime? datetime = null)
+        public DateTime? ShowDatePicker(string Title, DateTime? datetime = null)
         {
             DateTime? ret = null;
-
+            this.Title = this.Text = Title;
             #region DPI Size 
             var f = DpiRatio;
             var m3 = Convert.ToInt32(3 * f);
@@ -167,9 +167,10 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region ShowTimePicker
-        public DateTime? ShowTimePicker(DateTime? datetime = null)
+        public DateTime? ShowTimePicker(string Title, DateTime? datetime = null)
         {
             DateTime? ret = null;
+            this.Title = this.Text = Title;
             #region DPI Size 
             var f = DpiRatio;
             var m3 = Convert.ToInt32(3 * f);

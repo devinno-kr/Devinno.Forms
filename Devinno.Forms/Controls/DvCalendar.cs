@@ -218,7 +218,9 @@ namespace Devinno.Forms.Controls
             DateTime[] d = new DateTime[42];
             int startidx = ndw == 0 ? 7 : ndw;
             int endidx = startidx + Days;
-            dt -= new TimeSpan(startidx, 0, 0, 0);
+            if (dt.Date.Year == 1 && dt.Date.Month == 1 && dt.Date.Day == 1) { }
+            else dt -= new TimeSpan(startidx, 0, 0, 0);
+
             for (int i = 0; i < 42; i++)
             {
                 d[i] = dt;
@@ -370,7 +372,9 @@ namespace Devinno.Forms.Controls
             DateTime[] d = new DateTime[42];
             int startidx = ndw == 0 ? 7 : ndw;
             int endidx = startidx + Days;
-            dt -= new TimeSpan(startidx, 0, 0, 0);
+            if (dt.Date.Year == 1 && dt.Date.Month == 1 && dt.Date.Day == 1) { }
+            else dt -= new TimeSpan(startidx, 0, 0, 0);
+
             for (int i = 0; i < 42; i++)
             {
                 d[i] = dt;

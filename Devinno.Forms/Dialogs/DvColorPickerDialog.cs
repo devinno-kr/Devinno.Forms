@@ -454,10 +454,10 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region ShowColorPicker
-        public Color? ShowColorPicker(Color? color = null)
+        public Color? ShowColorPicker(string Title, Color? color = null)
         {
             Color? ret = null;
-           
+            this.Title = this.Text = Title;
             Theme = GetCallerFormTheme() ?? Theme;
 
             #region DPI Size 

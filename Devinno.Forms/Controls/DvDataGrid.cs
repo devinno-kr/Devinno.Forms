@@ -8,6 +8,7 @@ using Devinno.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -189,6 +190,11 @@ namespace Devinno.Forms.Controls
         #region RowBevel
         public bool RowBevel { get; set; } = true;
         #endregion
+
+        internal DvInputBox InputBox { get; } = new DvInputBox() { UseEnterKey = true };
+        internal DvDateTimePickerDialog DateTimePicker { get; } = new DvDateTimePickerDialog();
+        internal DvColorPickerDialog ColorPicker { get; } = new DvColorPickerDialog();
+
         #endregion
 
         #region Event
@@ -199,13 +205,14 @@ namespace Devinno.Forms.Controls
         List<DvDataGridRow> mrows = new List<DvDataGridRow>();
         Scroll vscroll = new Scroll() {  Direction = ScrollDirection.Vertical };
         Scroll hscroll = new Scroll() { Direction = ScrollDirection.Horizon };
-
+        
         bool bNotRaiseEvent = false;
         object objs = null;
         int PrevTotalHeight = -1;
         List<_DGSearch_> lsp = new List<_DGSearch_>();
 
         bool bInv = false;
+        internal bool bModSize = false;
         #endregion
 
         #region Event
@@ -261,7 +268,7 @@ namespace Devinno.Forms.Controls
             #endregion
             #region vscroll
             vscroll.Direction = ScrollDirection.Vertical;
-            vscroll.GetScrollTotal = () => GetRows().Sum(x => x.RowHeight);
+            vscroll.GetScrollTotal = () => PrevTotalHeight;//GetRows().Sum(x => x.RowHeight);
             vscroll.GetScrollTick = () => RowHeight;
             vscroll.GetScrollView = () => Areas.ContainsKey("rtScrollContent") ? Areas["rtScrollContent"].Height : 0;
             //vscroll.ScrollChanged += (o, s) => bInv = true;
@@ -1329,6 +1336,7 @@ namespace Devinno.Forms.Controls
                 }
                 RefreshRows();
                 bInv = true;
+                bModSize = true;
             }
             else throw new Exception("VALID COUNT");
             bNotRaiseEvent = false;
@@ -1694,14 +1702,16 @@ namespace Devinno.Forms.Controls
         {
             if (Areas.ContainsKey("rtScrollContent"))
             {
+                #region Bounds
                 var rtColumn = Areas["rtColumn"];
                 var rtScrollContent = Areas["rtScrollContent"];
                 var rts = GetColumnBounds(rtColumn, rtScrollContent);
                 var rtsc = rtScrollContent;
                 var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
                 var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
-
+                #endregion
                 #region Make DBSearch
+                if (bModSize)
                 {
                     var lsv = mrows;
                     var sum = lsv.Sum(x => x.RowHeight);
@@ -1712,12 +1722,14 @@ namespace Devinno.Forms.Controls
                         var nsum = 0;
                         foreach (var v in lsv) { lsp.Add(new _DGSearch_() { Height = v.RowHeight, Sum = nsum, Row = v }); nsum += v.RowHeight; }
                     }
+                    bModSize = false;
                 }
                 #endregion
-
+                #region Index Calc
                 var ls = GetRows();
                 var startidx = (int)MathTool.Constrain(BNSearch(lsp, 0, lsp.Count - 1, rtScrollContent.Top, vspos, rtScrollContent.Top) - 1, 0, ls.Count - 1);
                 var endidx = (int)MathTool.Constrain(BNSearch(lsp, 0, lsp.Count - 1, rtScrollContent.Top, vspos, rtScrollContent.Bottom) + 1, 0, ls.Count - 1);
+                #endregion
 
                 if (ls.Count > 0)
                 {

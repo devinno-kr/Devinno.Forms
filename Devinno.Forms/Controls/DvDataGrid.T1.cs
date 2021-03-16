@@ -186,7 +186,21 @@ namespace Devinno.Forms.Controls
     public class DvDataGridRow
     {
         public DvDataGrid Grid { get; private set; }
-        public int RowHeight { get; set; }
+
+        int nRowHeight;
+        public int RowHeight
+        {
+            get => nRowHeight; 
+            set
+            {
+                if(nRowHeight != value)
+                {
+                    nRowHeight = value;
+                    if(Grid != null) Grid.bModSize = true;
+                }
+            }
+        }
+       
         public List<IDvDataGridCell> Cells { get; private set; } = new List<IDvDataGridCell>();
         public object Source { get; set; }
         public object Tag { get; set; }
@@ -195,7 +209,7 @@ namespace Devinno.Forms.Controls
         public DvDataGridRow(DvDataGrid Grid)
         {
             this.Grid = Grid;
-            this.RowHeight = Grid.RowHeight;
+            this.nRowHeight = Grid.RowHeight;
         }
     }
     #endregion

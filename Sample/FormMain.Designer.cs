@@ -185,6 +185,8 @@ namespace Sample
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.dvControl3 = new Devinno.Forms.Controls.DvControl();
+            this.btnGridCells2 = new Devinno.Forms.Controls.DvButton();
             this.tab.SuspendLayout();
             this.tpControl.SuspendLayout();
             this.tpContainer.SuspendLayout();
@@ -3326,6 +3328,8 @@ namespace Sample
             // 
             // dvContainer3
             // 
+            this.dvContainer3.Controls.Add(this.btnGridCells2);
+            this.dvContainer3.Controls.Add(this.dvControl3);
             this.dvContainer3.Controls.Add(this.btnGridCells);
             this.dvContainer3.Controls.Add(this.dvControl2);
             this.dvContainer3.Controls.Add(this.btnGridMonth);
@@ -3467,6 +3471,40 @@ namespace Sample
             this.tsmiEdit.Name = "tsmiEdit";
             this.tsmiEdit.Size = new System.Drawing.Size(84, 41);
             this.tsmiEdit.Text = "편집(&E)";
+            // 
+            // dvControl3
+            // 
+            this.dvControl3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dvControl3.Location = new System.Drawing.Point(458, 0);
+            this.dvControl3.Name = "dvControl3";
+            this.dvControl3.Size = new System.Drawing.Size(8, 45);
+            this.dvControl3.TabIndex = 4;
+            this.dvControl3.TabStop = false;
+            this.dvControl3.Text = "dvControl3";
+            this.dvControl3.UseThemeColor = true;
+            // 
+            // btnGridCells2
+            // 
+            this.btnGridCells2.BackgroundDraw = true;
+            this.btnGridCells2.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.btnGridCells2.Clickable = true;
+            this.btnGridCells2.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.btnGridCells2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnGridCells2.Gradient = true;
+            this.btnGridCells2.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.btnGridCells2.IconGap = 0;
+            this.btnGridCells2.IconImage = null;
+            this.btnGridCells2.IconSize = 10F;
+            this.btnGridCells2.IconString = null;
+            this.btnGridCells2.Location = new System.Drawing.Point(466, 0);
+            this.btnGridCells2.LongClickTime = 0;
+            this.btnGridCells2.Name = "btnGridCells2";
+            this.btnGridCells2.Size = new System.Drawing.Size(225, 45);
+            this.btnGridCells2.TabIndex = 6;
+            this.btnGridCells2.Text = "Cells 2";
+            this.btnGridCells2.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnGridCells2.UseLongClick = false;
+            this.btnGridCells2.UseThemeColor = true;
             // 
             // FormMain
             // 
@@ -3669,6 +3707,8 @@ namespace Sample
         private Devinno.Forms.Controls.DvButton btnGridCells;
         private Devinno.Forms.Controls.DvControl dvControl2;
         private Devinno.Forms.Controls.DvButton btnGridMonth;
+        private Devinno.Forms.Controls.DvButton btnGridCells2;
+        private Devinno.Forms.Controls.DvControl dvControl3;
     }
 }
 

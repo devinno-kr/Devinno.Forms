@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,6 +15,8 @@ namespace Devinno.Forms.Dialogs
 {
     public partial class DvInputBox : DvForm
     {
+        public bool UseEnterKey { get; set; } = false;
+
         #region Constructor
         public DvInputBox()
         {
@@ -21,12 +24,18 @@ namespace Devinno.Forms.Dialogs
 
             Fixed = true;
 
-            btnOK.ButtonClick += (o, s) => { if (ValidCheck()) DialogResult = DialogResult.OK; };
+            btnOK.ButtonClick += (o, s) => OK();
             btnCancel.ButtonClick += (o, s) => DialogResult = DialogResult.Cancel;
         }
         #endregion
 
         #region Method
+        #region OK
+        void OK()
+        {
+            if (ValidCheck()) DialogResult = DialogResult.OK;
+        }
+        #endregion
         #region ValidCheck
         bool ValidCheck()
         {
@@ -37,7 +46,7 @@ namespace Devinno.Forms.Dialogs
                 var p = tag.p;
                 var info = tag.info;
 
-                if(c.InputStyle == DvInputType.NUMBER)
+                if (c.InputStyle == DvInputType.NUMBER)
                 {
                     if (p.PropertyType == typeof(byte)) { byte n; c.DrawBorder = !byte.TryParse(c.Value, out n); }
                     else if (p.PropertyType == typeof(ushort)) { ushort n; c.DrawBorder = !ushort.TryParse(c.Value, out n); }
@@ -54,14 +63,14 @@ namespace Devinno.Forms.Dialogs
                     else if (p.PropertyType == typeof(double)) { double n; c.DrawBorder = !double.TryParse(c.Value, out n); }
                     else if (p.PropertyType == typeof(decimal)) { decimal n; c.DrawBorder = !decimal.TryParse(c.Value, out n); }
                 }
-                else if(c.InputStyle == DvInputType.COMBO)
+                else if (c.InputStyle == DvInputType.COMBO)
                 {
                     c.DrawBorder = c.SelectedIndex == -1;
                 }
 
                 ret &= !c.DrawBorder;
             }
-         
+
             return ret;
         }
         #endregion
@@ -97,6 +106,7 @@ namespace Devinno.Forms.Dialogs
             #region Controls
             var ls = layout.Controls.Cast<Control>().ToArray();
             layout.Controls.Clear();
+
             for (int i = 0; i < props.Count; i++)
             {
                 if (i < props.Count)
@@ -108,10 +118,31 @@ namespace Devinno.Forms.Dialogs
                     c.Text = info != null && !string.IsNullOrWhiteSpace(info.Alias) ? info.Alias : p.Name;
                     c.ValueTextChanged += (o, s) => ((DvValueInput)o).DrawBorder = false;
                     c.SelectedIndexChanged += (o, s) => ((DvValueInput)o).DrawBorder = false;
+                    c.OriginalTextBox.KeyDown += (o, s) =>
+                    {
+                        if (UseEnterKey && s.KeyCode == Keys.Enter)
+                        {
+                            var oc = ((Control)o).Parent;
+                            var ls = layout.Controls.Cast<Control>().ToList();
+                            var idx = ls.IndexOf(oc);
+                            if (idx == ls.Count - 1) OK();
+                            else
+                            {
+                                var cNext = layout.Controls[idx + 1 == layout.Controls.Count ? 0 : idx + 1];
+                                if(cNext != null)
+                                {
+                                    var vc = cNext as DvValueInput;
+                                    if (vc.InputStyle != DvInputType.BOOL && vc.InputStyle != DvInputType.COMBO) this.Invoke(new Action(() => vc.OriginalTextBox.Focus()));
+                                    else this.Invoke(new Action(() => vc.Focus()));
+                                }
+                            }
+                        }
+                    };
 
                     layout.Controls.Add(c, 0, i);
                 }
             }
+            
             foreach (var v in ls) v.Dispose();
             #endregion
             #region Props
@@ -182,9 +213,28 @@ namespace Devinno.Forms.Dialogs
                 }
             }
             #endregion
-
+            #region Title
             this.Text = this.Title = string.IsNullOrWhiteSpace(Title) ? "항목 입력" : Title;
             Theme = GetCallerFormTheme() ?? Theme;
+            #endregion
+            #region Focus
+            var vf = layout.Controls.Cast<Control>().Where(x => x is DvValueInput).FirstOrDefault();
+            if (vf != null)
+            {
+                var th = new Thread(new ThreadStart(() =>
+                {
+                    Thread.Sleep(100);
+                    if (vf is DvValueInput)
+                    {
+                        var vc = vf as DvValueInput;
+                        if (vc.InputStyle != DvInputType.BOOL && vc.InputStyle != DvInputType.COMBO) this.Invoke(new Action(() => vc.OriginalTextBox.Focus()));
+                        else this.Invoke(new Action(() => vc.Focus()));
+                    }
+                }))
+                { IsBackground = true };
+                th.Start();
+            }
+            #endregion
 
             T ret = default(T);
             if (this.ShowDialog() == DialogResult.OK)
@@ -247,7 +297,98 @@ namespace Devinno.Forms.Dialogs
             return ret;
         }
         #endregion
+
+        public byte? ShowByte(string Title, byte? value = null)
+        {
+            byte? ret = null;
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnByte() { Value = value.Value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
+        public short? ShowShort(string Title, short? value = null)
+        {
+            short? ret = null;
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnShort() { Value = value.Value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
+        public int? ShowInt(string Title, int? value = null)
+        {
+            int? ret = null;
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnInt() { Value = value.Value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
+        public long? ShowLong(string Title, long? value = null)
+        {
+            long? ret = null;
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnLong() { Value = value.Value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
+        public ushort? ShowUShort(string Title, ushort? value = null)
+        {
+            ushort? ret = null;
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnUShort() { Value = value.Value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
+        public uint? ShowUInt(string Title, uint? value = null)
+        {
+            uint? ret = null;
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnUInt() { Value = value.Value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
+        public ulong? ShowULong(string Title, ulong? value = null)
+        {
+            ulong? ret = null;
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnULong() { Value = value.Value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
+        public float? ShowFloat(string Title, float? value = null)
+        {
+            float? ret = null;
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnFloat() { Value = value.Value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
+        public double? ShowDouble(string Title, double? value = null)
+        {
+            double? ret = null;
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnDouble() { Value = value.Value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
+        public decimal? ShowDecimal(string Title, decimal? value = null)
+        {
+            decimal? ret = null;
+            var v = ShowInputBox<ReturnDecimal>(Title, value.HasValue ? new ReturnDecimal() { Value = value.Value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
+        public string ShowString(string Title, string value = null)
+        {
+            string ret = null;
+            var v = ShowInputBox(Title, value != null ? new ReturnString() { Value = value } : null);
+            if (v != null) ret = v.Value;
+            return ret;
+        }
         #endregion
+
+        class ReturnByte { public byte Value { get; set; } }
+        class ReturnShort { public short Value { get; set; } }
+        class ReturnInt { public int Value { get; set; } }
+        class ReturnLong { public long Value { get; set; } }
+        class ReturnUShort { public ushort Value { get; set; } }
+        class ReturnUInt { public uint Value { get; set; } }
+        class ReturnULong { public ulong Value { get; set; } }
+        class ReturnFloat { public float Value { get; set; } }
+        class ReturnDouble { public double Value { get; set; } }
+        class ReturnDecimal { public decimal Value { get; set; } }
+        class ReturnString { public string Value { get; set; } }
+
     }
 
     #region attr : InputBoxIgnore

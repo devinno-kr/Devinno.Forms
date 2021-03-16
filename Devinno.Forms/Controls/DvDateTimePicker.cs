@@ -213,7 +213,7 @@ namespace Devinno.Forms.Controls
                     var frm = this.FindForm() as DvForm;
                     if (frm != null) frm.Block = true;
 
-                    var ret = dlg.ShowDateTimePicker(Value);
+                    var ret = dlg.ShowDateTimePicker("날짜/시간 입력", Value);
                     if (ret.HasValue) Value = ret.Value;
 
                     if (frm != null) frm.Block = false;
@@ -223,7 +223,7 @@ namespace Devinno.Forms.Controls
                     var frm = this.FindForm() as DvForm;
                     if (frm != null) frm.Block = true;
 
-                    var ret = dlg.ShowDatePicker(Value);
+                    var ret = dlg.ShowDatePicker("날짜 입력", Value);
                     if (ret.HasValue) Value = ret.Value;
 
                     if (frm != null) frm.Block = false;
@@ -233,7 +233,7 @@ namespace Devinno.Forms.Controls
                     var frm = this.FindForm() as DvForm;
                     if (frm != null) frm.Block = true;
 
-                    var ret = dlg.ShowTimePicker(Value);
+                    var ret = dlg.ShowTimePicker("시간 입력", Value);
                     if (ret.HasValue) Value = ret.Value;
 
                     if (frm != null) frm.Block = false;

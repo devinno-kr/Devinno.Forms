@@ -249,7 +249,7 @@ namespace Devinno.Forms.Controls
                 if (frm != null) frm.Block = true;
 
                 bDown = false;
-                var ret = dlg.ShowColorPicker(Value);
+                var ret = dlg.ShowColorPicker("색상 선택", Value);
                 if (ret.HasValue) Value = ret.Value;
                 Invalidate();
 

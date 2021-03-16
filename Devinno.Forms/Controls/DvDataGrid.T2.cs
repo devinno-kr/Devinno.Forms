@@ -317,7 +317,37 @@ namespace Devinno.Forms.Controls
         #endregion
     }
     #endregion
-
+    
+    #region class : DvDataGridDateTimePickerColumn
+    public class DvDataGridDateTimePickerColumn : DvDataGridColumn
+    {
+        #region Properties
+        public string Format { get; set; }
+        public DvDateTimePickerStyle PickerMode { get; set; }
+        #endregion
+        #region Constructor
+        public DvDataGridDateTimePickerColumn(DvDataGrid dataGrid) : base(dataGrid)
+        {
+            CellType = typeof(DvDataGridEditDateTimeCell);
+            PickerMode = DvDateTimePickerStyle.DateTime;
+        }
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridColorPickerColumn
+    public class DvDataGridColorPickerColumn : DvDataGridColumn
+    {
+        #region Properties
+        #endregion
+        #region Constructor
+        public DvDataGridColorPickerColumn(DvDataGrid dataGrid) : base(dataGrid)
+        {
+            CellType = typeof(DvDataGridEditColorCell);
+        }
+        #endregion
+    }
+    #endregion
+   
     #region class : DvDataGridLabelCell
     public class DvDataGridLabelCell : DvDataGridCell
     {
@@ -1195,6 +1225,339 @@ namespace Devinno.Forms.Controls
             #endregion
         }
         #endregion
+        #endregion
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridEditTextCell 
+    public class DvDataGridEditTextCell : DvDataGridCell
+    {
+        #region Properties
+        public bool ReadOnly { get; set; }
+        #endregion
+        #region Constructor
+        public DvDataGridEditTextCell(DvDataGrid Grid, DvDataGridRow Row, DvDataGridColumn Column) : base(Grid, Row, Column)
+        {
+        }
+        #endregion
+        #region Override
+        #region CellPaint
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
+        {
+            var f = Grid.DpiRatio;
+            var cTextBack = CellBackColor.BrightnessTransmit(DvDataGrid.InputBright);
+            var rt = new Rectangle(CellBounds.X, CellBounds.Y, CellBounds.Width, CellBounds.Height); rt.Inflate(-Convert.ToInt32(2 * f), -Convert.ToInt32(2 * f));
+            Theme.DrawBox(g, cTextBack, cTextBack, rt, RoundType.NONE, BoxDrawOption.BORDER);
+            if (Value != null)
+            {
+                var s = "";
+
+                if (Value is string) s = (string)Value;
+                else s = Value.ToString();
+
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    var c = CellTextColor;
+                    var bg = (Row.Selected ? SelectedCellBackColor : CellBackColor);
+                    if (Grid.TextShadow) Theme.DrawTextShadow(g, null, s, Grid.Font, c, bg, rt);
+                    else Theme.DrawText(g, null, s, Grid.Font, c, bg, rt);
+                }
+            }
+            base.CellPaint(Theme, g, CellBounds);
+        }
+        #endregion
+        #region CellMouseUp
+        public override void CellMouseUp(Rectangle CellBounds, int x, int y)
+        {
+            if (CollisionTool.Check(CellBounds, x, y))
+            {
+                var ret = Grid.InputBox.ShowString("입력 : " + Column.HeaderText, Value as string);
+                if (ret != null)
+                {
+                    var v = ret;
+                    if (v != Value as string)
+                    {
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
+                }
+            }
+
+            base.CellMouseUp(CellBounds, x, y);
+        }
+        #endregion
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridEditNumberCell 
+    public class DvDataGridEditNumberCell : DvDataGridCell
+    {
+        #region Properties
+        public string Format { get; set; }
+        public bool ReadOnly { get; set; }
+        #endregion
+        #region Constructor
+        public DvDataGridEditNumberCell(DvDataGrid Grid, DvDataGridRow Row, DvDataGridColumn Column) : base(Grid, Row, Column)
+        {
+            if (Column is DvDataGridTextFormatColumn)
+            {
+                this.Format = ((DvDataGridTextFormatColumn)Column).Format;
+            }
+        }
+        #endregion
+        #region Override
+        #region CellPaint
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
+        {
+            var f = Grid.DpiRatio;
+            var cTextBack = CellBackColor.BrightnessTransmit(DvDataGrid.InputBright);
+            var rt = new Rectangle(CellBounds.X, CellBounds.Y, CellBounds.Width, CellBounds.Height); rt.Inflate(-Convert.ToInt32(2 * f), -Convert.ToInt32(2 * f));
+            Theme.DrawBox(g, cTextBack, cTextBack, rt, RoundType.NONE, BoxDrawOption.BORDER);
+            if (Value != null)
+            {
+                var s = "";
+
+                if (Value is byte) s = (!string.IsNullOrWhiteSpace(Format) ? ((byte)Value).ToString(Format) : ((byte)Value).ToString());
+                else if (Value is short) s = (!string.IsNullOrWhiteSpace(Format) ? ((short)Value).ToString(Format) : ((short)Value).ToString());
+                else if (Value is ushort) s = (!string.IsNullOrWhiteSpace(Format) ? ((ushort)Value).ToString(Format) : ((ushort)Value).ToString());
+                else if (Value is int) s = (!string.IsNullOrWhiteSpace(Format) ? ((int)Value).ToString(Format) : ((int)Value).ToString());
+                else if (Value is uint) s = (!string.IsNullOrWhiteSpace(Format) ? ((uint)Value).ToString(Format) : ((uint)Value).ToString());
+                else if (Value is long) s = (!string.IsNullOrWhiteSpace(Format) ? ((long)Value).ToString(Format) : ((long)Value).ToString());
+                else if (Value is ulong) s = (!string.IsNullOrWhiteSpace(Format) ? ((ulong)Value).ToString(Format) : ((ulong)Value).ToString());
+                else if (Value is float) s = (!string.IsNullOrWhiteSpace(Format) ? ((float)Value).ToString(Format) : ((float)Value).ToString());
+                else if (Value is double) s = (!string.IsNullOrWhiteSpace(Format) ? ((double)Value).ToString(Format) : ((double)Value).ToString());
+                else if (Value is decimal) s = (!string.IsNullOrWhiteSpace(Format) ? ((decimal)Value).ToString(Format) : ((decimal)Value).ToString());
+
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    var c = CellTextColor;
+                    var bg = (Row.Selected ? SelectedCellBackColor : CellBackColor);
+                    if (Grid.TextShadow) Theme.DrawTextShadow(g, null, s, Grid.Font, c, bg, rt);
+                    else Theme.DrawText(g, null, s, Grid.Font, c, bg, rt);
+                }
+            }
+            base.CellPaint(Theme, g, CellBounds);
+        }
+        #endregion
+        #region CellMouseUp
+        public override void CellMouseUp(Rectangle CellBounds, int x, int y)
+        {
+            if (CollisionTool.Check(CellBounds, x, y))
+            {
+                if (Value is byte)
+                {
+                    var ret = Grid.InputBox.ShowByte("입력 : " + Column.HeaderText, Value as byte?);
+                    if (ret.HasValue && ret.Value != Value as byte?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
+                }
+                else if (Value is short)
+                {
+                    var ret = Grid.InputBox.ShowShort("입력 : " + Column.HeaderText, Value as short?);
+                    if (ret.HasValue && ret.Value != Value as short?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
+                }
+                else if (Value is ushort)
+                {
+                    var ret = Grid.InputBox.ShowUShort("입력 : " + Column.HeaderText, Value as ushort?);
+                    if (ret.HasValue && ret.Value != Value as ushort?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
+                }
+                else if (Value is int)
+                {
+                    var ret = Grid.InputBox.ShowInt("입력 : " + Column.HeaderText, Value as int?);
+                    if (ret.HasValue && ret.Value != Value as int?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
+                }
+                else if (Value is uint)
+                {
+                    var ret = Grid.InputBox.ShowUInt("입력 : " + Column.HeaderText, Value as uint?);
+                    if (ret.HasValue && ret.Value != Value as uint?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
+                }
+                else if (Value is long)
+                {
+                    var ret = Grid.InputBox.ShowLong("입력 : " + Column.HeaderText, Value as long?);
+                    if (ret.HasValue && ret.Value != Value as long?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
+                }
+                else if (Value is ulong)
+                {
+                    var ret = Grid.InputBox.ShowULong("입력 : " + Column.HeaderText, Value as ulong?);
+                    if (ret.HasValue && ret.Value != Value as ulong?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
+                }
+                else if (Value is float)
+                {
+                    var ret = Grid.InputBox.ShowFloat("입력 : " + Column.HeaderText, Value as float?);
+                    if (ret.HasValue && ret.Value != Value as float?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
+                }
+                else if (Value is double)
+                {
+                    var ret = Grid.InputBox.ShowDouble("입력 : " + Column.HeaderText, Value as double?);
+                    if (ret.HasValue && ret.Value != Value as double?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
+                }
+                else if (Value is decimal)
+                {
+                    var ret = Grid.InputBox.ShowDecimal("입력 : " + Column.HeaderText, Value as decimal?);
+                    if (ret.HasValue && ret.Value != Value as decimal?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
+                }
+
+
+            }
+            base.CellMouseUp(CellBounds, x, y);
+        }
+        #endregion
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridEditDateTimeCell 
+    public class DvDataGridEditDateTimeCell : DvDataGridCell
+    {
+        #region Properties
+        public bool ReadOnly { get; set; }
+        public string Format { get; set; }
+        public DvDateTimePickerStyle PickerMode { get; set; }
+        #endregion
+        #region Constructor
+        public DvDataGridEditDateTimeCell(DvDataGrid Grid, DvDataGridRow Row, DvDataGridColumn Column) : base(Grid, Row, Column)
+        {
+            if (Column is DvDataGridDateTimePickerColumn)
+            {
+                this.Format = ((DvDataGridDateTimePickerColumn)Column).Format;
+                this.PickerMode = ((DvDataGridDateTimePickerColumn)Column).PickerMode;
+            }
+        }
+        #endregion
+        #region Override
+        #region CellPaint
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
+        {
+            var f = Grid.DpiRatio;
+            var cTextBack = CellBackColor.BrightnessTransmit(DvDataGrid.InputBright);
+            var rt = new Rectangle(CellBounds.X, CellBounds.Y, CellBounds.Width, CellBounds.Height); rt.Inflate(-Convert.ToInt32(2 * f), -Convert.ToInt32(2 * f));
+            Theme.DrawBox(g, cTextBack, cTextBack, rt, RoundType.NONE, BoxDrawOption.BORDER);
+            if (Value != null)
+            {
+                var s = "";
+
+                if (Value is DateTime)
+                {
+                    if (Format == null)
+                    {
+                        switch (PickerMode)
+                        {
+                            case DvDateTimePickerStyle.DateTime: s = ((DateTime)Value).ToString("yyyy-MM-dd HH:mm:ss"); break;
+                            case DvDateTimePickerStyle.Date: s = ((DateTime)Value).ToString("yyyy-MM-dd"); break;
+                            case DvDateTimePickerStyle.Time: s = ((DateTime)Value).ToString("HH:mm:ss"); break;
+                        }
+                    }
+                    else s = ((DateTime)Value).ToString(Format);
+                }
+                else s = Value.ToString();
+
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    var c = CellTextColor;
+                    var bg = (Row.Selected ? SelectedCellBackColor : CellBackColor);
+                    if (Grid.TextShadow) Theme.DrawTextShadow(g, null, s, Grid.Font, c, bg, rt);
+                    else Theme.DrawText(g, null, s, Grid.Font, c, bg, rt);
+                }
+            }
+            base.CellPaint(Theme, g, CellBounds);
+        }
+        #endregion
+        #region CellMouseUp
+        public override void CellMouseUp(Rectangle CellBounds, int x, int y)
+        {
+            if (CollisionTool.Check(CellBounds, x, y))
+            {
+                DateTime? ret = null;
+
+                switch (PickerMode)
+                {
+                    case DvDateTimePickerStyle.DateTime: ret = Grid.DateTimePicker.ShowDateTimePicker("입력 : " + Column.HeaderText, (DateTime?)Value); break;
+                    case DvDateTimePickerStyle.Date: ret = Grid.DateTimePicker.ShowDatePicker("입력 : " + Column.HeaderText, (DateTime?)Value); break;
+                    case DvDateTimePickerStyle.Time: ret = Grid.DateTimePicker.ShowTimePicker("입력 : " + Column.HeaderText, (DateTime?)Value); break;
+                }
+
+                if (ret.HasValue)
+                {
+                    if (ret.Value != (DateTime?)Value)
+                    {
+                        var old = Value;
+                        Value = ret.Value;
+                        Grid.InvokeValueChanged(this, old, ret.Value);
+                    }
+                }
+            }
+            base.CellMouseUp(CellBounds, x, y);
+        }
+        #endregion
+        #endregion
+    }
+    #endregion
+    #region class : DvDataGridEditColorCell 
+    public class DvDataGridEditColorCell : DvDataGridCell
+    {
+        #region Properties
+        public bool ReadOnly { get; set; }
+        #endregion
+        #region Constructor
+        public DvDataGridEditColorCell(DvDataGrid Grid, DvDataGridRow Row, DvDataGridColumn Column) : base(Grid, Row, Column)
+        {
+            if (Column is DvDataGridColorPickerColumn)
+            {
+            }
+        }
+        #endregion
+        #region Override
+        #region CellPaint
+        public override void CellPaint(DvTheme Theme, Graphics g, Rectangle CellBounds)
+        {
+            var f = Grid.DpiRatio;
+            var cTextBack = CellBackColor.BrightnessTransmit(DvDataGrid.InputBright);
+            var rt = new Rectangle(CellBounds.X, CellBounds.Y, CellBounds.Width, CellBounds.Height); rt.Inflate(-Convert.ToInt32(2 * f), -Convert.ToInt32(2 * f));
+            Theme.DrawBox(g, cTextBack, cTextBack, rt, RoundType.NONE, BoxDrawOption.BORDER);
+            if (Value != null && Value is Color)
+            {
+                var vc = (Color)Value;
+                var s = "#" + vc.R.ToString("X2") + vc.G.ToString("X2") + vc.B.ToString("X2");
+
+                var vwh = Convert.ToInt32(f * 16);
+                var gap = Convert.ToInt32(f * 5);
+
+                var sz = g.MeasureString(s, Grid.Font);
+                
+                var rtw = DvDataGridTool.RTI(MathTool.MakeRectangle(rt, new SizeF((sz.Width + 4) + gap + (vwh), Math.Max(vwh, sz.Height + 4))));
+                var rtBox = MathTool.MakeRectangle(rtw, new Size(vwh, vwh)); rtBox.X = rtw.X;
+                var rtText = MathTool.MakeRectangle(rtw, new Size(Convert.ToInt32(sz.Width + 4), Convert.ToInt32(sz.Height + 4))); rtText.X = rtw.Right - Convert.ToInt32(sz.Width + 4);
+
+                Theme.DrawBox(g, vc, cTextBack, rtBox, RoundType.NONE, BoxDrawOption.BORDER);
+                if (!string.IsNullOrWhiteSpace(s))
+                {
+                    var c = CellTextColor;
+                    var bg = (Row.Selected ? SelectedCellBackColor : CellBackColor);
+                    if (Grid.TextShadow) Theme.DrawTextShadow(g, null, s, Grid.Font, c, bg, rtText);
+                    else Theme.DrawText(g, null, s, Grid.Font, c, bg, rtText);
+                }
+            }
+            base.CellPaint(Theme, g, CellBounds);
+        }
+        #endregion
+        #region CellMouseUp
+        public override void CellMouseUp(Rectangle CellBounds, int x, int y)
+        {
+            if (CollisionTool.Check(CellBounds, x, y))
+            {
+                var ret = Grid.ColorPicker.ShowColorPicker("입력 : " + Column.HeaderText, (Color?)Value);
+                if (ret.HasValue)
+                {
+                    if (ret.Value != (Color?)Value)
+                    {
+                        #region Value Set
+                        var old = Value;
+                        Value = ret.Value;
+                        Grid.InvokeValueChanged(this, old, ret.Value);
+                        #endregion
+                    }
+                }
+            }
+            base.CellMouseUp(CellBounds, x, y);
+        }
         #endregion
         #endregion
     }
