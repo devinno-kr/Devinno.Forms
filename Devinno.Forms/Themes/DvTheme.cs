@@ -1,4 +1,5 @@
-﻿using Devinno.Forms.Icons;
+﻿using Devinno.Forms.Containers;
+using Devinno.Forms.Icons;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -66,6 +67,12 @@ namespace Devinno.Forms.Themes
         {
             control.ForeColor = theme.ForeColor;
             control.BackColor = theme.BackColor;
+
+            if(control is DvTabControl)
+            {
+                var c = control as DvTabControl;
+                foreach (var v in c.TabPages.Cast<TabPage>()) v.BackColor = theme.BackColor;
+            }
 
             foreach (var c in control.Controls)
                 if (c is Control)

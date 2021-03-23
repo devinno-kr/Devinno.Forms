@@ -173,6 +173,8 @@ namespace Sample
             this.dg = new Devinno.Forms.Controls.DvDataGrid();
             this.dvControl1 = new Devinno.Forms.Controls.DvControl();
             this.dvContainer3 = new Devinno.Forms.Containers.DvContainer();
+            this.btnGridCells2 = new Devinno.Forms.Controls.DvButton();
+            this.dvControl3 = new Devinno.Forms.Controls.DvControl();
             this.btnGridCells = new Devinno.Forms.Controls.DvButton();
             this.dvControl2 = new Devinno.Forms.Controls.DvControl();
             this.btnGridMonth = new Devinno.Forms.Controls.DvButton();
@@ -185,8 +187,6 @@ namespace Sample
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.dvControl3 = new Devinno.Forms.Controls.DvControl();
-            this.btnGridCells2 = new Devinno.Forms.Controls.DvButton();
             this.tab.SuspendLayout();
             this.tpControl.SuspendLayout();
             this.tpContainer.SuspendLayout();
@@ -219,6 +219,7 @@ namespace Sample
             this.tab.Controls.Add(this.tpContents);
             this.tab.Controls.Add(this.tpDataGrid);
             this.tab.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tab.ForeColor = System.Drawing.Color.Black;
             this.tab.ItemSize = new System.Drawing.Size(120, 200);
             this.tab.Location = new System.Drawing.Point(0, 105);
             this.tab.Multiline = true;
@@ -229,12 +230,12 @@ namespace Sample
             this.tab.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tab.TabBarColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.tab.TabIndex = 1;
-            this.tab.TextColor = System.Drawing.Color.White;
+            this.tab.TextColor = System.Drawing.Color.Black;
             this.tab.UseThemeColor = true;
             // 
             // tpControl
             // 
-            this.tpControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tpControl.Controls.Add(this.dvSliderv2);
             this.tpControl.Controls.Add(this.dvSliderv1);
             this.tpControl.Controls.Add(this.dvProgressv2);
@@ -292,7 +293,8 @@ namespace Sample
             this.tpControl.Controls.Add(this.dvButton3);
             this.tpControl.Controls.Add(this.dvButton2);
             this.tpControl.Controls.Add(this.dvButton1);
-            this.tpControl.Font = new System.Drawing.Font("나눔고딕", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.tpControl.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.tpControl.ForeColor = System.Drawing.Color.White;
             this.tpControl.Location = new System.Drawing.Point(204, 4);
             this.tpControl.Name = "tpControl";
             this.tpControl.Padding = new System.Windows.Forms.Padding(3);
@@ -306,7 +308,7 @@ namespace Sample
             this.dvSliderv2.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvSliderv2.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvSliderv2.DrawText = true;
-            this.dvSliderv2.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvSliderv2.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvSliderv2.FormatString = "0.0";
             this.dvSliderv2.Location = new System.Drawing.Point(1326, 688);
             this.dvSliderv2.Maximum = 100D;
@@ -344,7 +346,7 @@ namespace Sample
             this.dvProgressv2.BarColor = System.Drawing.Color.DarkRed;
             this.dvProgressv2.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvProgressv2.DrawText = true;
-            this.dvProgressv2.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvProgressv2.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvProgressv2.FormatString = "0.0";
             this.dvProgressv2.Location = new System.Drawing.Point(1209, 688);
             this.dvProgressv2.Maximum = 100D;
@@ -382,7 +384,7 @@ namespace Sample
             this.dvSliderh2.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvSliderh2.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvSliderh2.DrawText = true;
-            this.dvSliderh2.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvSliderh2.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvSliderh2.FormatString = "0.0";
             this.dvSliderh2.Location = new System.Drawing.Point(1143, 637);
             this.dvSliderh2.Maximum = 100D;
@@ -401,7 +403,7 @@ namespace Sample
             this.dvProgressh2.BarColor = System.Drawing.Color.DarkRed;
             this.dvProgressh2.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvProgressh2.DrawText = true;
-            this.dvProgressh2.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvProgressh2.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvProgressh2.FormatString = "0.0";
             this.dvProgressh2.Location = new System.Drawing.Point(1143, 535);
             this.dvProgressh2.Maximum = 100D;
@@ -689,7 +691,7 @@ namespace Sample
             // 
             this.dvMeter1.DrawText = true;
             this.dvMeter1.FillColor = System.Drawing.Color.DarkRed;
-            this.dvMeter1.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvMeter1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvMeter1.GraduationLarge = 10D;
             this.dvMeter1.GraduationSmall = 2D;
             this.dvMeter1.Location = new System.Drawing.Point(20, 648);
@@ -737,7 +739,7 @@ namespace Sample
             this.dvKnob1.DrawText = true;
             this.dvKnob1.EmptyColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.dvKnob1.FillColor = System.Drawing.Color.DarkRed;
-            this.dvKnob1.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvKnob1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvKnob1.KnobColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvKnob1.Location = new System.Drawing.Point(566, 648);
             this.dvKnob1.Maximum = 100D;
@@ -758,7 +760,7 @@ namespace Sample
             // 
             this.dvGauge1.EmptyColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvGauge1.FillColor = System.Drawing.Color.DarkRed;
-            this.dvGauge1.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvGauge1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvGauge1.GraduationLarge = 10D;
             this.dvGauge1.GraduationSmall = 2D;
             this.dvGauge1.Location = new System.Drawing.Point(293, 648);
@@ -828,7 +830,7 @@ namespace Sample
             // dvCalendar1
             // 
             this.dvCalendar1.DaysBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.dvCalendar1.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvCalendar1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvCalendar1.Location = new System.Drawing.Point(836, 648);
             this.dvCalendar1.MonthlyBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.dvCalendar1.MultiSelect = false;
@@ -924,7 +926,7 @@ namespace Sample
             // dvSwitch1
             // 
             this.dvSwitch1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.dvSwitch1.Font = new System.Drawing.Font("나눔고딕", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvSwitch1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvSwitch1.Location = new System.Drawing.Point(20, 449);
             this.dvSwitch1.Name = "dvSwitch1";
             this.dvSwitch1.OnOff = false;
@@ -1390,7 +1392,7 @@ namespace Sample
             this.dvButton5.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvButton5.Clickable = true;
             this.dvButton5.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.dvButton5.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvButton5.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvButton5.Gradient = false;
             this.dvButton5.IconAlignment = Devinno.Forms.DvTextIconAlignment.TopBottom;
             this.dvButton5.IconGap = 5;
@@ -1413,7 +1415,7 @@ namespace Sample
             this.dvButton4.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.dvButton4.Clickable = true;
             this.dvButton4.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.dvButton4.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvButton4.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvButton4.Gradient = true;
             this.dvButton4.IconAlignment = Devinno.Forms.DvTextIconAlignment.TopBottom;
             this.dvButton4.IconGap = 5;
@@ -1499,7 +1501,7 @@ namespace Sample
             // 
             // tpContainer
             // 
-            this.tpContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tpContainer.Controls.Add(this.btnTab3);
             this.tpContainer.Controls.Add(this.btnTab2);
             this.tpContainer.Controls.Add(this.btnTab1);
@@ -1513,6 +1515,7 @@ namespace Sample
             this.tpContainer.Controls.Add(this.dvGroupBox1);
             this.tpContainer.Controls.Add(this.dvContainer1);
             this.tpContainer.Controls.Add(this.dvBorderPanel1);
+            this.tpContainer.ForeColor = System.Drawing.Color.White;
             this.tpContainer.Location = new System.Drawing.Point(204, 4);
             this.tpContainer.Name = "tpContainer";
             this.tpContainer.Padding = new System.Windows.Forms.Padding(3);
@@ -1617,6 +1620,7 @@ namespace Sample
             this.tabless.Controls.Add(this.tlp1);
             this.tabless.Controls.Add(this.tlp2);
             this.tabless.Controls.Add(this.tlp3);
+            this.tabless.ForeColor = System.Drawing.Color.Black;
             this.tabless.ItemSize = new System.Drawing.Size(0, 1);
             this.tabless.Location = new System.Drawing.Point(870, 380);
             this.tabless.Multiline = true;
@@ -1628,8 +1632,9 @@ namespace Sample
             // 
             // tlp1
             // 
-            this.tlp1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.tlp1.BackColor = System.Drawing.Color.Maroon;
             this.tlp1.Controls.Add(this.dvLabel18);
+            this.tlp1.ForeColor = System.Drawing.Color.White;
             this.tlp1.Location = new System.Drawing.Point(4, 5);
             this.tlp1.Name = "tlp1";
             this.tlp1.Padding = new System.Windows.Forms.Padding(3);
@@ -1663,8 +1668,9 @@ namespace Sample
             // 
             // tlp2
             // 
-            this.tlp2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(0)))));
+            this.tlp2.BackColor = System.Drawing.Color.DarkBlue;
             this.tlp2.Controls.Add(this.dvLabel20);
+            this.tlp2.ForeColor = System.Drawing.Color.White;
             this.tlp2.Location = new System.Drawing.Point(4, 5);
             this.tlp2.Name = "tlp2";
             this.tlp2.Padding = new System.Windows.Forms.Padding(3);
@@ -1698,8 +1704,9 @@ namespace Sample
             // 
             // tlp3
             // 
-            this.tlp3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(30)))));
+            this.tlp3.BackColor = System.Drawing.Color.DarkGreen;
             this.tlp3.Controls.Add(this.dvLabel21);
+            this.tlp3.ForeColor = System.Drawing.Color.White;
             this.tlp3.Location = new System.Drawing.Point(4, 5);
             this.tlp3.Name = "tlp3";
             this.tlp3.Size = new System.Drawing.Size(644, 291);
@@ -2052,7 +2059,7 @@ namespace Sample
             // 
             // dvGroupBox1
             // 
-            this.dvGroupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.dvGroupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.dvGroupBox1.BorderColor = System.Drawing.Color.Black;
             this.dvGroupBox1.BorderWidth = 1;
             this.dvGroupBox1.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
@@ -2146,7 +2153,7 @@ namespace Sample
             // 
             // tpGraph
             // 
-            this.tpGraph.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpGraph.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tpGraph.Controls.Add(this.btnGraphRefresh);
             this.tpGraph.Controls.Add(this.dvCircleGraph1);
             this.tpGraph.Controls.Add(this.dvLabel25);
@@ -2156,6 +2163,7 @@ namespace Sample
             this.tpGraph.Controls.Add(this.dvLabel23);
             this.tpGraph.Controls.Add(this.dvLabel22);
             this.tpGraph.Controls.Add(this.dvBarGraphh1);
+            this.tpGraph.ForeColor = System.Drawing.Color.White;
             this.tpGraph.Location = new System.Drawing.Point(204, 4);
             this.tpGraph.Name = "tpGraph";
             this.tpGraph.Padding = new System.Windows.Forms.Padding(3);
@@ -2244,7 +2252,7 @@ namespace Sample
             // 
             // dvLineGraph1
             // 
-            this.dvLineGraph1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvLineGraph1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvLineGraph1.FormatString = null;
             this.dvLineGraph1.GapWidth = 80;
             this.dvLineGraph1.Graduation = 10D;
@@ -2267,7 +2275,7 @@ namespace Sample
             // 
             this.dvBarGraphv1.BarGap = 8;
             this.dvBarGraphv1.BarSize = 48;
-            this.dvBarGraphv1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvBarGraphv1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvBarGraphv1.FormatString = null;
             this.dvBarGraphv1.Gradient = false;
             this.dvBarGraphv1.Graduation = 20D;
@@ -2338,7 +2346,7 @@ namespace Sample
             // 
             this.dvBarGraphh1.BarGap = 8;
             this.dvBarGraphh1.BarSize = 24;
-            this.dvBarGraphh1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvBarGraphh1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvBarGraphh1.FormatString = null;
             this.dvBarGraphh1.Gradient = false;
             this.dvBarGraphh1.Graduation = 20D;
@@ -2359,7 +2367,7 @@ namespace Sample
             // 
             // tpTimeGraph
             // 
-            this.tpTimeGraph.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpTimeGraph.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tpTimeGraph.Controls.Add(this.btnTrendStop);
             this.tpTimeGraph.Controls.Add(this.btnTrendStart);
             this.tpTimeGraph.Controls.Add(this.dvLabel30);
@@ -2373,6 +2381,7 @@ namespace Sample
             this.tpTimeGraph.Controls.Add(this.btnTimeGraphRefresh);
             this.tpTimeGraph.Controls.Add(this.dvTimeGraph1);
             this.tpTimeGraph.Controls.Add(this.dvLabel26);
+            this.tpTimeGraph.ForeColor = System.Drawing.Color.White;
             this.tpTimeGraph.Location = new System.Drawing.Point(204, 4);
             this.tpTimeGraph.Name = "tpTimeGraph";
             this.tpTimeGraph.Size = new System.Drawing.Size(1712, 967);
@@ -2385,7 +2394,7 @@ namespace Sample
             this.btnTrendStop.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnTrendStop.Clickable = true;
             this.btnTrendStop.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnTrendStop.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnTrendStop.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnTrendStop.Gradient = true;
             this.btnTrendStop.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnTrendStop.IconGap = 0;
@@ -2408,7 +2417,7 @@ namespace Sample
             this.btnTrendStart.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnTrendStart.Clickable = true;
             this.btnTrendStart.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnTrendStart.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnTrendStart.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnTrendStart.Gradient = true;
             this.btnTrendStart.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnTrendStart.IconGap = 0;
@@ -2429,7 +2438,7 @@ namespace Sample
             // 
             this.dvLabel30.BackgroundDraw = false;
             this.dvLabel30.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.dvLabel30.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvLabel30.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvLabel30.ForeColor = System.Drawing.Color.DodgerBlue;
             this.dvLabel30.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvLabel30.IconGap = 0;
@@ -2455,7 +2464,7 @@ namespace Sample
             // 
             this.dvLabel29.BackgroundDraw = false;
             this.dvLabel29.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.dvLabel29.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvLabel29.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvLabel29.ForeColor = System.Drawing.Color.Teal;
             this.dvLabel29.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvLabel29.IconGap = 0;
@@ -2481,7 +2490,7 @@ namespace Sample
             // 
             this.dvLabel28.BackgroundDraw = false;
             this.dvLabel28.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.dvLabel28.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvLabel28.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvLabel28.ForeColor = System.Drawing.Color.Crimson;
             this.dvLabel28.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvLabel28.IconGap = 0;
@@ -2509,7 +2518,7 @@ namespace Sample
             this.sldCSharp.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.sldCSharp.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.sldCSharp.DrawText = false;
-            this.sldCSharp.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.sldCSharp.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.sldCSharp.FormatString = null;
             this.sldCSharp.Location = new System.Drawing.Point(1624, 498);
             this.sldCSharp.Maximum = 100D;
@@ -2529,7 +2538,7 @@ namespace Sample
             this.sldJava.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.sldJava.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.sldJava.DrawText = false;
-            this.sldJava.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.sldJava.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.sldJava.FormatString = null;
             this.sldJava.Location = new System.Drawing.Point(1573, 498);
             this.sldJava.Maximum = 100D;
@@ -2549,7 +2558,7 @@ namespace Sample
             this.sldCpp.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.sldCpp.CursorColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.sldCpp.DrawText = false;
-            this.sldCpp.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.sldCpp.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.sldCpp.FormatString = null;
             this.sldCpp.Location = new System.Drawing.Point(1522, 498);
             this.sldCpp.Maximum = 100D;
@@ -2565,7 +2574,7 @@ namespace Sample
             // 
             // dvTrendGraph1
             // 
-            this.dvTrendGraph1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvTrendGraph1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvTrendGraph1.GraphBackColor = System.Drawing.Color.Transparent;
             this.dvTrendGraph1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.dvTrendGraph1.Interval = 1000;
@@ -2615,7 +2624,7 @@ namespace Sample
             this.btnTimeGraphRefresh.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnTimeGraphRefresh.Clickable = true;
             this.btnTimeGraphRefresh.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnTimeGraphRefresh.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnTimeGraphRefresh.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnTimeGraphRefresh.Gradient = true;
             this.btnTimeGraphRefresh.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnTimeGraphRefresh.IconGap = 0;
@@ -2634,7 +2643,7 @@ namespace Sample
             // 
             // dvTimeGraph1
             // 
-            this.dvTimeGraph1.Font = new System.Drawing.Font("나눔고딕", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dvTimeGraph1.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dvTimeGraph1.GraphBackColor = System.Drawing.Color.Transparent;
             this.dvTimeGraph1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.dvTimeGraph1.Location = new System.Drawing.Point(20, 55);
@@ -2678,7 +2687,7 @@ namespace Sample
             // 
             // tpDialog
             // 
-            this.tpDialog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpDialog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tpDialog.Controls.Add(this.btnSerialPortSetting_Simple);
             this.tpDialog.Controls.Add(this.btnSerialPortSetting_Normal);
             this.tpDialog.Controls.Add(this.btnSelectorBox_Check);
@@ -2701,6 +2710,7 @@ namespace Sample
             this.tpDialog.Controls.Add(this.btnInputBox);
             this.tpDialog.Controls.Add(this.btnDateTimePicker_DateTime);
             this.tpDialog.Controls.Add(this.btnColorPicker);
+            this.tpDialog.ForeColor = System.Drawing.Color.White;
             this.tpDialog.Location = new System.Drawing.Point(204, 4);
             this.tpDialog.Name = "tpDialog";
             this.tpDialog.Padding = new System.Windows.Forms.Padding(3);
@@ -2714,17 +2724,17 @@ namespace Sample
             this.btnSerialPortSetting_Simple.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnSerialPortSetting_Simple.Clickable = true;
             this.btnSerialPortSetting_Simple.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnSerialPortSetting_Simple.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnSerialPortSetting_Simple.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSerialPortSetting_Simple.Gradient = true;
             this.btnSerialPortSetting_Simple.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnSerialPortSetting_Simple.IconGap = 0;
             this.btnSerialPortSetting_Simple.IconImage = null;
             this.btnSerialPortSetting_Simple.IconSize = 10F;
             this.btnSerialPortSetting_Simple.IconString = null;
-            this.btnSerialPortSetting_Simple.Location = new System.Drawing.Point(276, 428);
+            this.btnSerialPortSetting_Simple.Location = new System.Drawing.Point(376, 428);
             this.btnSerialPortSetting_Simple.LongClickTime = 0;
             this.btnSerialPortSetting_Simple.Name = "btnSerialPortSetting_Simple";
-            this.btnSerialPortSetting_Simple.Size = new System.Drawing.Size(250, 45);
+            this.btnSerialPortSetting_Simple.Size = new System.Drawing.Size(350, 45);
             this.btnSerialPortSetting_Simple.TabIndex = 22;
             this.btnSerialPortSetting_Simple.Text = "SerialPortSetting ( Simple )";
             this.btnSerialPortSetting_Simple.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2737,7 +2747,7 @@ namespace Sample
             this.btnSerialPortSetting_Normal.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnSerialPortSetting_Normal.Clickable = true;
             this.btnSerialPortSetting_Normal.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnSerialPortSetting_Normal.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnSerialPortSetting_Normal.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSerialPortSetting_Normal.Gradient = true;
             this.btnSerialPortSetting_Normal.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnSerialPortSetting_Normal.IconGap = 0;
@@ -2747,7 +2757,7 @@ namespace Sample
             this.btnSerialPortSetting_Normal.Location = new System.Drawing.Point(20, 428);
             this.btnSerialPortSetting_Normal.LongClickTime = 0;
             this.btnSerialPortSetting_Normal.Name = "btnSerialPortSetting_Normal";
-            this.btnSerialPortSetting_Normal.Size = new System.Drawing.Size(250, 45);
+            this.btnSerialPortSetting_Normal.Size = new System.Drawing.Size(350, 45);
             this.btnSerialPortSetting_Normal.TabIndex = 21;
             this.btnSerialPortSetting_Normal.Text = "SerialPortSetting ( Normal )";
             this.btnSerialPortSetting_Normal.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2760,17 +2770,17 @@ namespace Sample
             this.btnSelectorBox_Check.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnSelectorBox_Check.Clickable = true;
             this.btnSelectorBox_Check.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnSelectorBox_Check.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnSelectorBox_Check.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSelectorBox_Check.Gradient = true;
             this.btnSelectorBox_Check.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnSelectorBox_Check.IconGap = 0;
             this.btnSelectorBox_Check.IconImage = null;
             this.btnSelectorBox_Check.IconSize = 10F;
             this.btnSelectorBox_Check.IconString = null;
-            this.btnSelectorBox_Check.Location = new System.Drawing.Point(788, 377);
+            this.btnSelectorBox_Check.Location = new System.Drawing.Point(1088, 377);
             this.btnSelectorBox_Check.LongClickTime = 0;
             this.btnSelectorBox_Check.Name = "btnSelectorBox_Check";
-            this.btnSelectorBox_Check.Size = new System.Drawing.Size(250, 45);
+            this.btnSelectorBox_Check.Size = new System.Drawing.Size(350, 45);
             this.btnSelectorBox_Check.TabIndex = 20;
             this.btnSelectorBox_Check.Text = "SelectorBox ( Check )";
             this.btnSelectorBox_Check.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2783,17 +2793,17 @@ namespace Sample
             this.btnSelectorBox_Radio.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnSelectorBox_Radio.Clickable = true;
             this.btnSelectorBox_Radio.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnSelectorBox_Radio.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnSelectorBox_Radio.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSelectorBox_Radio.Gradient = true;
             this.btnSelectorBox_Radio.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnSelectorBox_Radio.IconGap = 0;
             this.btnSelectorBox_Radio.IconImage = null;
             this.btnSelectorBox_Radio.IconSize = 10F;
             this.btnSelectorBox_Radio.IconString = null;
-            this.btnSelectorBox_Radio.Location = new System.Drawing.Point(532, 377);
+            this.btnSelectorBox_Radio.Location = new System.Drawing.Point(732, 377);
             this.btnSelectorBox_Radio.LongClickTime = 0;
             this.btnSelectorBox_Radio.Name = "btnSelectorBox_Radio";
-            this.btnSelectorBox_Radio.Size = new System.Drawing.Size(250, 45);
+            this.btnSelectorBox_Radio.Size = new System.Drawing.Size(350, 45);
             this.btnSelectorBox_Radio.TabIndex = 19;
             this.btnSelectorBox_Radio.Text = "SelectorBox ( Radio )";
             this.btnSelectorBox_Radio.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2806,17 +2816,17 @@ namespace Sample
             this.btnSelectorBox_Combo.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnSelectorBox_Combo.Clickable = true;
             this.btnSelectorBox_Combo.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnSelectorBox_Combo.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnSelectorBox_Combo.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSelectorBox_Combo.Gradient = true;
             this.btnSelectorBox_Combo.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnSelectorBox_Combo.IconGap = 0;
             this.btnSelectorBox_Combo.IconImage = null;
             this.btnSelectorBox_Combo.IconSize = 10F;
             this.btnSelectorBox_Combo.IconString = null;
-            this.btnSelectorBox_Combo.Location = new System.Drawing.Point(276, 377);
+            this.btnSelectorBox_Combo.Location = new System.Drawing.Point(376, 377);
             this.btnSelectorBox_Combo.LongClickTime = 0;
             this.btnSelectorBox_Combo.Name = "btnSelectorBox_Combo";
-            this.btnSelectorBox_Combo.Size = new System.Drawing.Size(250, 45);
+            this.btnSelectorBox_Combo.Size = new System.Drawing.Size(350, 45);
             this.btnSelectorBox_Combo.TabIndex = 18;
             this.btnSelectorBox_Combo.Text = "SelectorBox ( Combo )";
             this.btnSelectorBox_Combo.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2829,7 +2839,7 @@ namespace Sample
             this.btnSelectorBox_Selector.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnSelectorBox_Selector.Clickable = true;
             this.btnSelectorBox_Selector.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnSelectorBox_Selector.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnSelectorBox_Selector.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSelectorBox_Selector.Gradient = true;
             this.btnSelectorBox_Selector.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnSelectorBox_Selector.IconGap = 0;
@@ -2839,7 +2849,7 @@ namespace Sample
             this.btnSelectorBox_Selector.Location = new System.Drawing.Point(20, 377);
             this.btnSelectorBox_Selector.LongClickTime = 0;
             this.btnSelectorBox_Selector.Name = "btnSelectorBox_Selector";
-            this.btnSelectorBox_Selector.Size = new System.Drawing.Size(250, 45);
+            this.btnSelectorBox_Selector.Size = new System.Drawing.Size(350, 45);
             this.btnSelectorBox_Selector.TabIndex = 17;
             this.btnSelectorBox_Selector.Text = "SelectorBox ( Selector )";
             this.btnSelectorBox_Selector.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2852,17 +2862,17 @@ namespace Sample
             this.btnMessageBox_YesNoCancel.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnMessageBox_YesNoCancel.Clickable = true;
             this.btnMessageBox_YesNoCancel.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnMessageBox_YesNoCancel.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnMessageBox_YesNoCancel.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnMessageBox_YesNoCancel.Gradient = true;
             this.btnMessageBox_YesNoCancel.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnMessageBox_YesNoCancel.IconGap = 0;
             this.btnMessageBox_YesNoCancel.IconImage = null;
             this.btnMessageBox_YesNoCancel.IconSize = 10F;
             this.btnMessageBox_YesNoCancel.IconString = null;
-            this.btnMessageBox_YesNoCancel.Location = new System.Drawing.Point(788, 326);
+            this.btnMessageBox_YesNoCancel.Location = new System.Drawing.Point(1088, 326);
             this.btnMessageBox_YesNoCancel.LongClickTime = 0;
             this.btnMessageBox_YesNoCancel.Name = "btnMessageBox_YesNoCancel";
-            this.btnMessageBox_YesNoCancel.Size = new System.Drawing.Size(250, 45);
+            this.btnMessageBox_YesNoCancel.Size = new System.Drawing.Size(350, 45);
             this.btnMessageBox_YesNoCancel.TabIndex = 16;
             this.btnMessageBox_YesNoCancel.Text = "MessageBox ( Yes / No / Cancel )";
             this.btnMessageBox_YesNoCancel.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2875,17 +2885,17 @@ namespace Sample
             this.btnMessageBox_YesNo.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnMessageBox_YesNo.Clickable = true;
             this.btnMessageBox_YesNo.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnMessageBox_YesNo.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnMessageBox_YesNo.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnMessageBox_YesNo.Gradient = true;
             this.btnMessageBox_YesNo.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnMessageBox_YesNo.IconGap = 0;
             this.btnMessageBox_YesNo.IconImage = null;
             this.btnMessageBox_YesNo.IconSize = 10F;
             this.btnMessageBox_YesNo.IconString = null;
-            this.btnMessageBox_YesNo.Location = new System.Drawing.Point(532, 326);
+            this.btnMessageBox_YesNo.Location = new System.Drawing.Point(732, 326);
             this.btnMessageBox_YesNo.LongClickTime = 0;
             this.btnMessageBox_YesNo.Name = "btnMessageBox_YesNo";
-            this.btnMessageBox_YesNo.Size = new System.Drawing.Size(250, 45);
+            this.btnMessageBox_YesNo.Size = new System.Drawing.Size(350, 45);
             this.btnMessageBox_YesNo.TabIndex = 15;
             this.btnMessageBox_YesNo.Text = "MessageBox ( Yes / No )";
             this.btnMessageBox_YesNo.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2898,17 +2908,17 @@ namespace Sample
             this.btnMessageBox_OkCancel.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnMessageBox_OkCancel.Clickable = true;
             this.btnMessageBox_OkCancel.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnMessageBox_OkCancel.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnMessageBox_OkCancel.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnMessageBox_OkCancel.Gradient = true;
             this.btnMessageBox_OkCancel.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnMessageBox_OkCancel.IconGap = 0;
             this.btnMessageBox_OkCancel.IconImage = null;
             this.btnMessageBox_OkCancel.IconSize = 10F;
             this.btnMessageBox_OkCancel.IconString = null;
-            this.btnMessageBox_OkCancel.Location = new System.Drawing.Point(276, 326);
+            this.btnMessageBox_OkCancel.Location = new System.Drawing.Point(376, 326);
             this.btnMessageBox_OkCancel.LongClickTime = 0;
             this.btnMessageBox_OkCancel.Name = "btnMessageBox_OkCancel";
-            this.btnMessageBox_OkCancel.Size = new System.Drawing.Size(250, 45);
+            this.btnMessageBox_OkCancel.Size = new System.Drawing.Size(350, 45);
             this.btnMessageBox_OkCancel.TabIndex = 14;
             this.btnMessageBox_OkCancel.Text = "MessageBox ( Ok / Cancel )";
             this.btnMessageBox_OkCancel.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2921,17 +2931,17 @@ namespace Sample
             this.btnKeypadH_Password.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnKeypadH_Password.Clickable = true;
             this.btnKeypadH_Password.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnKeypadH_Password.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnKeypadH_Password.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnKeypadH_Password.Gradient = true;
             this.btnKeypadH_Password.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnKeypadH_Password.IconGap = 0;
             this.btnKeypadH_Password.IconImage = null;
             this.btnKeypadH_Password.IconSize = 10F;
             this.btnKeypadH_Password.IconString = null;
-            this.btnKeypadH_Password.Location = new System.Drawing.Point(532, 275);
+            this.btnKeypadH_Password.Location = new System.Drawing.Point(732, 275);
             this.btnKeypadH_Password.LongClickTime = 0;
             this.btnKeypadH_Password.Name = "btnKeypadH_Password";
-            this.btnKeypadH_Password.Size = new System.Drawing.Size(250, 45);
+            this.btnKeypadH_Password.Size = new System.Drawing.Size(350, 45);
             this.btnKeypadH_Password.TabIndex = 13;
             this.btnKeypadH_Password.Text = "Keypad H ( Password )";
             this.btnKeypadH_Password.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2944,17 +2954,17 @@ namespace Sample
             this.btnKeypadH_Float.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnKeypadH_Float.Clickable = true;
             this.btnKeypadH_Float.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnKeypadH_Float.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnKeypadH_Float.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnKeypadH_Float.Gradient = true;
             this.btnKeypadH_Float.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnKeypadH_Float.IconGap = 0;
             this.btnKeypadH_Float.IconImage = null;
             this.btnKeypadH_Float.IconSize = 10F;
             this.btnKeypadH_Float.IconString = null;
-            this.btnKeypadH_Float.Location = new System.Drawing.Point(276, 275);
+            this.btnKeypadH_Float.Location = new System.Drawing.Point(376, 275);
             this.btnKeypadH_Float.LongClickTime = 0;
             this.btnKeypadH_Float.Name = "btnKeypadH_Float";
-            this.btnKeypadH_Float.Size = new System.Drawing.Size(250, 45);
+            this.btnKeypadH_Float.Size = new System.Drawing.Size(350, 45);
             this.btnKeypadH_Float.TabIndex = 12;
             this.btnKeypadH_Float.Text = "Keypad H ( Float )";
             this.btnKeypadH_Float.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2967,17 +2977,17 @@ namespace Sample
             this.btnDateTimePicker_Time.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnDateTimePicker_Time.Clickable = true;
             this.btnDateTimePicker_Time.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnDateTimePicker_Time.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnDateTimePicker_Time.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnDateTimePicker_Time.Gradient = true;
             this.btnDateTimePicker_Time.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnDateTimePicker_Time.IconGap = 0;
             this.btnDateTimePicker_Time.IconImage = null;
             this.btnDateTimePicker_Time.IconSize = 10F;
             this.btnDateTimePicker_Time.IconString = null;
-            this.btnDateTimePicker_Time.Location = new System.Drawing.Point(532, 71);
+            this.btnDateTimePicker_Time.Location = new System.Drawing.Point(732, 71);
             this.btnDateTimePicker_Time.LongClickTime = 0;
             this.btnDateTimePicker_Time.Name = "btnDateTimePicker_Time";
-            this.btnDateTimePicker_Time.Size = new System.Drawing.Size(250, 45);
+            this.btnDateTimePicker_Time.Size = new System.Drawing.Size(350, 45);
             this.btnDateTimePicker_Time.TabIndex = 11;
             this.btnDateTimePicker_Time.Text = "DateTimePicker  ( Time )";
             this.btnDateTimePicker_Time.TextPadding = new System.Windows.Forms.Padding(0);
@@ -2990,17 +3000,17 @@ namespace Sample
             this.btnDateTimePicker_Date.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnDateTimePicker_Date.Clickable = true;
             this.btnDateTimePicker_Date.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnDateTimePicker_Date.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnDateTimePicker_Date.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnDateTimePicker_Date.Gradient = true;
             this.btnDateTimePicker_Date.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnDateTimePicker_Date.IconGap = 0;
             this.btnDateTimePicker_Date.IconImage = null;
             this.btnDateTimePicker_Date.IconSize = 10F;
             this.btnDateTimePicker_Date.IconString = null;
-            this.btnDateTimePicker_Date.Location = new System.Drawing.Point(276, 71);
+            this.btnDateTimePicker_Date.Location = new System.Drawing.Point(376, 71);
             this.btnDateTimePicker_Date.LongClickTime = 0;
             this.btnDateTimePicker_Date.Name = "btnDateTimePicker_Date";
-            this.btnDateTimePicker_Date.Size = new System.Drawing.Size(250, 45);
+            this.btnDateTimePicker_Date.Size = new System.Drawing.Size(350, 45);
             this.btnDateTimePicker_Date.TabIndex = 10;
             this.btnDateTimePicker_Date.Text = "DateTimePicker ( Date )";
             this.btnDateTimePicker_Date.TextPadding = new System.Windows.Forms.Padding(0);
@@ -3013,17 +3023,17 @@ namespace Sample
             this.btnKeypad_Password.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnKeypad_Password.Clickable = true;
             this.btnKeypad_Password.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnKeypad_Password.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnKeypad_Password.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnKeypad_Password.Gradient = true;
             this.btnKeypad_Password.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnKeypad_Password.IconGap = 0;
             this.btnKeypad_Password.IconImage = null;
             this.btnKeypad_Password.IconSize = 10F;
             this.btnKeypad_Password.IconString = null;
-            this.btnKeypad_Password.Location = new System.Drawing.Point(532, 224);
+            this.btnKeypad_Password.Location = new System.Drawing.Point(732, 224);
             this.btnKeypad_Password.LongClickTime = 0;
             this.btnKeypad_Password.Name = "btnKeypad_Password";
-            this.btnKeypad_Password.Size = new System.Drawing.Size(250, 45);
+            this.btnKeypad_Password.Size = new System.Drawing.Size(350, 45);
             this.btnKeypad_Password.TabIndex = 9;
             this.btnKeypad_Password.Text = "Keypad ( Password )";
             this.btnKeypad_Password.TextPadding = new System.Windows.Forms.Padding(0);
@@ -3036,17 +3046,17 @@ namespace Sample
             this.btnKeypad_Float.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnKeypad_Float.Clickable = true;
             this.btnKeypad_Float.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnKeypad_Float.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnKeypad_Float.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnKeypad_Float.Gradient = true;
             this.btnKeypad_Float.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnKeypad_Float.IconGap = 0;
             this.btnKeypad_Float.IconImage = null;
             this.btnKeypad_Float.IconSize = 10F;
             this.btnKeypad_Float.IconString = null;
-            this.btnKeypad_Float.Location = new System.Drawing.Point(276, 224);
+            this.btnKeypad_Float.Location = new System.Drawing.Point(376, 224);
             this.btnKeypad_Float.LongClickTime = 0;
             this.btnKeypad_Float.Name = "btnKeypad_Float";
-            this.btnKeypad_Float.Size = new System.Drawing.Size(250, 45);
+            this.btnKeypad_Float.Size = new System.Drawing.Size(350, 45);
             this.btnKeypad_Float.TabIndex = 8;
             this.btnKeypad_Float.Text = "Keypad ( Float )";
             this.btnKeypad_Float.TextPadding = new System.Windows.Forms.Padding(0);
@@ -3059,7 +3069,7 @@ namespace Sample
             this.btnMessageBox_Ok.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnMessageBox_Ok.Clickable = true;
             this.btnMessageBox_Ok.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnMessageBox_Ok.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnMessageBox_Ok.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnMessageBox_Ok.Gradient = true;
             this.btnMessageBox_Ok.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnMessageBox_Ok.IconGap = 0;
@@ -3069,7 +3079,7 @@ namespace Sample
             this.btnMessageBox_Ok.Location = new System.Drawing.Point(20, 326);
             this.btnMessageBox_Ok.LongClickTime = 0;
             this.btnMessageBox_Ok.Name = "btnMessageBox_Ok";
-            this.btnMessageBox_Ok.Size = new System.Drawing.Size(250, 45);
+            this.btnMessageBox_Ok.Size = new System.Drawing.Size(350, 45);
             this.btnMessageBox_Ok.TabIndex = 7;
             this.btnMessageBox_Ok.Text = "MessageBox ( Ok )";
             this.btnMessageBox_Ok.TextPadding = new System.Windows.Forms.Padding(0);
@@ -3082,7 +3092,7 @@ namespace Sample
             this.btnKeypadH_Int.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnKeypadH_Int.Clickable = true;
             this.btnKeypadH_Int.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnKeypadH_Int.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnKeypadH_Int.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnKeypadH_Int.Gradient = true;
             this.btnKeypadH_Int.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnKeypadH_Int.IconGap = 0;
@@ -3092,7 +3102,7 @@ namespace Sample
             this.btnKeypadH_Int.Location = new System.Drawing.Point(20, 275);
             this.btnKeypadH_Int.LongClickTime = 0;
             this.btnKeypadH_Int.Name = "btnKeypadH_Int";
-            this.btnKeypadH_Int.Size = new System.Drawing.Size(250, 45);
+            this.btnKeypadH_Int.Size = new System.Drawing.Size(350, 45);
             this.btnKeypadH_Int.TabIndex = 6;
             this.btnKeypadH_Int.Text = "Keypad H ( Int )";
             this.btnKeypadH_Int.TextPadding = new System.Windows.Forms.Padding(0);
@@ -3105,7 +3115,7 @@ namespace Sample
             this.btnKeypad_Int.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnKeypad_Int.Clickable = true;
             this.btnKeypad_Int.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnKeypad_Int.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnKeypad_Int.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnKeypad_Int.Gradient = true;
             this.btnKeypad_Int.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnKeypad_Int.IconGap = 0;
@@ -3115,7 +3125,7 @@ namespace Sample
             this.btnKeypad_Int.Location = new System.Drawing.Point(20, 224);
             this.btnKeypad_Int.LongClickTime = 0;
             this.btnKeypad_Int.Name = "btnKeypad_Int";
-            this.btnKeypad_Int.Size = new System.Drawing.Size(250, 45);
+            this.btnKeypad_Int.Size = new System.Drawing.Size(350, 45);
             this.btnKeypad_Int.TabIndex = 5;
             this.btnKeypad_Int.Text = "Keypad ( Int )";
             this.btnKeypad_Int.TextPadding = new System.Windows.Forms.Padding(0);
@@ -3128,7 +3138,7 @@ namespace Sample
             this.btnKeyboard.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnKeyboard.Clickable = true;
             this.btnKeyboard.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnKeyboard.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnKeyboard.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnKeyboard.Gradient = true;
             this.btnKeyboard.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnKeyboard.IconGap = 0;
@@ -3138,7 +3148,7 @@ namespace Sample
             this.btnKeyboard.Location = new System.Drawing.Point(20, 173);
             this.btnKeyboard.LongClickTime = 0;
             this.btnKeyboard.Name = "btnKeyboard";
-            this.btnKeyboard.Size = new System.Drawing.Size(250, 45);
+            this.btnKeyboard.Size = new System.Drawing.Size(350, 45);
             this.btnKeyboard.TabIndex = 4;
             this.btnKeyboard.Text = "Keyboard";
             this.btnKeyboard.TextPadding = new System.Windows.Forms.Padding(0);
@@ -3151,7 +3161,7 @@ namespace Sample
             this.btnInputBox.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnInputBox.Clickable = true;
             this.btnInputBox.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnInputBox.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnInputBox.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnInputBox.Gradient = true;
             this.btnInputBox.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnInputBox.IconGap = 0;
@@ -3161,7 +3171,7 @@ namespace Sample
             this.btnInputBox.Location = new System.Drawing.Point(20, 122);
             this.btnInputBox.LongClickTime = 0;
             this.btnInputBox.Name = "btnInputBox";
-            this.btnInputBox.Size = new System.Drawing.Size(250, 45);
+            this.btnInputBox.Size = new System.Drawing.Size(350, 45);
             this.btnInputBox.TabIndex = 3;
             this.btnInputBox.Text = "InputBox";
             this.btnInputBox.TextPadding = new System.Windows.Forms.Padding(0);
@@ -3174,7 +3184,7 @@ namespace Sample
             this.btnDateTimePicker_DateTime.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnDateTimePicker_DateTime.Clickable = true;
             this.btnDateTimePicker_DateTime.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnDateTimePicker_DateTime.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnDateTimePicker_DateTime.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnDateTimePicker_DateTime.Gradient = true;
             this.btnDateTimePicker_DateTime.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnDateTimePicker_DateTime.IconGap = 0;
@@ -3184,7 +3194,7 @@ namespace Sample
             this.btnDateTimePicker_DateTime.Location = new System.Drawing.Point(20, 71);
             this.btnDateTimePicker_DateTime.LongClickTime = 0;
             this.btnDateTimePicker_DateTime.Name = "btnDateTimePicker_DateTime";
-            this.btnDateTimePicker_DateTime.Size = new System.Drawing.Size(250, 45);
+            this.btnDateTimePicker_DateTime.Size = new System.Drawing.Size(350, 45);
             this.btnDateTimePicker_DateTime.TabIndex = 2;
             this.btnDateTimePicker_DateTime.Text = "DateTimePicker ( DateTime )";
             this.btnDateTimePicker_DateTime.TextPadding = new System.Windows.Forms.Padding(0);
@@ -3197,7 +3207,7 @@ namespace Sample
             this.btnColorPicker.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.btnColorPicker.Clickable = true;
             this.btnColorPicker.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnColorPicker.Font = new System.Drawing.Font("나눔고딕", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnColorPicker.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnColorPicker.Gradient = true;
             this.btnColorPicker.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.btnColorPicker.IconGap = 0;
@@ -3207,7 +3217,7 @@ namespace Sample
             this.btnColorPicker.Location = new System.Drawing.Point(20, 20);
             this.btnColorPicker.LongClickTime = 0;
             this.btnColorPicker.Name = "btnColorPicker";
-            this.btnColorPicker.Size = new System.Drawing.Size(250, 45);
+            this.btnColorPicker.Size = new System.Drawing.Size(350, 45);
             this.btnColorPicker.TabIndex = 1;
             this.btnColorPicker.Text = "ColorPicker";
             this.btnColorPicker.TextPadding = new System.Windows.Forms.Padding(0);
@@ -3216,8 +3226,9 @@ namespace Sample
             // 
             // tpContents
             // 
-            this.tpContents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpContents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tpContents.Controls.Add(this.dvTableLayoutPanel2);
+            this.tpContents.ForeColor = System.Drawing.Color.White;
             this.tpContents.Location = new System.Drawing.Point(204, 4);
             this.tpContents.Name = "tpContents";
             this.tpContents.Padding = new System.Windows.Forms.Padding(10);
@@ -3281,10 +3292,11 @@ namespace Sample
             // 
             // tpDataGrid
             // 
-            this.tpDataGrid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.tpDataGrid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tpDataGrid.Controls.Add(this.dg);
             this.tpDataGrid.Controls.Add(this.dvControl1);
             this.tpDataGrid.Controls.Add(this.dvContainer3);
+            this.tpDataGrid.ForeColor = System.Drawing.Color.White;
             this.tpDataGrid.Location = new System.Drawing.Point(204, 4);
             this.tpDataGrid.Name = "tpDataGrid";
             this.tpDataGrid.Padding = new System.Windows.Forms.Padding(20);
@@ -3341,6 +3353,40 @@ namespace Sample
             this.dvContainer3.TabStop = false;
             this.dvContainer3.Text = "dvContainer3";
             this.dvContainer3.UseThemeColor = true;
+            // 
+            // btnGridCells2
+            // 
+            this.btnGridCells2.BackgroundDraw = true;
+            this.btnGridCells2.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.btnGridCells2.Clickable = true;
+            this.btnGridCells2.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.btnGridCells2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnGridCells2.Gradient = true;
+            this.btnGridCells2.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.btnGridCells2.IconGap = 0;
+            this.btnGridCells2.IconImage = null;
+            this.btnGridCells2.IconSize = 10F;
+            this.btnGridCells2.IconString = null;
+            this.btnGridCells2.Location = new System.Drawing.Point(466, 0);
+            this.btnGridCells2.LongClickTime = 0;
+            this.btnGridCells2.Name = "btnGridCells2";
+            this.btnGridCells2.Size = new System.Drawing.Size(225, 45);
+            this.btnGridCells2.TabIndex = 6;
+            this.btnGridCells2.Text = "Cells 2";
+            this.btnGridCells2.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnGridCells2.UseLongClick = false;
+            this.btnGridCells2.UseThemeColor = true;
+            // 
+            // dvControl3
+            // 
+            this.dvControl3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dvControl3.Location = new System.Drawing.Point(458, 0);
+            this.dvControl3.Name = "dvControl3";
+            this.dvControl3.Size = new System.Drawing.Size(8, 45);
+            this.dvControl3.TabIndex = 4;
+            this.dvControl3.TabStop = false;
+            this.dvControl3.Text = "dvControl3";
+            this.dvControl3.UseThemeColor = true;
             // 
             // btnGridCells
             // 
@@ -3472,50 +3518,17 @@ namespace Sample
             this.tsmiEdit.Size = new System.Drawing.Size(84, 41);
             this.tsmiEdit.Text = "편집(&E)";
             // 
-            // dvControl3
-            // 
-            this.dvControl3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dvControl3.Location = new System.Drawing.Point(458, 0);
-            this.dvControl3.Name = "dvControl3";
-            this.dvControl3.Size = new System.Drawing.Size(8, 45);
-            this.dvControl3.TabIndex = 4;
-            this.dvControl3.TabStop = false;
-            this.dvControl3.Text = "dvControl3";
-            this.dvControl3.UseThemeColor = true;
-            // 
-            // btnGridCells2
-            // 
-            this.btnGridCells2.BackgroundDraw = true;
-            this.btnGridCells2.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.btnGridCells2.Clickable = true;
-            this.btnGridCells2.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            this.btnGridCells2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnGridCells2.Gradient = true;
-            this.btnGridCells2.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
-            this.btnGridCells2.IconGap = 0;
-            this.btnGridCells2.IconImage = null;
-            this.btnGridCells2.IconSize = 10F;
-            this.btnGridCells2.IconString = null;
-            this.btnGridCells2.Location = new System.Drawing.Point(466, 0);
-            this.btnGridCells2.LongClickTime = 0;
-            this.btnGridCells2.Name = "btnGridCells2";
-            this.btnGridCells2.Size = new System.Drawing.Size(225, 45);
-            this.btnGridCells2.TabIndex = 6;
-            this.btnGridCells2.Text = "Cells 2";
-            this.btnGridCells2.TextPadding = new System.Windows.Forms.Padding(0);
-            this.btnGridCells2.UseLongClick = false;
-            this.btnGridCells2.UseThemeColor = true;
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.ClientSize = new System.Drawing.Size(1920, 1080);
             this.Controls.Add(this.tab);
             this.Controls.Add(this.ms);
+            this.FrameColor = System.Drawing.Color.White;
             this.MainMenuStrip = this.ms;
-            this.MinimumSize = new System.Drawing.Size(1920, 1080);
+            this.MinimumSize = new System.Drawing.Size(1918, 1048);
             this.Name = "FormMain";
             this.Padding = new System.Windows.Forms.Padding(0, 60, 0, 0);
             this.Text = "Sample";
@@ -3524,7 +3537,6 @@ namespace Sample
             this.TitleIconColor = System.Drawing.Color.Gainsboro;
             this.TitleIconSize = 14F;
             this.TitleIconString = "fab fa-instalod";
-            this.UseThemeColor = false;
             this.tab.ResumeLayout(false);
             this.tpControl.ResumeLayout(false);
             this.tpContainer.ResumeLayout(false);

@@ -20,9 +20,11 @@ namespace Sample
 {
     public partial class FormMain : DvForm
     {
+        #region Member Variable
+        #region Random
         Random rnd = new Random();
         Timer tmr;
-
+        #endregion
         #region Grid
         int GridMode = 1;
         List<GridItem2> Items2 = new List<GridItem2>();
@@ -41,11 +43,13 @@ namespace Sample
         DvSelectorBox selectorBox = new DvSelectorBox();
         DvSerialPortSetting serialPortSetting = new DvSerialPortSetting();
         #endregion
+        #endregion
 
         public FormMain()
         {
             InitializeComponent();
 
+            #region TabIcon
             tab.TabIcons.Add("tpControl", new DvIcon("fa-cube", 18, DvTextIconAlignment.TopBottom, 5));
             tab.TabIcons.Add("tpContainer", new DvIcon("fa-layer-group", 18, DvTextIconAlignment.TopBottom, 5));
             tab.TabIcons.Add("tpGraph", new DvIcon("fa-chart-bar", 18, DvTextIconAlignment.TopBottom, 5));
@@ -53,7 +57,7 @@ namespace Sample
             tab.TabIcons.Add("tpDialog", new DvIcon("far fa-window-maximize", 18, DvTextIconAlignment.TopBottom, 5));
             tab.TabIcons.Add("tpContents", new DvIcon("fa-cubes", 18, DvTextIconAlignment.TopBottom, 5));
             tab.TabIcons.Add("tpDataGrid", new DvIcon("fa-table", 18, DvTextIconAlignment.TopBottom, 5));
-
+            #endregion
 
             #region Lamp / Switch
             dvSwitch1.OnOffChanged += (o, s) => dvLamp1.OnOff = dvLamp2.OnOff = dvLamp3.OnOff = dvLamp4.OnOff = dvSwitch1.OnOff;
@@ -273,7 +277,7 @@ namespace Sample
                 dg.Rows.Clear();
                 dg.SummaryRows.Clear();
 
-                dg.Font = new Font("나눔고딕", 7);
+                dg.Font = new Font("나눔고딕", 8);
                 dg.TextShadow = false;
                 dg.RowBevel = true;
                 dg.TouchMode = true;
@@ -323,7 +327,7 @@ namespace Sample
                 dg.SummaryRows.Clear();
 
                 dg.AutoSet = true;
-                dg.Font = new Font("나눔고딕", 8);
+                dg.Font = new Font("나눔고딕", 9);
                 dg.TextShadow = false;
                 dg.RowBevel = true;
                 dg.TouchMode = false;
@@ -369,7 +373,7 @@ namespace Sample
                 dg.SummaryRows.Clear();
 
                 dg.AutoSet = true;
-                dg.Font = new Font("나눔고딕", 8);
+                dg.Font = new Font("나눔고딕", 9);
                 dg.TextShadow = false;
                 dg.RowBevel = true;
                 dg.TouchMode = false;
@@ -416,6 +420,7 @@ namespace Sample
 
         }
 
+        #region Method
         #region GraphSet
         void GraphSet()
         {
@@ -479,6 +484,7 @@ namespace Sample
             }
             return s;
         }
+        #endregion
         #endregion
     }
 

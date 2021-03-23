@@ -39,7 +39,6 @@ namespace FinanceDV
             this.Name = "FormMain";
             this.Padding = new System.Windows.Forms.Padding(7, 60, 7, 7);
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 
         }
