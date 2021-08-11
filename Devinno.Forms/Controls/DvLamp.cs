@@ -220,6 +220,17 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+
+        #region ContentAlignment
+        private DvContentAlignment eContentAlignment = DvContentAlignment.MiddleCenter;
+        [Category("- 모양")]
+        public DvContentAlignment ContentAlignment
+        {
+            get { return eContentAlignment; }
+            set { if (eContentAlignment != value) { eContentAlignment = value; Invalidate(); } }
+        }
+        #endregion
+
         #endregion
 
         #region Member Variable
@@ -245,11 +256,12 @@ namespace Devinno.Forms.Controls
             var wratio = (Width > Height ? (double)Width / (double)Height : 1D);
             var hratio = (Width < Height ? (double)Height / (double)Width : 1D);
 
+
             if (string.IsNullOrWhiteSpace(Text))
             {
                 var ng = Math.Min(LampSize / 8, 9);
                 var szv = LampStyle == DvLampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
-                var rtFA = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
+                var rtFA = DrawingTool.MakeRectangleAlign(rtContent, szv, ContentAlignment);
                 var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
 
                 SetArea("rtLampBack", rtFA);
@@ -266,7 +278,7 @@ namespace Devinno.Forms.Controls
                     var szTX = g.MeasureString(Text, Font);
                     var szv = g.MeasureTextIcon(eLampAlignment, szFA, gap, Text, Font);
 
-                    var rt = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
+                    var rt = DrawingTool.MakeRectangleAlign(rtContent, szv, ContentAlignment);
 
                     if (LampAlignment == DvTextIconAlignment.LeftRight)
                     {
@@ -293,7 +305,7 @@ namespace Devinno.Forms.Controls
                 {
                     var ng = Math.Min(LampSize / 8, 9);
                     var szv = LampStyle == DvLampStyle.CIRCLE ? new Size(LampSize, LampSize) : new Size(Convert.ToInt32(LampSize * wratio), Convert.ToInt32(LampSize * hratio));
-                    var rtFA = DrawingTool.MakeRectangleAlign(rtContent, szv, DvContentAlignment.MiddleCenter);
+                    var rtFA = DrawingTool.MakeRectangleAlign(rtContent, szv, ContentAlignment);
                     var rtFAIN = new Rectangle(rtFA.X, rtFA.Y, rtFA.Width, rtFA.Height); rtFAIN.Inflate(-ng, -ng);
                    
                     SetArea("rtLampBack", rtFA);

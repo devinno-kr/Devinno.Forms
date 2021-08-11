@@ -185,7 +185,7 @@ namespace Devinno.Forms.Extensions
                     var r = FA.GetFAI(icon.IconString);
 
                     var old = g.TextRenderingHint;
-                    g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                    g.TextRenderingHint = icon.RenderingHint.HasValue ? icon.RenderingHint.Value : TextRenderingHint.AntiAliasGridFit;
                     using (var ft = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
                     {
                         var text = r.IconText;
@@ -216,7 +216,7 @@ namespace Devinno.Forms.Extensions
                     var r = FA.GetFAI(icon.IconString);
 
                     var old = g.TextRenderingHint;
-                    g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                    g.TextRenderingHint = icon.RenderingHint.HasValue ? icon.RenderingHint.Value : TextRenderingHint.AntiAliasGridFit;
                     using (var ft = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
                     {
                         var text = r.IconText;

@@ -482,6 +482,7 @@ namespace Devinno.Forms.Controls
                         }
                         #endregion
                         #region Filter
+                        if (col.UseFilter)
                         {
                             var rt = DvDataGridTool.RTI(rts["rtFilter" + col.Name]); rt.Offset(hspos, 0);
                             var n2 = Convert.ToInt32(f * 2);
@@ -516,6 +517,7 @@ namespace Devinno.Forms.Controls
                         }
                         #endregion
                         #region Filter
+                        if (col.UseFilter)
                         {
                             var rt = rts["rtFilter" + col.Name];
                             var n2 = Convert.ToInt32(f * 2);

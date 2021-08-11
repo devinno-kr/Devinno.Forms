@@ -123,9 +123,9 @@ namespace Devinno.Forms.Dialogs
                         if (UseEnterKey && s.KeyCode == Keys.Enter)
                         {
                             var oc = ((Control)o).Parent;
-                            var ls = layout.Controls.Cast<Control>().ToList();
-                            var idx = ls.IndexOf(oc);
-                            if (idx == ls.Count - 1) OK();
+                            var vls = layout.Controls.Cast<Control>().ToList();
+                            var idx = vls.IndexOf(oc);
+                            if (idx == vls.Count - 1) OK();
                             else
                             {
                                 var cNext = layout.Controls[idx + 1 == layout.Controls.Count ? 0 : idx + 1];
@@ -298,80 +298,157 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
 
-        public byte? ShowByte(string Title, byte? value = null)
+        public byte? ShowByte(string Title, string Name = null, byte? value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             byte? ret = null;
-            var v = ShowInputBox(Title, value.HasValue ? new ReturnByte() { Value = value.Value } : null);
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnByte() { Value = value.Value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }
-        public short? ShowShort(string Title, short? value = null)
+        public short? ShowShort(string Title, string Name = null, short? value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             short? ret = null;
-            var v = ShowInputBox(Title, value.HasValue ? new ReturnShort() { Value = value.Value } : null);
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnShort() { Value = value.Value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }
-        public int? ShowInt(string Title, int? value = null)
+        public int? ShowInt(string Title, string Name = null, int? value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             int? ret = null;
-            var v = ShowInputBox(Title, value.HasValue ? new ReturnInt() { Value = value.Value } : null);
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnInt() { Value = value.Value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }
-        public long? ShowLong(string Title, long? value = null)
+        public long? ShowLong(string Title, string Name = null, long? value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             long? ret = null;
-            var v = ShowInputBox(Title, value.HasValue ? new ReturnLong() { Value = value.Value } : null);
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnLong() { Value = value.Value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }
-        public ushort? ShowUShort(string Title, ushort? value = null)
+        public ushort? ShowUShort(string Title, string Name = null, ushort? value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             ushort? ret = null;
-            var v = ShowInputBox(Title, value.HasValue ? new ReturnUShort() { Value = value.Value } : null);
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnUShort() { Value = value.Value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }
-        public uint? ShowUInt(string Title, uint? value = null)
+        public uint? ShowUInt(string Title, string Name = null, uint? value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             uint? ret = null;
-            var v = ShowInputBox(Title, value.HasValue ? new ReturnUInt() { Value = value.Value } : null);
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnUInt() { Value = value.Value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }
-        public ulong? ShowULong(string Title, ulong? value = null)
+        public ulong? ShowULong(string Title, string Name = null, ulong? value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             ulong? ret = null;
-            var v = ShowInputBox(Title, value.HasValue ? new ReturnULong() { Value = value.Value } : null);
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnULong() { Value = value.Value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }
-        public float? ShowFloat(string Title, float? value = null)
+        public float? ShowFloat(string Title, string Name = null, float? value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             float? ret = null;
-            var v = ShowInputBox(Title, value.HasValue ? new ReturnFloat() { Value = value.Value } : null);
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnFloat() { Value = value.Value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }
-        public double? ShowDouble(string Title, double? value = null)
+        public double? ShowDouble(string Title, string Name = null, double? value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             double? ret = null;
-            var v = ShowInputBox(Title, value.HasValue ? new ReturnDouble() { Value = value.Value } : null);
+            var v = ShowInputBox(Title, value.HasValue ? new ReturnDouble() { Value = value.Value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }
-        public decimal? ShowDecimal(string Title, decimal? value = null)
+        public decimal? ShowDecimal(string Title, string Name = null, decimal? value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             decimal? ret = null;
-            var v = ShowInputBox<ReturnDecimal>(Title, value.HasValue ? new ReturnDecimal() { Value = value.Value } : null);
+            var v = ShowInputBox<ReturnDecimal>(Title, value.HasValue ? new ReturnDecimal() { Value = value.Value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }
-        public string ShowString(string Title, string value = null)
+        public string ShowString(string Title, string Name = null, string value = null)
         {
+            Dictionary<string, InputBoxInfo> dic = null;
+            if (Name != null)
+            {
+                dic = new Dictionary<string, InputBoxInfo>();
+                dic.Add("Value", new InputBoxInfo() { Alias = Name });
+            }
+
             string ret = null;
-            var v = ShowInputBox(Title, value != null ? new ReturnString() { Value = value } : null);
+            var v = ShowInputBox(Title, value != null ? new ReturnString() { Value = value } : null, dic);
             if (v != null) ret = v.Value;
             return ret;
         }

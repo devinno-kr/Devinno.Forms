@@ -1347,52 +1347,52 @@ namespace Devinno.Forms.Controls
             {
                 if (Value is byte)
                 {
-                    var ret = Grid.InputBox.ShowByte("입력 : " + Column.HeaderText, Value as byte?);
+                    var ret = Grid.InputBox.ShowByte("입력 : " + Column.HeaderText, "값", Value as byte?);
                     if (ret.HasValue && ret.Value != Value as byte?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
                 }
                 else if (Value is short)
                 {
-                    var ret = Grid.InputBox.ShowShort("입력 : " + Column.HeaderText, Value as short?);
+                    var ret = Grid.InputBox.ShowShort("입력 : " + Column.HeaderText, "값", Value as short?);
                     if (ret.HasValue && ret.Value != Value as short?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
                 }
                 else if (Value is ushort)
                 {
-                    var ret = Grid.InputBox.ShowUShort("입력 : " + Column.HeaderText, Value as ushort?);
+                    var ret = Grid.InputBox.ShowUShort("입력 : " + Column.HeaderText, "값", Value as ushort?);
                     if (ret.HasValue && ret.Value != Value as ushort?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
                 }
                 else if (Value is int)
                 {
-                    var ret = Grid.InputBox.ShowInt("입력 : " + Column.HeaderText, Value as int?);
+                    var ret = Grid.InputBox.ShowInt("입력 : " + Column.HeaderText, "값", Value as int?);
                     if (ret.HasValue && ret.Value != Value as int?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
                 }
                 else if (Value is uint)
                 {
-                    var ret = Grid.InputBox.ShowUInt("입력 : " + Column.HeaderText, Value as uint?);
+                    var ret = Grid.InputBox.ShowUInt("입력 : " + Column.HeaderText, "값", Value as uint?);
                     if (ret.HasValue && ret.Value != Value as uint?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
                 }
                 else if (Value is long)
                 {
-                    var ret = Grid.InputBox.ShowLong("입력 : " + Column.HeaderText, Value as long?);
+                    var ret = Grid.InputBox.ShowLong("입력 : " + Column.HeaderText, "값", Value as long?);
                     if (ret.HasValue && ret.Value != Value as long?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
                 }
                 else if (Value is ulong)
                 {
-                    var ret = Grid.InputBox.ShowULong("입력 : " + Column.HeaderText, Value as ulong?);
+                    var ret = Grid.InputBox.ShowULong("입력 : " + Column.HeaderText, "값", Value as ulong?);
                     if (ret.HasValue && ret.Value != Value as ulong?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
                 }
                 else if (Value is float)
                 {
-                    var ret = Grid.InputBox.ShowFloat("입력 : " + Column.HeaderText, Value as float?);
+                    var ret = Grid.InputBox.ShowFloat("입력 : " + Column.HeaderText, "값", Value as float?);
                     if (ret.HasValue && ret.Value != Value as float?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
                 }
                 else if (Value is double)
                 {
-                    var ret = Grid.InputBox.ShowDouble("입력 : " + Column.HeaderText, Value as double?);
+                    var ret = Grid.InputBox.ShowDouble("입력 : " + Column.HeaderText, "값", Value as double?);
                     if (ret.HasValue && ret.Value != Value as double?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
                 }
                 else if (Value is decimal)
                 {
-                    var ret = Grid.InputBox.ShowDecimal("입력 : " + Column.HeaderText, Value as decimal?);
+                    var ret = Grid.InputBox.ShowDecimal("입력 : " + Column.HeaderText, "값", Value as decimal?);
                     if (ret.HasValue && ret.Value != Value as decimal?) { var old = Value; Value = ret.Value; Grid.InvokeValueChanged(this, old, ret.Value); }
                 }
 

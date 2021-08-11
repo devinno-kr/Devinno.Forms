@@ -205,10 +205,15 @@ namespace Sample
             btnInputBox.ButtonClick += (o, s) =>
             {
                 Block = true;
+                /*
                 var dic = new Dictionary<string, InputBoxInfo>();
                 dic.Add("PortName", new InputBoxInfo() { Items = SerialPort.GetPortNames().Select(x => new ComboBoxItem(x)).ToList() });
                 dic.Add("Baudrate", new InputBoxInfo() { Items = new int[] { 4800, 9600, 19200, 38400, 57600, 115200 }.Select(x => new ComboBoxItem(x.ToString())).ToList() });
                 inputBox.ShowInputBox<Data3>("입력", null, dic);
+                */
+
+                inputBox.ShowString("새 파일", "제목");
+
                 Block = false;
             };
 
@@ -320,7 +325,7 @@ namespace Sample
                 GridMode = 2;
                 var f = DpiRatio;
                 dg.MovingStop();
-                dg.SelectionMode = DvDataGridSelectionMode.SELECTOR;
+                dg.SelectionMode = DvDataGridSelectionMode.MULTI;
                 dg.ColumnGroups.Clear();
                 dg.Columns.Clear();
                 dg.Rows.Clear();
@@ -333,6 +338,7 @@ namespace Sample
                 dg.TouchMode = false;
                 dg.ScrollMode = ScrollMode.Vertical;
                 dg.RowHeight = dg.ColumnHeight = Convert.ToInt32(30 * f);
+                
                 dg.Columns.Add(new DvDataGridColumn(dg) { Name = "DeviceName", HeaderText = "장치명", SizeMode = SizeMode.Percent, Width = 15M });
                 dg.Columns.Add(new DvDataGridImageColumn(dg) { Name = "DeviceImage", HeaderText = "이미지", SizeMode = SizeMode.Percent, Width = 5M });
                 dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Time", HeaderText = "설치일", SizeMode = SizeMode.Percent, Width = 15M, Format = "yyyy.MM.dd" });

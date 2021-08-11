@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Devinno.Forms.Icons
 
         public DvTextIconAlignment Alignment { get; set; } = DvTextIconAlignment.LeftRight;
         public int Gap { get; set; } = 0;
-
+        public TextRenderingHint? RenderingHint { get; set; } = null;
         internal bool Shadow { get; set; }
 
         public DvIcon() { }

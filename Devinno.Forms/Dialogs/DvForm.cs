@@ -326,11 +326,13 @@ namespace Devinno.Forms.Dialogs
             BackColor = BlackTheme.StaticBackColor;
             #endregion
             #region Thread
-            var th = new System.Threading.Thread(new System.Threading.ThreadStart(() => {
-
+            var th = new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
                 var sz = this.Size;
                 var st = this.WindowState;
-                while(true)
+                var oe = MousePosition;
+
+                while (true)
                 {
                     try
                     {
@@ -339,21 +341,43 @@ namespace Devinno.Forms.Dialogs
                             sz = this.Size;
                             this.Invoke(new Action(() => Invalidate()));
                         }
-                        else if(st != this.WindowState)
+                        else if (st != this.WindowState)
                         {
                             st = this.WindowState;
                             this.Invoke(new Action(() => Invalidate()));
                         }
-                        else if(mvdown != null)
+                        else if (mvdown != null)
                         {
                             this.Invoke(new Action(() => Invalidate()));
+                        }
+
+                        var ve = MousePosition;
+                        if (oe.X != ve.X || oe.Y != ve.Y)
+                        {
+                            oe = ve;
+                            if (Areas.ContainsKey("rtExit") && Areas.ContainsKey("rtMax") && Areas.ContainsKey("rtMin"))
+                            {
+                                var rtExit = Areas["rtExit"];
+                                var rtMax = Areas["rtMax"];
+                                var rtMin = Areas["rtMin"];
+                                var e = new Point(ve.X - this.Left, ve.Y - this.Top);
+
+                                var inv = false;
+                                if (ExitBox) { var b = CollisionTool.Check(rtExit, e.X, e.Y); inv |= bdExit != b; bdExit = b; }
+                                if (MaximizeBox) { var b = CollisionTool.Check(rtMax, e.X, e.Y); inv |= bdMax != b; bdMax = b; }
+                                if (MinimizeBox) { var b = CollisionTool.Check(rtMin, e.X, e.Y); inv |= bdMin != b; bdMin = b; }
+
+                                if (inv)
+                                    this.Invoke(new Action(() => Invalidate()));
+                            }
                         }
                     }
                     catch { }
                     System.Threading.Thread.Sleep(10);
                 }
 
-            })) { IsBackground = true };
+            }))
+            { IsBackground = true };
             th.Start();
             #endregion
         }
@@ -564,8 +588,21 @@ namespace Devinno.Forms.Dialogs
                 #region Form Move
                 if (Movable)
                 {
-                    if (CollisionTool.Check(rtTitle, e.X, e.Y))
-                        mvdown = new WNDMV() { Point = this.PointToScreen(e.Location), Location = this.Location };
+                    #region Movable
+                    if (Environment.OSVersion.Platform != PlatformID.Unix)
+                    {
+                        if (CollisionTool.Check(rtTitle, e.X, e.Y))
+                        {
+                            Win32Tool.ReleaseCapture();
+                            Win32Tool.SendMessage(Handle, Win32Tool.WM_NCLBUTTONDOWN, Win32Tool.HT_CAPTION, 0);
+                        }
+                    }
+                    else
+                    {
+                        if (CollisionTool.Check(rtTitle, e.X, e.Y))
+                            mvdown = new WNDMV() { Point = this.PointToScreen(e.Location), Location = this.Location };
+                    }
+                    #endregion
                 }
                 #endregion
             }

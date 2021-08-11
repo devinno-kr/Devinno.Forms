@@ -22,6 +22,10 @@ namespace Devinno.Forms.Controls
         #region Icon
         private DvIcon ico = new DvIcon();
 
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public DvIcon Icon => ico;
+
         [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         [Category("- 아이콘")]
         public Bitmap IconImage

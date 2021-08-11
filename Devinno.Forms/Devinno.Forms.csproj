@@ -13,8 +13,9 @@
     <PackageProjectUrl>https://github.com/devinno-kr/Devinno.Forms</PackageProjectUrl>
     <PackageIcon>ico.png</PackageIcon>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -46,12 +47,6 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Devinno">
-      <HintPath>..\..\Devinno\Devinno\bin\Debug\net5.0\Devinno.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
