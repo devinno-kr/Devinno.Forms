@@ -1271,7 +1271,7 @@ namespace Devinno.Forms.Controls
         {
             if (CollisionTool.Check(CellBounds, x, y))
             {
-                var ret = Grid.InputBox.ShowString("입력 : " + Column.HeaderText, Value as string);
+                var ret = Grid.InputBox.ShowString("입력 : " + Column.HeaderText, "값", Value as string);
                 if (ret != null)
                 {
                     var v = ret;

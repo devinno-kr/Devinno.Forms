@@ -139,7 +139,7 @@ namespace Devinno.Forms.Controls
             set => OriginalTextBox.Text = value;
         }
         #endregion
-  
+
         #region Font
         public override Font Font
         {
@@ -188,7 +188,7 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Constructor
-        public DvTextBox() 
+        public DvTextBox()
         {
             #region SetStyle : Selectable
             SetStyle(ControlStyles.Selectable, true);
@@ -450,6 +450,14 @@ namespace Devinno.Forms.Controls
                 OriginalTextBox.Location = new Point(rttb.X + 0, rttb.Y + 0);
                 OriginalTextBox.Visible = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block));
                 #endregion
+            }
+        }
+
+        public void Center(DvForm frm)
+        {
+            using (var g = CreateGraphics())
+            {
+                Center(g, frm);
             }
         }
         #endregion

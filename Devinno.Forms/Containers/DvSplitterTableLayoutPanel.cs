@@ -294,7 +294,7 @@ namespace Devinno.Forms.Containers
                     var ls = new List<RowStyle>();
                     for (int i = 0; i < rowhs.Length && i < RowStyles.Count; i++)
                     {
-                        var cs = ColumnStyles[i];
+                        var cs = RowStyles[i];
                         if (cs.SizeType == SizeType.Absolute) ls.Add(new RowStyle(SizeType.Absolute, rowhs[i]));
                         else if (cs.SizeType == SizeType.Percent) ls.Add(new RowStyle(SizeType.Percent, ((float)rowhs[i] / (float)(rowhs.Sum())) * 100F));
                     }

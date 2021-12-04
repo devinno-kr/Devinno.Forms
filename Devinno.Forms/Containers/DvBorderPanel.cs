@@ -98,7 +98,7 @@ namespace Devinno.Forms.Containers
         #region Constructor
         public DvBorderPanel()
         {
-            SetStyle(ControlStyles.Selectable, true);
+            SetStyle(ControlStyles.Selectable, false);
             UpdateStyles();
 
             Size = new Size(300, 200);

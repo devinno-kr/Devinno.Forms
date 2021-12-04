@@ -12,6 +12,17 @@ namespace Devinno.Forms.Dialogs
 {
     public partial class DvMessageBox : DvForm
     {
+        bool bUseKey = false;
+        public bool UseKey
+        {
+            get => bUseKey;
+            set
+            {
+                bUseKey = value;
+                btnOk.UseKey = btnCancel.UseKey = btnNo.UseKey = btnYes.UseKey = UseKey;
+            }
+        }
+
         public DvMessageBox()
         {
             InitializeComponent();
@@ -20,9 +31,10 @@ namespace Devinno.Forms.Dialogs
             btnCancel.ButtonClick += (o, s) => DialogResult = DialogResult.Cancel;
             btnYes.ButtonClick += (o, s) => DialogResult = DialogResult.Yes;
             btnNo.ButtonClick += (o, s) => DialogResult = DialogResult.No;
+            SetStyle(ControlStyles.Selectable, false);
 
             Fixed = true;
-
+            KeyPreview = true;
         }
 
         public DialogResult ShowMessageBoxOk(string Title, string Message)
@@ -47,10 +59,12 @@ namespace Devinno.Forms.Dialogs
             layout.RowStyles[1].SizeType = SizeType.Absolute;
             layout.RowStyles[1].Height = Convert.ToInt32(36 * f);
             #endregion
-
+          
             layout.Controls.Clear();
             layout.Controls.Add(lblMessage, 0, 0); layout.SetColumnSpan(lblMessage, 8);
             layout.Controls.Add(btnOk, 1, 1); layout.SetColumnSpan(btnOk, 6);
+
+            btnOk.Select();
             return this.ShowDialog();
         }
 
@@ -81,6 +95,8 @@ namespace Devinno.Forms.Dialogs
             layout.Controls.Add(lblMessage, 0, 0); layout.SetColumnSpan(lblMessage, 8);
             layout.Controls.Add(btnOk, 1, 1); layout.SetColumnSpan(btnOk, 3);
             layout.Controls.Add(btnCancel, 4, 1); layout.SetColumnSpan(btnCancel, 3);
+
+            btnCancel.Select();
             return this.ShowDialog();
         }
 
@@ -107,11 +123,12 @@ namespace Devinno.Forms.Dialogs
             layout.RowStyles[1].Height = Convert.ToInt32(36 * f);
             #endregion
 
-
             layout.Controls.Clear();
             layout.Controls.Add(lblMessage, 0, 0); layout.SetColumnSpan(lblMessage, 8);
             layout.Controls.Add(btnYes, 1, 1); layout.SetColumnSpan(btnYes, 3);
             layout.Controls.Add(btnNo, 4, 1); layout.SetColumnSpan(btnNo, 3);
+
+            btnNo.Select();
             return this.ShowDialog();
         }
 
@@ -143,6 +160,8 @@ namespace Devinno.Forms.Dialogs
             layout.Controls.Add(btnYes, 1, 1);          layout.SetColumnSpan(btnYes, 2);
             layout.Controls.Add(btnNo, 3, 1);           layout.SetColumnSpan(btnNo, 2);
             layout.Controls.Add(btnCancel, 5, 1);       layout.SetColumnSpan(btnCancel, 2);
+
+            btnCancel.Select();
             return this.ShowDialog();
         }
 

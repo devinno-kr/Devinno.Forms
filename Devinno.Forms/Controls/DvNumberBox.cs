@@ -230,7 +230,7 @@ namespace Devinno.Forms.Controls
 
                         var rtPlus = new Rectangle(rtR.X, rtContent.Y, rtR.Width, rtR.Height / 2);
                         var rtMinus = new Rectangle(rtR.X, rtPlus.Bottom, rtR.Width, rtContent.Bottom - rtPlus.Bottom);
-                        var rtValue = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width - rtContent.Height, rtContent.Height);
+                        var rtValue = new Rectangle(rtContent.X, rtContent.Y, rtContent.Width - ButtonWidth, rtContent.Height);
                         SetArea("rtMinus", rtMinus);
                         SetArea("rtPlus", rtPlus);
                         SetArea("rtValue", rtValue);

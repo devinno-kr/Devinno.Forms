@@ -31,6 +31,11 @@ namespace Sample
         {
             this.tab = new Devinno.Forms.Containers.DvTabControl();
             this.tpControl = new System.Windows.Forms.TabPage();
+            this.dvTriangleButton4 = new Devinno.Forms.Controls.DvTriangleButton();
+            this.dvTriangleButton3 = new Devinno.Forms.Controls.DvTriangleButton();
+            this.dvTriangleButton2 = new Devinno.Forms.Controls.DvTriangleButton();
+            this.dvTriangleButton1 = new Devinno.Forms.Controls.DvTriangleButton();
+            this.dvNumberBox2 = new Devinno.Forms.Controls.DvNumberBox();
             this.dvSliderv2 = new Devinno.Forms.Controls.DvSliderV();
             this.dvSliderv1 = new Devinno.Forms.Controls.DvSliderV();
             this.dvProgressv2 = new Devinno.Forms.Controls.DvProgressV();
@@ -89,6 +94,9 @@ namespace Sample
             this.dvButton2 = new Devinno.Forms.Controls.DvButton();
             this.dvButton1 = new Devinno.Forms.Controls.DvButton();
             this.tpContainer = new System.Windows.Forms.TabPage();
+            this.dvSplitterTableLayoutPanel2 = new Devinno.Forms.Containers.DvSplitterTableLayoutPanel();
+            this.dvLabel32 = new Devinno.Forms.Controls.DvLabel();
+            this.dvLabel34 = new Devinno.Forms.Controls.DvLabel();
             this.btnTab3 = new Devinno.Forms.Controls.DvButton();
             this.btnTab2 = new Devinno.Forms.Controls.DvButton();
             this.btnTab1 = new Devinno.Forms.Controls.DvButton();
@@ -173,6 +181,8 @@ namespace Sample
             this.dg = new Devinno.Forms.Controls.DvDataGrid();
             this.dvControl1 = new Devinno.Forms.Controls.DvControl();
             this.dvContainer3 = new Devinno.Forms.Containers.DvContainer();
+            this.btnGridClear = new Devinno.Forms.Controls.DvButton();
+            this.dvControl4 = new Devinno.Forms.Controls.DvControl();
             this.btnGridCells2 = new Devinno.Forms.Controls.DvButton();
             this.dvControl3 = new Devinno.Forms.Controls.DvControl();
             this.btnGridCells = new Devinno.Forms.Controls.DvButton();
@@ -190,6 +200,7 @@ namespace Sample
             this.tab.SuspendLayout();
             this.tpControl.SuspendLayout();
             this.tpContainer.SuspendLayout();
+            this.dvSplitterTableLayoutPanel2.SuspendLayout();
             this.tabless.SuspendLayout();
             this.tlp1.SuspendLayout();
             this.tlp2.SuspendLayout();
@@ -236,6 +247,11 @@ namespace Sample
             // tpControl
             // 
             this.tpControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tpControl.Controls.Add(this.dvTriangleButton4);
+            this.tpControl.Controls.Add(this.dvTriangleButton3);
+            this.tpControl.Controls.Add(this.dvTriangleButton2);
+            this.tpControl.Controls.Add(this.dvTriangleButton1);
+            this.tpControl.Controls.Add(this.dvNumberBox2);
             this.tpControl.Controls.Add(this.dvSliderv2);
             this.tpControl.Controls.Add(this.dvSliderv1);
             this.tpControl.Controls.Add(this.dvProgressv2);
@@ -301,6 +317,92 @@ namespace Sample
             this.tpControl.Size = new System.Drawing.Size(1712, 967);
             this.tpControl.TabIndex = 0;
             this.tpControl.Text = "Control";
+            // 
+            // dvTriangleButton4
+            // 
+            this.dvTriangleButton4.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvTriangleButton4.Clickable = true;
+            this.dvTriangleButton4.Corner = 5;
+            this.dvTriangleButton4.Direction = Devinno.Forms.Controls.TriangleDirection.RIGHT;
+            this.dvTriangleButton4.Gradient = false;
+            this.dvTriangleButton4.Location = new System.Drawing.Point(1603, 19);
+            this.dvTriangleButton4.LongClickTime = 0;
+            this.dvTriangleButton4.Name = "dvTriangleButton4";
+            this.dvTriangleButton4.Size = new System.Drawing.Size(96, 96);
+            this.dvTriangleButton4.TabIndex = 70;
+            this.dvTriangleButton4.Text = "dvTriangleButton4";
+            this.dvTriangleButton4.UseKey = false;
+            this.dvTriangleButton4.UseLongClick = false;
+            this.dvTriangleButton4.UseThemeColor = true;
+            // 
+            // dvTriangleButton3
+            // 
+            this.dvTriangleButton3.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvTriangleButton3.Clickable = true;
+            this.dvTriangleButton3.Corner = 5;
+            this.dvTriangleButton3.Direction = Devinno.Forms.Controls.TriangleDirection.LEFT;
+            this.dvTriangleButton3.Gradient = false;
+            this.dvTriangleButton3.Location = new System.Drawing.Point(1441, 19);
+            this.dvTriangleButton3.LongClickTime = 0;
+            this.dvTriangleButton3.Name = "dvTriangleButton3";
+            this.dvTriangleButton3.Size = new System.Drawing.Size(96, 96);
+            this.dvTriangleButton3.TabIndex = 69;
+            this.dvTriangleButton3.Text = "dvTriangleButton3";
+            this.dvTriangleButton3.UseKey = false;
+            this.dvTriangleButton3.UseLongClick = false;
+            this.dvTriangleButton3.UseThemeColor = true;
+            // 
+            // dvTriangleButton2
+            // 
+            this.dvTriangleButton2.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvTriangleButton2.Clickable = true;
+            this.dvTriangleButton2.Corner = 5;
+            this.dvTriangleButton2.Direction = Devinno.Forms.Controls.TriangleDirection.DOWN;
+            this.dvTriangleButton2.Gradient = false;
+            this.dvTriangleButton2.Location = new System.Drawing.Point(1275, 19);
+            this.dvTriangleButton2.LongClickTime = 0;
+            this.dvTriangleButton2.Name = "dvTriangleButton2";
+            this.dvTriangleButton2.Size = new System.Drawing.Size(110, 96);
+            this.dvTriangleButton2.TabIndex = 68;
+            this.dvTriangleButton2.Text = "dvTriangleButton2";
+            this.dvTriangleButton2.UseKey = false;
+            this.dvTriangleButton2.UseLongClick = false;
+            this.dvTriangleButton2.UseThemeColor = true;
+            // 
+            // dvTriangleButton1
+            // 
+            this.dvTriangleButton1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvTriangleButton1.Clickable = true;
+            this.dvTriangleButton1.Corner = 5;
+            this.dvTriangleButton1.Direction = Devinno.Forms.Controls.TriangleDirection.UP;
+            this.dvTriangleButton1.Gradient = false;
+            this.dvTriangleButton1.Location = new System.Drawing.Point(1143, 19);
+            this.dvTriangleButton1.LongClickTime = 0;
+            this.dvTriangleButton1.Name = "dvTriangleButton1";
+            this.dvTriangleButton1.Size = new System.Drawing.Size(110, 96);
+            this.dvTriangleButton1.TabIndex = 67;
+            this.dvTriangleButton1.Text = "dvTriangleButton1";
+            this.dvTriangleButton1.UseKey = false;
+            this.dvTriangleButton1.UseLongClick = false;
+            this.dvTriangleButton1.UseThemeColor = true;
+            // 
+            // dvNumberBox2
+            // 
+            this.dvNumberBox2.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvNumberBox2.ButtonWidth = 60;
+            this.dvNumberBox2.FormatString = null;
+            this.dvNumberBox2.Location = new System.Drawing.Point(601, 596);
+            this.dvNumberBox2.Maximum = 100D;
+            this.dvNumberBox2.Minimum = 0D;
+            this.dvNumberBox2.Name = "dvNumberBox2";
+            this.dvNumberBox2.Size = new System.Drawing.Size(214, 68);
+            this.dvNumberBox2.Style = Devinno.Forms.Controls.DvNumberBoxStyle.Right;
+            this.dvNumberBox2.TabIndex = 66;
+            this.dvNumberBox2.Text = "dvNumberBox2";
+            this.dvNumberBox2.Tick = 1D;
+            this.dvNumberBox2.UseThemeColor = true;
+            this.dvNumberBox2.Value = 0D;
+            this.dvNumberBox2.ValueBoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             // 
             // dvSliderv2
             // 
@@ -601,6 +703,7 @@ namespace Sample
             this.dvValueLabelButton1.TitleWidth = 100;
             this.dvValueLabelButton1.Unit = "";
             this.dvValueLabelButton1.UnitWidth = 36;
+            this.dvValueLabelButton1.UseButton = true;
             this.dvValueLabelButton1.UseLongClick = false;
             this.dvValueLabelButton1.UseThemeColor = true;
             this.dvValueLabelButton1.Value = null;
@@ -632,10 +735,10 @@ namespace Sample
             // 
             this.dvToolBox1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvToolBox1.CategoryColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.dvToolBox1.Location = new System.Drawing.Point(1143, 19);
+            this.dvToolBox1.Location = new System.Drawing.Point(1143, 121);
             this.dvToolBox1.Name = "dvToolBox1";
             this.dvToolBox1.RowHeight = 45;
-            this.dvToolBox1.Size = new System.Drawing.Size(275, 459);
+            this.dvToolBox1.Size = new System.Drawing.Size(275, 357);
             this.dvToolBox1.TabIndex = 50;
             this.dvToolBox1.Text = "dvToolBox1";
             this.dvToolBox1.TouchMode = true;
@@ -644,13 +747,13 @@ namespace Sample
             // dvTreeView1
             // 
             this.dvTreeView1.BoxColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.dvTreeView1.Location = new System.Drawing.Point(1424, 19);
+            this.dvTreeView1.Location = new System.Drawing.Point(1424, 121);
             this.dvTreeView1.Name = "dvTreeView1";
             this.dvTreeView1.RadioColor = System.Drawing.Color.DarkRed;
             this.dvTreeView1.RowHeight = 45;
             this.dvTreeView1.SelectedColor = System.Drawing.Color.DarkRed;
             this.dvTreeView1.SelectionMode = Devinno.Forms.Controls.ItemSelectionMode.SINGLE;
-            this.dvTreeView1.Size = new System.Drawing.Size(275, 459);
+            this.dvTreeView1.Size = new System.Drawing.Size(275, 357);
             this.dvTreeView1.TabIndex = 49;
             this.dvTreeView1.Text = "dvTreeView1";
             this.dvTreeView1.TouchMode = true;
@@ -750,7 +853,7 @@ namespace Sample
             this.dvKnob1.StartAngle = 120;
             this.dvKnob1.SweepAngle = 300;
             this.dvKnob1.TabIndex = 44;
-            this.dvKnob1.Text = "dvKnob1";
+            this.dvKnob1.Text = "black";
             this.dvKnob1.UseThemeColor = true;
             this.dvKnob1.Value = 0D;
             this.dvKnob1.ValueFont = new System.Drawing.Font("Eras Demi ITC", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
@@ -845,6 +948,7 @@ namespace Sample
             // 
             // dvLamp4
             // 
+            this.dvLamp4.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvLamp4.LampAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvLamp4.LampBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvLamp4.LampDarkBright = -0.5D;
@@ -955,6 +1059,7 @@ namespace Sample
             // 
             // dvLamp3
             // 
+            this.dvLamp3.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvLamp3.LampAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvLamp3.LampBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvLamp3.LampDarkBright = -0.5D;
@@ -977,6 +1082,7 @@ namespace Sample
             // 
             // dvLamp2
             // 
+            this.dvLamp2.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvLamp2.LampAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvLamp2.LampBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvLamp2.LampDarkBright = -0.5D;
@@ -999,6 +1105,7 @@ namespace Sample
             // 
             // dvLamp1
             // 
+            this.dvLamp1.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.dvLamp1.LampAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.dvLamp1.LampBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dvLamp1.LampDarkBright = -0.5D;
@@ -1406,6 +1513,7 @@ namespace Sample
             this.dvButton5.TabIndex = 4;
             this.dvButton5.Text = "Button 5";
             this.dvButton5.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvButton5.UseKey = false;
             this.dvButton5.UseLongClick = false;
             this.dvButton5.UseThemeColor = true;
             // 
@@ -1429,6 +1537,7 @@ namespace Sample
             this.dvButton4.TabIndex = 3;
             this.dvButton4.Text = "Button 4";
             this.dvButton4.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvButton4.UseKey = false;
             this.dvButton4.UseLongClick = false;
             this.dvButton4.UseThemeColor = true;
             // 
@@ -1452,6 +1561,7 @@ namespace Sample
             this.dvButton3.TabIndex = 2;
             this.dvButton3.Text = "Button 3";
             this.dvButton3.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvButton3.UseKey = false;
             this.dvButton3.UseLongClick = false;
             this.dvButton3.UseThemeColor = false;
             // 
@@ -1474,6 +1584,7 @@ namespace Sample
             this.dvButton2.TabIndex = 1;
             this.dvButton2.Text = "Button 2";
             this.dvButton2.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvButton2.UseKey = false;
             this.dvButton2.UseLongClick = false;
             this.dvButton2.UseThemeColor = false;
             // 
@@ -1496,12 +1607,14 @@ namespace Sample
             this.dvButton1.TabIndex = 0;
             this.dvButton1.Text = "Button 1";
             this.dvButton1.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvButton1.UseKey = false;
             this.dvButton1.UseLongClick = false;
             this.dvButton1.UseThemeColor = true;
             // 
             // tpContainer
             // 
             this.tpContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tpContainer.Controls.Add(this.dvSplitterTableLayoutPanel2);
             this.tpContainer.Controls.Add(this.btnTab3);
             this.tpContainer.Controls.Add(this.btnTab2);
             this.tpContainer.Controls.Add(this.btnTab1);
@@ -1523,6 +1636,76 @@ namespace Sample
             this.tpContainer.TabIndex = 1;
             this.tpContainer.Text = "Container";
             // 
+            // dvSplitterTableLayoutPanel2
+            // 
+            this.dvSplitterTableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.dvSplitterTableLayoutPanel2.ColumnCount = 1;
+            this.dvSplitterTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.dvSplitterTableLayoutPanel2.Controls.Add(this.dvLabel32, 0, 1);
+            this.dvSplitterTableLayoutPanel2.Controls.Add(this.dvLabel34, 0, 0);
+            this.dvSplitterTableLayoutPanel2.DrawSplitter = false;
+            this.dvSplitterTableLayoutPanel2.Location = new System.Drawing.Point(459, 700);
+            this.dvSplitterTableLayoutPanel2.Name = "dvSplitterTableLayoutPanel2";
+            this.dvSplitterTableLayoutPanel2.RowCount = 2;
+            this.dvSplitterTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.dvSplitterTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.dvSplitterTableLayoutPanel2.Size = new System.Drawing.Size(400, 300);
+            this.dvSplitterTableLayoutPanel2.SplitterColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.dvSplitterTableLayoutPanel2.TabIndex = 13;
+            this.dvSplitterTableLayoutPanel2.UseThemeColor = true;
+            // 
+            // dvLabel32
+            // 
+            this.dvLabel32.BackgroundDraw = true;
+            this.dvLabel32.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.dvLabel32.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dvLabel32.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvLabel32.IconGap = 0;
+            this.dvLabel32.IconImage = null;
+            this.dvLabel32.IconSize = 10F;
+            this.dvLabel32.IconString = null;
+            this.dvLabel32.LabelColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dvLabel32.Location = new System.Drawing.Point(10, 155);
+            this.dvLabel32.LongClickTime = 0;
+            this.dvLabel32.Margin = new System.Windows.Forms.Padding(10, 5, 5, 10);
+            this.dvLabel32.Name = "dvLabel32";
+            this.dvLabel32.Size = new System.Drawing.Size(385, 135);
+            this.dvLabel32.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
+            this.dvLabel32.TabIndex = 4;
+            this.dvLabel32.TabStop = false;
+            this.dvLabel32.Text = "(0,1)";
+            this.dvLabel32.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvLabel32.Unit = "";
+            this.dvLabel32.UnitWidth = 36;
+            this.dvLabel32.UseLongClick = false;
+            this.dvLabel32.UseThemeColor = true;
+            // 
+            // dvLabel34
+            // 
+            this.dvLabel34.BackgroundDraw = true;
+            this.dvLabel34.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.dvLabel34.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dvLabel34.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvLabel34.IconGap = 0;
+            this.dvLabel34.IconImage = null;
+            this.dvLabel34.IconSize = 10F;
+            this.dvLabel34.IconString = null;
+            this.dvLabel34.LabelColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.dvLabel34.Location = new System.Drawing.Point(10, 10);
+            this.dvLabel34.LongClickTime = 0;
+            this.dvLabel34.Margin = new System.Windows.Forms.Padding(10, 10, 5, 5);
+            this.dvLabel34.Name = "dvLabel34";
+            this.dvLabel34.Size = new System.Drawing.Size(385, 135);
+            this.dvLabel34.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
+            this.dvLabel34.TabIndex = 2;
+            this.dvLabel34.TabStop = false;
+            this.dvLabel34.Text = "(0,0)";
+            this.dvLabel34.TextPadding = new System.Windows.Forms.Padding(0);
+            this.dvLabel34.Unit = "";
+            this.dvLabel34.UnitWidth = 36;
+            this.dvLabel34.UseLongClick = false;
+            this.dvLabel34.UseThemeColor = true;
+            // 
             // btnTab3
             // 
             this.btnTab3.BackgroundDraw = true;
@@ -1542,6 +1725,7 @@ namespace Sample
             this.btnTab3.TabIndex = 12;
             this.btnTab3.Text = "Tab 3";
             this.btnTab3.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnTab3.UseKey = false;
             this.btnTab3.UseLongClick = false;
             this.btnTab3.UseThemeColor = true;
             // 
@@ -1564,6 +1748,7 @@ namespace Sample
             this.btnTab2.TabIndex = 11;
             this.btnTab2.Text = "Tab 2";
             this.btnTab2.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnTab2.UseKey = false;
             this.btnTab2.UseLongClick = false;
             this.btnTab2.UseThemeColor = true;
             // 
@@ -1586,6 +1771,7 @@ namespace Sample
             this.btnTab1.TabIndex = 10;
             this.btnTab1.Text = "Tab 1";
             this.btnTab1.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnTab1.UseKey = false;
             this.btnTab1.UseLongClick = false;
             this.btnTab1.UseThemeColor = true;
             // 
@@ -2047,7 +2233,7 @@ namespace Sample
             this.dvPanel1.Name = "dvPanel1";
             this.dvPanel1.Padding = new System.Windows.Forms.Padding(7, 43, 7, 7);
             this.dvPanel1.Size = new System.Drawing.Size(400, 300);
-            this.dvPanel1.Style = Devinno.Forms.Containers.DvPanelStyle.A;
+            this.dvPanel1.Style = Devinno.Forms.Containers.DvPanelStyle.Title;
             this.dvPanel1.TabIndex = 3;
             this.dvPanel1.TabStop = false;
             this.dvPanel1.Text = "Panel";
@@ -2190,6 +2376,7 @@ namespace Sample
             this.btnGraphRefresh.TabIndex = 9;
             this.btnGraphRefresh.Text = "Refresh";
             this.btnGraphRefresh.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnGraphRefresh.UseKey = false;
             this.btnGraphRefresh.UseLongClick = false;
             this.btnGraphRefresh.UseThemeColor = true;
             // 
@@ -2408,6 +2595,7 @@ namespace Sample
             this.btnTrendStop.TabIndex = 20;
             this.btnTrendStop.Text = "Stop";
             this.btnTrendStop.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnTrendStop.UseKey = false;
             this.btnTrendStop.UseLongClick = false;
             this.btnTrendStop.UseThemeColor = true;
             // 
@@ -2431,6 +2619,7 @@ namespace Sample
             this.btnTrendStart.TabIndex = 19;
             this.btnTrendStart.Text = "Start";
             this.btnTrendStart.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnTrendStart.UseKey = false;
             this.btnTrendStart.UseLongClick = false;
             this.btnTrendStart.UseThemeColor = true;
             // 
@@ -2638,6 +2827,7 @@ namespace Sample
             this.btnTimeGraphRefresh.TabIndex = 10;
             this.btnTimeGraphRefresh.Text = "Refresh";
             this.btnTimeGraphRefresh.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnTimeGraphRefresh.UseKey = false;
             this.btnTimeGraphRefresh.UseLongClick = false;
             this.btnTimeGraphRefresh.UseThemeColor = true;
             // 
@@ -2738,6 +2928,7 @@ namespace Sample
             this.btnSerialPortSetting_Simple.TabIndex = 22;
             this.btnSerialPortSetting_Simple.Text = "SerialPortSetting ( Simple )";
             this.btnSerialPortSetting_Simple.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnSerialPortSetting_Simple.UseKey = false;
             this.btnSerialPortSetting_Simple.UseLongClick = false;
             this.btnSerialPortSetting_Simple.UseThemeColor = true;
             // 
@@ -2761,6 +2952,7 @@ namespace Sample
             this.btnSerialPortSetting_Normal.TabIndex = 21;
             this.btnSerialPortSetting_Normal.Text = "SerialPortSetting ( Normal )";
             this.btnSerialPortSetting_Normal.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnSerialPortSetting_Normal.UseKey = false;
             this.btnSerialPortSetting_Normal.UseLongClick = false;
             this.btnSerialPortSetting_Normal.UseThemeColor = true;
             // 
@@ -2784,6 +2976,7 @@ namespace Sample
             this.btnSelectorBox_Check.TabIndex = 20;
             this.btnSelectorBox_Check.Text = "SelectorBox ( Check )";
             this.btnSelectorBox_Check.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnSelectorBox_Check.UseKey = false;
             this.btnSelectorBox_Check.UseLongClick = false;
             this.btnSelectorBox_Check.UseThemeColor = true;
             // 
@@ -2807,6 +3000,7 @@ namespace Sample
             this.btnSelectorBox_Radio.TabIndex = 19;
             this.btnSelectorBox_Radio.Text = "SelectorBox ( Radio )";
             this.btnSelectorBox_Radio.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnSelectorBox_Radio.UseKey = false;
             this.btnSelectorBox_Radio.UseLongClick = false;
             this.btnSelectorBox_Radio.UseThemeColor = true;
             // 
@@ -2830,6 +3024,7 @@ namespace Sample
             this.btnSelectorBox_Combo.TabIndex = 18;
             this.btnSelectorBox_Combo.Text = "SelectorBox ( Combo )";
             this.btnSelectorBox_Combo.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnSelectorBox_Combo.UseKey = false;
             this.btnSelectorBox_Combo.UseLongClick = false;
             this.btnSelectorBox_Combo.UseThemeColor = true;
             // 
@@ -2853,6 +3048,7 @@ namespace Sample
             this.btnSelectorBox_Selector.TabIndex = 17;
             this.btnSelectorBox_Selector.Text = "SelectorBox ( Selector )";
             this.btnSelectorBox_Selector.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnSelectorBox_Selector.UseKey = false;
             this.btnSelectorBox_Selector.UseLongClick = false;
             this.btnSelectorBox_Selector.UseThemeColor = true;
             // 
@@ -2876,6 +3072,7 @@ namespace Sample
             this.btnMessageBox_YesNoCancel.TabIndex = 16;
             this.btnMessageBox_YesNoCancel.Text = "MessageBox ( Yes / No / Cancel )";
             this.btnMessageBox_YesNoCancel.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnMessageBox_YesNoCancel.UseKey = false;
             this.btnMessageBox_YesNoCancel.UseLongClick = false;
             this.btnMessageBox_YesNoCancel.UseThemeColor = true;
             // 
@@ -2899,6 +3096,7 @@ namespace Sample
             this.btnMessageBox_YesNo.TabIndex = 15;
             this.btnMessageBox_YesNo.Text = "MessageBox ( Yes / No )";
             this.btnMessageBox_YesNo.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnMessageBox_YesNo.UseKey = false;
             this.btnMessageBox_YesNo.UseLongClick = false;
             this.btnMessageBox_YesNo.UseThemeColor = true;
             // 
@@ -2922,6 +3120,7 @@ namespace Sample
             this.btnMessageBox_OkCancel.TabIndex = 14;
             this.btnMessageBox_OkCancel.Text = "MessageBox ( Ok / Cancel )";
             this.btnMessageBox_OkCancel.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnMessageBox_OkCancel.UseKey = false;
             this.btnMessageBox_OkCancel.UseLongClick = false;
             this.btnMessageBox_OkCancel.UseThemeColor = true;
             // 
@@ -2945,6 +3144,7 @@ namespace Sample
             this.btnKeypadH_Password.TabIndex = 13;
             this.btnKeypadH_Password.Text = "Keypad H ( Password )";
             this.btnKeypadH_Password.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnKeypadH_Password.UseKey = false;
             this.btnKeypadH_Password.UseLongClick = false;
             this.btnKeypadH_Password.UseThemeColor = true;
             // 
@@ -2968,6 +3168,7 @@ namespace Sample
             this.btnKeypadH_Float.TabIndex = 12;
             this.btnKeypadH_Float.Text = "Keypad H ( Float )";
             this.btnKeypadH_Float.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnKeypadH_Float.UseKey = false;
             this.btnKeypadH_Float.UseLongClick = false;
             this.btnKeypadH_Float.UseThemeColor = true;
             // 
@@ -2991,6 +3192,7 @@ namespace Sample
             this.btnDateTimePicker_Time.TabIndex = 11;
             this.btnDateTimePicker_Time.Text = "DateTimePicker  ( Time )";
             this.btnDateTimePicker_Time.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnDateTimePicker_Time.UseKey = false;
             this.btnDateTimePicker_Time.UseLongClick = false;
             this.btnDateTimePicker_Time.UseThemeColor = true;
             // 
@@ -3014,6 +3216,7 @@ namespace Sample
             this.btnDateTimePicker_Date.TabIndex = 10;
             this.btnDateTimePicker_Date.Text = "DateTimePicker ( Date )";
             this.btnDateTimePicker_Date.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnDateTimePicker_Date.UseKey = false;
             this.btnDateTimePicker_Date.UseLongClick = false;
             this.btnDateTimePicker_Date.UseThemeColor = true;
             // 
@@ -3037,6 +3240,7 @@ namespace Sample
             this.btnKeypad_Password.TabIndex = 9;
             this.btnKeypad_Password.Text = "Keypad ( Password )";
             this.btnKeypad_Password.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnKeypad_Password.UseKey = false;
             this.btnKeypad_Password.UseLongClick = false;
             this.btnKeypad_Password.UseThemeColor = true;
             // 
@@ -3060,6 +3264,7 @@ namespace Sample
             this.btnKeypad_Float.TabIndex = 8;
             this.btnKeypad_Float.Text = "Keypad ( Float )";
             this.btnKeypad_Float.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnKeypad_Float.UseKey = false;
             this.btnKeypad_Float.UseLongClick = false;
             this.btnKeypad_Float.UseThemeColor = true;
             // 
@@ -3083,6 +3288,7 @@ namespace Sample
             this.btnMessageBox_Ok.TabIndex = 7;
             this.btnMessageBox_Ok.Text = "MessageBox ( Ok )";
             this.btnMessageBox_Ok.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnMessageBox_Ok.UseKey = false;
             this.btnMessageBox_Ok.UseLongClick = false;
             this.btnMessageBox_Ok.UseThemeColor = true;
             // 
@@ -3106,6 +3312,7 @@ namespace Sample
             this.btnKeypadH_Int.TabIndex = 6;
             this.btnKeypadH_Int.Text = "Keypad H ( Int )";
             this.btnKeypadH_Int.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnKeypadH_Int.UseKey = false;
             this.btnKeypadH_Int.UseLongClick = false;
             this.btnKeypadH_Int.UseThemeColor = true;
             // 
@@ -3129,6 +3336,7 @@ namespace Sample
             this.btnKeypad_Int.TabIndex = 5;
             this.btnKeypad_Int.Text = "Keypad ( Int )";
             this.btnKeypad_Int.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnKeypad_Int.UseKey = false;
             this.btnKeypad_Int.UseLongClick = false;
             this.btnKeypad_Int.UseThemeColor = true;
             // 
@@ -3152,6 +3360,7 @@ namespace Sample
             this.btnKeyboard.TabIndex = 4;
             this.btnKeyboard.Text = "Keyboard";
             this.btnKeyboard.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnKeyboard.UseKey = false;
             this.btnKeyboard.UseLongClick = false;
             this.btnKeyboard.UseThemeColor = true;
             // 
@@ -3175,6 +3384,7 @@ namespace Sample
             this.btnInputBox.TabIndex = 3;
             this.btnInputBox.Text = "InputBox";
             this.btnInputBox.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnInputBox.UseKey = false;
             this.btnInputBox.UseLongClick = false;
             this.btnInputBox.UseThemeColor = true;
             // 
@@ -3198,6 +3408,7 @@ namespace Sample
             this.btnDateTimePicker_DateTime.TabIndex = 2;
             this.btnDateTimePicker_DateTime.Text = "DateTimePicker ( DateTime )";
             this.btnDateTimePicker_DateTime.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnDateTimePicker_DateTime.UseKey = false;
             this.btnDateTimePicker_DateTime.UseLongClick = false;
             this.btnDateTimePicker_DateTime.UseThemeColor = true;
             // 
@@ -3221,6 +3432,7 @@ namespace Sample
             this.btnColorPicker.TabIndex = 1;
             this.btnColorPicker.Text = "ColorPicker";
             this.btnColorPicker.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnColorPicker.UseKey = false;
             this.btnColorPicker.UseLongClick = false;
             this.btnColorPicker.UseThemeColor = true;
             // 
@@ -3311,6 +3523,7 @@ namespace Sample
             this.dg.ColumnColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.dg.ColumnHeight = 30;
             this.dg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dg.HScrollPosition = ((long)(0));
             this.dg.Location = new System.Drawing.Point(20, 73);
             this.dg.Name = "dg";
             this.dg.RowBevel = true;
@@ -3326,6 +3539,7 @@ namespace Sample
             this.dg.TextShadow = true;
             this.dg.TouchMode = false;
             this.dg.UseThemeColor = true;
+            this.dg.VScrollPosition = ((long)(0));
             // 
             // dvControl1
             // 
@@ -3340,6 +3554,8 @@ namespace Sample
             // 
             // dvContainer3
             // 
+            this.dvContainer3.Controls.Add(this.btnGridClear);
+            this.dvContainer3.Controls.Add(this.dvControl4);
             this.dvContainer3.Controls.Add(this.btnGridCells2);
             this.dvContainer3.Controls.Add(this.dvControl3);
             this.dvContainer3.Controls.Add(this.btnGridCells);
@@ -3353,6 +3569,41 @@ namespace Sample
             this.dvContainer3.TabStop = false;
             this.dvContainer3.Text = "dvContainer3";
             this.dvContainer3.UseThemeColor = true;
+            // 
+            // btnGridClear
+            // 
+            this.btnGridClear.BackgroundDraw = true;
+            this.btnGridClear.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.btnGridClear.Clickable = true;
+            this.btnGridClear.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.btnGridClear.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnGridClear.Gradient = true;
+            this.btnGridClear.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.btnGridClear.IconGap = 0;
+            this.btnGridClear.IconImage = null;
+            this.btnGridClear.IconSize = 10F;
+            this.btnGridClear.IconString = null;
+            this.btnGridClear.Location = new System.Drawing.Point(718, 0);
+            this.btnGridClear.LongClickTime = 0;
+            this.btnGridClear.Name = "btnGridClear";
+            this.btnGridClear.Size = new System.Drawing.Size(225, 45);
+            this.btnGridClear.TabIndex = 8;
+            this.btnGridClear.Text = "Clear";
+            this.btnGridClear.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnGridClear.UseKey = false;
+            this.btnGridClear.UseLongClick = false;
+            this.btnGridClear.UseThemeColor = true;
+            // 
+            // dvControl4
+            // 
+            this.dvControl4.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dvControl4.Location = new System.Drawing.Point(691, 0);
+            this.dvControl4.Name = "dvControl4";
+            this.dvControl4.Size = new System.Drawing.Size(27, 45);
+            this.dvControl4.TabIndex = 7;
+            this.dvControl4.TabStop = false;
+            this.dvControl4.Text = "dvControl4";
+            this.dvControl4.UseThemeColor = true;
             // 
             // btnGridCells2
             // 
@@ -3374,6 +3625,7 @@ namespace Sample
             this.btnGridCells2.TabIndex = 6;
             this.btnGridCells2.Text = "Cells 2";
             this.btnGridCells2.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnGridCells2.UseKey = false;
             this.btnGridCells2.UseLongClick = false;
             this.btnGridCells2.UseThemeColor = true;
             // 
@@ -3408,6 +3660,7 @@ namespace Sample
             this.btnGridCells.TabIndex = 0;
             this.btnGridCells.Text = "Cells";
             this.btnGridCells.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnGridCells.UseKey = false;
             this.btnGridCells.UseLongClick = false;
             this.btnGridCells.UseThemeColor = true;
             // 
@@ -3442,6 +3695,7 @@ namespace Sample
             this.btnGridMonth.TabIndex = 1;
             this.btnGridMonth.Text = "Scroll / Touch";
             this.btnGridMonth.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnGridMonth.UseKey = false;
             this.btnGridMonth.UseLongClick = false;
             this.btnGridMonth.UseThemeColor = true;
             // 
@@ -3471,65 +3725,67 @@ namespace Sample
             this.toolStripSeparator2,
             this.tsmiExit});
             this.tsmiFile.Name = "tsmiFile";
-            this.tsmiFile.Size = new System.Drawing.Size(83, 41);
+            this.tsmiFile.Size = new System.Drawing.Size(55, 41);
             this.tsmiFile.Text = "파일(&F)";
             // 
             // tsmiNewFile
             // 
             this.tsmiNewFile.ForeColor = System.Drawing.SystemColors.ActiveBorder;
             this.tsmiNewFile.Name = "tsmiNewFile";
-            this.tsmiNewFile.Size = new System.Drawing.Size(198, 34);
+            this.tsmiNewFile.Size = new System.Drawing.Size(130, 22);
             this.tsmiNewFile.Text = "새 파일(&N)";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(195, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(127, 6);
             // 
             // tsmiOpenFile
             // 
             this.tsmiOpenFile.ForeColor = System.Drawing.SystemColors.ActiveBorder;
             this.tsmiOpenFile.Name = "tsmiOpenFile";
-            this.tsmiOpenFile.Size = new System.Drawing.Size(198, 34);
+            this.tsmiOpenFile.Size = new System.Drawing.Size(130, 22);
             this.tsmiOpenFile.Text = "열기(&O)";
             // 
             // tsmiSaveFile
             // 
             this.tsmiSaveFile.ForeColor = System.Drawing.SystemColors.ActiveBorder;
             this.tsmiSaveFile.Name = "tsmiSaveFile";
-            this.tsmiSaveFile.Size = new System.Drawing.Size(198, 34);
+            this.tsmiSaveFile.Size = new System.Drawing.Size(130, 22);
             this.tsmiSaveFile.Text = "저장(&S)";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(195, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(127, 6);
             // 
             // tsmiExit
             // 
             this.tsmiExit.ForeColor = System.Drawing.SystemColors.ActiveBorder;
             this.tsmiExit.Name = "tsmiExit";
-            this.tsmiExit.Size = new System.Drawing.Size(198, 34);
+            this.tsmiExit.Size = new System.Drawing.Size(130, 22);
             this.tsmiExit.Text = "끝내기(&X)";
             // 
             // tsmiEdit
             // 
             this.tsmiEdit.Name = "tsmiEdit";
-            this.tsmiEdit.Size = new System.Drawing.Size(84, 41);
+            this.tsmiEdit.Size = new System.Drawing.Size(56, 41);
             this.tsmiEdit.Text = "편집(&E)";
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.ClientSize = new System.Drawing.Size(1920, 1080);
             this.Controls.Add(this.tab);
             this.Controls.Add(this.ms);
             this.FrameColor = System.Drawing.Color.White;
+            this.IconBoxColor = System.Drawing.Color.DarkRed;
             this.MainMenuStrip = this.ms;
             this.MinimumSize = new System.Drawing.Size(1918, 1048);
             this.Name = "FormMain";
+            this.NoFrame = true;
             this.Padding = new System.Windows.Forms.Padding(0, 60, 0, 0);
             this.Text = "Sample";
             this.Title = "Sample";
@@ -3540,6 +3796,7 @@ namespace Sample
             this.tab.ResumeLayout(false);
             this.tpControl.ResumeLayout(false);
             this.tpContainer.ResumeLayout(false);
+            this.dvSplitterTableLayoutPanel2.ResumeLayout(false);
             this.tabless.ResumeLayout(false);
             this.tlp1.ResumeLayout(false);
             this.tlp2.ResumeLayout(false);
@@ -3721,6 +3978,16 @@ namespace Sample
         private Devinno.Forms.Controls.DvButton btnGridMonth;
         private Devinno.Forms.Controls.DvButton btnGridCells2;
         private Devinno.Forms.Controls.DvControl dvControl3;
+        private Devinno.Forms.Containers.DvSplitterTableLayoutPanel dvSplitterTableLayoutPanel2;
+        private Devinno.Forms.Controls.DvLabel dvLabel32;
+        private Devinno.Forms.Controls.DvLabel dvLabel34;
+        private Devinno.Forms.Controls.DvButton btnGridClear;
+        private Devinno.Forms.Controls.DvControl dvControl4;
+        private Devinno.Forms.Controls.DvNumberBox dvNumberBox2;
+        private Devinno.Forms.Controls.DvTriangleButton dvTriangleButton1;
+        private Devinno.Forms.Controls.DvTriangleButton dvTriangleButton4;
+        private Devinno.Forms.Controls.DvTriangleButton dvTriangleButton3;
+        private Devinno.Forms.Controls.DvTriangleButton dvTriangleButton2;
     }
 }
 

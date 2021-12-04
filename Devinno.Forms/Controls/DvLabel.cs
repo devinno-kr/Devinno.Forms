@@ -189,7 +189,6 @@ namespace Devinno.Forms.Controls
         public DvLabel()
         {
             Size = new Size(150, 30);
-
             click.GenLongClick = new Action(() => { this.Invoke(new Action(() => LongClick?.Invoke(this, null))); });
         }
         #endregion

@@ -341,7 +341,7 @@ namespace Sample
                 
                 dg.Columns.Add(new DvDataGridColumn(dg) { Name = "DeviceName", HeaderText = "장치명", SizeMode = SizeMode.Percent, Width = 15M });
                 dg.Columns.Add(new DvDataGridImageColumn(dg) { Name = "DeviceImage", HeaderText = "이미지", SizeMode = SizeMode.Percent, Width = 5M });
-                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Time", HeaderText = "설치일", SizeMode = SizeMode.Percent, Width = 15M, Format = "yyyy.MM.dd" });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Time", HeaderText = "설치일", SizeMode = SizeMode.Percent, Width = 15M, Format = "yyyy.MM.dd", UseSort = true });
                 dg.Columns.Add(new DvDataGridTextConverterColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = SizeMode.Percent, Width = 5M, Converter = GetDOW });
                 dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Temperature", HeaderText = "온도", SizeMode = SizeMode.Percent, Width =10M, Format = "0.0 ℃" });
                 dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmT", HeaderText = "온도 알람", SizeMode = SizeMode.Percent, Width = 5M, Simple = false });
@@ -421,7 +421,11 @@ namespace Sample
             btnGridMonth.ButtonClick += (o, s) => actMonth();
             btnGridCells.ButtonClick += (o, s) => actCells();
             btnGridCells2.ButtonClick += (o, s) => actCells2();
-            actMonth();
+            btnGridClear.ButtonClick += (o, s) => dg.Clear();
+            
+            messageBox.UseKey = true;
+
+            actCells();
             #endregion
 
         }

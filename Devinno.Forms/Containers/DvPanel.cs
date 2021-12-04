@@ -1,4 +1,5 @@
 ﻿using Devinno.Extensions;
+using Devinno.Forms.Controls;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
@@ -132,7 +133,7 @@ namespace Devinno.Forms.Containers
         }
         #endregion
         #region Style
-        private DvPanelStyle eStyle = DvPanelStyle.A;
+        private DvPanelStyle eStyle = DvPanelStyle.Title;
         public DvPanelStyle Style
         {
             get => eStyle;
@@ -178,7 +179,7 @@ namespace Devinno.Forms.Containers
             base.LoadAreas(g);
 
             var rtContent = Areas["rtContent"];
-            if (Style == DvPanelStyle.A)
+            if (Style == DvPanelStyle.Title)
             {
                 var rtTitle = new Rectangle(rtContent.X + 1, rtContent.Y, rtContent.Width - 2, TitleHeight);
                 var rtPanel = new Rectangle(rtContent.X, rtTitle.Bottom, rtContent.Width, rtContent.Height - rtTitle.Bottom);
@@ -219,7 +220,7 @@ namespace Devinno.Forms.Containers
             #endregion
             #region Draw
             e.Graphics.Clear(Parent.BackColor);
-            if (Style == DvPanelStyle.A)
+            if (Style == DvPanelStyle.Title)
             {
                 if (DrawTitle)
                 {
@@ -230,8 +231,25 @@ namespace Devinno.Forms.Containers
             }
             else
             {
-                Theme.DrawBox(e.Graphics, BackColor, Parent.BackColor, rtPanel, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | BoxDrawOption.OUT_SHADOW);
-
+                switch (Style)
+                {
+                    case DvPanelStyle.Panel:
+                        Theme.DrawBox(e.Graphics, BackColor, Parent.BackColor, rtPanel, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL_LT | BoxDrawOption.OUT_SHADOW);
+                        break;
+                    case DvPanelStyle.FlatConcave:
+                        Theme.DrawBox(e.Graphics, BackColor, Parent.BackColor, rtPanel, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL);
+                        break;
+                    case DvPanelStyle.FlatConvex:
+                        Theme.DrawBox(e.Graphics, BackColor, Parent.BackColor, rtPanel, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                        break;
+                    case DvPanelStyle.Concave:
+                        Theme.DrawBox(e.Graphics, BackColor, Parent.BackColor, rtPanel, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+                        break;
+                    case DvPanelStyle.Convex:
+                        Theme.DrawBox(e.Graphics, BackColor, Parent.BackColor, rtPanel, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW | BoxDrawOption.IN_BEVEL_LT);
+                        break;
+                }
+               
                 if (DrawTitle)
                 {
                     Theme.DrawTextShadow(e.Graphics, ico, Text, TitleFont, ForeColor, TitleColor, rtText, DvContentAlignment.MiddleLeft);
@@ -248,5 +266,13 @@ namespace Devinno.Forms.Containers
         #endregion
     }
 
-    public enum DvPanelStyle { A, B }
+    public enum DvPanelStyle 
+    {
+        Title,
+        Panel,
+        FlatConvex,
+        FlatConcave,
+        Concave,
+        Convex
+    }
 }

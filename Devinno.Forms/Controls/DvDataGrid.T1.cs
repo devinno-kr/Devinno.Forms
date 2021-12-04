@@ -159,14 +159,17 @@ namespace Devinno.Forms.Controls
                         case DvDataGridColumnSortState.NONE:
                             SortState = DvDataGridColumnSortState.ASC;
                             SortOrder = (SortState != DvDataGridColumnSortState.NONE ? Grid.Columns.Where(x => x.UseSort && x.SortState != DvDataGridColumnSortState.NONE).Count() : 1000);
+                            Grid.InvokeSortChanged();
                             break;
                         case DvDataGridColumnSortState.ASC:
                             SortState = DvDataGridColumnSortState.DESC;
                             SortOrder = (SortState != DvDataGridColumnSortState.NONE ? Grid.Columns.Where(x => x.UseSort && x.SortState != DvDataGridColumnSortState.NONE).Count() : 1000);
+                            Grid.InvokeSortChanged();
                             break;
                         case DvDataGridColumnSortState.DESC:
                             SortState = DvDataGridColumnSortState.NONE;
                             SortOrder = (SortState != DvDataGridColumnSortState.NONE ? Grid.Columns.Where(x => x.UseSort && x.SortState != DvDataGridColumnSortState.NONE).Count() : 1000);
+                            Grid.InvokeSortChanged();
                             break;
                     }
                     b = true;

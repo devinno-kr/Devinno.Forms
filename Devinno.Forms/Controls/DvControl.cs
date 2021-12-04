@@ -58,6 +58,7 @@ namespace Devinno.Forms.Controls
         {
             this.SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
+            this.SetStyle(ControlStyles.Selectable, false);
             this.UpdateStyles();
 
             DoubleBuffered = true;
@@ -123,7 +124,20 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-       
+        #region OnGotFocus
+        protected override void OnGotFocus(EventArgs e)
+        {
+            Invalidate();
+            base.OnGotFocus(e);
+        }
+        #endregion
+        #region OnLostFocus
+        protected override void OnLostFocus(EventArgs e)
+        {
+            Invalidate();
+            base.OnLostFocus(e);
+        }
+        #endregion
         #region LoadAreas
         protected virtual void LoadAreas(Graphics g)
         {

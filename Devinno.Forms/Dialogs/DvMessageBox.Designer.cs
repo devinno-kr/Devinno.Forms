@@ -48,7 +48,7 @@ namespace Devinno.Forms.Dialogs
             this.pnl.Name = "pnl";
             this.pnl.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.pnl.Size = new System.Drawing.Size(252, 99);
-            this.pnl.TabIndex = 0;
+            this.pnl.TabIndex = 100;
             this.pnl.TabStop = false;
             this.pnl.Text = "dvContainer1";
             this.pnl.UseThemeColor = true;
@@ -77,7 +77,7 @@ namespace Devinno.Forms.Dialogs
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.layout.Size = new System.Drawing.Size(246, 86);
-            this.layout.TabIndex = 0;
+            this.layout.TabIndex = 101;
             // 
             // btnOk
             // 
@@ -99,6 +99,7 @@ namespace Devinno.Forms.Dialogs
             this.btnOk.TabIndex = 1;
             this.btnOk.Text = "확인";
             this.btnOk.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnOk.UseKey = false;
             this.btnOk.UseLongClick = false;
             this.btnOk.UseThemeColor = true;
             // 
@@ -119,9 +120,10 @@ namespace Devinno.Forms.Dialogs
             this.btnCancel.LongClickTime = 0;
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(23, 30);
-            this.btnCancel.TabIndex = 3;
+            this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "취소";
             this.btnCancel.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnCancel.UseKey = false;
             this.btnCancel.UseLongClick = false;
             this.btnCancel.UseThemeColor = true;
             // 
@@ -142,9 +144,10 @@ namespace Devinno.Forms.Dialogs
             this.btnYes.LongClickTime = 0;
             this.btnYes.Name = "btnYes";
             this.btnYes.Size = new System.Drawing.Size(23, 30);
-            this.btnYes.TabIndex = 4;
+            this.btnYes.TabIndex = 3;
             this.btnYes.Text = "예";
             this.btnYes.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnYes.UseKey = false;
             this.btnYes.UseLongClick = false;
             this.btnYes.UseThemeColor = true;
             // 
@@ -165,9 +168,10 @@ namespace Devinno.Forms.Dialogs
             this.btnNo.LongClickTime = 0;
             this.btnNo.Name = "btnNo";
             this.btnNo.Size = new System.Drawing.Size(23, 30);
-            this.btnNo.TabIndex = 5;
+            this.btnNo.TabIndex = 4;
             this.btnNo.Text = "아니요";
             this.btnNo.TextPadding = new System.Windows.Forms.Padding(0);
+            this.btnNo.UseKey = false;
             this.btnNo.UseLongClick = false;
             this.btnNo.UseThemeColor = true;
             // 
@@ -188,7 +192,7 @@ namespace Devinno.Forms.Dialogs
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(240, 44);
             this.lblMessage.Style = Devinno.Forms.Controls.DvLabelStyle.FlatConvex;
-            this.lblMessage.TabIndex = 6;
+            this.lblMessage.TabIndex = 103;
             this.lblMessage.TabStop = false;
             this.lblMessage.TextPadding = new System.Windows.Forms.Padding(0);
             this.lblMessage.Unit = "";
@@ -222,12 +226,10 @@ namespace Devinno.Forms.Dialogs
 
         private Containers.DvContainer pnl;
         private Containers.DvTableLayoutPanel layout;
-        private Containers.DvContainer dvContainer1;
         private Controls.DvLabel lblMessage;
         private Controls.DvButton btnOk;
         private Controls.DvButton btnCancel;
         private Controls.DvButton btnYes;
         private Controls.DvButton btnNo;
-        private Controls.DvLabel lblMessagge;
     }
 }

@@ -230,6 +230,21 @@ namespace Devinno.Forms.Controls
             set { if (strButtonText != value) { strButtonText = value; Invalidate(); } }
         }
         #endregion
+        #region UseButton
+        private bool bUseButton = true;
+        public bool UseButton
+        {
+            get => bUseButton;
+            set
+            {
+                if (bUseButton != value)
+                {
+                    bUseButton = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
 
         public bool UseLongClick { get => click.UseLongClick; set => click.UseLongClick = value; }
         public int LongClickTime { get => click.LongClickTime; set => click.LongClickTime = value; }
@@ -269,25 +284,45 @@ namespace Devinno.Forms.Controls
         protected override void LoadAreas(Graphics g)
         {
             base.LoadAreas(g);
+            if (UseButton)
+            {
+                var rtContent = Areas["rtContent"];
 
-            var rtContent = Areas["rtContent"];
+                var rtTitle = new Rectangle(rtContent.X, rtContent.Y, TitleWidth, rtContent.Height);
+                SetArea("rtTitle", rtTitle);
 
-            var rtTitle = new Rectangle(rtContent.X, rtContent.Y, TitleWidth, rtContent.Height);
-            SetArea("rtTitle", rtTitle);
+                var rtValueAll = new Rectangle(rtContent.X + TitleWidth, rtContent.Y, rtContent.Width - TitleWidth - ButtonWidth, rtContent.Height);
+                SetArea("rtValueAll", rtValueAll);
 
-            var rtValueAll = new Rectangle(rtContent.X + TitleWidth, rtContent.Y, rtContent.Width - TitleWidth - ButtonWidth, rtContent.Height);
-            SetArea("rtValueAll", rtValueAll);
+                var rtButton = new Rectangle(rtContent.Right - ButtonWidth, rtContent.Y, ButtonWidth, rtContent.Height);
+                SetArea("rtButton", rtButton);
 
-            var rtButton = new Rectangle(rtContent.Right - ButtonWidth, rtContent.Y, ButtonWidth, rtContent.Height);
-            SetArea("rtButton", rtButton);
+                var szUnitW = 0;
+                if (!string.IsNullOrWhiteSpace(Unit)) szUnitW = UnitWidth;
+                var rtUnit = new Rectangle(rtValueAll.Right - szUnitW, rtValueAll.Y, szUnitW, rtValueAll.Height);
+                SetArea("rtUnit", rtUnit);
 
-            var szUnitW = 0;
-            if (!string.IsNullOrWhiteSpace(Unit)) szUnitW = UnitWidth;
-            var rtUnit = new Rectangle(rtValueAll.Right - szUnitW, rtValueAll.Y, szUnitW, rtValueAll.Height);
-            SetArea("rtUnit", rtUnit);
+                var rtValue = new Rectangle(rtValueAll.X, rtValueAll.Y, rtValueAll.Width - szUnitW, rtValueAll.Height);
+                SetArea("rtValue", rtValue);
+            }
+            else
+            {
+                var rtContent = Areas["rtContent"];
 
-            var rtValue = new Rectangle(rtValueAll.X, rtValueAll.Y, rtValueAll.Width - szUnitW, rtValueAll.Height);
-            SetArea("rtValue", rtValue);
+                var rtTitle = new Rectangle(rtContent.X, rtContent.Y, TitleWidth, rtContent.Height);
+                SetArea("rtTitle", rtTitle);
+
+                var rtValueAll = new Rectangle(rtContent.X + TitleWidth, rtContent.Y, rtContent.Width - TitleWidth, rtContent.Height);
+                SetArea("rtValueAll", rtValueAll);
+
+                var szUnitW = 0;
+                if (!string.IsNullOrWhiteSpace(Unit)) szUnitW = UnitWidth;
+                var rtUnit = new Rectangle(rtValueAll.Right - szUnitW, rtValueAll.Y, szUnitW, rtValueAll.Height);
+                SetArea("rtUnit", rtUnit);
+
+                var rtValue = new Rectangle(rtValueAll.X, rtValueAll.Y, rtValueAll.Width - szUnitW, rtValueAll.Height);
+                SetArea("rtValue", rtValue);
+            }
         }
         #endregion
 
@@ -303,69 +338,120 @@ namespace Devinno.Forms.Controls
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             #endregion
-            #region Bounds
-            var rtContent = Areas["rtContent"];
-            var rtValue = Areas["rtValue"];
-            var rtValueAll = Areas["rtValueAll"];
-            var rtTitle = Areas["rtTitle"];
-            var rtUnit = Areas["rtUnit"];
-            var rtButton = Areas["rtButton"];
-            #endregion
             #region Init
             var p = new Pen(ValueColor, 1);
             var br = new SolidBrush(ValueColor);
             #endregion
-            #region Draw
-            Theme.DrawBox(e.Graphics, TitleColor, BackColor, rtTitle, RoundType.L, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW);
-
-            switch (Style)
+            if (UseButton)
             {
-                case DvLabelStyle.FlatConcave:
-                    Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL);
-                    break;
-                case DvLabelStyle.FlatConvex:
-                    Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
-                    break;
-                case DvLabelStyle.Concave:
-                    Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
-                    break;
-                case DvLabelStyle.Convex:
-                    Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW | BoxDrawOption.IN_BEVEL_LT);
-                    break;
-            }
+                #region Bounds
+                var rtContent = Areas["rtContent"];
+                var rtValue = Areas["rtValue"];
+                var rtValueAll = Areas["rtValueAll"];
+                var rtTitle = Areas["rtTitle"];
+                var rtUnit = Areas["rtUnit"];
+                var rtButton = Areas["rtButton"];
+                #endregion
+                #region Draw
+                Theme.DrawBox(e.Graphics, TitleColor, BackColor, rtTitle, RoundType.L, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW);
 
-            Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, TitleColor, rtTitle);
-            Theme.DrawTextShadow(e.Graphics, null, Value, Font, ForeColor, ValueColor, rtValue);
+                switch (Style)
+                {
+                    case DvLabelStyle.FlatConcave:
+                        Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL);
+                        break;
+                    case DvLabelStyle.FlatConvex:
+                        Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                        break;
+                    case DvLabelStyle.Concave:
+                        Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+                        break;
+                    case DvLabelStyle.Convex:
+                        Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW | BoxDrawOption.IN_BEVEL_LT);
+                        break;
+                }
 
-            if (!bDown)
-            {
-                var cv = ButtonColor;
-                Theme.DrawBox(e.Graphics, cv, BackColor, rtButton, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
-                Theme.DrawTextShadow(e.Graphics, icobtn, ButtonText, Font, ForeColor, cv, new Rectangle(rtButton.X, rtButton.Y + 0, rtButton.Width, rtButton.Height), DvContentAlignment.MiddleCenter);
+                Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, TitleColor, rtTitle);
+                Theme.DrawTextShadow(e.Graphics, null, Value, Font, ForeColor, ValueColor, rtValue);
+
+                if (!bDown)
+                {
+                    var cv = ButtonColor;
+                    Theme.DrawBox(e.Graphics, cv, BackColor, rtButton, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW | BoxDrawOption.GRADIENT_V);
+                    Theme.DrawTextShadow(e.Graphics, icobtn, ButtonText, Font, ForeColor, cv, new Rectangle(rtButton.X, rtButton.Y + 0, rtButton.Width, rtButton.Height), DvContentAlignment.MiddleCenter);
+                }
+                else
+                {
+                    var cv = ButtonColor.BrightnessTransmit(Theme.DownBright);
+                    Theme.DrawBox(e.Graphics, cv, BackColor, rtButton, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
+                    Theme.DrawTextShadow(e.Graphics, icobtn, ButtonText, Font, ForeColor.BrightnessTransmit(Theme.DownBright), cv, new Rectangle(rtButton.X, rtButton.Y + 1, rtButton.Width, rtButton.Height), DvContentAlignment.MiddleCenter);
+                }
+
+                if (UnitWidth > 0 && !string.IsNullOrWhiteSpace(Unit))
+                {
+                    #region Unit Sep
+                    var szh = Convert.ToInt32(rtUnit.Height / 2);
+
+                    p.Width = 1;
+
+                    p.Color = ValueColor.BrightnessTransmit(Theme.OutBevelBright);
+                    e.Graphics.DrawLine(p, rtUnit.X + 1, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X + 1, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+
+                    p.Color = ValueColor.BrightnessTransmit(Theme.BorderBright);
+                    e.Graphics.DrawLine(p, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+                    #endregion
+                    Theme.DrawTextShadow(e.Graphics, null, Unit, Font, ForeColor, ValueColor, rtUnit);
+                }
+                #endregion
             }
             else
             {
-                var cv = ButtonColor.BrightnessTransmit(Theme.DownBright);
-                Theme.DrawBox(e.Graphics, cv, BackColor, rtButton, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.GRADIENT_V_REVERSE);
-                Theme.DrawTextShadow(e.Graphics, icobtn, ButtonText, Font, ForeColor.BrightnessTransmit(Theme.DownBright), cv, new Rectangle(rtButton.X, rtButton.Y + 1, rtButton.Width, rtButton.Height), DvContentAlignment.MiddleCenter);
-            }
-
-            if (UnitWidth > 0 && !string.IsNullOrWhiteSpace(Unit))
-            {
-                #region Unit Sep
-                var szh = Convert.ToInt32(rtUnit.Height / 2);
-
-                p.Width = 1;
-
-                p.Color = ValueColor.BrightnessTransmit(Theme.OutBevelBright);
-                e.Graphics.DrawLine(p, rtUnit.X + 1, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X + 1, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
-
-                p.Color = ValueColor.BrightnessTransmit(Theme.BorderBright);
-                e.Graphics.DrawLine(p, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+                #region Bounds
+                var rtContent = Areas["rtContent"];
+                var rtValue = Areas["rtValue"];
+                var rtValueAll = Areas["rtValueAll"];
+                var rtTitle = Areas["rtTitle"];
+                var rtUnit = Areas["rtUnit"];
                 #endregion
-                Theme.DrawTextShadow(e.Graphics, null, Unit, Font, ForeColor, ValueColor, rtUnit);
+                #region Draw
+                Theme.DrawBox(e.Graphics, TitleColor, BackColor, rtTitle, RoundType.L, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW);
+
+                switch (Style)
+                {
+                    case DvLabelStyle.FlatConcave:
+                        Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL);
+                        break;
+                    case DvLabelStyle.FlatConvex:
+                        Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                        break;
+                    case DvLabelStyle.Concave:
+                        Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+                        break;
+                    case DvLabelStyle.Convex:
+                        Theme.DrawBox(e.Graphics, ValueColor, BackColor, rtValueAll, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW | BoxDrawOption.IN_BEVEL_LT);
+                        break;
+                }
+
+                Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor, TitleColor, rtTitle);
+                Theme.DrawTextShadow(e.Graphics, null, Value, Font, ForeColor, ValueColor, rtValue);
+
+                if (UnitWidth > 0 && !string.IsNullOrWhiteSpace(Unit))
+                {
+                    #region Unit Sep
+                    var szh = Convert.ToInt32(rtUnit.Height / 2);
+
+                    p.Width = 1;
+
+                    p.Color = ValueColor.BrightnessTransmit(Theme.OutBevelBright);
+                    e.Graphics.DrawLine(p, rtUnit.X + 1, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X + 1, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+
+                    p.Color = ValueColor.BrightnessTransmit(Theme.BorderBright);
+                    e.Graphics.DrawLine(p, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) - (szh / 2) + 1, rtUnit.X, (rtContent.Y + (rtContent.Height / 2)) + (szh / 2) + 1);
+                    #endregion
+                    Theme.DrawTextShadow(e.Graphics, null, Unit, Font, ForeColor, ValueColor, rtUnit);
+                }
+                #endregion
             }
-            #endregion
             #region Dispose
             br.Dispose();
             p.Dispose();
@@ -377,14 +463,16 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             Focus();
-            
-            if (Areas.ContainsKey("rtButton") && CollisionTool.Check(Areas["rtButton"], e.Location))
+            if (UseButton)
             {
-                bDown = true;
-                ButtonDown?.Invoke(this, null);
-                Invalidate();
+                if (Areas.ContainsKey("rtButton") && CollisionTool.Check(Areas["rtButton"], e.Location))
+                {
+                    bDown = true;
+                    ButtonDown?.Invoke(this, null);
+                    Invalidate();
 
-                click.MouseDown(e);
+                    click.MouseDown(e);
+                }
             }
             base.OnMouseDown(e);
         }
@@ -392,13 +480,16 @@ namespace Devinno.Forms.Controls
         #region OnMouseUp
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            click.MouseUp(e);
-            if (Areas.ContainsKey("rtButton") && CollisionTool.Check(Areas["rtButton"], e.Location)) ButtonUp?.Invoke(this, null);
-            if (bDown)
+            if (UseButton)
             {
-                bDown = false;
-                Invalidate();
-                if (Areas.ContainsKey("rtButton") && CollisionTool.Check(Areas["rtButton"], e.Location)) ButtonClick?.Invoke(this, null);
+                click.MouseUp(e);
+                if (Areas.ContainsKey("rtButton") && CollisionTool.Check(Areas["rtButton"], e.Location)) ButtonUp?.Invoke(this, null);
+                if (bDown)
+                {
+                    bDown = false;
+                    Invalidate();
+                    if (Areas.ContainsKey("rtButton") && CollisionTool.Check(Areas["rtButton"], e.Location)) ButtonClick?.Invoke(this, null);
+                }
             }
             base.OnMouseUp(e);
         }

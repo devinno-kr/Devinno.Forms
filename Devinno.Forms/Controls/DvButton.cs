@@ -148,6 +148,11 @@ namespace Devinno.Forms.Controls
 
         public bool UseLongClick { get => click.UseLongClick; set=> click.UseLongClick = value; }
         public int LongClickTime { get => click.LongClickTime; set => click.LongClickTime = value; } 
+        
+        public bool UseKey { get; set; }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public bool ButtonDownState => bDown;
         #endregion
 
         #region Event
@@ -160,6 +165,7 @@ namespace Devinno.Forms.Controls
         #region Member Variable
         private bool bDown = false;
         private LongClick click = new LongClick();
+        private bool bKeyClick = false;
         #endregion
 
         #region Constructor
@@ -177,6 +183,42 @@ namespace Devinno.Forms.Controls
             click.Reset = new Action(() => { this.Invoke(new Action(() => { bDown = false; Invalidate(); })); });
             click.GenLongClick = new Action(() => { this.Invoke(new Action(() => LongClick?.Invoke(this, null))); });
 
+            KeyPress += (o, s) =>
+            {
+                if (UseKey && Focused)
+                {
+                    if (s.KeyChar == '\r' || s.KeyChar == ' ')
+                    {
+                        var th = new Thread(new ThreadStart(() =>
+                        {
+                            this.Invoke(new Action(() =>
+                            {
+                                bDown = true;
+                                ButtonDown?.Invoke(this, null); Invalidate();
+                                Invalidate();
+
+                            }));
+
+                            Thread.Sleep(50);
+
+                            this.Invoke(new Action(() =>
+                            {
+                                ButtonUp?.Invoke(this, null);
+                                if (bDown)
+                                {
+                                    bDown = false;
+                                    Invalidate();
+                                    ButtonClick?.Invoke(this, null);
+                                }
+                            }));
+
+                        }))
+                        { IsBackground = true };
+                        th.Start();
+                    }
+                }
+
+            };
         }
         #endregion
 
@@ -221,7 +263,16 @@ namespace Devinno.Forms.Controls
                 if (BackgroundDraw) Theme.DrawBox(e.Graphics, cv, BackColor, rtContent, RoundType.ALL, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | (Gradient ? BoxDrawOption.GRADIENT_V_REVERSE : BoxDrawOption.NONE));
                 Theme.DrawTextShadow(e.Graphics, ico, Text, Font, ForeColor.BrightnessTransmit(Theme.DownBright), BackgroundDraw ? cv : BackColor, new Rectangle(rtText.X, rtText.Y + 1, rtText.Width, rtText.Height), DvContentAlignment.MiddleCenter);
             }
+
+            if(UseKey && Focused && !bDown)
+            {
+                var cv = ButtonColor.BrightnessTransmit(0.25);
+                Theme.DrawBorder(e.Graphics, cv, ButtonColor, 1, new Rectangle(rtContent.X + 1, rtContent.Y + 1, rtContent.Width - 2, rtContent.Height - 2), RoundType.ALL, BoxDrawOption.BORDER);
+            }
+
             #endregion
+
+
             #region Dispose
             br.Dispose();
             p.Dispose();
@@ -250,13 +301,16 @@ namespace Devinno.Forms.Controls
         #region OnMouseUp
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            click.MouseUp(e);
-            ButtonUp?.Invoke(this, null);
-            if (bDown)
+            if (Clickable)
             {
-                bDown = false;
-                Invalidate();
-                ButtonClick?.Invoke(this, null);
+                click.MouseUp(e);
+                ButtonUp?.Invoke(this, null);
+                if (bDown)
+                {
+                    bDown = false;
+                    Invalidate();
+                    ButtonClick?.Invoke(this, null);
+                }
             }
             base.OnMouseUp(e);
         }

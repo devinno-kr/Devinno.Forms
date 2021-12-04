@@ -4,6 +4,7 @@ using Devinno.Forms.Dialogs;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
+using Devinno.Forms.Tools;
 using Devinno.Tools;
 using System;
 using System.Collections.Generic;
@@ -195,6 +196,11 @@ namespace Devinno.Forms.Controls
         internal DvDateTimePickerDialog DateTimePicker { get; } = new DvDateTimePickerDialog();
         internal DvColorPickerDialog ColorPicker { get; } = new DvColorPickerDialog();
 
+        #region ScrollPosition
+        public long VScrollPosition { get => vscroll.ScrollPosition; set => vscroll.ScrollPosition = value; }
+        public long HScrollPosition { get => hscroll.ScrollPosition; set => hscroll.ScrollPosition = value; }
+        #endregion
+
         #endregion
 
         #region Event
@@ -213,6 +219,8 @@ namespace Devinno.Forms.Controls
 
         bool bInv = false;
         internal bool bModSize = false;
+        
+        DvDataGridRow first = null;
         #endregion
 
         #region Event
@@ -340,6 +348,7 @@ namespace Devinno.Forms.Controls
         #region OnThemeDraw
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
+            
             #region Color
             var BoxColor = GetBoxColor(Theme);
             var ColumnColor = GetColumnColor(Theme);
@@ -384,263 +393,210 @@ namespace Devinno.Forms.Controls
 
             #endregion
             #region Draw
-            #region Column Index 
-
-            var rtnm = "rtColumn";
-            var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (Rectangle?)null;
-            int? isnf = null, ienf = null;
-            if (vsnf != null && venf != null && rts.ContainsKey(rtnm + vsnf.Name) && rts.ContainsKey(rtnm + venf.Name))
+            using (var pth = DrawingTool.GetRoundRectPath(new Rectangle(rtContent.X, rtContent.Y, rtContent.Width + 1, rtContent.Height + 1), Theme.Corner))
             {
-                var rtsv = rts[rtnm + vsnf.Name];
-                var rtev = rts[rtnm + venf.Name];
-                var mrt = new Rectangle(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
+                #region Column Index 
 
-                var vls = lsnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                isnf = Columns.IndexOf(vls.FirstOrDefault());
-                ienf = Columns.IndexOf(vls.LastOrDefault());
-                mrtNF = mrt;
-            }
-
-            var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (Rectangle?)null;
-            int? isf = null, ief = null;
-            if (vsf != null && vef != null && rts.ContainsKey(rtnm + vsf.Name) && rts.ContainsKey(rtnm + vef.Name))
-            {
-                var rtsv = rts[rtnm + vsf.Name];
-                var rtev = rts[rtnm + vef.Name];
-                var mrt = new Rectangle(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
-
-                var vls = lsf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                isf = Columns.IndexOf(vls.FirstOrDefault());
-                ief = Columns.IndexOf(vls.LastOrDefault());
-                mrtF = mrt;
-            }
-
-            rtnm = "rtColumnGroup";
-            var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (Rectangle?)null;
-            int? isgnf = null, iegnf = null;
-            if (vsgnf != null && vegnf != null && rts.ContainsKey(rtnm + vsgnf.Name) && rts.ContainsKey(rtnm + vegnf.Name))
-            {
-                var rtsv = rts[rtnm + vsgnf.Name];
-                var rtev = rts[rtnm + vegnf.Name];
-                var mrt = new Rectangle(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
-
-                var vls = lsgnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                isgnf = ColumnGroups.IndexOf(vls.FirstOrDefault());
-                iegnf = ColumnGroups.IndexOf(vls.LastOrDefault());
-                mrtGNF = mrt;
-            }
-
-            var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (Rectangle?)null;
-            int? isgf = null, iegf = null;
-            if (vsgf != null && vegf != null && rts.ContainsKey(rtnm + vsgf.Name) && rts.ContainsKey(rtnm + vegf.Name))
-            {
-                var rtsv = rts[rtnm + vsgf.Name];
-                var rtev = rts[rtnm + vegf.Name];
-                var mrt = new Rectangle(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
-
-                var vls = lsgf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                isgf = ColumnGroups.IndexOf(vls.FirstOrDefault());
-                iegf = ColumnGroups.IndexOf(vls.LastOrDefault());
-                mrtGF = mrt;
-            }
-            #endregion
-            #region Column
-            #region ColumnBox
-            Theme.DrawBox(e.Graphics, ColumnColor, BackColor, rtColumn, RoundType.T, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
-            if (rtColumn.Right != rtScrollContent.Right)
-            {
-                p.Width = 1;
-                p.Color = ColumnBorderColor;
-                e.Graphics.DrawLine(p, rtScrollContent.Right, rtColumn.Top, rtScrollContent.Right, rtColumn.Bottom);
-            }
-
-            if (SelectionMode == DvDataGridSelectionMode.SELECTOR)
-            {
-                p.Width = 1;
-                p.Color = ColumnBorderColor;
-                e.Graphics.DrawLine(p, rtScrollContent.Left + spw, rtColumn.Top, rtScrollContent.Left + spw, rtColumn.Bottom);
-            }
-            #endregion
-
-            e.Graphics.SetClip(rtColumnV);
-
-            #region Column
-            {
-                #region !Fixed
-                if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
+                var rtnm = "rtColumn";
+                var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (Rectangle?)null;
+                int? isnf = null, ienf = null;
+                if (vsnf != null && venf != null && rts.ContainsKey(rtnm + vsnf.Name) && rts.ContainsKey(rtnm + venf.Name))
                 {
-                    var vls = Columns.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
-                    var mrt = new Rectangle(mrtNF.Value.X, rtColumn.Y, mrtNF.Value.Width, rtColumn.Height);
-                    e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
-                    foreach (var col in vls)
-                    {
-                        #region Column
-                        {
-                            var rt = DvDataGridTool.RTI(rts["rtColumn" + col.Name]); rt.Offset(hspos, 0);
-                            DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
-                            col.Paint(Theme, e.Graphics, rt);
-                        }
-                        #endregion
-                        #region Filter
-                        if (col.UseFilter)
-                        {
-                            var rt = DvDataGridTool.RTI(rts["rtFilter" + col.Name]); rt.Offset(hspos, 0);
-                            var n2 = Convert.ToInt32(f * 2);
-                            var rtin = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtin.Inflate(-n2, -n2);
-                            DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
-                            if (col.UseFilter)
-                            {
-                                br.Color = ColumnColor.BrightnessTransmit(InputBright); e.Graphics.FillRectangle(br, rtin);
-                                p.Color = ColumnColor.BrightnessTransmit(Theme.BorderBright); e.Graphics.DrawRectangle(p, rtin);
-                                Theme.DrawTextShadow(e.Graphics, null, col.FilterText, Font, ForeColor, br.Color, DvDataGridTool.RTI(rt));
-                            }
-                        }
-                        #endregion
-                    }
-                    e.Graphics.ResetClip();
-                    e.Graphics.SetClip(rtColumnV);
+                    var rtsv = rts[rtnm + vsnf.Name];
+                    var rtev = rts[rtnm + venf.Name];
+                    var mrt = new Rectangle(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
+
+                    var vls = lsnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    isnf = Columns.IndexOf(vls.FirstOrDefault());
+                    ienf = Columns.IndexOf(vls.LastOrDefault());
+                    mrtNF = mrt;
+                }
+
+                var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (Rectangle?)null;
+                int? isf = null, ief = null;
+                if (vsf != null && vef != null && rts.ContainsKey(rtnm + vsf.Name) && rts.ContainsKey(rtnm + vef.Name))
+                {
+                    var rtsv = rts[rtnm + vsf.Name];
+                    var rtev = rts[rtnm + vef.Name];
+                    var mrt = new Rectangle(rtsv.Left, rtColumn.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+
+                    var vls = lsf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    isf = Columns.IndexOf(vls.FirstOrDefault());
+                    ief = Columns.IndexOf(vls.LastOrDefault());
+                    mrtF = mrt;
+                }
+
+                rtnm = "rtColumnGroup";
+                var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (Rectangle?)null;
+                int? isgnf = null, iegnf = null;
+                if (vsgnf != null && vegnf != null && rts.ContainsKey(rtnm + vsgnf.Name) && rts.ContainsKey(rtnm + vegnf.Name))
+                {
+                    var rtsv = rts[rtnm + vsgnf.Name];
+                    var rtev = rts[rtnm + vegnf.Name];
+                    var mrt = new Rectangle(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
+
+                    var vls = lsgnf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X + hspos, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    isgnf = ColumnGroups.IndexOf(vls.FirstOrDefault());
+                    iegnf = ColumnGroups.IndexOf(vls.LastOrDefault());
+                    mrtGNF = mrt;
+                }
+
+                var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (Rectangle?)null;
+                int? isgf = null, iegf = null;
+                if (vsgf != null && vegf != null && rts.ContainsKey(rtnm + vsgf.Name) && rts.ContainsKey(rtnm + vegf.Name))
+                {
+                    var rtsv = rts[rtnm + vsgf.Name];
+                    var rtev = rts[rtnm + vegf.Name];
+                    var mrt = new Rectangle(rtsv.Left, rtsv.Y, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+
+                    var vls = lsgf.Where(x => CollisionTool.Check(mrt, DvDataGridTool.RTI(new Rectangle(rts[rtnm + x.Name].X, rts[rtnm + x.Name].Y, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                    isgf = ColumnGroups.IndexOf(vls.FirstOrDefault());
+                    iegf = ColumnGroups.IndexOf(vls.LastOrDefault());
+                    mrtGF = mrt;
                 }
                 #endregion
-                #region Fixed
-                if (mrtF.HasValue && isf.HasValue && ief.HasValue)
+                #region Column
+                if (Columns.Count > 0)
                 {
-                    var vls = Columns.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
-                    var mrt = new Rectangle(mrtF.Value.X, rtColumn.Y, mrtF.Value.Width, rtColumn.Height);
-                    e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
-                    foreach (var col in vls)
+                    #region ColumnBox
+                    Theme.DrawBox(e.Graphics, ColumnColor, BackColor, rtColumn, RoundType.T, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                    if (rtColumn.Right != rtScrollContent.Right)
                     {
-                        #region Column
-                        {
-                            var rt = rts["rtColumn" + col.Name];
-                            DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
-                            col.Paint(Theme, e.Graphics, rt);
-                        }
-                        #endregion
-                        #region Filter
-                        if (col.UseFilter)
-                        {
-                            var rt = rts["rtFilter" + col.Name];
-                            var n2 = Convert.ToInt32(f * 2);
-                            var rtin = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtin.Inflate(-n2, -n2);
-                            DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
-                            if (col.UseFilter)
-                            {
-                                br.Color = ColumnColor.BrightnessTransmit(InputBright); e.Graphics.FillRectangle(br, rtin);
-                                p.Color = ColumnColor.BrightnessTransmit(Theme.BorderBright); e.Graphics.DrawRectangle(p, rtin);
-                                Theme.DrawTextShadow(e.Graphics, null, col.FilterText, Font, ForeColor, br.Color, DvDataGridTool.RTI(rt));
-                            }
-                        }
-                        #endregion
+                        p.Width = 1;
+                        p.Color = ColumnBorderColor;
+                        e.Graphics.DrawLine(p, rtScrollContent.Right, rtColumn.Top, rtScrollContent.Right, rtColumn.Bottom);
                     }
-                    e.Graphics.ResetClip();
-                    e.Graphics.SetClip(rtColumnV);
-                }
-                #endregion
-            }
-            #endregion
-            #region ColumnGroup
-            {
-                #region !Fixed
-                if (mrtGNF.HasValue && isgnf.HasValue && iegnf.HasValue)
-                {
-                    var vls = ColumnGroups.GetRange(isgnf.Value, iegnf.Value - isgnf.Value + 1).ToList();
-                    var mrt = new Rectangle(mrtGNF.Value.X, rtColumn.Y, mrtGNF.Value.Width, rtColumn.Height);
-                    e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
-                    foreach (var colgroup in vls)
-                    {
-                        var rt = DvDataGridTool.RTI(rts["rtColumnGroup" + colgroup.Name]); rt.Offset(hspos, 0);
-                        DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
-                        colgroup.Paint(Theme, e.Graphics, rt);
-                    }
-                    e.Graphics.ResetClip();
-                    e.Graphics.SetClip(rtColumnV);
-                }
-                #endregion
-                #region Fixed
-                if (mrtGF.HasValue && isgf.HasValue && iegf.HasValue)
-                {
-                    var vls = ColumnGroups.GetRange(isgf.Value, iegf.Value - isgf.Value + 1).ToList();
-                    var mrt = new Rectangle(mrtGF.Value.X, rtColumn.Y, mrtGF.Value.Width, rtColumn.Height);
-                    e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
-                    foreach (var colgroup in vls)
-                    {
-                        var rt = rts["rtColumnGroup" + colgroup.Name];
-                        DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
-                        colgroup.Paint(Theme, e.Graphics, rt);
-                    }
-                    e.Graphics.ResetClip();
-                    e.Graphics.SetClip(rtColumnV);
-                }
-                #endregion
-            }
-            #endregion
-            #region ColumnSelector
-            if (SelectionMode == DvDataGridSelectionMode.SELECTOR)
-            {
-                var rtSelector = new Rectangle(rtColumn.X, rtColumn.Y, spw, rtColumn.Height);
-                DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rtSelector);
 
-                var rtSelectorBox = MathTool.MakeRectangle(DvDataGridTool.RTI(rtSelector), new Size(sbw, sbw));
-                Theme.DrawBox(e.Graphics, ColumnColor.BrightnessTransmit(BoxBright), ColumnColor, rtSelectorBox, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
-
-                if (bAllSelect)
-                {
-                    Rectangle rtCheck = new Rectangle(rtSelectorBox.X, rtSelectorBox.Y - 0, rtSelectorBox.Width, rtSelectorBox.Height); rtCheck.Inflate(-Convert.ToInt32(4 * f), -Convert.ToInt32(4 * f));
-                    Rectangle rtCheckSH = new Rectangle(rtCheck.X, rtCheck.Y + 1, rtCheck.Width, rtCheck.Height);
-
-                    p.Width = Convert.ToInt32(3 * f);
-                    p.Color = ForeColor;
-                    e.Graphics.DrawLine(p, rtCheck.X, rtCheck.Y + rtCheck.Height / 2, rtCheck.X + rtCheck.Width / 2, rtCheck.Y + rtCheck.Height);
-                    e.Graphics.DrawLine(p, rtCheck.X + rtCheck.Width / 2 - 1, rtCheck.Y + rtCheck.Height, rtCheck.X + rtCheck.Width, rtCheck.Y);
-                    p.Width = 1;
-                }
-            }
-            #endregion
-
-            e.Graphics.ResetClip();
-            #endregion
-            #region Box
-            Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtScrollContent, RoundType.NONE, BoxDrawOption.BORDER);
-            #endregion
-            #region Rows
-            {
-                e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
-
-                #region Row
-                e.Graphics.SetClip(rtScrollContent);
-                Loop((i, rtROW, v) =>
-                {
-                    #region Selector
                     if (SelectionMode == DvDataGridSelectionMode.SELECTOR)
                     {
-                        var rt = DvDataGridTool.RTI(new Rectangle(rtROW.X, rtROW.Y, spw, rtROW.Height));
+                        p.Width = 1;
+                        p.Color = ColumnBorderColor;
+                        e.Graphics.DrawLine(p, rtScrollContent.Left + spw, rtColumn.Top, rtScrollContent.Left + spw, rtColumn.Bottom);
+                    }
+                    #endregion
 
-                        var old = e.Graphics.ClipBounds;
-                        var oldsm = e.Graphics.SmoothingMode;
-                        e.Graphics.SetClip(new Rectangle(rt.X, rtScrollContent.Y, rt.Width, rtScrollContent.Height), CombineMode.Intersect);
-                        e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+                    e.Graphics.SetClip(rtColumnV);
 
-                        #region Background
-                        var bg = BoxColor;
-                        var c = v.Selected ? SelectedRowColor : RowColor;
-
-                        br.Color = c; e.Graphics.FillRectangle(br, rt);
-                        if (RowBevel)
+                    #region Column
+                    {
+                        #region !Fixed
+                        if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                         {
-                            int n = 1;
-                            var pts = new Point[] { new Point(rt.Right - n, rt.Top + n), new Point(rt.Left + n, rt.Top + n), new Point(rt.Left + n, rt.Bottom - n) };
-                            p.Color = c.BrightnessTransmit(DvDataGrid.ColumnBevelBright);
-                            e.Graphics.DrawLines(p, pts);
+                            var vls = Columns.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
+                            var mrt = new Rectangle(mrtNF.Value.X, rtColumn.Y, mrtNF.Value.Width, rtColumn.Height);
+                            e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
+                            foreach (var col in vls)
+                            {
+                                #region Column
+                                {
+                                    var rt = DvDataGridTool.RTI(rts["rtColumn" + col.Name]); rt.Offset(hspos, 0);
+                                    DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
+                                    col.Paint(Theme, e.Graphics, rt);
+                                }
+                                #endregion
+                                #region Filter
+                                if (col.UseFilter)
+                                {
+                                    var rt = DvDataGridTool.RTI(rts["rtFilter" + col.Name]); rt.Offset(hspos, 0);
+                                    var n2 = Convert.ToInt32(f * 2);
+                                    var rtin = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtin.Inflate(-n2, -n2);
+                                    DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
+                                    if (col.UseFilter)
+                                    {
+                                        br.Color = ColumnColor.BrightnessTransmit(InputBright); e.Graphics.FillRectangle(br, rtin);
+                                        p.Color = ColumnColor.BrightnessTransmit(Theme.BorderBright); e.Graphics.DrawRectangle(p, rtin);
+                                        Theme.DrawTextShadow(e.Graphics, null, col.FilterText, Font, ForeColor, br.Color, DvDataGridTool.RTI(rt));
+                                    }
+                                }
+                                #endregion
+                            }
+                            e.Graphics.ResetClip();
+                            e.Graphics.SetClip(rtColumnV);
                         }
-                        p.Color = bg.BrightnessTransmit(Theme.BorderBright);
-                        e.Graphics.DrawRectangle(p, rt);
                         #endregion
-                        #region CheckBox
-                        var rtSelectorBox = MathTool.MakeRectangle(rt, new Size(sbw, sbw));
-                        Theme.DrawBox(e.Graphics, RowColor.BrightnessTransmit(BoxBright), c, rtSelectorBox, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+                        #region Fixed
+                        if (mrtF.HasValue && isf.HasValue && ief.HasValue)
+                        {
+                            var vls = Columns.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
+                            var mrt = new Rectangle(mrtF.Value.X, rtColumn.Y, mrtF.Value.Width, rtColumn.Height);
+                            e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
+                            foreach (var col in vls)
+                            {
+                                #region Column
+                                {
+                                    var rt = rts["rtColumn" + col.Name];
+                                    DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
+                                    col.Paint(Theme, e.Graphics, rt);
+                                }
+                                #endregion
+                                #region Filter
+                                if (col.UseFilter)
+                                {
+                                    var rt = rts["rtFilter" + col.Name];
+                                    var n2 = Convert.ToInt32(f * 2);
+                                    var rtin = new Rectangle(rt.X, rt.Y, rt.Width, rt.Height); rtin.Inflate(-n2, -n2);
+                                    DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
+                                    if (col.UseFilter)
+                                    {
+                                        br.Color = ColumnColor.BrightnessTransmit(InputBright); e.Graphics.FillRectangle(br, rtin);
+                                        p.Color = ColumnColor.BrightnessTransmit(Theme.BorderBright); e.Graphics.DrawRectangle(p, rtin);
+                                        Theme.DrawTextShadow(e.Graphics, null, col.FilterText, Font, ForeColor, br.Color, DvDataGridTool.RTI(rt));
+                                    }
+                                }
+                                #endregion
+                            }
+                            e.Graphics.ResetClip();
+                            e.Graphics.SetClip(rtColumnV);
+                        }
                         #endregion
-                        #region Check
-                        if (v.Selected)
+                    }
+                    #endregion
+                    #region ColumnGroup
+                    {
+                        #region !Fixed
+                        if (mrtGNF.HasValue && isgnf.HasValue && iegnf.HasValue)
+                        {
+                            var vls = ColumnGroups.GetRange(isgnf.Value, iegnf.Value - isgnf.Value + 1).ToList();
+                            var mrt = new Rectangle(mrtGNF.Value.X, rtColumn.Y, mrtGNF.Value.Width, rtColumn.Height);
+                            e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
+                            foreach (var colgroup in vls)
+                            {
+                                var rt = DvDataGridTool.RTI(rts["rtColumnGroup" + colgroup.Name]); rt.Offset(hspos, 0);
+                                DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
+                                colgroup.Paint(Theme, e.Graphics, rt);
+                            }
+                            e.Graphics.ResetClip();
+                            e.Graphics.SetClip(rtColumnV);
+                        }
+                        #endregion
+                        #region Fixed
+                        if (mrtGF.HasValue && isgf.HasValue && iegf.HasValue)
+                        {
+                            var vls = ColumnGroups.GetRange(isgf.Value, iegf.Value - isgf.Value + 1).ToList();
+                            var mrt = new Rectangle(mrtGF.Value.X, rtColumn.Y, mrtGF.Value.Width, rtColumn.Height);
+                            e.Graphics.SetClip(new Rectangle(mrt.X, mrt.Y, mrt.Width + 1, mrt.Height), CombineMode.Intersect);
+                            foreach (var colgroup in vls)
+                            {
+                                var rt = rts["rtColumnGroup" + colgroup.Name];
+                                DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rt);
+                                colgroup.Paint(Theme, e.Graphics, rt);
+                            }
+                            e.Graphics.ResetClip();
+                            e.Graphics.SetClip(rtColumnV);
+                        }
+                        #endregion
+                    }
+                    #endregion
+                    #region ColumnSelector
+                    if (SelectionMode == DvDataGridSelectionMode.SELECTOR)
+                    {
+                        var rtSelector = new Rectangle(rtColumn.X, rtColumn.Y, spw, rtColumn.Height);
+                        DrawColumnBox(e.Graphics, Theme, rtColumn, rtScrollContent, rtSelector);
+
+                        var rtSelectorBox = MathTool.MakeRectangle(DvDataGridTool.RTI(rtSelector), new Size(sbw, sbw));
+                        Theme.DrawBox(e.Graphics, ColumnColor.BrightnessTransmit(BoxBright), ColumnColor, rtSelectorBox, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+
+                        if (bAllSelect)
                         {
                             Rectangle rtCheck = new Rectangle(rtSelectorBox.X, rtSelectorBox.Y - 0, rtSelectorBox.Width, rtSelectorBox.Height); rtCheck.Inflate(-Convert.ToInt32(4 * f), -Convert.ToInt32(4 * f));
                             Rectangle rtCheckSH = new Rectangle(rtCheck.X, rtCheck.Y + 1, rtCheck.Width, rtCheck.Height);
@@ -651,175 +607,255 @@ namespace Devinno.Forms.Controls
                             e.Graphics.DrawLine(p, rtCheck.X + rtCheck.Width / 2 - 1, rtCheck.Y + rtCheck.Height, rtCheck.X + rtCheck.Width, rtCheck.Y);
                             p.Width = 1;
                         }
-                        #endregion
+                    }
+                    #endregion
 
-                        e.Graphics.ResetClip();
-                        e.Graphics.SetClip(rtScrollContent);
-                        e.Graphics.SmoothingMode = oldsm;
-                    }
-                    #endregion
-                    #region !Fixed
-                    if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
-                    {
-                        var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
-                        var mrt = new Rectangle(mrtNF.Value.X, rtScrollContent.Y, mrtNF.Value.Width, rtScrollContent.Height);
-                        e.Graphics.SetClip(mrt, CombineMode.Intersect);
-                        foreach (var cell in vls)
-                        {
-                            if (cell.Visible)
-                            {
-                                var rtCol = rts["rtColumn" + cell.Column.Name];
-                                var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
-
-                                if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
-                                if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
-                                cell.Paint(Theme, e.Graphics, rt);
-                            }
-                        }
-                        e.Graphics.ResetClip();
-                    }
-                    #endregion
-                    #region Fixed
-                    if (mrtF.HasValue && isf.HasValue && ief.HasValue)
-                    {
-                        var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
-                        var mrt = new Rectangle(mrtF.Value.X, rtScrollContent.Y, mrtF.Value.Width + 1, rtScrollContent.Height);
-                        e.Graphics.SetClip(mrt, CombineMode.Intersect);
-                        foreach (var cell in vls)
-                        {
-                            if (cell.Visible)
-                            {
-                                var rtCol = rts["rtColumn" + cell.Column.Name];
-                                var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
-                                if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
-                                if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
-                                cell.Paint(Theme, e.Graphics, rt);
-                            }
-                        }
-                        e.Graphics.ResetClip();
-                    }
-                    #endregion
-                });
-                e.Graphics.ResetClip();
-                #endregion
-                #region Summary 
-                if (SummaryRows.Count > 0)
-                {
-                    for (int i = 0; i < SummaryRows.Count; i++)
-                    {
-                        var v = SummaryRows[i];
-                        var rtROW = new Rectangle(rtSummary.X, rtSummary.Y + (i * RowHeight), rtSummary.Width, RowHeight);
-                        #region !Fixed
-                        if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
-                        {
-                            var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
-                            var mrt = new Rectangle(mrtNF.Value.X, rtSummary.Y, mrtNF.Value.Width, rtSummary.Height);
-                            e.Graphics.SetClip(mrt, CombineMode.Intersect);
-                            foreach (var cell in vls)
-                            {
-                                if (cell.Visible)
-                                {
-                                    var rtCol = rts["rtColumn" + Columns[cell.ColumnIndex].Name];
-                                    var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
-                                    if (cell.ColumnSpan > 1 && cell.ColumnIndex + cell.ColumnSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColumnSpan).Sum();
-                                    cell.Paint(Theme, e.Graphics, rt);
-                                }
-                            }
-                            e.Graphics.ResetClip();
-                        }
-                        #endregion
-                        #region Fixed
-                        if (mrtF.HasValue && isf.HasValue && ief.HasValue)
-                        {
-                            var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
-                            var mrt = new Rectangle(mrtF.Value.X, rtSummary.Y, mrtF.Value.Width + 1, rtSummary.Height);
-                            e.Graphics.SetClip(mrt, CombineMode.Intersect);
-                            foreach (var cell in vls)
-                            {
-                                if (cell.Visible)
-                                {
-                                    var rtCol = rts["rtColumn" + Columns[cell.ColumnIndex].Name];
-                                    var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
-                                    if (cell.ColumnSpan > 1 && cell.ColumnIndex + cell.ColumnSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColumnSpan).Sum();
-                                    cell.Paint(Theme, e.Graphics, rt);
-                                }
-                            }
-                            e.Graphics.ResetClip();
-                        }
-                        #endregion
-                    }
+                    e.Graphics.ResetClip();
                 }
                 #endregion
-
-                e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-            }
-            #endregion
-            #region Scroll
-            switch (ScrollMode)
-            {
-                #region Horizon
-                case ScrollMode.Horizon:
-                    {
-                        Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScrollH, RoundType.B, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
-
-                        var cCur = Theme.ScrollCursorColor;
-                        if (hscroll.IsScrolling) cCur = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
-                        else if (hscroll.IsTouchMoving) cCur = Theme.PointColor.BrightnessTransmit(0.3);
-
-                        var rtcur = hscroll.GetScrollCursorRect(rtScrollH);
-                        e.Graphics.SetClip(rtScrollH);
-                        if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
-                        e.Graphics.ResetClip();
-                    }
-                    break;
+                #region Box
+                Theme.DrawBox(e.Graphics, BoxColor, BackColor, rtScrollContent, Columns.Count > 0 ? RoundType.LB :  RoundType.L, BoxDrawOption.BORDER);
                 #endregion
-                #region Vertical
-                case ScrollMode.Vertical:
+                #region Rows
+                {
+                    e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
+                    using (var pthA = DrawingTool.GetRoundRectPathLB(rtContent, Theme.Corner))
                     {
-                        Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScrollV, RoundType.RB, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                        #region Row
+                        e.Graphics.SetClip(pthA);
+                        Loop((i, rtROW, v) =>
+                        {
+                            #region Selector
+                            if (SelectionMode == DvDataGridSelectionMode.SELECTOR)
+                            {
+                                var rt = DvDataGridTool.RTI(new Rectangle(rtROW.X, rtROW.Y, spw, rtROW.Height));
 
-                        var cCur = Theme.ScrollCursorColor;
-                        if (vscroll.IsScrolling) cCur = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
-                        else if (vscroll.IsTouchMoving) cCur = Theme.PointColor.BrightnessTransmit(0.3);
+                                var old = e.Graphics.ClipBounds;
+                                var oldsm = e.Graphics.SmoothingMode;
+                                e.Graphics.SetClip(new Rectangle(rt.X, rtScrollContent.Y, rt.Width, rtScrollContent.Height), CombineMode.Intersect);
+                                e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
-                        var rtcur = vscroll.GetScrollCursorRect(rtScrollV);
-                        e.Graphics.SetClip(rtScrollV);
-                        if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
+                                #region Background
+                                var bg = BoxColor;
+                                var c = v.Selected ? SelectedRowColor : RowColor;
+
+                                br.Color = c; e.Graphics.FillRectangle(br, rt);
+                                if (RowBevel)
+                                {
+                                    int n = 1;
+                                    var pts = new Point[] { new Point(rt.Right - n, rt.Top + n), new Point(rt.Left + n, rt.Top + n), new Point(rt.Left + n, rt.Bottom - n) };
+                                    p.Color = c.BrightnessTransmit(DvDataGrid.ColumnBevelBright);
+                                    e.Graphics.DrawLines(p, pts);
+                                }
+                                p.Color = bg.BrightnessTransmit(Theme.BorderBright);
+                                e.Graphics.DrawRectangle(p, rt);
+                                #endregion
+                                #region CheckBox
+                                var rtSelectorBox = MathTool.MakeRectangle(rt, new Size(sbw, sbw));
+                                Theme.DrawBox(e.Graphics, RowColor.BrightnessTransmit(BoxBright), c, rtSelectorBox, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_BEVEL | BoxDrawOption.IN_SHADOW);
+                                #endregion
+                                #region Check
+                                if (v.Selected)
+                                {
+                                    Rectangle rtCheck = new Rectangle(rtSelectorBox.X, rtSelectorBox.Y - 0, rtSelectorBox.Width, rtSelectorBox.Height); rtCheck.Inflate(-Convert.ToInt32(4 * f), -Convert.ToInt32(4 * f));
+                                    Rectangle rtCheckSH = new Rectangle(rtCheck.X, rtCheck.Y + 1, rtCheck.Width, rtCheck.Height);
+
+                                    p.Width = Convert.ToInt32(3 * f);
+                                    p.Color = ForeColor;
+                                    e.Graphics.DrawLine(p, rtCheck.X, rtCheck.Y + rtCheck.Height / 2, rtCheck.X + rtCheck.Width / 2, rtCheck.Y + rtCheck.Height);
+                                    e.Graphics.DrawLine(p, rtCheck.X + rtCheck.Width / 2 - 1, rtCheck.Y + rtCheck.Height, rtCheck.X + rtCheck.Width, rtCheck.Y);
+                                    p.Width = 1;
+                                }
+                                #endregion
+
+                                e.Graphics.ResetClip();
+                                e.Graphics.SetClip(pthA);
+                                e.Graphics.SmoothingMode = oldsm;
+                            }
+                            #endregion
+                            #region !Fixed
+                            if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
+                            {
+                                var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
+                                var mrt = new Rectangle(mrtNF.Value.X, rtScrollContent.Y, mrtNF.Value.Width, rtScrollContent.Height);
+                                e.Graphics.SetClip(mrt, CombineMode.Intersect);
+                                foreach (var cell in vls)
+                                {
+                                    if (cell.Visible)
+                                    {
+                                        var rtCol = rts["rtColumn" + cell.Column.Name];
+                                        var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
+
+                                        if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
+                                        if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
+                                        cell.Paint(Theme, e.Graphics, rt);
+                                    }
+                                }
+                                e.Graphics.ResetClip();
+                                e.Graphics.SetClip(pthA);
+                            }
+                            #endregion
+                            #region Fixed
+                            if (mrtF.HasValue && isf.HasValue && ief.HasValue)
+                            {
+                                var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
+                                var mrt = new Rectangle(mrtF.Value.X, rtScrollContent.Y, mrtF.Value.Width + 1, rtScrollContent.Height);
+                                e.Graphics.SetClip(mrt, CombineMode.Intersect);
+                                foreach (var cell in vls)
+                                {
+                                    if (cell.Visible)
+                                    {
+                                        var rtCol = rts["rtColumn" + cell.Column.Name];
+                                        var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
+                                        if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
+                                        if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
+                                        cell.Paint(Theme, e.Graphics, rt);
+                                    }
+                                }
+                                e.Graphics.ResetClip();
+                                e.Graphics.SetClip(pthA);
+                            }
+                            #endregion
+                        });
                         e.Graphics.ResetClip();
+                        #endregion
+                        #region Summary 
+                        e.Graphics.SetClip(pthA);
+                        if (SummaryRows.Count > 0)
+                        {
+                            for (int i = 0; i < SummaryRows.Count; i++)
+                            {
+                                var v = SummaryRows[i];
+                                var rtROW = new Rectangle(rtSummary.X, rtSummary.Y + (i * RowHeight), rtSummary.Width, RowHeight);
+                                #region !Fixed
+                                if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
+                                {
+                                    var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
+                                    var mrt = new Rectangle(mrtNF.Value.X, rtSummary.Y, mrtNF.Value.Width, rtSummary.Height);
+                                    e.Graphics.SetClip(mrt, CombineMode.Intersect);
+                                    foreach (var cell in vls)
+                                    {
+                                        if (cell.Visible)
+                                        {
+                                            var rtCol = rts["rtColumn" + Columns[cell.ColumnIndex].Name];
+                                            var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
+                                            if (cell.ColumnSpan > 1 && cell.ColumnIndex + cell.ColumnSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColumnSpan).Sum();
+                                            cell.Paint(Theme, e.Graphics, rt);
+                                        }
+                                    }
+                                    e.Graphics.ResetClip();
+                                    e.Graphics.SetClip(pthA);
+                                }
+                                #endregion
+                                #region Fixed
+                                if (mrtF.HasValue && isf.HasValue && ief.HasValue)
+                                {
+                                    var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
+                                    var mrt = new Rectangle(mrtF.Value.X, rtSummary.Y, mrtF.Value.Width + 1, rtSummary.Height);
+                                    e.Graphics.SetClip(mrt, CombineMode.Intersect);
+                                    foreach (var cell in vls)
+                                    {
+                                        if (cell.Visible)
+                                        {
+                                            var rtCol = rts["rtColumn" + Columns[cell.ColumnIndex].Name];
+                                            var rt = new Rectangle(rtCol.X, rtROW.Y, rtCol.Width, rtROW.Height);
+                                            if (cell.ColumnSpan > 1 && cell.ColumnIndex + cell.ColumnSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColumnSpan).Sum();
+                                            cell.Paint(Theme, e.Graphics, rt);
+                                        }
+                                    }
+                                    e.Graphics.ResetClip();
+                                    e.Graphics.SetClip(pthA);
+                                }
+                                #endregion
+                            }
+                        }
+                        e.Graphics.ResetClip();
+                        #endregion
+
+                        if (vscroll.ScrollTotal > vscroll.ScrollView)
+                        {
+                            e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+                            p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
+                            float diameter = Theme.Corner * 2.0F;
+                            var sizeF = new SizeF(diameter, diameter);
+                            var arc = new RectangleF(rtContent.Left, rtContent.Bottom - 0 - (diameter), sizeF.Width, sizeF.Height);
+                            e.Graphics.DrawArc(p, arc, 90, 90);
+                            e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
+                        }
                     }
-                    break;
+                    e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+                }
                 #endregion
-                #region Both
-                case ScrollMode.Both:
-                    {
-                        Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScrollH, RoundType.LB, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
-                        Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScrollV, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
-                        Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScrollR, RoundType.RB, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                #region Scroll
+                switch (ScrollMode)
+                {
+                    #region Horizon
+                    case ScrollMode.Horizon:
+                        {
+                            Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScrollH, RoundType.B, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
 
-                        var cCurH = Theme.ScrollCursorColor;
-                        if (hscroll.IsScrolling) cCurH = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
-                        else if (hscroll.IsTouchMoving) cCurH = Theme.PointColor.BrightnessTransmit(0.3);
-                        var rtcurH = hscroll.GetScrollCursorRect(rtScrollH);
-                        e.Graphics.SetClip(rtScrollH);
-                        if (rtcurH.HasValue) Theme.DrawBox(e.Graphics, cCurH, Theme.ScrollBarColor, rtcurH.Value, RoundType.ALL, BoxDrawOption.BORDER);
-                        e.Graphics.ResetClip();
+                            var cCur = Theme.ScrollCursorColor;
+                            if (hscroll.IsScrolling) cCur = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
+                            else if (hscroll.IsTouchMoving) cCur = Theme.PointColor.BrightnessTransmit(0.3);
 
-                        var cCurV = Theme.ScrollCursorColor;
-                        if (vscroll.IsScrolling) cCurV = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
-                        else if (vscroll.IsTouchMoving) cCurV = Theme.PointColor.BrightnessTransmit(0.3);
-                        var rtcurV = vscroll.GetScrollCursorRect(rtScrollV);
-                        e.Graphics.SetClip(rtScrollV);
-                        if (rtcurV.HasValue) Theme.DrawBox(e.Graphics, cCurV, Theme.ScrollBarColor, rtcurV.Value, RoundType.ALL, BoxDrawOption.BORDER);
-                        e.Graphics.ResetClip();
-                    }
-                    break;
+                            var rtcur = hscroll.GetScrollCursorRect(rtScrollH);
+                            e.Graphics.SetClip(rtScrollH);
+                            if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
+                            e.Graphics.ResetClip();
+                        }
+                        break;
                     #endregion
+                    #region Vertical
+                    case ScrollMode.Vertical:
+                        {
+                            Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScrollV, Columns.Count > 0 ? RoundType.RB : RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+
+                            var cCur = Theme.ScrollCursorColor;
+                            if (vscroll.IsScrolling) cCur = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
+                            else if (vscroll.IsTouchMoving) cCur = Theme.PointColor.BrightnessTransmit(0.3);
+
+                            var rtcur = vscroll.GetScrollCursorRect(rtScrollV);
+                            e.Graphics.SetClip(rtScrollV);
+                            if (rtcur.HasValue) Theme.DrawBox(e.Graphics, cCur, Theme.ScrollBarColor, rtcur.Value, RoundType.ALL, BoxDrawOption.BORDER);
+                            e.Graphics.ResetClip();
+                        }
+                        break;
+                    #endregion
+                    #region Both
+                    case ScrollMode.Both:
+                        {
+                            Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScrollH, RoundType.LB, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                            Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScrollV, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+                            Theme.DrawBox(e.Graphics, Theme.ScrollBarColor, BackColor, rtScrollR, Columns.Count > 0 ? RoundType.RB : RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.OUT_SHADOW);
+
+                            var cCurH = Theme.ScrollCursorColor;
+                            if (hscroll.IsScrolling) cCurH = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
+                            else if (hscroll.IsTouchMoving) cCurH = Theme.PointColor.BrightnessTransmit(0.3);
+                            var rtcurH = hscroll.GetScrollCursorRect(rtScrollH);
+                            e.Graphics.SetClip(rtScrollH);
+                            if (rtcurH.HasValue) Theme.DrawBox(e.Graphics, cCurH, Theme.ScrollBarColor, rtcurH.Value, RoundType.ALL, BoxDrawOption.BORDER);
+                            e.Graphics.ResetClip();
+
+                            var cCurV = Theme.ScrollCursorColor;
+                            if (vscroll.IsScrolling) cCurV = Theme.ScrollCursorColor.BrightnessTransmit(0.3);
+                            else if (vscroll.IsTouchMoving) cCurV = Theme.PointColor.BrightnessTransmit(0.3);
+                            var rtcurV = vscroll.GetScrollCursorRect(rtScrollV);
+                            e.Graphics.SetClip(rtScrollV);
+                            if (rtcurV.HasValue) Theme.DrawBox(e.Graphics, cCurV, Theme.ScrollBarColor, rtcurV.Value, RoundType.ALL, BoxDrawOption.BORDER);
+                            e.Graphics.ResetClip();
+                        }
+                        break;
+                        #endregion
+                }
+                #endregion
+                #region Column Border
+                if (Columns.Count > 0)
+                {
+                    p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
+                    e.Graphics.DrawLine(p, rtColumn.Left, rtColumn.Bottom, rtColumn.Right, rtColumn.Bottom);
+                }
+                #endregion
             }
-            #endregion
-            #region Column Border
-            p.Color = BackColor.BrightnessTransmit(Theme.BorderBright);
-            e.Graphics.DrawLine(p, rtColumn.Left, rtColumn.Bottom, rtColumn.Right, rtColumn.Bottom);
-            #endregion
             #endregion
             #region Dispose
             br.Dispose();
@@ -847,6 +883,7 @@ namespace Devinno.Forms.Controls
 
             if (Areas.Count > 1)
             {
+                bool bRefresh = false;
                 #region Bounds
                 var f = DpiRatio;
 
@@ -877,7 +914,12 @@ namespace Devinno.Forms.Controls
                     var rtFilter = rts["rtFilter" + col.Name];
                     if (col.UseFilter && CollisionTool.Check(rtFilter, e.X, e.Y))
                     {
-
+                        var ret = InputBox.ShowString("필터 : " + col.HeaderText, "텍스트", col.FilterText);
+                        if (ret != null)
+                        {
+                            col.FilterText = ret;
+                            bRefresh = true;
+                        }
                     }
                 }
                 #endregion
@@ -1007,6 +1049,8 @@ namespace Devinno.Forms.Controls
                         }
                     }
                     #endregion
+
+
                 });
                 #endregion
 
@@ -1029,7 +1073,9 @@ namespace Devinno.Forms.Controls
                     if (vscroll.TouchMode && CollisionTool.Check(Areas["rtScrollContent"], e.Location)) vscroll.TouchDown(e);
                 }
                 #endregion
-                bInv = true; 
+                bInv = true;
+
+                if (bRefresh) RefreshRows();
             }
             base.OnMouseDown(e);
         }
@@ -1192,6 +1238,9 @@ namespace Devinno.Forms.Controls
                 }
                 #endregion
 
+                var SelectedRows = Rows.Where(x => x.Selected).ToList();
+                var bSelectionChange = false;
+
                 Loop((i, rtROW, v) =>
                 {
                     #region !Fixed
@@ -1231,7 +1280,78 @@ namespace Devinno.Forms.Controls
                         }
                     }
                     #endregion
+
+                    #region MultiSelect
+                    else if (SelectionMode == DvDataGridSelectionMode.MULTI)
+                    {
+                        if (CollisionTool.Check(rtROW, e.X, e.Y))
+                        {
+                            if ((ModifierKeys & Keys.Control) == Keys.Control)
+                            {
+                                if (SelectedRows.Contains(v))
+                                {
+                                    SelectedRows.Remove(v);
+                                    bSelectionChange = true;
+                                }
+                                else
+                                {
+                                    SelectedRows.Add(v);
+                                    bSelectionChange = true;
+                                    first = v;
+                                }
+                            }
+                            else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+                            {
+                                if (first == null)
+                                {
+                                    SelectedRows.Add(v);
+                                    bSelectionChange = true;
+                                }
+                                else
+                                {
+                                    int idx1 = Rows.IndexOf(first);
+                                    int idx2 = i;
+                                    int min = idx1 > idx2 ? idx2 : idx1;
+                                    int max = idx1 > idx2 ? idx1 : idx2;
+
+                                    bool b = false;
+                                    for (int ii = min; ii <= max; ii++)
+                                    {
+                                        if (!SelectedRows.Contains(Rows[ii]))
+                                        {
+                                            SelectedRows.Add(Rows[ii]);
+                                            b = true;
+                                        }
+                                    }
+                                    if (b) bSelectionChange = true;
+                                }
+                            }
+                            else
+                            {
+                                SelectedRows.Clear();
+                                SelectedRows.Add(v);
+                                bSelectionChange = true;
+                                first = v;
+                            }
+                        }
+                    }
+                    #endregion
+                    #region SingleSelect
+                    else if (SelectionMode == DvDataGridSelectionMode.SINGLE)
+                    {
+                        if (CollisionTool.Check(rtROW, e.X, e.Y))
+                        {
+                            SelectedRows.Clear();
+                            SelectedRows.Add(v);
+                            bSelectionChange = true;
+                        }
+                    }
+                    #endregion
+
                 });
+
+                foreach (var v in Rows) v.Selected = SelectedRows.Contains(v);
+                if (bSelectionChange) SelectedChanged?.Invoke(this, null);
                 #endregion
             }
             bInv = true;
@@ -1241,6 +1361,23 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Method
+
+        #region Clear
+        public void Clear()
+        {
+            SelectionMode = DvDataGridSelectionMode.SINGLE;
+            ScrollMode = ScrollMode.Vertical;
+            bNotRaiseEvent = true;
+            objs = null;
+            ColumnGroups.Clear();
+            Columns.Clear();
+            SummaryRows.Clear();
+            Rows.Clear();
+            bNotRaiseEvent = false;
+            RefreshRows();
+            Invalidate();
+        }
+        #endregion
         #region Draw
         #region DrawColumnBox
         void DrawColumnBox(Graphics g, DvTheme Theme, Rectangle rtColumn, Rectangle rtScrollContent, Rectangle rt)
