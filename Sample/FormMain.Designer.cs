@@ -624,6 +624,7 @@ namespace Sample
             this.dvValueInput3.Name = "dvValueInput3";
             this.dvValueInput3.OffText = "OFF";
             this.dvValueInput3.OnOff = false;
+            this.dvValueInput3.OnOffIconDraw = false;
             this.dvValueInput3.OnText = "ON";
             this.dvValueInput3.SelectedIndex = -1;
             this.dvValueInput3.SelectedItemColor = System.Drawing.Color.DarkRed;
@@ -661,6 +662,7 @@ namespace Sample
             this.dvValueInput2.Name = "dvValueInput2";
             this.dvValueInput2.OffText = "OFF";
             this.dvValueInput2.OnOff = false;
+            this.dvValueInput2.OnOffIconDraw = false;
             this.dvValueInput2.OnText = "ON";
             this.dvValueInput2.SelectedIndex = -1;
             this.dvValueInput2.SelectedItemColor = System.Drawing.Color.DarkRed;

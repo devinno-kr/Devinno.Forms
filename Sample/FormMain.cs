@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -48,6 +49,21 @@ namespace Sample
         public FormMain()
         {
             InitializeComponent();
+
+            var path = @"D:\Project\Devinno\Library\Git\devinno-kr\Devinno.Forms\Devinno.Forms\";
+            var dlgs = Directory.GetFiles(Path.Combine(path, "Dialogs")).Select(x => Path.GetFileNameWithoutExtension(x)).ToLookup(x => x.Split('.').First()).Select(x => x.Key).ToList();
+            var cntls = Directory.GetFiles(Path.Combine(path, "Controls")).Select(x => Path.GetFileNameWithoutExtension(x)).ToLookup(x => x.Split('.').First()).Select(x => x.Key).ToList();
+            var conts = Directory.GetFiles(Path.Combine(path, "Containers")).Select(x => Path.GetFileNameWithoutExtension(x)).ToLookup(x => x.Split('.').First()).Select(x => x.Key).ToList();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("Controls");
+            foreach (var v in cntls) sb.AppendLine("\t" + v);
+            sb.AppendLine("Containers");
+            foreach (var v in conts) sb.AppendLine("\t" + v);
+            sb.AppendLine("Dialogs");
+            foreach (var v in dlgs) sb.AppendLine("\t" + v);
+
+            var s = sb.ToString();
 
             #region TabIcon
             tab.TabIcons.Add("tpControl", new DvIcon("fa-cube", 18, DvTextIconAlignment.TopBottom, 5));
@@ -338,12 +354,12 @@ namespace Sample
                 dg.TouchMode = false;
                 dg.ScrollMode = ScrollMode.Vertical;
                 dg.RowHeight = dg.ColumnHeight = Convert.ToInt32(30 * f);
-                
+
                 dg.Columns.Add(new DvDataGridColumn(dg) { Name = "DeviceName", HeaderText = "장치명", SizeMode = SizeMode.Percent, Width = 15M });
                 dg.Columns.Add(new DvDataGridImageColumn(dg) { Name = "DeviceImage", HeaderText = "이미지", SizeMode = SizeMode.Percent, Width = 5M });
                 dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Time", HeaderText = "설치일", SizeMode = SizeMode.Percent, Width = 15M, Format = "yyyy.MM.dd", UseSort = true });
                 dg.Columns.Add(new DvDataGridTextConverterColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = SizeMode.Percent, Width = 5M, Converter = GetDOW });
-                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Temperature", HeaderText = "온도", SizeMode = SizeMode.Percent, Width =10M, Format = "0.0 ℃" });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Temperature", HeaderText = "온도", SizeMode = SizeMode.Percent, Width = 10M, Format = "0.0 ℃" });
                 dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmT", HeaderText = "온도 알람", SizeMode = SizeMode.Percent, Width = 5M, Simple = false });
                 dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Humidity", HeaderText = "습도", SizeMode = SizeMode.Percent, Width = 10M, Format = "0 '%'" });
                 dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmH", HeaderText = "습도 알람", SizeMode = SizeMode.Percent, Width = 5M, Simple = false });
@@ -390,7 +406,7 @@ namespace Sample
                 dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Number2", HeaderText = "소수", SizeMode = SizeMode.Percent, Width = 17M, CellType = typeof(DvDataGridEditNumberCell), Format = "0.00" });
                 dg.Columns.Add(new DvDataGridDateTimePickerColumn(dg) { Name = "Time", HeaderText = "시간", SizeMode = SizeMode.Percent, Width = 17M, PickerMode = DvDateTimePickerStyle.DateTime });
                 dg.Columns.Add(new DvDataGridColorPickerColumn(dg) { Name = "Color", HeaderText = "색상", SizeMode = SizeMode.Percent, Width = 17M });
-                dg.Columns.Add(new DvDataGridComboBoxColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = SizeMode.Percent, Width = 17M, Items = Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>().Select(x=>new DvDataGridComboBoxItem(x.ToString()) { Source = x }).ToList()});
+                dg.Columns.Add(new DvDataGridComboBoxColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = SizeMode.Percent, Width = 17M, Items = Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>().Select(x => new DvDataGridComboBoxItem(x.ToString()) { Source = x }).ToList() });
 
                 var Items = new List<GridItem3>();
                 for (int i = 1; i <= 100; i++)
@@ -407,7 +423,7 @@ namespace Sample
                   if (GridMode == 2)
                   {
                       var ar = Items2.ToArray();
-                      foreach(var v in ar)
+                      foreach (var v in ar)
                       {
                           v.Humidity = Convert.ToInt32(MathTool.Constrain(v.Humidity + (rnd.Next() % 2 == 0 ? 1 : -1), 0, 100));
                           v.Temperature = Convert.ToDouble(MathTool.Constrain(v.Temperature + (rnd.Next() % 2 == 0 ? 0.1 : -0.1), 0, 100));
@@ -422,12 +438,13 @@ namespace Sample
             btnGridCells.ButtonClick += (o, s) => actCells();
             btnGridCells2.ButtonClick += (o, s) => actCells2();
             btnGridClear.ButtonClick += (o, s) => dg.Clear();
-            
+
             messageBox.UseKey = true;
 
             actCells();
             #endregion
 
+            dvKnob1.SweepAngle = 720;
         }
 
         #region Method

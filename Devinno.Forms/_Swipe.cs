@@ -14,7 +14,7 @@ namespace Devinno.Forms
         #region Const
         public const int GapSize = 10;
         public const int GapTime = 1;
-        const double decelerationRate = 0.997;
+        const double decelerationRate = 0.998;
         const int ThreadInterval = 10;
         #endregion
 

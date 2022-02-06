@@ -13,13 +13,13 @@
     <PackageProjectUrl>https://github.com/devinno-kr/Devinno.Forms</PackageProjectUrl>
     <PackageIcon>ico.png</PackageIcon>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.2.14</AssemblyVersion>
-    <FileVersion>1.0.2.14</FileVersion>
-    <Version>1.0.2.14</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+    <Version>1.0.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Devinno" Version="1.0.1.14" />
+    <PackageReference Include="Devinno" Version="1.0.1" />
     <PackageReference Include="System.Resources.Extensions" Version="5.0.0" />
   </ItemGroup>
 

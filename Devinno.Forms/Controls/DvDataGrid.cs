@@ -727,6 +727,37 @@ namespace Devinno.Forms.Controls
                             {
                                 var v = SummaryRows[i];
                                 var rtROW = new Rectangle(rtSummary.X, rtSummary.Y + (i * RowHeight), rtSummary.Width, RowHeight);
+                                #region Selector
+                                if (SelectionMode == DvDataGridSelectionMode.SELECTOR)
+                                {
+                                    var rt = DvDataGridTool.RTI(new Rectangle(rtROW.X, rtROW.Y, spw, rtROW.Height));
+
+                                    var old = e.Graphics.ClipBounds;
+                                    var oldsm = e.Graphics.SmoothingMode;
+                                    e.Graphics.SetClip(new Rectangle(rt.X, rtSummary.Y, rt.Width, rtSummary.Height), CombineMode.Intersect);
+                                    e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+
+                                    #region Background
+                                    var bg = BoxColor;
+                                    var c = SummaryRowColor;
+
+                                    br.Color = c; e.Graphics.FillRectangle(br, rt);
+                                    if (RowBevel)
+                                    {
+                                        int n = 1;
+                                        var pts = new Point[] { new Point(rt.Right - n, rt.Top + n), new Point(rt.Left + n, rt.Top + n), new Point(rt.Left + n, rt.Bottom - n) };
+                                        p.Color = c.BrightnessTransmit(DvDataGrid.ColumnBevelBright);
+                                        e.Graphics.DrawLines(p, pts);
+                                    }
+                                    p.Color = bg.BrightnessTransmit(Theme.BorderBright);
+                                    e.Graphics.DrawRectangle(p, rt);
+                                    #endregion
+
+                                    e.Graphics.ResetClip();
+                                    e.Graphics.SetClip(pthA);
+                                    e.Graphics.SmoothingMode = oldsm;
+                                }
+                                #endregion
                                 #region !Fixed
                                 if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                                 {

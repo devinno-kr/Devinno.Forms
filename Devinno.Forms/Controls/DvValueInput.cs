@@ -232,6 +232,21 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region OnOffIconDraw
+        private bool bOnOffIconDraw = false;
+        public bool OnOffIconDraw
+        {
+            get => bOnOffIconDraw;
+            set
+            {
+                if (bOnOffIconDraw != value)
+                {
+                    bOnOffIconDraw = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
 
         #region OnOFf
         private bool bOnOff = false;
@@ -611,24 +626,35 @@ namespace Devinno.Forms.Controls
                         if (!bDownOn)
                         {
                             Theme.DrawBox(e.Graphics, cOnBG, BackColor, rtOn, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW);
-                            Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-check") { IconSize = 12, Gap = 5 }, OnText, Font, cOnTxt, cOnBG, rtOn);
-
+                            if (OnOffIconDraw)
+                                Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-check") { IconSize = 12, Gap = 5 }, OnText, Font, cOnTxt, cOnBG, rtOn);
+                            else
+                                Theme.DrawTextShadow(e.Graphics, null, OnText, Font, cOnTxt, cOnBG, rtOn);
                         }
                         else
                         {
                             Theme.DrawBox(e.Graphics, cOnBG.BrightnessTransmit(Theme.DownBright), BackColor, rtOn, RoundType.NONE, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.OUT_BEVEL);
-                            Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-check") { IconSize = 12, Gap = 5 }, OnText, Font, cOnTxt.BrightnessTransmit(Theme.DownBright), cOnBG, new Rectangle(rtOn.X, rtOn.Y + Theme.ShadowGap, rtOn.Width, rtOn.Height));
+                            if (OnOffIconDraw)
+                                Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-check") { IconSize = 12, Gap = 5 }, OnText, Font, cOnTxt.BrightnessTransmit(Theme.DownBright), cOnBG, new Rectangle(rtOn.X, rtOn.Y + Theme.ShadowGap, rtOn.Width, rtOn.Height));
+                            else
+                                Theme.DrawTextShadow(e.Graphics, null, OnText, Font, cOnTxt.BrightnessTransmit(Theme.DownBright), cOnBG, new Rectangle(rtOn.X, rtOn.Y + Theme.ShadowGap, rtOn.Width, rtOn.Height));
                         }
 
                         if (!bDownOff)
                         {
                             Theme.DrawBox(e.Graphics, cOffBG, BackColor, rtOff, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.IN_BEVEL | BoxDrawOption.OUT_SHADOW);
-                            Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-times") { IconSize = 12, Gap = 5 }, OffText, Font, cOffTxt, cOffBG, rtOff);
+                            if (OnOffIconDraw)
+                                Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-times") { IconSize = 12, Gap = 5 }, OffText, Font, cOffTxt, cOffBG, rtOff);
+                            else
+                                Theme.DrawTextShadow(e.Graphics, null, OffText, Font, cOffTxt, cOffBG, rtOff);
                         }
                         else
                         {
                             Theme.DrawBox(e.Graphics, cOffBG.BrightnessTransmit(Theme.DownBright), BackColor, rtOff, RoundType.R, BoxDrawOption.BORDER | BoxDrawOption.IN_SHADOW | BoxDrawOption.OUT_BEVEL);
-                            Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-times") { IconSize = 12, Gap = 5 }, OffText, Font, cOffTxt.BrightnessTransmit(Theme.DownBright), cOffBG, new Rectangle(rtOff.X, rtOff.Y + Theme.ShadowGap, rtOff.Width, rtOff.Height));
+                            if (OnOffIconDraw)
+                                Theme.DrawTextShadow(e.Graphics, new DvIcon("fa-times") { IconSize = 12, Gap = 5 }, OffText, Font, cOffTxt.BrightnessTransmit(Theme.DownBright), cOffBG, new Rectangle(rtOff.X, rtOff.Y + Theme.ShadowGap, rtOff.Width, rtOff.Height));
+                            else
+                                Theme.DrawTextShadow(e.Graphics, null, OffText, Font, cOffTxt.BrightnessTransmit(Theme.DownBright), cOffBG, new Rectangle(rtOff.X, rtOff.Y + Theme.ShadowGap, rtOff.Width, rtOff.Height));
                         }
                         #endregion
                     }
