@@ -63,9 +63,9 @@ namespace Devinno.Forms.Properties {
         /// <summary>
         ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static byte[] Font_Awesome_5_Brands_Regular {
+        internal static byte[] Font_Awesome_6_Brands_Regular_400 {
             get {
-                object obj = ResourceManager.GetObject("Font_Awesome_5_Brands_Regular", resourceCulture);
+                object obj = ResourceManager.GetObject("Font_Awesome_6_Brands_Regular_400", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace Devinno.Forms.Properties {
         /// <summary>
         ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static byte[] Font_Awesome_5_Free_Regular {
+        internal static byte[] Font_Awesome_6_Free_Regular_400 {
             get {
-                object obj = ResourceManager.GetObject("Font_Awesome_5_Free_Regular", resourceCulture);
+                object obj = ResourceManager.GetObject("Font_Awesome_6_Free_Regular_400", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace Devinno.Forms.Properties {
         /// <summary>
         ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static byte[] Font_Awesome_5_Free_Solid {
+        internal static byte[] Font_Awesome_6_Free_Solid_900 {
             get {
-                object obj = ResourceManager.GetObject("Font_Awesome_5_Free_Solid", resourceCulture);
+                object obj = ResourceManager.GetObject("Font_Awesome_6_Free_Solid_900", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -101,12 +101,52 @@ namespace Devinno.Forms.Properties {
         }
         
         /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static byte[] gb1 {
+            get {
+                object obj = ResourceManager.GetObject("gb1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static byte[] gb2 {
+            get {
+                object obj = ResourceManager.GetObject("gb2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static byte[] NanumGothic {
+            get {
+                object obj = ResourceManager.GetObject("NanumGothic", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
         internal static System.Drawing.Bitmap Saturation {
             get {
                 object obj = ResourceManager.GetObject("Saturation", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static byte[] Saturation1 {
+            get {
+                object obj = ResourceManager.GetObject("Saturation1", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -121,12 +161,32 @@ namespace Devinno.Forms.Properties {
         }
         
         /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static byte[] tmi1 {
+            get {
+                object obj = ResourceManager.GetObject("tmi1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
         internal static System.Drawing.Bitmap tmi2 {
             get {
                 object obj = ResourceManager.GetObject("tmi2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static byte[] tmi21 {
+            get {
+                object obj = ResourceManager.GetObject("tmi21", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

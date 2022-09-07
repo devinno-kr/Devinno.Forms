@@ -13,14 +13,16 @@
     <PackageProjectUrl>https://github.com/devinno-kr/Devinno.Forms</PackageProjectUrl>
     <PackageIcon>ico.png</PackageIcon>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.1.5</AssemblyVersion>
-    <FileVersion>1.0.1.5</FileVersion>
-    <Version>1.0.1.5</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.1.0.0</Version>
   </PropertyGroup>
 
+ 
   <ItemGroup>
-    <PackageReference Include="Devinno" Version="1.0.1" />
-    <PackageReference Include="System.Resources.Extensions" Version="5.0.0" />
+    <Compile Remove="BackupCode\**" />
+    <EmbeddedResource Remove="BackupCode\**" />
+    <None Remove="BackupCode\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,14 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Containers\" />
-    <Folder Include="Controls\" />
-    <Folder Include="Dialogs\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Icons\" />
-    <Folder Include="Menus\" />
-    <Folder Include="Themes\" />
-    <Folder Include="Tools\" />
+    <PackageReference Include="Devinno" Version="1.0.1.1" />
   </ItemGroup>
 
 </Project>

@@ -118,25 +118,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Font_Awesome_5_Brands_Regular" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Font Awesome 5 Brands Regular.otf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Font_Awesome_6_Brands_Regular_400" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Font Awesome 6 Brands-Regular-400.otf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Font_Awesome_5_Free_Regular" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Font Awesome 5 Free Regular.otf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Font_Awesome_6_Free_Regular_400" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Font Awesome 6 Free-Regular-400.otf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Font_Awesome_5_Free_Solid" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Font Awesome 5 Free Solid.otf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Font_Awesome_6_Free_Solid_900" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Font Awesome 6 Free-Solid-900.otf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="gb" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gb.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="gb1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="gb2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gb2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NanumGothic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NanumGothic.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Saturation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Saturation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Saturation1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Saturation;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="tmi" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmi.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="tmi1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmi;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="tmi2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmi2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tmi21" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmi2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
