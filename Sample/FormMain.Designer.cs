@@ -200,6 +200,7 @@ namespace Sample
             this.listBox = new Devinno.Forms.Controls.DvListBox();
             this.dvButton2 = new Devinno.Forms.Controls.DvButton();
             this.dvButton1 = new Devinno.Forms.Controls.DvButton();
+            this.dataGrid = new Devinno.Forms.Controls.DvDataGrid();
             this.tab.SuspendLayout();
             this.tpControl.SuspendLayout();
             this.tblTriButton.SuspendLayout();
@@ -310,7 +311,6 @@ namespace Sample
             // 
             // inOnOff
             // 
-            this.inOnOff.Animation = true;
             this.inOnOff.Button = null;
             this.inOnOff.ButtonColor = null;
             this.inOnOff.ButtonIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
@@ -545,7 +545,6 @@ namespace Sample
             // 
             // vlblOnOff
             // 
-            this.vlblOnOff.Animation = true;
             this.vlblOnOff.Button = null;
             this.vlblOnOff.ButtonColor = null;
             this.vlblOnOff.ButtonIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
@@ -610,7 +609,6 @@ namespace Sample
             // 
             // sels
             // 
-            this.sels.Animation = true;
             this.sels.BackgroundDraw = true;
             this.sels.ButtonWidth = null;
             this.sels.Location = new System.Drawing.Point(499, 361);
@@ -721,7 +719,6 @@ namespace Sample
             // 
             // sw
             // 
-            this.sw.Animation = true;
             this.sw.BoxColor = null;
             this.sw.Location = new System.Drawing.Point(499, 277);
             this.sw.Name = "sw";
@@ -738,7 +735,6 @@ namespace Sample
             // 
             // onoff
             // 
-            this.onoff.Animation = true;
             this.onoff.CursorColor = null;
             this.onoff.Location = new System.Drawing.Point(499, 193);
             this.onoff.Name = "onoff";
@@ -2472,7 +2468,6 @@ namespace Sample
             this.barGraphH.Size = new System.Drawing.Size(678, 637);
             this.barGraphH.TabIndex = 0;
             this.barGraphH.Text = "dvBarGraphh1";
-            this.barGraphH.TouchMode = true;
             this.barGraphH.ValueDraw = true;
             // 
             // tpBarGraphV
@@ -2507,7 +2502,6 @@ namespace Sample
             this.barGraphV.Size = new System.Drawing.Size(678, 637);
             this.barGraphV.TabIndex = 0;
             this.barGraphV.Text = "dvBarGraphv1";
-            this.barGraphV.TouchMode = true;
             this.barGraphV.ValueDraw = true;
             // 
             // tpCircleGraph
@@ -2564,7 +2558,6 @@ namespace Sample
             this.lineGraph.Size = new System.Drawing.Size(678, 637);
             this.lineGraph.TabIndex = 0;
             this.lineGraph.Text = "dvLineGraph1";
-            this.lineGraph.TouchMode = true;
             this.lineGraph.ValueDraw = true;
             // 
             // tpTrendGraph
@@ -2594,7 +2587,6 @@ namespace Sample
             this.trendGraph.TabIndex = 0;
             this.trendGraph.Text = "dvTrendGraph1";
             this.trendGraph.TimeFormatString = null;
-            this.trendGraph.TouchMode = true;
             this.trendGraph.ValueFormatString = null;
             this.trendGraph.XAxisGraduation = System.TimeSpan.Parse("00:10:00");
             this.trendGraph.XAxisGridDraw = true;
@@ -2626,7 +2618,6 @@ namespace Sample
             this.timeGraph.TabIndex = 0;
             this.timeGraph.Text = "dvTimeGraph1";
             this.timeGraph.TimeFormatString = null;
-            this.timeGraph.TouchMode = true;
             this.timeGraph.ValueFormatString = null;
             this.timeGraph.XAxisGraduation = System.TimeSpan.Parse("00:10:00");
             this.timeGraph.XAxisGridDraw = true;
@@ -3335,7 +3326,7 @@ namespace Sample
             // 
             this.colorPicker.ButtonColor = null;
             this.colorPicker.ButtonWidth = 30;
-            this.colorPicker.CodeType = Devinno.Forms.ColorCodeType.CodeRGB;
+            this.colorPicker.CodeType = Devinno.Tools.ColorCodeType.CodeRGB;
             this.colorPicker.Location = new System.Drawing.Point(13, 331);
             this.colorPicker.Name = "colorPicker";
             this.colorPicker.Round = null;
@@ -3651,6 +3642,7 @@ namespace Sample
             // tpTable
             // 
             this.tpTable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tpTable.Controls.Add(this.dataGrid);
             this.tpTable.Controls.Add(this.btnTreeRemove);
             this.tpTable.Controls.Add(this.btnTreeAdd);
             this.tpTable.Controls.Add(this.treeView);
@@ -3711,7 +3703,6 @@ namespace Sample
             // 
             // treeView
             // 
-            this.treeView.Animation = true;
             this.treeView.BackgroundDraw = true;
             this.treeView.BoxColor = null;
             this.treeView.ItemHeight = 30;
@@ -3727,7 +3718,6 @@ namespace Sample
             this.treeView.TabIndex = 4;
             this.treeView.TabStop = false;
             this.treeView.Text = "dvTreeView1";
-            this.treeView.TouchMode = true;
             // 
             // lblToolDrag
             // 
@@ -3755,7 +3745,6 @@ namespace Sample
             // 
             // toolBox
             // 
-            this.toolBox.Animation = true;
             this.toolBox.BackgroundDraw = true;
             this.toolBox.BoxColor = null;
             this.toolBox.CategoryColor = null;
@@ -3769,7 +3758,6 @@ namespace Sample
             this.toolBox.TabIndex = 2;
             this.toolBox.TabStop = false;
             this.toolBox.Text = "dvToolBox1";
-            this.toolBox.TouchMode = true;
             // 
             // comboBox
             // 
@@ -3787,7 +3775,6 @@ namespace Sample
             this.comboBox.Size = new System.Drawing.Size(200, 30);
             this.comboBox.TabIndex = 1;
             this.comboBox.Text = "dvComboBox1";
-            this.comboBox.TouchMode = true;
             // 
             // listBox
             // 
@@ -3806,7 +3793,6 @@ namespace Sample
             this.listBox.Size = new System.Drawing.Size(200, 263);
             this.listBox.TabIndex = 0;
             this.listBox.Text = "dvListBox1";
-            this.listBox.TouchMode = true;
             // 
             // dvButton2
             // 
@@ -3851,6 +3837,27 @@ namespace Sample
             this.dvButton1.Text = "dvButton1";
             this.dvButton1.TextPadding = new System.Windows.Forms.Padding(0);
             this.dvButton1.UseKey = false;
+            // 
+            // dataGrid
+            // 
+            this.dataGrid.Bevel = true;
+            this.dataGrid.BoxColor = null;
+            this.dataGrid.ColumnColor = null;
+            this.dataGrid.ColumnHeight = 30;
+            this.dataGrid.HScrollPosition = 0D;
+            this.dataGrid.Location = new System.Drawing.Point(13, 318);
+            this.dataGrid.Name = "dataGrid";
+            this.dataGrid.RowColor = null;
+            this.dataGrid.RowHeight = 30;
+            this.dataGrid.ScrollMode = Devinno.Forms.Utils.ScrollMode.Vertical;
+            this.dataGrid.SelectedRowColor = null;
+            this.dataGrid.SelectionMode = Devinno.Forms.Controls.DvDataGridSelectionMode.Single;
+            this.dataGrid.ShadowGap = 1;
+            this.dataGrid.Size = new System.Drawing.Size(692, 383);
+            this.dataGrid.SummaryRowColor = null;
+            this.dataGrid.TabIndex = 7;
+            this.dataGrid.Text = "dvDataGrid1";
+            this.dataGrid.VScrollPosition = 0D;
             // 
             // FormMain
             // 
@@ -4073,5 +4080,6 @@ namespace Sample
         private Devinno.Forms.Controls.DvTreeView treeView;
         private Devinno.Forms.Controls.DvButton btnTreeRemove;
         private Devinno.Forms.Controls.DvButton btnTreeAdd;
+        private Devinno.Forms.Controls.DvDataGrid dataGrid;
     }
 }

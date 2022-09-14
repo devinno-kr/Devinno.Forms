@@ -1,4 +1,5 @@
 ﻿using Devinno.Collections;
+using Devinno.Forms.Dialogs;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Themes;
 using Devinno.Forms.Tools;
@@ -89,9 +90,6 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region Animation
-        public bool Animation { get; set; } = true;
-        #endregion
 
         #region Round
         private RoundType? round = null;
@@ -125,8 +123,6 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region ScrollBar
-        public bool TouchMode { get => scroll.TouchMode; set => scroll.TouchMode = value; }
-
         internal bool _IsScrolling => scroll.IsTouchMoving || (scroll.IsTouchScrolling && scroll.TouchOffset != 0);
         internal bool IsScrolling { get; private set; }
         internal bool DrawScroll { get; set; } = true;
@@ -136,6 +132,10 @@ namespace Devinno.Forms.Controls
             get => scroll.ScrollPosition;
             set => scroll.ScrollPosition = value;
         }
+        #endregion
+
+        #region Animation
+        private bool Animation => GetTheme()?.Animation ?? false;
         #endregion
         #endregion
 
@@ -191,6 +191,8 @@ namespace Devinno.Forms.Controls
             var p = new Pen(Color.Black);
             var br = new SolidBrush(Color.Black);
             #endregion
+
+            scroll.TouchMode = Theme.TouchMode;
 
             Areas((rtContent, rtBox, rtScroll) =>
             {
@@ -346,6 +348,9 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             int x = e.X, y = e.Y;
+            
+            scroll.TouchMode = GetTheme()?.TouchMode ?? false;
+
             Areas((rtContent, rtBox, rtScroll) =>
             {
                 scroll.MouseDown(x, y, rtScroll);

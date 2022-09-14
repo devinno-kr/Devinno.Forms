@@ -1,4 +1,5 @@
 ﻿using Devinno.Extensions;
+using Devinno.Forms.Dialogs;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
@@ -44,21 +45,8 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-
-        #region TouchMode
-        private bool bTouchMode = true;
-        public bool TouchMode
-        {
-            get => bTouchMode;
-            set
-            {
-                if (bTouchMode != value)
-                {
-                    bTouchMode = value;
-                    Invalidate();
-                }
-            }
-        }
+        #region Animation
+        private bool Animation => GetTheme()?.Animation ?? false;
         #endregion
 
         private double TouchOffset => tcDown != null ? (tcDown.MovePoint.Y - tcDown.DownPoint.Y) : 0;
@@ -114,7 +102,7 @@ namespace Devinno.Forms.Controls
             Pen p = new Pen(Color.Black);
             #endregion
 
-            if (TouchMode)
+            if (Theme?.TouchMode ?? false)
             {
                 Areas((rtContent, rtView, rtCenter) =>
                 {
@@ -223,7 +211,7 @@ namespace Devinno.Forms.Controls
         {
             float x = e.X, y = e.Y;
 
-            if (TouchMode)
+            if (GetTheme()?.TouchMode ?? false)
             {
                 #region Touch
                 Areas((rtContent, rtView, rtCenter) =>
@@ -263,7 +251,8 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseMove(MouseEventArgs e)
         {
             float x = e.X, y = e.Y;
-            if (TouchMode)
+           
+            if (GetTheme()?.TouchMode ?? false)
             {
                 #region Touch
                 Areas((rtContent, rtView, rtCenter) =>
@@ -278,10 +267,6 @@ namespace Devinno.Forms.Controls
                 });
                 #endregion
             }
-            else
-            {
-                
-            }
 
             base.OnMouseMove(e);
         }
@@ -290,7 +275,8 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseUp(MouseEventArgs e)
         {
             float x = e.X, y = e.Y;
-            if (TouchMode)
+
+            if (GetTheme()?.TouchMode ?? false)
             {
                 #region Touch
                 Areas((rtContent, rtView, rtCenter) =>
@@ -357,8 +343,12 @@ namespace Devinno.Forms.Controls
                                         var ni = Convert.ToInt32(oy < 0 ? Math.Floor(oy / ItemHeight) : Math.Floor(oy / ItemHeight));
 
                                         SelectedIndex = Index(SelectedIndex + ni);
-                                        ani.Stop();
-                                        ani.Start(Math.Abs(ItemHeight * ni) * 5, "B" + (ItemHeight * ni), ()=> { this.Invoke(new Action(() => Invalidate())); });
+
+                                        if (Animation && !ani.IsPlaying)
+                                        {
+                                            ani.Stop();
+                                            ani.Start(Math.Abs(ItemHeight * ni) * 5, "B" + (ItemHeight * ni), () => { this.Invoke(new Action(() => Invalidate())); });
+                                        }
                                     }
                                     #endregion
                                 }

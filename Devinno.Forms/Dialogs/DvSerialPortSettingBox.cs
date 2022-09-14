@@ -45,7 +45,8 @@ namespace Devinno.Forms.Dialogs
         #region ShowSerialPortSetting
         public SerialPortSetting ShowSerialPortSetting(SerialPortSetting v = null)
         {
-            Theme = GetCallerFormTheme() ?? Theme;
+            Theme = GetCallerFormTheme();
+
             SerialPortSetting ret = null;
 
             #region Size
@@ -114,7 +115,7 @@ namespace Devinno.Forms.Dialogs
         #region ShowSimpleSerialPortSetting
         public SerialPortSetting ShowSimpleSerialPortSetting(SerialPortSetting v = null)
         {
-            Theme = GetCallerFormTheme() ?? Theme;
+            Theme = GetCallerFormTheme();
 
             SerialPortSetting ret = null;
             #region Size

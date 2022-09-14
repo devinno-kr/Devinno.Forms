@@ -16,6 +16,7 @@ using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -104,15 +105,12 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region Animation
-        public bool Animation { get; set; } = true;
-        #endregion
 
         #region Nodes
-        public TreeViewNodeCollection Nodes { get; private set; }
+        public DvTreeViewNodeCollection Nodes { get; private set; }
         #endregion
         #region SelectedNodes
-        public List<TreeViewNode> SelectedNodes { get; } = new List<TreeViewNode>();
+        public List<DvTreeViewNode> SelectedNodes { get; } = new List<DvTreeViewNode>();
         #endregion
         #region SelectionMode
         public ItemSelectionMode SelectionMode { get; set; } = ItemSelectionMode.Single;
@@ -149,9 +147,11 @@ namespace Devinno.Forms.Controls
         }
         #endregion
 
-        #region ScrollBar
-        public bool TouchMode { get => scroll.TouchMode; set => scroll.TouchMode = value; }
+        #region Animation
+        private bool Animation => GetTheme()?.Animation ?? false;
+        #endregion
 
+        #region ScrollBar
         internal bool _IsScrolling => scroll.IsTouchMoving || (scroll.IsTouchScrolling && scroll.TouchOffset != 0);
         internal bool IsScrolling { get; private set; }
         internal bool DrawScroll { get; set; } = true;
@@ -162,16 +162,20 @@ namespace Devinno.Forms.Controls
             set => scroll.ScrollPosition = value;
         }
         #endregion
+
+        #region VisibleDropDown 
+        internal bool VisibleDropDown { get; set; } = false;
+        #endregion
         #endregion
 
         #region Member Variable
         private Scroll scroll;
         private Animation ani = new Animation();
         private int mx = 0, my = 0;
-        private TreeViewNode aniItem = null;
-        private List<TreeViewNode> ls = new List<TreeViewNode>();
-        private List<TreeViewNode> anils = new List<TreeViewNode>();
-        private TreeViewNode first;
+        private DvTreeViewNode aniItem = null;
+        private List<DvTreeViewNode> ls = new List<DvTreeViewNode>();
+        private List<DvTreeViewNode> anils = new List<DvTreeViewNode>();
+        private DvTreeViewNode first;
 
         private Point downPoint;
         private Point movePoint;
@@ -180,10 +184,10 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Event
-        public event EventHandler<TreeViewNodeMouseEventArgs> NodeDown;
-        public event EventHandler<TreeViewNodeMouseEventArgs> NodeUp;
-        public event EventHandler<TreeViewNodeMouseEventArgs> NodeClicked;
-        public event EventHandler<TreeViewNodeMouseEventArgs> NodeDoubleClicked;
+        public event EventHandler<DvTreeViewNodeMouseEventArgs> NodeDown;
+        public event EventHandler<DvTreeViewNodeMouseEventArgs> NodeUp;
+        public event EventHandler<DvTreeViewNodeMouseEventArgs> NodeClicked;
+        public event EventHandler<DvTreeViewNodeMouseEventArgs> NodeDoubleClicked;
         public event EventHandler SelectedChanged;
         #endregion
 
@@ -198,7 +202,7 @@ namespace Devinno.Forms.Controls
             #endregion
 
             #region Nodes
-            Nodes = new TreeViewNodeCollection(null);
+            Nodes = new DvTreeViewNodeCollection(null);
             Nodes.Changed += (o, s) =>
             {
                 foreach (var v in Nodes)
@@ -261,6 +265,8 @@ namespace Devinno.Forms.Controls
             var p = new Pen(Color.Black);
             var br = new SolidBrush(Color.Black);
             #endregion
+
+            scroll.TouchMode = Theme.TouchMode;
 
             Areas((rtContent, rtBox, rtScroll) =>
             {
@@ -347,7 +353,7 @@ namespace Devinno.Forms.Controls
                             if (SelectedNodes.Contains(itm))
                                 Theme.DrawBox(e.Graphics, rtBounds, SelectedColor, SelectedBorderColor, RoundType.All, Box.ButtonUp_V(true, ShadowGap));
 
-                            if (SelectionMode != ItemSelectionMode.None && CollisionTool.Check(rtBounds, mx, my))
+                            if (!_IsScrolling && SelectionMode != ItemSelectionMode.None && CollisionTool.Check(rtBounds, mx, my))
                                 Theme.DrawBox(e.Graphics, rtBounds, Util.FromArgb(30, Color.White), Util.FromArgb(90, Color.White), RoundType.All, Box.FlatBox(true));
 
                             itm.Draw(e.Graphics, Theme, rtText);
@@ -395,6 +401,9 @@ namespace Devinno.Forms.Controls
             ClearInput();
 
             int x = e.X, y = e.Y;
+
+            scroll.TouchMode = GetTheme()?.TouchMode ?? false;
+
             Areas((rtContent, rtBox, rtScroll) =>
             {
                 scroll.MouseDown(x, y, rtScroll);
@@ -404,17 +413,20 @@ namespace Devinno.Forms.Controls
 
                 if (CollisionTool.Check(rtBox, x, y))
                 {
-                    loop((ls, i, rt, itm, rtRow, rtRadio, rtText) =>
+                    if (!VisibleDropDown)
                     {
-                        if (itm != null && CollisionTool.Check(Util.FromRect(rt.Left + 1, rt.Top + 1, rt.Width - 2, rt.Height - 2), rtBox))
+                        loop((ls, i, rt, itm, rtRow, rtRadio, rtText) =>
                         {
-                            if (CollisionTool.Check(rtText, x, y))
+                            if (itm != null && CollisionTool.Check(Util.FromRect(rt.Left + 1, rt.Top + 1, rt.Width - 2, rt.Height - 2), rtBox))
                             {
-                                NodeDown?.Invoke(this, new TreeViewNodeMouseEventArgs(x, y, itm));
-                                itm.MouseDown(rtText, x, y);
+                                if (CollisionTool.Check(rtText, x, y))
+                                {
+                                    NodeDown?.Invoke(this, new DvTreeViewNodeMouseEventArgs(x, y, itm));
+                                    itm.MouseDown(rtText, x, y);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
 
                 if (CollisionTool.Check(rtBox, x, y))
@@ -461,105 +473,107 @@ namespace Devinno.Forms.Controls
 
                 if (CollisionTool.Check(rtBox, x, y))
                 {
-                    loop((ls, i, rt, itm, rtRow, rtRadio, rtText) =>
+                    if (!VisibleDropDown)
                     {
-                        if (CollisionTool.Check(Util.FromRect(rt.Left + 1, rt.Top + 1, rt.Width - 2, rt.Height - 2), rtBox))
+                        loop((ls, i, rt, itm, rtRow, rtRadio, rtText) =>
                         {
-                            if (CollisionTool.Check(rtRadio, x, y))
+                            if (CollisionTool.Check(Util.FromRect(rt.Left + 1, rt.Top + 1, rt.Width - 2, rt.Height - 2), rtBox))
                             {
-                                itm.Expands = !itm.Expands;
-
-                                if (Animation)
+                                if (CollisionTool.Check(rtRadio, x, y))
                                 {
-                                    aniItem = itm;
-                                    anils.Clear();
-                                    MS2(itm, anils);
+                                    itm.Expands = !itm.Expands;
 
-                                    ani.Stop();
-                                    ani.Start(150, "", Invalidate);
-                                }
-                            }
-
-                            if (CollisionTool.Check(rtText, x, y) && Math.Abs(downPoint.Y - e.Y) < Scroll.GapSize && (DateTime.Now - downTime).TotalSeconds < Scroll.GapTime)
-                            {
-                                NodeUp?.Invoke(this, new TreeViewNodeMouseEventArgs(x, y, itm));
-                                var r = itm.MouseUp(rtText, x, y);
-
-                                if (!r)
-                                {
-                                    var v = itm;
-                                    #region Single Selection
-                                    if (SelectionMode == ItemSelectionMode.Single)
+                                    if (Animation)
                                     {
-                                        SelectedNodes.Clear();
-                                        SelectedNodes.Add(v);
-                                        if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
-                                        first = v;
+                                        aniItem = itm;
+                                        anils.Clear();
+                                        MS2(itm, anils);
+
+                                        ani.Stop();
+                                        ani.Start(150, "", Invalidate);
                                     }
-                                    #endregion
-                                    #region Multi Selection
-                                    else if (SelectionMode == ItemSelectionMode.Multi)
-                                    {
-                                        if ((ModifierKeys & Keys.Control) == Keys.Control)
-                                        {
-                                            #region Control
-                                            if (SelectedNodes.Contains(v))
-                                            {
-                                                SelectedNodes.Remove(v);
-                                                if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
-                                            }
-                                            else
-                                            {
-                                                SelectedNodes.Add(v);
-                                                if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
-                                                first = v;
-                                            }
-                                            #endregion
-                                        }
-                                        else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
-                                        {
-                                            #region Shift
-                                            if (first == null)
-                                            {
-                                                SelectedNodes.Add(v);
-                                                if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
-                                            }
-                                            else
-                                            {
-                                                int idx1 = ls.IndexOf(first);
-                                                int idx2 = i;
-                                                int min = Math.Min(idx1, idx2);
-                                                int max = Math.Max(idx1, idx2);
+                                }
 
-                                                bool b = false;
-                                                for (int ii = min; ii <= max; ii++)
-                                                {
-                                                    if (!SelectedNodes.Contains(ls[ii]))
-                                                    {
-                                                        SelectedNodes.Add(ls[ii]);
-                                                        b = true;
-                                                    }
-                                                }
-                                                if (b && SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
-                                            }
-                                            #endregion
-                                        }
-                                        else
+                                if (CollisionTool.Check(rtText, x, y) && Math.Abs(downPoint.Y - e.Y) < Scroll.GapSize && (DateTime.Now - downTime).TotalSeconds < Scroll.GapTime)
+                                {
+                                    NodeUp?.Invoke(this, new DvTreeViewNodeMouseEventArgs(x, y, itm));
+                                    var r = itm.MouseUp(rtText, x, y);
+
+                                    if (!r)
+                                    {
+                                        var v = itm;
+                                        #region Single Selection
+                                        if (SelectionMode == ItemSelectionMode.Single)
                                         {
-                                            #region Select
                                             SelectedNodes.Clear();
                                             SelectedNodes.Add(v);
                                             if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
                                             first = v;
-                                            #endregion
                                         }
+                                        #endregion
+                                        #region Multi Selection
+                                        else if (SelectionMode == ItemSelectionMode.Multi)
+                                        {
+                                            if ((ModifierKeys & Keys.Control) == Keys.Control)
+                                            {
+                                                #region Control
+                                                if (SelectedNodes.Contains(v))
+                                                {
+                                                    SelectedNodes.Remove(v);
+                                                    if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                                }
+                                                else
+                                                {
+                                                    SelectedNodes.Add(v);
+                                                    if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                                    first = v;
+                                                }
+                                                #endregion
+                                            }
+                                            else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+                                            {
+                                                #region Shift
+                                                if (first == null)
+                                                {
+                                                    SelectedNodes.Add(v);
+                                                    if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                                }
+                                                else
+                                                {
+                                                    int idx1 = ls.IndexOf(first);
+                                                    int idx2 = i;
+                                                    int min = Math.Min(idx1, idx2);
+                                                    int max = Math.Max(idx1, idx2);
+
+                                                    bool b = false;
+                                                    for (int ii = min; ii <= max; ii++)
+                                                    {
+                                                        if (!SelectedNodes.Contains(ls[ii]))
+                                                        {
+                                                            SelectedNodes.Add(ls[ii]);
+                                                            b = true;
+                                                        }
+                                                    }
+                                                    if (b && SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                                }
+                                                #endregion
+                                            }
+                                            else
+                                            {
+                                                #region Select
+                                                SelectedNodes.Clear();
+                                                SelectedNodes.Add(v);
+                                                if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                                first = v;
+                                                #endregion
+                                            }
+                                        }
+                                        #endregion
                                     }
-                                    #endregion
                                 }
                             }
-                        }
-                    });
-
+                        });
+                    }
                 }
             });
 
@@ -590,13 +604,16 @@ namespace Devinno.Forms.Controls
             {
                 if (CollisionTool.Check(rtBox, x, y) && !IsScrolling)
                 {
-                    loop((ls, i, rt, itm, rtRow, rtRadio, rtText) =>
+                    if (!VisibleDropDown)
                     {
-                        if (CollisionTool.Check(rtText, x, y))
+                        loop((ls, i, rt, itm, rtRow, rtRadio, rtText) =>
                         {
-                            NodeClicked?.Invoke(this, new TreeViewNodeMouseEventArgs(x, y, itm));
-                        }
-                    });
+                            if (CollisionTool.Check(rtText, x, y))
+                            {
+                                NodeClicked?.Invoke(this, new DvTreeViewNodeMouseEventArgs(x, y, itm));
+                            }
+                        });
+                    }
                 }
             });
 
@@ -613,13 +630,16 @@ namespace Devinno.Forms.Controls
             {
                 if (CollisionTool.Check(rtBox, x, y) && !IsScrolling)
                 {
-                    loop((ls, i, rt, itm, rtRow, rtRadio, rtText) =>
+                    if (!VisibleDropDown)
                     {
-                        if (CollisionTool.Check(rtText, x, y))
+                        loop((ls, i, rt, itm, rtRow, rtRadio, rtText) =>
                         {
-                            NodeDoubleClicked?.Invoke(this, new TreeViewNodeMouseEventArgs(x, y, itm));
-                        }
-                    });
+                            if (CollisionTool.Check(rtText, x, y))
+                            {
+                                NodeDoubleClicked?.Invoke(this, new DvTreeViewNodeMouseEventArgs(x, y, itm));
+                            }
+                        });
+                    }
                 }
             });
 
@@ -649,9 +669,9 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region loop
-        private void loop(Action<List<TreeViewNode>, int, RectangleF, TreeViewNode, RectangleF, RectangleF, RectangleF> Func)
+        private void loop(Action<List<DvTreeViewNode>, int, RectangleF, DvTreeViewNode, RectangleF, RectangleF, RectangleF> Func)
         {
-            var vls = new List<TreeViewNode>();
+            var vls = new List<DvTreeViewNode>();
             MakeList(vls);
             ls = vls;
 
@@ -793,9 +813,9 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region GetTreeNode
-        public TreeViewNode GetTreeNode(int x, int y)
+        public DvTreeViewNode GetTreeNode(int x, int y)
         {
-            TreeViewNode ret = null;
+            DvTreeViewNode ret = null;
             loop((ls, i, rt, itm, rtRow, rtRadio, rtText) =>
             {
                 if (CollisionTool.Check(rtText, x, y)) ret = itm;
@@ -804,13 +824,13 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region MakeList
-        void MakeList(List<TreeViewNode> ls)
+        void MakeList(List<DvTreeViewNode> ls)
         {
             ls.Clear();
             for (int i = 0; i < Nodes.Count; i++) MS(Nodes[i], ls);
         }
 
-        void MS(TreeViewNode nd, List<TreeViewNode> lst)
+        void MS(DvTreeViewNode nd, List<DvTreeViewNode> lst)
         {
             if (Animation && ani.IsPlaying && aniItem == nd)
             {
@@ -824,7 +844,7 @@ namespace Devinno.Forms.Controls
             }
         }
 
-        void MS2(TreeViewNode nd, List<TreeViewNode> lst)
+        void MS2(DvTreeViewNode nd, List<DvTreeViewNode> lst)
         {
             for (int i = 0; i < nd.Nodes.Count; i++) MS(nd.Nodes[i], lst);
         }
@@ -832,78 +852,101 @@ namespace Devinno.Forms.Controls
 
         #region Input
         #region SetInput
-        internal void SetInput(TreeViewNode nd, RectangleF rtValue, string Value)
+        internal void SetInput(DvTreeViewNode nd, RectangleF rtValue, string Value)
         {
-            OriginalTextBox.BackColor = GetTheme().InputColor;
-            OriginalTextBox.ForeColor = ForeColor;
-            OriginalTextBox.Text = Value;
-            OriginalTextBox.Tag = nd;
-            OriginalTextBox.Visible = true;
-            OriginalTextBox.Focus();
-            AlignInput(rtValue);
+            var Wnd = FindForm() as DvForm;
+            var Theme = GetTheme();
+            if (Theme.KeyboardInput)
+            {
+                OriginalTextBox.BackColor = GetTheme().InputColor;
+                OriginalTextBox.ForeColor = ForeColor;
+                OriginalTextBox.Text = Value;
+                OriginalTextBox.Tag = nd;
+                OriginalTextBox.Visible = true;
+                OriginalTextBox.Focus();
+                AlignInput(rtValue);
+            }
+            else OriginalTextBox.Visible = false;
         }
         #endregion
         #region ClearInput
         void ClearInput()
         {
-            FlushInput();
+            var Wnd = FindForm() as DvForm;
+            var Theme = GetTheme();
+            if (Theme.KeyboardInput)
+            {
+                FlushInput();
 
-            OriginalTextBox.Tag = null;
-            OriginalTextBox.Visible = false;
+                OriginalTextBox.Tag = null;
+                OriginalTextBox.Visible = false;
+            }
+            else OriginalTextBox.Visible = false;
         }
         #endregion
         #region FlushInput
         void FlushInput()
         {
-            var node = OriginalTextBox.Tag as TreeViewNode;
-            if (node != null)
+            var Wnd = FindForm() as DvForm;
+            var Theme = GetTheme();
+            if (Theme.KeyboardInput)
             {
-                var s = node.GetType().Name;
-                if (node is TreeViewInputStringNode) ((TreeViewInputStringNode)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<byte>) ((TreeViewInputNumberNode<byte>)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<ushort>) ((TreeViewInputNumberNode<ushort>)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<uint>) ((TreeViewInputNumberNode<uint>)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<ulong>) ((TreeViewInputNumberNode<ulong>)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<sbyte>) ((TreeViewInputNumberNode<sbyte>)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<short>) ((TreeViewInputNumberNode<short>)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<int>) ((TreeViewInputNumberNode<int>)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<long>) ((TreeViewInputNumberNode<long>)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<float>) ((TreeViewInputNumberNode<float>)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<double>) ((TreeViewInputNumberNode<double>)node).TextChange(OriginalTextBox);
-                else if (node is TreeViewInputNumberNode<decimal>) ((TreeViewInputNumberNode<decimal>)node).TextChange(OriginalTextBox);
+                var node = OriginalTextBox.Tag as DvTreeViewNode;
+                if (node != null)
+                {
+                    var s = node.GetType().Name;
+                    if (node is DvTreeViewInputStringNode) ((DvTreeViewInputStringNode)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<byte>) ((DvTreeViewInputNumberNode<byte>)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<ushort>) ((DvTreeViewInputNumberNode<ushort>)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<uint>) ((DvTreeViewInputNumberNode<uint>)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<ulong>) ((DvTreeViewInputNumberNode<ulong>)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<sbyte>) ((DvTreeViewInputNumberNode<sbyte>)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<short>) ((DvTreeViewInputNumberNode<short>)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<int>) ((DvTreeViewInputNumberNode<int>)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<long>) ((DvTreeViewInputNumberNode<long>)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<float>) ((DvTreeViewInputNumberNode<float>)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<double>) ((DvTreeViewInputNumberNode<double>)node).TextChange(OriginalTextBox);
+                    else if (node is DvTreeViewInputNumberNode<decimal>) ((DvTreeViewInputNumberNode<decimal>)node).TextChange(OriginalTextBox);
 
+                }
+                Invalidate();
             }
-            Invalidate();
+            else OriginalTextBox.Visible = false;
         }
         #endregion
         #region AlignInput
         void AlignInput(RectangleF rtValue)
         {
             var Wnd = FindForm() as DvForm;
-            #region Align
-            OriginalTextBox.TextAlign = HorizontalAlignment.Center;
-            #endregion
-            bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block));
-            if (bv != OriginalTextBox.Visible) OriginalTextBox.Visible = bv;
+            var Theme = GetTheme();
+            if (Theme.KeyboardInput)
+            {
+                #region Align
+                OriginalTextBox.TextAlign = HorizontalAlignment.Center;
+                #endregion
+                bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block)) && (Theme?.KeyboardInput ?? false);
+                if (bv != OriginalTextBox.Visible) OriginalTextBox.Visible = bv;
 
-            var sz = TextRenderer.MeasureText(Text, Font);
-            var sz2 = TextRenderer.MeasureText("H", Font);
-            var rt = Util.FromRect(rtValue, new Padding(5));
-            var rtText = Util.MakeRectangleAlign(rt, new SizeF(rt.Width, Math.Max(Convert.ToInt32(sz2.Height), Convert.ToInt32(sz.Height))), DvContentAlignment.MiddleCenter);
+                var sz = TextRenderer.MeasureText(Text, Font);
+                var sz2 = TextRenderer.MeasureText("H", Font);
+                var rt = Util.FromRect(rtValue, new Padding(5));
+                var rtText = Util.MakeRectangleAlign(rt, new SizeF(rt.Width, Math.Max(Convert.ToInt32(sz2.Height), Convert.ToInt32(sz.Height))), DvContentAlignment.MiddleCenter);
 
-            OriginalTextBox.Bounds = Util.INT(rtText);
+                OriginalTextBox.Bounds = Util.INT(rtText);
+            }
+            else OriginalTextBox.Visible = false;
         }
         #endregion
         #endregion
         #endregion
     }
 
-    #region class : TreeViewLabelNode
-    public class TreeViewLabelNode : TreeViewNode
+    #region class : DvTreeViewLabelNode
+    public class DvTreeViewLabelNode : DvTreeViewNode
     {
         #region Constructor
-        public TreeViewLabelNode(string Text) : base(Text) { }
-        public TreeViewLabelNode(string Text, string IconString) : base(Text, IconString) { }
+        public DvTreeViewLabelNode(string Text) : base(Text) { }
+        public DvTreeViewLabelNode(string Text, string IconString) : base(Text, IconString) { }
         #endregion
 
         #region Override
@@ -935,8 +978,8 @@ namespace Devinno.Forms.Controls
         #endregion
     }
     #endregion
-    #region class : TreeViewValueLabelNode
-    public class TreeViewValueLabelNode : TreeViewNode
+    #region class : DvTreeViewValueLabelNode
+    public class DvTreeViewValueLabelNode : DvTreeViewNode
     {
         #region Properties
         #region ButtonColor
@@ -1111,8 +1154,8 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Constructor
-        public TreeViewValueLabelNode(string Text) : base(Text) { }
-        public TreeViewValueLabelNode(string Text, string IconString) : base(Text, IconString) { }
+        public DvTreeViewValueLabelNode(string Text) : base(Text) { }
+        public DvTreeViewValueLabelNode(string Text, string IconString) : base(Text, IconString) { }
         #endregion
 
         #region Override
@@ -1282,8 +1325,8 @@ namespace Devinno.Forms.Controls
         #endregion
     }
     #endregion
-    #region class : TreeViewInputStringNode
-    public class TreeViewInputStringNode : TreeViewNode
+    #region class : DvTreeViewInputStringNode
+    public class DvTreeViewInputStringNode : DvTreeViewNode
     {
         #region Properties
         #region ButtonColor
@@ -1459,8 +1502,8 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Constructor
-        public TreeViewInputStringNode(string Text) : base(Text) { }
-        public TreeViewInputStringNode(string Text, string IconString) : base(Text, IconString) { }
+        public DvTreeViewInputStringNode(string Text) : base(Text) { }
+        public DvTreeViewInputStringNode(string Text, string IconString) : base(Text, IconString) { }
         #endregion
 
         #region Override
@@ -1581,12 +1624,28 @@ namespace Devinno.Forms.Controls
         public override bool MouseUp(RectangleF bounds, int x, int y)
         {
             var ret = false;
+                      
             Areas(bounds, (rtContent, rtTitle, rtValue, rtUnit, rtButton, rtValueAll) =>
             {
                 if (bDown)
                 {
                     bDown = false;
-                    if (CollisionTool.Check(rtValue, x, y)) Control.SetInput(this, rtValue, this.Value);
+
+                    var Wnd = Control.FindForm() as DvForm;
+                    var Theme = Control.GetTheme();
+                    if (CollisionTool.Check(rtValue, x, y))
+                    {
+                        if (Theme.KeyboardInput) Control.SetInput(this, rtValue, this.Value);
+                        else
+                        {
+                            Wnd.Block = true;
+
+                            var ret = DvDialogs.Keyboard.ShowKeyboard(Text ?? "입력", Value);
+                            if (ret != null) Value = ret;
+
+                            Wnd.Block = false;
+                        }
+                    }
                     if (CollisionTool.Check(rtValueAll, x, y)) ret = true;
                 }
 
@@ -1639,8 +1698,8 @@ namespace Devinno.Forms.Controls
         #endregion
     }
     #endregion
-    #region class : TreeViewInputNumberNode
-    public class TreeViewInputNumberNode<T> : TreeViewNode where T : struct
+    #region class : DvTreeViewInputNumberNode
+    public class DvTreeViewInputNumberNode<T> : DvTreeViewNode where T : struct
     {
         #region Properties
         #region ButtonColor
@@ -2152,7 +2211,7 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Constructor
-        public TreeViewInputNumberNode(string Text) : base(Text)
+        public DvTreeViewInputNumberNode(string Text) : base(Text)
         {
             if (typeof(T) == typeof(sbyte)) { }
             else if (typeof(T) == typeof(short)) { }
@@ -2168,7 +2227,7 @@ namespace Devinno.Forms.Controls
             else throw new Exception("숫자 자료형이 아닙니다");
         }
 
-        public TreeViewInputNumberNode(string Text, string IconString) : base(Text, IconString)
+        public DvTreeViewInputNumberNode(string Text, string IconString) : base(Text, IconString)
         {
             if (typeof(T) == typeof(sbyte)) { }
             else if (typeof(T) == typeof(short)) { }
@@ -2285,7 +2344,7 @@ namespace Devinno.Forms.Controls
                     #region Error
                     if (Error != InputError.None)
                     {
-                        var rt = new RectangleF(rtValue.Left, rtValue.Top, rtValue.Width + rtButton.Width, rtValue.Height);
+                        var rt = new RectangleF(rtValue.Left, rtValue.Top, rtValueAll.Width + rtButton.Width, rtValue.Height);
                         Theme.DrawBox(g, rt, ValueColor, ErrorColor, RoundType.All, BoxStyle.Border);
                     }
                     #endregion
@@ -2315,7 +2374,21 @@ namespace Devinno.Forms.Controls
                 if (bDown)
                 {
                     bDown = false;
-                    if (CollisionTool.Check(rtValue, x, y)) Control.SetInput(this, rtValue, sVal);
+                    var Wnd = Control.FindForm() as DvForm;
+                    var Theme = Control.GetTheme();
+                    if (CollisionTool.Check(rtValue, x, y))
+                    {
+                        if (Theme.KeyboardInput) Control.SetInput(this, rtValue, sVal);
+                        else
+                        {
+                            Wnd.Block = true;
+
+                            var ret = DvDialogs.Keypad.ShowKeypad<T>(Text ?? "입력", Value);
+                            if (ret.HasValue) sVal = ret.Value.ToString();
+
+                            Wnd.Block = false;
+                        }
+                    }
                     if (CollisionTool.Check(rtValueAll, x, y)) ret = true;
                 }
 
@@ -2412,8 +2485,8 @@ namespace Devinno.Forms.Controls
         #endregion
     }
     #endregion
-    #region class : TreeViewInputComboNode
-    public class TreeViewInputComboNode : TreeViewNode
+    #region class : DvTreeViewInputComboNode
+    public class DvTreeViewInputComboNode : DvTreeViewNode
     {
         #region Properties
         #region ButtonColor
@@ -2581,8 +2654,8 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Constructor
-        public TreeViewInputComboNode(string Text) : base(Text) { }
-        public TreeViewInputComboNode(string Text, string IconString) : base(Text, IconString) { }
+        public DvTreeViewInputComboNode(string Text) : base(Text) { }
+        public DvTreeViewInputComboNode(string Text, string IconString) : base(Text, IconString) { }
         #endregion
 
         #region Override
@@ -2822,7 +2895,15 @@ namespace Devinno.Forms.Controls
                     closedWhileInControl = (Control.RectangleToScreen(Control.ClientRectangle).Contains(Cursor.Position));
                     DropState = DvDropState.Closed;
                     Control.Invalidate();
+
+                    ThreadPool.QueueUserWorkItem((o) =>
+                    {
+                        Thread.Sleep(20);
+                        Control.VisibleDropDown = false;
+                    });
                 };
+                dropContainer.Shown += (o, s) => Control.VisibleDropDown = true;
+
                 DropState = DvDropState.Dropping;
                 dropContainer.VScrollPosition = vpos;
                 dropContainer.Show(Control);
@@ -2912,7 +2993,7 @@ namespace Devinno.Forms.Controls
         {
             #region Properties
             internal bool Freeze { get; set; }
-            public TreeViewInputComboNode ComboBox { get; private set; }
+            public DvTreeViewInputComboNode ComboBox { get; private set; }
             public double VScrollPosition
             {
                 get => ListBox.ScrollPosition;
@@ -2936,7 +3017,7 @@ namespace Devinno.Forms.Controls
             #endregion
 
             #region Constructor
-            public DropDownContainer(TreeViewInputComboNode c)
+            public DropDownContainer(DvTreeViewInputComboNode c)
             {
                 #region Init
                 this.BlankForm = true;
@@ -2965,9 +3046,8 @@ namespace Devinno.Forms.Controls
                 ListBox.Round = RoundType.Rect;
                 ListBox.Items.AddRange(c.Items);
                 ListBox.SelectionMode = ItemSelectionMode.Single;
-                //ListBox.Corner = 0;
                 ListBox.ItemHeight = c.ItemHeight;
-                ListBox.TouchMode = true;
+
                 ListBox.ItemClicked += (o, s) =>
                 {
                     if (s.Item != null)
@@ -2987,13 +3067,13 @@ namespace Devinno.Forms.Controls
                 var BoxColor = Theme.ListBackColor;
                 var ItemColor = c.ValueColor ?? Theme.InputColor;
                 var SelectedItemColor = Theme.PointColor;
-                #endregion
-
+                
                 this.BackColor = ListBox.BackColor = c.Control.BoxColor ?? Theme.ListBackColor;
                 this.ForeColor = ListBox.ForeColor = c.Control.ForeColor;
                 ListBox.BoxColor = BoxColor;
                 ListBox.RowColor = ItemColor;
                 ListBox.SelectedColor = SelectedItemColor;
+                #endregion
             }
             #endregion
 
@@ -3017,13 +3097,13 @@ namespace Devinno.Forms.Controls
     }
     #endregion
 
-    #region class : TreeViewNode
-    public abstract class TreeViewNode
+    #region class : DvTreeViewNode
+    public abstract class DvTreeViewNode
     {
         #region Properties
         public DvTreeView Control { get; internal set; }
-        public TreeViewNode Parents { get; internal set; }
-        public TreeViewNodeCollection Nodes { get; private set; }
+        public DvTreeViewNode Parents { get; internal set; }
+        public DvTreeViewNodeCollection Nodes { get; private set; }
         public bool Expands { get; set; } = true;
         public int Depth { get => (Parents != null ? Parents.Depth + 1 : 0); }
 
@@ -3076,9 +3156,9 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Constructor
-        private TreeViewNode()
+        private DvTreeViewNode()
         {
-            Nodes = new TreeViewNodeCollection(this);
+            Nodes = new DvTreeViewNodeCollection(this);
             Nodes.Changed += (o, s) =>
             {
                 foreach (var v in Nodes)
@@ -3090,12 +3170,12 @@ namespace Devinno.Forms.Controls
             };
         }
 
-        public TreeViewNode(string Text) : this()
+        public DvTreeViewNode(string Text) : this()
         {
             this.Text = Text;
         }
 
-        public TreeViewNode(string Text, string IconString) : this()
+        public DvTreeViewNode(string Text, string IconString) : this()
         {
             this.Text = Text;
             this.IconString = IconString;
@@ -3124,25 +3204,25 @@ namespace Devinno.Forms.Controls
         #endregion
     }
     #endregion
-    #region class : TreeViewNodeCollection
-    public class TreeViewNodeCollection : EventList<TreeViewNode>
+    #region class : DvTreeViewNodeCollection
+    public class DvTreeViewNodeCollection : EventList<DvTreeViewNode>
     {
-        public TreeViewNode Parent { get; private set; } = null;
+        public DvTreeViewNode Parent { get; private set; } = null;
 
-        public TreeViewNodeCollection(TreeViewNode node)
+        public DvTreeViewNodeCollection(DvTreeViewNode node)
         {
             this.Parent = node;
         }
     }
     #endregion
-    #region class : TreeViewNodeMouseEventArgs
-    public class TreeViewNodeMouseEventArgs : EventArgs
+    #region class : DvTreeViewNodeMouseEventArgs
+    public class DvTreeViewNodeMouseEventArgs : EventArgs
     {
         public int X { get; private set; }
         public int Y { get; private set; }
-        public TreeViewNode Node { get; private set; }
+        public DvTreeViewNode Node { get; private set; }
 
-        public TreeViewNodeMouseEventArgs(int X, int Y, TreeViewNode Node)
+        public DvTreeViewNodeMouseEventArgs(int X, int Y, DvTreeViewNode Node)
         {
             this.X = X;
             this.Y = Y;

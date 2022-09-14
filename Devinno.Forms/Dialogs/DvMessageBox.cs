@@ -42,10 +42,10 @@ namespace Devinno.Forms.Dialogs
             btnYes = new DvButton { Name = nameof(btnYes), Text = "예", Dock = DockStyle.Fill };
             btnNo = new DvButton { Name = nameof(btnNo), Text = "아니요", Dock = DockStyle.Fill };
 
-            btnOK.MouseClick += (o, s) => DialogResult = DialogResult.OK;
-            btnCancel.MouseClick += (o, s) => DialogResult = DialogResult.Cancel;
-            btnYes.MouseClick += (o, s) => DialogResult = DialogResult.Yes;
-            btnNo.MouseClick += (o, s) => DialogResult = DialogResult.No;
+            btnOK.ButtonClick += (o, s) => DialogResult = DialogResult.OK;
+            btnCancel.ButtonClick += (o, s) => DialogResult = DialogResult.Cancel;
+            btnYes.ButtonClick += (o, s) => DialogResult = DialogResult.Yes;
+            btnNo.ButtonClick += (o, s) => DialogResult = DialogResult.No;
 
             SetExComposited();
         }

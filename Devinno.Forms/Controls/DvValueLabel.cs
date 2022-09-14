@@ -1,4 +1,5 @@
 ﻿using Devinno.Extensions;
+using Devinno.Forms.Dialogs;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
 using Devinno.Forms.Utils;
@@ -514,6 +515,7 @@ namespace Devinno.Forms.Controls
     }
     #endregion
 
+    #region DvValueLabelString
     public class DvValueLabelString : DvValueLabel
     {
         #region Properties
@@ -543,8 +545,9 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
     }
+    #endregion
 
-
+    #region DvValueLabelNumber
     public class DvValueLabelNumber<T> : DvValueLabel where T : struct
     {
         #region Properties
@@ -618,13 +621,12 @@ namespace Devinno.Forms.Controls
 
     public class DvValueLabelInt : DvValueLabelNumber<int> { }
     public class DvValueLabelFloat : DvValueLabelNumber<float> { }
+    #endregion
 
+    #region DvValueLabelBoolean
     public class DvValueLabelBoolean: DvValueLabel
     {
         #region Properties
-        #region Animation
-        public bool Animation { get; set; } = true;
-        #endregion
         #region Value
         private bool bValue = false;
         public bool Value
@@ -635,7 +637,7 @@ namespace Devinno.Forms.Controls
                 if (bValue != value)
                 {
                     bValue = value;
-                    if (Animation)
+                    if (Animation && !ani.IsPlaying)
                     {
                         ani.Stop();
                         ani.Start(200, bValue ? "On" : "Off", () => this.Invoke(new Action(() => Invalidate())));
@@ -660,6 +662,10 @@ namespace Devinno.Forms.Controls
             get => sOff;
             set { if (sOff != value) { sOff = value; Invalidate(); } }
         }
+        #endregion
+
+        #region Animation
+        private bool Animation => GetTheme()?.Animation ?? false;
         #endregion
         #endregion
 
@@ -743,4 +749,5 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
     }
+    #endregion
 }

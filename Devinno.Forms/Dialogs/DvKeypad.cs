@@ -98,8 +98,8 @@ namespace Devinno.Forms.Dialogs
             };
             #endregion
             #region Enter / Clear
-            btnClear.MouseClick += (o, s) => { sval = ""; SetText(); };
-            btnEnter.MouseClick += (o, s) =>
+            btnClear.ButtonClick += (o, s) => { sval = ""; SetText(); };
+            btnEnter.ButtonClick += (o, s) =>
             {
                 if (sval.Length != lbl.Text.Length && sval.Length == 0)
                 {
@@ -121,19 +121,19 @@ namespace Devinno.Forms.Dialogs
             };
             #endregion
             #region 0~9
-            btn0.MouseClick += (o, s) => { sval += "0"; SetText(); };
-            btn1.MouseClick += (o, s) => { sval += "1"; SetText(); };
-            btn2.MouseClick += (o, s) => { sval += "2"; SetText(); };
-            btn3.MouseClick += (o, s) => { sval += "3"; SetText(); };
-            btn4.MouseClick += (o, s) => { sval += "4"; SetText(); };
-            btn5.MouseClick += (o, s) => { sval += "5"; SetText(); };
-            btn6.MouseClick += (o, s) => { sval += "6"; SetText(); };
-            btn7.MouseClick += (o, s) => { sval += "7"; SetText(); };
-            btn8.MouseClick += (o, s) => { sval += "8"; SetText(); };
-            btn9.MouseClick += (o, s) => { sval += "9"; SetText(); };
+            btn0.ButtonClick += (o, s) => { sval += "0"; SetText(); };
+            btn1.ButtonClick += (o, s) => { sval += "1"; SetText(); };
+            btn2.ButtonClick += (o, s) => { sval += "2"; SetText(); };
+            btn3.ButtonClick += (o, s) => { sval += "3"; SetText(); };
+            btn4.ButtonClick += (o, s) => { sval += "4"; SetText(); };
+            btn5.ButtonClick += (o, s) => { sval += "5"; SetText(); };
+            btn6.ButtonClick += (o, s) => { sval += "6"; SetText(); };
+            btn7.ButtonClick += (o, s) => { sval += "7"; SetText(); };
+            btn8.ButtonClick += (o, s) => { sval += "8"; SetText(); };
+            btn9.ButtonClick += (o, s) => { sval += "9"; SetText(); };
             #endregion
             #region Dot
-            btnDot.MouseClick += (o, s) =>
+            btnDot.ButtonClick += (o, s) =>
             {
                 if (sval.IndexOf('.') == -1)
                 {
@@ -144,7 +144,7 @@ namespace Devinno.Forms.Dialogs
             };
             #endregion
             #region Sign
-            btnSign.MouseClick += (o, s) => {
+            btnSign.ButtonClick += (o, s) => {
                 decimal n = 0;
                 if (decimal.TryParse(sval, out n))
                 {
@@ -162,7 +162,7 @@ namespace Devinno.Forms.Dialogs
             };
             #endregion
             #region Back
-            btnBack.MouseClick += (o, s) =>
+            btnBack.ButtonClick += (o, s) =>
             {
                 if (sval.Length > 0) sval = sval.Substring(0, sval.Length - 1);
                 SetText();

@@ -1,4 +1,5 @@
 ﻿using Devinno.Extensions;
+using Devinno.Forms.Dialogs;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
 using Devinno.Forms.Utils;
@@ -65,9 +66,6 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region Animation
-        public bool Animation { get; set; } = true;
-        #endregion
         #region ButtonWidth
         private int? nButtonWidth = null;
         public int? ButtonWidth
@@ -112,6 +110,10 @@ namespace Devinno.Forms.Controls
                 }
             }
         }
+        #endregion
+
+        #region Animation
+        private bool Animation => GetTheme()?.Animation ?? false;
         #endregion
         #endregion
 

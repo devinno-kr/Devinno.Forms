@@ -151,8 +151,6 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region ScrollBar
-        public bool TouchMode { get => scroll.TouchMode; set => scroll.TouchMode = value; }
-
         internal bool IsScrolling => scroll.IsTouchMoving || (scroll.IsTouchScrolling && scroll.TouchOffset != 0);
         internal bool DrawScroll { get; set; } = true;
         internal bool Scrollable => scroll.ScrollView < scroll.ScrollTotal;
@@ -218,6 +216,8 @@ namespace Devinno.Forms.Controls
             var p = new Pen(Color.Black);
             var br = new SolidBrush(Color.Black);
             #endregion
+
+            scroll.TouchMode = Theme.TouchMode;
 
             Areas((rtContent, rtBox, rtScroll) =>
             {
@@ -317,6 +317,9 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             int x = e.X, y = e.Y;
+
+            scroll.TouchMode = GetTheme()?.TouchMode ?? false;
+
             Areas((rtContent, rtBox, rtScroll) =>
             {
                 scroll.MouseDown(x, y, rtScroll);
@@ -430,6 +433,9 @@ namespace Devinno.Forms.Controls
                             }
                             #endregion
                         }
+
+                        if (MathTool.GetDistance(downPoint, e.Location) < 10 && (DateTime.Now - downTime).TotalSeconds < Scroll.GapTime && CollisionTool.Check(rt, e.Location))
+                            ItemClicked?.Invoke(this, new ItemClickedEventArgs(v));
                     });
                 }
             });
@@ -440,6 +446,7 @@ namespace Devinno.Forms.Controls
         #region OnMouseClick
         protected override void OnMouseClick(MouseEventArgs e)
         {
+            /*
             int x = e.X, y = e.Y;
             Areas((rtContent, rtBox, rtScroll) =>
             {
@@ -454,6 +461,7 @@ namespace Devinno.Forms.Controls
                 }
             });
             Invalidate();
+            */
             base.OnMouseClick(e);
         }
         #endregion

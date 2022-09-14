@@ -553,12 +553,30 @@ namespace Devinno.Forms.Controls
             Align(g, Wnd);
             #endregion
             #region Enabled Text
-            if (!Enabled || (Wnd != null && Wnd.Block))
+            if (!Enabled || (Wnd != null && Wnd.Block) || !Theme.KeyboardInput)
             {
                 var rt = OriginalTextBox.Bounds; rt.Offset(1, 0);
                 TextRenderer.DrawText(g, OriginalTextBox.Text, this.Font, rt, ForeColor);
             }
             #endregion
+        }
+        #endregion
+        #region OnMouseDown
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            var Wnd = FindForm() as DvForm;
+            var Theme = GetTheme();
+            if (Theme.KeyboardInput) OriginalTextBox.Focus();
+            else
+            {
+                Wnd.Block = true;
+
+                var ret = DvDialogs.Keyboard.ShowKeyboard(Title ?? "입력", Value);
+                if (ret != null) OriginalTextBox.Text = ret;
+
+                Wnd.Block = false;
+            }
+            base.OnMouseDown(e);
         }
         #endregion
         #endregion
@@ -588,7 +606,8 @@ namespace Devinno.Forms.Controls
                 }
                 #endregion
                 #region Set
-                bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block));
+                var Theme = GetTheme();
+                bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block)) && (Theme?.KeyboardInput ?? false);
                 if (bv != OriginalTextBox.Visible) OriginalTextBox.Visible = bv;
 
                 var sz = TextRenderer.MeasureText(Text, Font);
@@ -1031,7 +1050,7 @@ namespace Devinno.Forms.Controls
             Align(g, Wnd);
             #endregion
             #region Enabled Text
-            if (!Enabled || (Wnd != null && Wnd.Block))
+            if (!Enabled || (Wnd != null && Wnd.Block) || !Theme.KeyboardInput)
             {
                 var rt = OriginalTextBox.Bounds; rt.Offset(1, 0);
                 TextRenderer.DrawText(g, OriginalTextBox.Text, this.Font, rt, ForeColor);
@@ -1046,6 +1065,24 @@ namespace Devinno.Forms.Controls
                 });
             }
             #endregion
+        }
+        #endregion
+        #region OnMouseDown
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            var Wnd = FindForm() as DvForm;
+            var Theme = GetTheme();
+            if (Theme.KeyboardInput) OriginalTextBox.Focus();
+            else
+            {
+                Wnd.Block = true;
+
+                var ret = DvDialogs.Keypad.ShowKeypad<T>(Title ?? "입력", Value);
+                if (ret.HasValue) OriginalTextBox.Text = ret.Value.ToString();
+
+                Wnd.Block = false;
+            }
+            base.OnMouseDown(e);
         }
         #endregion
         #endregion
@@ -1075,7 +1112,8 @@ namespace Devinno.Forms.Controls
                 }
                 #endregion
                 #region Set
-                bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block));
+                var Theme = GetTheme();
+                bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block)) && (Theme?.KeyboardInput ?? false);
                 if (bv != OriginalTextBox.Visible) OriginalTextBox.Visible = bv;
 
                 var sz = TextRenderer.MeasureText(Text, Font);
@@ -1149,7 +1187,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #endregion
     }
-   
+
     public class DvValueInputInt : DvValueInputNumber<int> { }
     public class DvValueInputFloat : DvValueInputNumber<float> { }
     #endregion
@@ -1158,9 +1196,6 @@ namespace Devinno.Forms.Controls
     public class DvValueInputBoolean : DvValueInput
     {
         #region Properties
-        #region Animation
-        public bool Animation { get; set; } = true;
-        #endregion
         #region Value
         private bool bValue = false;
         public bool Value
@@ -1171,7 +1206,7 @@ namespace Devinno.Forms.Controls
                 if (bValue != value)
                 {
                     bValue = value;
-                    if (Animation)
+                    if (Animation && !ani.IsPlaying)
                     {
                         ani.Stop();
                         ani.Start(200, bValue ? "On" : "Off", () => this.Invoke(new Action(() => Invalidate())));
@@ -1197,6 +1232,10 @@ namespace Devinno.Forms.Controls
             get => sOff;
             set { if (sOff != value) { sOff = value; Invalidate(); } }
         }
+        #endregion
+
+        #region Animation
+        private bool Animation => GetTheme()?.Animation ?? false;
         #endregion
         #endregion
 
@@ -1706,6 +1745,7 @@ namespace Devinno.Forms.Controls
             internal event EventHandler<DropWindowEventArgs> DropStateChanged;
             #endregion
 
+            #region Contstructor
             public DropDownContainer(DvValueInputCombo c)
             {
                 #region Init
@@ -1737,9 +1777,8 @@ namespace Devinno.Forms.Controls
                 ListBox.Round = RoundType.Rect;
                 ListBox.Items.AddRange(c.Items);
                 ListBox.SelectionMode = ItemSelectionMode.Single;
-                //ListBox.Corner = 0;
                 ListBox.ItemHeight = c.ItemHeight;
-                ListBox.TouchMode = true;
+
                 ListBox.ItemClicked += (o, s) =>
                 {
                     if (s.Item != null)
@@ -1756,17 +1795,18 @@ namespace Devinno.Forms.Controls
                 #endregion
 
                 #region Color
-                var Theme = c.GetTheme();
                 var BoxColor = Theme.ListBackColor;
                 var ItemColor = c.ValueColor ?? Theme.InputColor;
                 var SelectedItemColor = Theme.PointColor;
-                #endregion
+              
                 this.BackColor = ListBox.BackColor = c.BackColor;
                 this.ForeColor = ListBox.ForeColor = c.ForeColor;
                 ListBox.BoxColor = BoxColor;
                 ListBox.RowColor = ItemColor;
                 ListBox.SelectedColor = SelectedItemColor;
+                #endregion
             }
+            #endregion
 
             #region Implements
             #region PreFilterMessage

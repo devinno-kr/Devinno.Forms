@@ -1,5 +1,6 @@
 ﻿using Devinno.Extensions;
 using Devinno.Forms.Containers;
+using Devinno.Forms.Dialogs;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Utils;
 using Devinno.Tools;
@@ -29,18 +30,18 @@ namespace Devinno.Forms.Themes
         public abstract float GradientDark { get; set; }
         public abstract int Corner { get; set; }
         public abstract float KeySpecialButtonBrightness { get; }
-        
+
         public abstract byte OutShadowAlpha { get; set; }
         public abstract byte OutBevelAlpha { get; set; }
         public abstract byte InShadowAlpha { get; set; }
-     
+
         public abstract byte GradientLightAlpha { get; }
         public abstract byte GradientDarkAlpha { get; }
         public abstract float DataGridInputBright { get; }
         public abstract float DataGridCheckBoxBright { get; }
         public abstract float DataGridColumnBevelBright { get; }
         public abstract float DataGridRowBevelBright { get; }
-        public abstract int DisableAlpha { get; } 
+        public abstract int DisableAlpha { get; }
         public abstract int TextOffsetY { get; }
         public abstract int TextOffsetX { get; }
 
@@ -48,7 +49,7 @@ namespace Devinno.Forms.Themes
         public abstract Color BackColor { get; }
         public abstract Color ButtonColor { get; }
 
-      
+
         public abstract Color LabelColor { get; }
         public abstract Color InputColor { get; }
         public abstract Color CheckBoxColor { get; }
@@ -98,8 +99,12 @@ namespace Devinno.Forms.Themes
         public abstract void GetSwitchColors(Color Color, out Color c1, out Color c2, out Color c3, out Color c4);
         public abstract void GetLampColors(Color BackColor, Color OnLampColor, Color OffLampColor, bool OnOff,
                                            bool Animation, Animation ani,
-                                           out Color BackLightColor, out Color BackDarkColor, 
+                                           out Color BackLightColor, out Color BackDarkColor,
                                            out Color LampLightColor, out Color LampDarkColor, out Color LampColor);
+
+        public bool Animation { get; set; } = true;
+        public bool TouchMode { get; set; } = true;
+        public bool KeyboardInput { get; set; } = true;
 
         #region Static Method
         internal static void SetTheme(Control control, DvTheme theme)

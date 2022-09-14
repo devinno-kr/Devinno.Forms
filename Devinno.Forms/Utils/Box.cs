@@ -25,6 +25,10 @@ namespace Devinno.Forms.Utils
         public static BoxStyle ListBox(int ShadowGap) => BoxStyle.Fill | BoxStyle.OutShadow;
         public static BoxStyle Border() => BoxStyle.Border;
 
+        public static BoxStyle Concave(int ShadowGap) => Style(Fill.Fill, Embossing.Concave, ShadowGap, true);
+        public static BoxStyle Convex(int ShadowGap) => Style(Fill.Fill, Embossing.Convex, ShadowGap, true);
+        public static BoxStyle FlatConcave(int ShadowGap) => Style(Fill.Fill, Embossing.FlatConcave, ShadowGap, true);
+        public static BoxStyle FlatConvex(int ShadowGap) => Style(Fill.Fill, Embossing.FlatConvex, ShadowGap, true);
         #region BoxStyle
         #region Style
         public static BoxStyle Style(Fill fill, Embossing volume, int ShadowGap, bool border)

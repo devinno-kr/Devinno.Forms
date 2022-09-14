@@ -6,6 +6,7 @@ using Devinno.Forms.Dialogs;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
+using Devinno.Forms.Utils;
 using Devinno.Timers;
 using Devinno.Tools;
 using Newtonsoft.Json;
@@ -82,7 +83,7 @@ namespace Sample
             ani.OnImages.Add(new Bitmap(Properties.Resources.Fan5));
             ani.OnImages.Add(new Bitmap(Properties.Resources.Fan6));
             ani.Interval = 25;
-            ani.MouseClick += (o, s) => ani.OnOff = !ani.OnOff;
+            ani.MouseDown += (o, s) => ani.OnOff = !ani.OnOff;
             #endregion
             #region meter
             meter.Bars.Add(new MeterBar(0, 70, Color.Green));
@@ -176,36 +177,36 @@ namespace Sample
             #region treeView
             for (int a = 1; a <= 3; a++)
             {
-                var va = new TreeViewLabelNode("Cat " + a);
+                var va = new DvTreeViewLabelNode("Cat " + a);
                 treeView.Nodes.Add(va);
 
                 var ls = Enum.GetValues<DayOfWeek>().Select(x => new TextIcon { Text = x.ToString(), Value = x }).ToList();
 
                 for (int b = 1; b <= 2; b++)
                 {
-                    var vb = new TreeViewLabelNode("Sub " + a + "." + b);
+                    var vb = new DvTreeViewLabelNode("Sub " + a + "." + b);
                     va.Nodes.Add(vb);
 
                     for (int c = 1; c <= 4; c++)
                     {
                         if (c == 1)
                         {
-                            var vc = new TreeViewValueLabelNode("Name") { Value = "Item " + a + "." + b + "." + c, ValueColor = Color.FromArgb(50, 50, 50), TitleWidth = 60, ValueWidth = 120 };
+                            var vc = new DvTreeViewValueLabelNode("Name") { Value = "Item " + a + "." + b + "." + c, ValueColor = Color.FromArgb(50, 50, 50), TitleWidth = 60, ValueWidth = 120 };
                             vb.Nodes.Add(vc);
                         }
                         else if (c == 2)
                         {
-                            var vc = new TreeViewInputStringNode("Title") { TitleWidth = 60, ValueWidth = 120 };
+                            var vc = new DvTreeViewInputStringNode("Title") { TitleWidth = 60, ValueWidth = 120 };
                             vb.Nodes.Add(vc);
                         }
                         else if (c == 3)
                         {
-                            var vc = new TreeViewInputNumberNode<float>("Temp") { Minimum = -20, Maximum = 200, Value = 0, TitleWidth = 60, ButtonWidth = 30, ValueWidth = 90, UnitWidth = 24, Unit = "℃", ButtonIconString = "fa-check" };
+                            var vc = new DvTreeViewInputNumberNode<float>("Temp") { Minimum = -20, Maximum = 200, Value = 0, TitleWidth = 60, ButtonWidth = 30, ValueWidth = 90, UnitWidth = 24, Unit = "℃", ButtonIconString = "fa-check" };
                             vb.Nodes.Add(vc);
                         }
                         else if (c == 4)
                         {
-                            var vc = new TreeViewInputComboNode("DOW") { TitleWidth = 60, ValueWidth = 120 };
+                            var vc = new DvTreeViewInputComboNode("DOW") { TitleWidth = 60, ValueWidth = 120 };
                             vc.Items.AddRange(ls);
                             vc.SelectedIndex = 0;
                             vb.Nodes.Add(vc);
@@ -242,6 +243,190 @@ namespace Sample
                     }
                 }
             };
+            #endregion
+            #region dataGrid
+            #region actMonth
+            var actMonth = new Action(() =>
+            {
+                var dg = dataGrid;
+                dg.SelectionMode = DvDataGridSelectionMode.Selector;
+                dg.ColumnGroups.Clear();
+                dg.Columns.Clear();
+                dg.Rows.Clear();
+                dg.SummaryRows.Clear();
+
+                dg.ScrollMode = ScrollMode.Both;
+                dg.RowHeight = dg.ColumnHeight = Convert.ToInt32(30);
+                dg.ColumnGroups.Add(new DvDataGridColumn(dg) { Name = "G1", HeaderText = "기본사항", Fixed = true });
+                dg.ColumnGroups.Add(new DvDataGridColumn(dg) { Name = "G2", HeaderText = "일일 수집량" });
+                dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Name", GroupName = "G1", HeaderText = "이름", SizeMode = DvSizeMode.Pixel, Width = Convert.ToInt32(100), Fixed = true, UseFilter = true, CellType = typeof(DvDataGridLabelCell) });
+                dg.Columns.Add(new DvDataGridColumn(dg) { Name = "State", GroupName = "G1", HeaderText = "상태", SizeMode = DvSizeMode.Pixel, Width = Convert.ToInt32(70), Fixed = true, CellType = typeof(DvDataGridLabelCell) });
+                for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
+                    dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Day" + i, GroupName = "G2", HeaderText = i + "일", SizeMode = DvSizeMode.Pixel, Width = Convert.ToInt32(70), CellType = typeof(DvDataGridLabelCell) });
+
+                var srow = new DvDataGridSummaryRow(dg);
+                var srow2 = new DvDataGridSummaryRow(dg);
+                srow.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "합계", ColumnIndex = 0, ColumnSpan = 2 });
+                srow.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "", ColumnIndex = 0, ColumnSpan = 1, Visible = false });
+                srow2.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "평균", ColumnIndex = 0, ColumnSpan = 2 });
+                srow2.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "", ColumnIndex = 0, ColumnSpan = 1, Visible = false });
+                for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
+                {
+                    srow.Cells.Add(new DvDataGridSummarySumCell(dg, srow) { ColumnIndex = 1 + i, ColumnSpan = 1, Format = "N0" });
+                    srow2.Cells.Add(new DvDataGridSummaryAverageCell(dg, srow) { ColumnIndex = 1 + i, ColumnSpan = 1, Format = "N0" });
+                }
+                dg.SummaryRows.Add(srow);
+                dg.SummaryRows.Add(srow2);
+
+                var Items = new List<GridItem>();
+                for (int i = 0; i <= 100; i++)
+                {
+                    var lsv = new List<int>();
+                    for (int j = 1; j <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); j++) lsv.Add(rnd.Next(0, 100));
+                    Items.Add(new GridItem() { Name = "NM" + i, State = "NORMAL", Days = lsv.ToArray() });
+                }
+                dg.SetDataSource<GridItem>(Items);
+
+            });
+            #endregion
+            #region actMonitor
+            var actMonitor = new Action(() =>
+            {
+                var pics = new List<Bitmap>();
+                pics.Add(new Bitmap(Properties.Resources._1));
+                pics.Add(new Bitmap(Properties.Resources._2));
+                pics.Add(new Bitmap(Properties.Resources._3));
+
+                var dg = dataGrid;
+                dg.SelectionMode = DvDataGridSelectionMode.Selector;
+                dg.ColumnGroups.Clear();
+                dg.Columns.Clear();
+                dg.Rows.Clear();
+                dg.SummaryRows.Clear();
+
+                /*
+                dg.RowHeight = 43;
+                dg.Columns.Add(new DvDataGridColumn(dg) { Name = "DeviceName", HeaderText = "장치명", SizeMode = SizeMode.Percent, Width = 10M });
+                dg.Columns.Add(new DvDataGridImageColumn(dg) { Name = "DeviceImage", HeaderText = "이미지", SizeMode = SizeMode.Percent, Width = 11M });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Time", HeaderText = "설치일", SizeMode = SizeMode.Percent, Width = 15M, Format = "yyyy.MM.dd", UseSort = true });
+                dg.Columns.Add(new DvDataGridTextConverterColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = SizeMode.Percent, Width = 8M, Converter = GetDOW });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Temperature", HeaderText = "온도", SizeMode = SizeMode.Percent, Width = 10M, Format = "0.0 ℃" });
+                dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmT", HeaderText = "온도 알람", SizeMode = SizeMode.Percent, Width = 10M});
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Humidity", HeaderText = "습도", SizeMode = SizeMode.Percent, Width = 10M, Format = "0 '%'" });
+                dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmH", HeaderText = "습도 알람", SizeMode = SizeMode.Percent, Width = 10M});
+                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Play", HeaderText = "동작", Text = "", IconString = "fa-play", IconSize = 11, SizeMode = SizeMode.Percent, Width = 8M });
+                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Stop", HeaderText = "정지", Text = "", IconString = "fa-stop", IconSize = 11, SizeMode = SizeMode.Percent, Width = 8M });
+                */
+
+                dg.RowHeight = 30;
+                dg.Columns.Add(new DvDataGridColumn(dg) { Name = "DeviceName", HeaderText = "장치명", SizeMode = DvSizeMode.Percent, Width = 15M });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Time", HeaderText = "설치일", SizeMode = DvSizeMode.Percent, Width = 15M, Format = "yyyy.MM.dd", UseSort = true });
+                dg.Columns.Add(new DvDataGridTextConverterColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = DvSizeMode.Percent, Width = 10M, Converter = GetDOW });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Temperature", HeaderText = "온도", SizeMode = DvSizeMode.Percent, Width = 10M, Format = "0.0 ℃" });
+                dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmT", HeaderText = "온도 알람", SizeMode = DvSizeMode.Percent, Width = 10M });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Humidity", HeaderText = "습도", SizeMode = DvSizeMode.Percent, Width = 10M, Format = "0 '%'" });
+                dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmH", HeaderText = "습도 알람", SizeMode = DvSizeMode.Percent, Width = 10M });
+                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Play", HeaderText = "동작", Text = "", IconString = "fa-play", IconSize = 11, SizeMode = DvSizeMode.Percent, Width = 10M });
+                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Stop", HeaderText = "정지", Text = "", IconString = "fa-stop", IconSize = 11, SizeMode = DvSizeMode.Percent, Width = 10M });
+
+                var Items = new List<GridItem2>();
+                for (int i = 1; i <= 100; i++)
+                {
+                    Items.Add(new GridItem2()
+                    {
+                        DeviceName = "DEV" + i,
+                        DeviceImage = i % 3 == 0 ? pics[0] : (i % 3 == 1 ? pics[1] : pics[2]),
+                        Time = DateTime.Now.Date + TimeSpan.FromDays(i),
+                        Humidity = rnd.Next(0, 100),
+                        Temperature = rnd.Next(0, 1000) / 10D,
+                    });
+                }
+                dg.SetDataSource<GridItem2>(Items);
+
+                new Thread((o) =>
+                {
+                    var ls = o as List<GridItem2>;
+                    while (true)
+                    {
+                        foreach (var v in ls)
+                        {
+                            v.Humidity = Convert.ToInt32(MathTool.Constrain(v.Humidity + (rnd.Next() % 2 == 0 ? 1 : -1), 0, 100));
+                            v.Temperature = Convert.ToDouble(MathTool.Constrain(v.Temperature + (rnd.Next() % 2 == 0 ? 0.1 : -0.1), 0, 100));
+                        }
+                        Thread.Sleep(10);
+                    }
+                })
+                { IsBackground = true }.Start(Items);
+            });
+            #endregion
+            #region actInput
+            var actInput = new Action(() =>
+            {
+                var dg = dataGrid;
+                dg.SelectionMode = DvDataGridSelectionMode.Selector;
+                dg.ColumnGroups.Clear();
+                dg.Columns.Clear();
+                dg.Rows.Clear();
+                dg.SummaryRows.Clear();
+
+                var ls = Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>().Select(x => new TextIcon { Text = GetDOW(x), Value = x }).ToList();
+
+                /*
+                dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Name", HeaderText = "명칭", SizeMode = DvSizeMode.Percent, Width = 10M });
+                dg.Columns.Add(new DvDataGridCheckBoxColumn(dg) { Name = "Used", HeaderText = "사용", SizeMode = DvSizeMode.Percent, Width = 5M });
+                dg.Columns.Add(new DvDataGridComboBoxColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = DvSizeMode.Percent, Width = 10M, Items = ls, MaximumViewCount = 5, ButtonWidth = 30, });
+                dg.Columns.Add(new DvDataGridEditTextColumn(dg) { Name = "Message", HeaderText = "메시지", SizeMode = DvSizeMode.Percent, Width = 12M });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer", HeaderText = "정수", SizeMode = DvSizeMode.Percent, Width = 10M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<double>(dg) { Name = "Double", HeaderText = "실수", SizeMode = DvSizeMode.Percent, Width = 10M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditBoolColumn(dg) { Name = "OnOff", HeaderText = "ON/OFF", SizeMode = DvSizeMode.Percent, Width = 18M, });
+                dg.Columns.Add(new DvDataGridDateTimePickerColumn(dg) { Name = "Time", HeaderText = "날짜", SizeMode = DvSizeMode.Percent, Width = 13M, PickerMode = DateTimePickerType.Date });
+                dg.Columns.Add(new DvDataGridColorPickerColumn(dg) { Name = "Color", HeaderText = "색상", SizeMode = DvSizeMode.Percent, Width = 12M });
+                */
+                /*
+                dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Name", HeaderText = "명칭", SizeMode = DvSizeMode.Percent, Width = 12M });
+                dg.Columns.Add(new DvDataGridComboBoxColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = DvSizeMode.Percent, Width = 13M, Items = ls, MaximumViewCount = 5, ButtonWidth = 40, });
+                dg.Columns.Add(new DvDataGridEditStringColumn(dg) { Name = "Message", HeaderText = "메시지", SizeMode = DvSizeMode.Percent, Width = 15M });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer", HeaderText = "정수", SizeMode = DvSizeMode.Percent, Width = 10M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<double>(dg) { Name = "Double", HeaderText = "실수", SizeMode = DvSizeMode.Percent, Width = 12M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditBoolColumn(dg) { Name = "OnOff", HeaderText = "ON/OFF", SizeMode = DvSizeMode.Percent, Width = 22M, });
+                dg.Columns.Add(new DvDataGridDateTimePickerColumn(dg) { Name = "Time", HeaderText = "날짜", SizeMode = DvSizeMode.Percent, Width = 16M, PickerMode = DateTimePickerType.Date });
+                */
+
+                dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Name", HeaderText = "명칭", SizeMode = DvSizeMode.Pixel, Width = 80M });
+                dg.Columns.Add(new DvDataGridComboBoxColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = DvSizeMode.Pixel, Width = 80M, Items = ls, MaximumViewCount = 5, ButtonWidth = 40, });
+                dg.Columns.Add(new DvDataGridEditStringColumn(dg) { Name = "Message", HeaderText = "메시지", SizeMode = DvSizeMode.Pixel, Width = 80M });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer", HeaderText = "정수", SizeMode = DvSizeMode.Pixel, Width = 80M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer2", HeaderText = "정수2", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer3", HeaderText = "정수3", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer4", HeaderText = "정수4", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer5", HeaderText = "정수5", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer6", HeaderText = "정수6", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer7", HeaderText = "정수7", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer8", HeaderText = "정수8", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer9", HeaderText = "정수9", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditNumberColumn<double>(dg) { Name = "Double", HeaderText = "실수", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
+                dg.Columns.Add(new DvDataGridEditBoolColumn(dg) { Name = "OnOff", HeaderText = "ON/OFF", SizeMode = DvSizeMode.Pixel, Width = 160M, });
+                dg.Columns.Add(new DvDataGridDateTimePickerColumn(dg) { Name = "Time", HeaderText = "날짜", SizeMode = DvSizeMode.Pixel, Width = 120M, PickerMode = DateTimePickerType.Date });
+                dg.ScrollMode = ScrollMode.Both;
+
+                var Items = new List<GridItem3>();
+                for (int i = 1; i <= 100; i++)
+                {
+                    Items.Add(new GridItem3()
+                    {
+                        Name = "아이템" + i,
+                        DOW = (DayOfWeek)(i % 7),
+                        Time = DateTime.Now.Date,
+                        Color = Color.Black,
+                        Message = "Comment",
+                    });
+                }
+                dg.SetDataSource<GridItem3>(Items);
+            });
+            #endregion
+            //actMonth();
+            //actMonitor();
+            actInput();
             #endregion
             #region Boxes
             InputBox = new DvInputBox { MinWidth = 220 };
@@ -293,9 +478,9 @@ namespace Sample
             btnLampPump.ButtonClick += (o, s) => btnLampPump.OnOff = !btnLampPump.OnOff;
             #endregion
             #region lmp.MouseClick
-            lmp1.MouseClick += (o, s) => lmp1.OnOff = !lmp1.OnOff;
-            lmp2.MouseClick += (o, s) => lmp2.OnOff = !lmp2.OnOff;
-            lmp3.MouseClick += (o, s) => lmp3.OnOff = !lmp3.OnOff;
+            lmp1.MouseDown += (o, s) => lmp1.OnOff = !lmp1.OnOff;
+            lmp2.MouseDown += (o, s) => lmp2.OnOff = !lmp2.OnOff;
+            lmp3.MouseDown += (o, s) => lmp3.OnOff = !lmp3.OnOff;
             #endregion
             #region in.ValueChanged
             inOnOff.ValueChanged += (o, s) => vlblOnOff.Value = inOnOff.Value;
@@ -562,8 +747,8 @@ namespace Sample
                 var ret = InputBox.ShowString("입력");
                 if (ret != null)
                 {
-                    if (treeView.SelectedNodes.Count > 0) treeView.SelectedNodes.First().Nodes.Add(new TreeViewLabelNode(ret));
-                    else treeView.Nodes.Add(new TreeViewLabelNode(ret));
+                    if (treeView.SelectedNodes.Count > 0) treeView.SelectedNodes.First().Nodes.Add(new DvTreeViewLabelNode(ret));
+                    else treeView.Nodes.Add(new DvTreeViewLabelNode(ret));
                     treeView.Invalidate();
                 }
                 Block = false;
@@ -582,6 +767,8 @@ namespace Sample
             };
             #endregion
             #endregion
+
+            Theme.KeyboardInput = true;
 
             SetExComposited();
 
@@ -660,9 +847,27 @@ namespace Sample
             }
         }
         #endregion
-
+        #region GetDOW
+        string GetDOW(object dow)
+        {
+            var s = "";
+            if (dow is DayOfWeek)
+            {
+                switch (dow)
+                {
+                    case DayOfWeek.Monday: s = "월"; break;
+                    case DayOfWeek.Tuesday: s = "화"; break;
+                    case DayOfWeek.Wednesday: s = "수"; break;
+                    case DayOfWeek.Thursday: s = "목"; break;
+                    case DayOfWeek.Friday: s = "금"; break;
+                    case DayOfWeek.Saturday: s = "토"; break;
+                    case DayOfWeek.Sunday: s = "일"; break;
+                }
+            }
+            return s;
+        }
         #endregion
-
+        #endregion
     }
 
     #region class : Data1 
@@ -699,6 +904,86 @@ namespace Sample
 
         [JsonIgnore]
         public object? Tag { get; set; }
+    }
+    #endregion
+
+    #region class : GridItem
+    public class GridItem
+    {
+        public string Name { get; set; }
+        public string State { get; set; }
+
+        public int Day1 { get => Days[0]; }
+        public int Day2 { get => Days[1]; }
+        public int Day3 { get => Days[2]; }
+        public int Day4 { get => Days[3]; }
+        public int Day5 { get => Days[4]; }
+        public int Day6 { get => Days[5]; }
+        public int Day7 { get => Days[6]; }
+        public int Day8 { get => Days[7]; }
+        public int Day9 { get => Days[8]; }
+        public int Day10 { get => Days[9]; }
+        public int Day11 { get => Days[10]; }
+        public int Day12 { get => Days[11]; }
+        public int Day13 { get => Days[12]; }
+        public int Day14 { get => Days[13]; }
+        public int Day15 { get => Days[14]; }
+        public int Day16 { get => Days[15]; }
+        public int Day17 { get => Days[16]; }
+        public int Day18 { get => Days[17]; }
+        public int Day19 { get => Days[18]; }
+        public int Day20 { get => Days[19]; }
+        public int Day21 { get => Days[20]; }
+        public int Day22 { get => Days[21]; }
+        public int Day23 { get => Days[22]; }
+        public int Day24 { get => Days[23]; }
+        public int Day25 { get => Days[24]; }
+        public int Day26 { get => Days[25]; }
+        public int Day27 { get => Days[26]; }
+        public int Day28 { get => Days[27]; }
+        public int Day29 { get => Days[28]; }
+        public int Day30 { get => Days[29]; }
+        public int Day31 { get => Days[30]; }
+
+        public int[] Days { get; set; } = new int[31];
+    }
+    #endregion
+    #region class : GridItem2
+    public enum DeviceMode { A, B, C }
+    public class GridItem2
+    {
+        public string DeviceName { get; set; }
+        public Bitmap DeviceImage { get; set; }
+        public DateTime Time { get; set; }
+        public DayOfWeek DOW => Time.DayOfWeek;
+        public double Temperature { get; set; }
+        public int Humidity { get; set; }
+        public bool AlarmH => Humidity < 15;
+        public bool AlarmT => Temperature > 80;
+    }
+    #endregion
+    #region class : GridItem3
+    public class GridItem3
+    {
+        public string Name { get; set; }
+        public bool Used { get; set; }
+        public DayOfWeek DOW { get; set; }
+        public string Message { get; set; }
+        public int Integer { get; set; }
+        public double Double { get; set; }
+        public bool OnOff { get; set; }
+        public DateTime Time { get; set; }
+        public Color Color { get; set; }
+
+        public int Integer2 { get; set; }
+        public int Integer3 { get; set; }
+        public int Integer4 { get; set; }
+        public int Integer5 { get; set; }
+        public int Integer6 { get; set; }
+        public int Integer7 { get; set; }
+        public int Integer8 { get; set; }
+        public int Integer9 { get; set; }
+
     }
     #endregion
 }

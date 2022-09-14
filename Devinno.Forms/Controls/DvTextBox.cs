@@ -302,10 +302,28 @@ namespace Devinno.Forms.Controls
                 Theme.DrawBox(e.Graphics, rtContent, TextBoxColor, BorderColor, Round, Box.LabelBox(Style, ShadowGap));
 
                 #region Enabled Text
-                if (!Enabled || (Wnd != null && Wnd.Block))
+                if (!Enabled || (Wnd != null && Wnd.Block) || !Theme.KeyboardInput)
                 {
                     var rt = OriginalTextBox.Bounds; rt.Offset(1, 0);
-                    TextRenderer.DrawText(e.Graphics, OriginalTextBox.Text, this.Font, rt, ForeColor);
+
+                    var flag = TextFormatFlags.Default;
+                    switch(ContentAlignment)
+                    {
+                        case DvContentAlignment.TopLeft:        flag |= TextFormatFlags.Left;             flag |= TextFormatFlags.Top; break;
+                        case DvContentAlignment.TopCenter:      flag |= TextFormatFlags.HorizontalCenter; flag |= TextFormatFlags.Top; break;
+                        case DvContentAlignment.TopRight:       flag |= TextFormatFlags.Right;            flag |= TextFormatFlags.Top; break;
+
+                        case DvContentAlignment.MiddleLeft:     flag |= TextFormatFlags.Left;             flag |= TextFormatFlags.VerticalCenter; break;
+                        case DvContentAlignment.MiddleCenter:   flag |= TextFormatFlags.HorizontalCenter; flag |= TextFormatFlags.VerticalCenter; break;
+                        case DvContentAlignment.MiddleRight:    flag |= TextFormatFlags.Right;            flag |= TextFormatFlags.VerticalCenter; break;
+
+                        case DvContentAlignment.BottomLeft:     flag |= TextFormatFlags.Left;             flag |= TextFormatFlags.Bottom; break;
+                        case DvContentAlignment.BottomCenter:   flag |= TextFormatFlags.HorizontalCenter; flag |= TextFormatFlags.Bottom; break;
+                        case DvContentAlignment.BottomRight:    flag |= TextFormatFlags.Right;            flag |= TextFormatFlags.Bottom; break;
+
+                    }
+
+                    TextRenderer.DrawText(e.Graphics, OriginalTextBox.Text, this.Font, rt, ForeColor, flag);
                 }
                 #endregion
                 #region Unit
@@ -337,7 +355,18 @@ namespace Devinno.Forms.Controls
         #region OnMouseDown
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            OriginalTextBox.Focus();
+            var Wnd = FindForm() as DvForm;
+            var Theme = GetTheme();
+            if (Theme.KeyboardInput) OriginalTextBox.Focus();
+            else
+            {
+                Wnd.Block = true;
+
+                var ret = DvDialogs.Keyboard.ShowKeyboard("입력", Text);
+                if (ret != null) OriginalTextBox.Text = ret;
+
+                Wnd.Block = false;
+            }
             base.OnMouseDown(e);
         }
         #endregion
@@ -411,7 +440,8 @@ namespace Devinno.Forms.Controls
                 }
                 #endregion
                 #region Set
-                bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block));
+                var Theme = GetTheme();
+                bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block)) && (Theme?.KeyboardInput ?? false);
                 if (bv != OriginalTextBox.Visible) OriginalTextBox.Visible = bv;
 
                 if (bounds != rtText)

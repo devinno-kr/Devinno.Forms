@@ -170,14 +170,7 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region TouchMode
-        public bool TouchMode
-        {
-            get => scroll.TouchMode;
-            set => scroll.TouchMode = value;
-        }
-        #endregion
-
+ 
         #region BarSize
         private int nBarSize = 24;
         public int BarSize
@@ -272,6 +265,8 @@ namespace Devinno.Forms.Controls
             var p = new Pen(Color.Black);
             var br = new SolidBrush(Color.Black);
             #endregion
+
+            scroll.TouchMode = Theme.TouchMode;
 
             Areas((rtContent, rtRemark, rtNameAxis, rtValueAxis, rtGraphAl, rtGraph, rtScroll, GP, CH) =>
             {
@@ -495,6 +490,8 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             int x = e.X, y = e.Y;
+
+            scroll.TouchMode = GetTheme()?.TouchMode ?? false;
 
             Areas((rtContent, rtRemark, rtNameAxis, rtValueAxis, rtGraphAl, rtGraph, rtScroll, GP, CH) =>
             {

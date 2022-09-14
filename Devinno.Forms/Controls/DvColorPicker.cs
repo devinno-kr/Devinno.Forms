@@ -331,7 +331,7 @@ namespace Devinno.Forms.Controls
                     var cB = ValueBorderColor;
                     var cT = ForeColor;
 
-                    var s = ColorTool2.GetName(SelectedColor, CodeType);
+                    var s = ColorTool.GetName(SelectedColor, CodeType);
                     Theme.DrawBox(g, rtValueAll, cV, cB, rndValue, Box.LabelBox(Embossing.FlatConcave, ShadowGap));
 
                     e.Graphics.SetClip(rtValue);

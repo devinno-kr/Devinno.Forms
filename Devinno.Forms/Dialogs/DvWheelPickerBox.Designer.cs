@@ -82,7 +82,6 @@ namespace Devinno.Forms.Dialogs
             this.wheelPicker.Size = new System.Drawing.Size(274, 188);
             this.wheelPicker.TabIndex = 1;
             this.wheelPicker.Text = "dvWheelPicker1";
-            this.wheelPicker.TouchMode = true;
             // 
             // btnOK
             // 

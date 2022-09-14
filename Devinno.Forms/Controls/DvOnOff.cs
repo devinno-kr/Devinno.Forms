@@ -1,4 +1,5 @@
 ﻿using Devinno.Extensions;
+using Devinno.Forms.Dialogs;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Themes;
 using Devinno.Forms.Tools;
@@ -149,7 +150,7 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Animation
-        public bool Animation { get; set; } = true;
+        private bool Animation => GetTheme()?.Animation ?? false;
         #endregion
         #endregion
 

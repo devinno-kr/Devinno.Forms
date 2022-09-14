@@ -17,7 +17,6 @@ namespace Devinno.Forms.Dialogs
         public int ButtonHeight { get; set; } = 30;
         public int ItemViewCount { get; set; } = 5;
         public int ItemHeight { get => wheelPicker.ItemHeight; set => wheelPicker.ItemHeight = value; }
-        public bool TouchMode { get => wheelPicker.TouchMode; set => wheelPicker.TouchMode = value; }
 
         public int MinWidth { get; set; } = 200;
         public int MinHeight { get; set; } = 140;
@@ -28,8 +27,8 @@ namespace Devinno.Forms.Dialogs
         {
             InitializeComponent();
 
-            btnOK.MouseClick += (o, s) => DialogResult = DialogResult.OK;
-            btnCancel.MouseClick += (o, s) => DialogResult = DialogResult.Cancel;
+            btnOK.ButtonClick += (o, s) => DialogResult = DialogResult.OK;
+            btnCancel.ButtonClick += (o, s) => DialogResult = DialogResult.Cancel;
 
             SetExComposited();
         }
@@ -42,12 +41,11 @@ namespace Devinno.Forms.Dialogs
             Theme = GetCallerFormTheme();
 
             int? ret = null;
-
-            tpnl.RowStyles[2].Height = ButtonHeight + 6;
-
             this.Title = this.Text = Title;
 
             #region Size
+            tpnl.RowStyles[2].Height = ButtonHeight + 6;
+
             int w = 0;
             using(var g = CreateGraphics())
             {
@@ -60,9 +58,11 @@ namespace Devinno.Forms.Dialogs
             this.Height = Math.Max(MinHeight, TitleHeight + 20 + 36 + (wheelPicker.ItemHeight * ItemViewCount));
             #endregion
 
+            #region Set
             wheelPicker.Items.Clear();
             wheelPicker.Items.AddRange(Items);
             wheelPicker.SelectedIndex = SelectedIndex == -1 ? 0 : SelectedIndex;
+            #endregion
 
             if (this.ShowDialog()== DialogResult.OK)
             {

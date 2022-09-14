@@ -125,22 +125,7 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region TouchMode
-        private bool bTouchMode = false;
-        public bool TouchMode
-        {
-            get => bTouchMode;
-            set
-            {
-                if (bTouchMode != value)
-                {
-                    bTouchMode = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
-
+ 
         #region Round
         private RoundType? round = null;
         public RoundType? Round
@@ -485,6 +470,7 @@ namespace Devinno.Forms.Controls
             internal event EventHandler<DropWindowEventArgs> DropStateChanged;
             #endregion
 
+            #region Constructor
             public DropDownContainer(DvComboBox c)
             {
                 #region Init
@@ -516,9 +502,8 @@ namespace Devinno.Forms.Controls
                 ListBox.Round = RoundType.Rect;
                 ListBox.Items.AddRange(c.Items);
                 ListBox.SelectionMode = ItemSelectionMode.Single;
-                //ListBox.Corner = 0;
                 ListBox.ItemHeight = c.ItemHeight;
-                ListBox.TouchMode = c.TouchMode;
+                
                 ListBox.ItemClicked += (o, s) =>
                 {
                     if (s.Item != null)
@@ -535,17 +520,18 @@ namespace Devinno.Forms.Controls
                 #endregion
 
                 #region Color
-                var Theme = c.GetTheme();
                 var BoxColor = Theme.ListBackColor;
                 var ItemColor = c.ItemColor ?? Theme.ButtonColor;
                 var SelectedItemColor = c.SelectedItemColor ?? Theme.PointColor;
-                #endregion
+ 
                 this.BackColor = ListBox.BackColor = c.BackColor;
                 this.ForeColor = ListBox.ForeColor = c.ForeColor;
                 ListBox.BoxColor = BoxColor;
                 ListBox.RowColor = ItemColor;
                 ListBox.SelectedColor = SelectedItemColor;
+                #endregion
             }
+            #endregion
 
             #region Implements
             #region PreFilterMessage

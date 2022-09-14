@@ -36,7 +36,6 @@ namespace Devinno.Forms
     public enum DvDropState { Closed, Closing, Dropping, Dropped }
  
     public enum DateTimePickerType { Date, Time, DateTime }
-    public enum ColorCodeType { ARGB, RGB, CodeRGB, CodeARGB }
     public enum ItemSelectionMode { None, Single, Multi }
     public enum BorderThickness { Thin, Normal, Bold }
     public enum Embossing { Flat, FlatConcave, FlatConvex, Concave, Convex }

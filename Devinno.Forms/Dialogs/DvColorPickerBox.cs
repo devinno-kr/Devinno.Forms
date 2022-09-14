@@ -31,7 +31,7 @@ namespace Devinno.Forms.Dialogs
         #region Member Variable
         double nH, nS, nV;
         bool bDownHue, bDownColor;
-        bool ignore;
+        bool ignore = false;
         byte[] ba = new byte[256 * 256 * 4];
         #endregion
 
