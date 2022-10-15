@@ -192,8 +192,8 @@ namespace Devinno.Forms.Controls
             scroll.GetScrollTotal = () => Items.Count * ItemHeight;
             scroll.GetScrollTick = () => ItemHeight;
             scroll.GetScrollView = () => this.Height - 2;
-            scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
-            scroll.ScrollEnded += (o, s) => this.Invoke(new Action(() => Invalidate()));
+            scroll.ScrollChanged += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
+            scroll.ScrollEnded += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
         }
         #endregion
 

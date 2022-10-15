@@ -138,9 +138,11 @@ namespace Devinno.Forms.Extensions
                 {
                     if (!icon.Shadow)
                     {
+                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
                         var sz = g.MeasureIcon(icon);
-                        var rt = Util.MakeRectangleAlign(bounds, sz, align);
+                        var rt = Util.INT(Util.MakeRectangleAlign(bounds, sz, align));
                         g.DrawImage(icon.IconImage, rt);
+                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                     }
                 }
                 else if (FA.Contains(icon.IconString) && icon.IconSize > 0)
@@ -310,6 +312,7 @@ namespace Devinno.Forms.Extensions
             if (texticon != null)
                 DrawTextIcon(g, texticon.Icon, brico, texticon.Text, font, brText, Util.FromRect(bounds, texticon.TextPadding), align, TextOffsetX, TextOffsetY);
         }
+
         public static void DrawTextIcon(this Graphics g, DvIcon icon, Brush brico, string text, Font font, Brush brText, RectangleF bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter, int TextOffsetX = 0, int TextOffsetY = 0)
         {
             if (icon == null || (icon != null && icon.IconImage == null && !FA.Contains(icon.IconString)))
@@ -400,8 +403,6 @@ namespace Devinno.Forms.Extensions
                 }
             }
         }
-
-
         #endregion
 
         #region ALIGN

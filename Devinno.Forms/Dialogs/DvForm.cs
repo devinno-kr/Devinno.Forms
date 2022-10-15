@@ -1030,6 +1030,11 @@ namespace Devinno.Forms.Dialogs
         {
             DvTheme ret = null;
             if (Form.ActiveForm is DvForm) ret = ((DvForm)Form.ActiveForm).Theme;
+            if (ret == null)
+            {
+                if (Owner != null && Owner is DvForm) ret = ((DvForm)Owner).Theme;
+                else ret = DvTheme.DefaultTheme;
+            }
             return ret;
         }
         public Form GetCallerForm()

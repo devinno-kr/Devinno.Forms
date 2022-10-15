@@ -57,6 +57,7 @@ namespace Devinno.Forms.Controls
         private TextIcon texticonBtn = new TextIcon();
 
         public DvIcon ButtonIcon => texticonBtn.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap ButtonIconImage
         {
             get => texticonBtn.IconImage;
@@ -131,6 +132,7 @@ namespace Devinno.Forms.Controls
         private TextIcon texticonTitle = new TextIcon();
 
         public DvIcon TitleIcon => texticonTitle.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap TitleIconImage
         {
             get => texticonTitle.IconImage;
@@ -391,6 +393,8 @@ namespace Devinno.Forms.Controls
                     var cT = ButtonDownState ? ForeColor.BrightnessTransmit(Theme.DownBrightness) : ForeColor;
 
                     Theme.DrawBox(g, rtButton, cV, cB, rndButton, !ButtonDownState ? Box.ButtonUp_V(true, ShadowGap) : Box.ButtonDown(ShadowGap));
+
+                    if (ButtonDownState) rtButton.Offset(0, 1);
                     Theme.DrawTextIcon(g, texticonBtn, Font, cT, rtButton);
                 }
                 #endregion
@@ -495,8 +499,8 @@ namespace Devinno.Forms.Controls
     }
     #endregion
 
-    #region DvValueInputString
-    public class DvValueInputString : DvValueInput
+    #region DvValueInputText
+    public class DvValueInputText : DvValueInput
     {
         #region Properties
         #region Value
@@ -517,11 +521,11 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Event
-        public new event EventHandler ValueChanged;
+        public event EventHandler ValueChanged;
         #endregion
 
         #region Constructor
-        public DvValueInputString() : base()
+        public DvValueInputText() : base()
         {
             #region TextBox
             OriginalTextBox = new TextBox();
@@ -1188,12 +1192,23 @@ namespace Devinno.Forms.Controls
         #endregion
     }
 
+    public class DvValueInputSByte : DvValueInputNumber<sbyte> { }
+    public class DvValueInputShort : DvValueInputNumber<short> { }
     public class DvValueInputInt : DvValueInputNumber<int> { }
+    public class DvValueInputLong : DvValueInputNumber<long> { }
+
+    public class DvValueInputByte : DvValueInputNumber<byte> { }
+    public class DvValueInputUShort : DvValueInputNumber<ushort> { }
+    public class DvValueInputUInt : DvValueInputNumber<uint> { }
+    public class DvValueInputULong : DvValueInputNumber<ulong> { }
+
     public class DvValueInputFloat : DvValueInputNumber<float> { }
+    public class DvValueInputDouble : DvValueInputNumber<double> { }
+    public class DvValueInputDecimal : DvValueInputNumber<decimal> { }
     #endregion
 
-    #region DvValueInputBoolean
-    public class DvValueInputBoolean : DvValueInput
+    #region DvValueInputBool
+    public class DvValueInputBool : DvValueInput
     {
         #region Properties
         #region Value
@@ -1209,7 +1224,7 @@ namespace Devinno.Forms.Controls
                     if (Animation && !ani.IsPlaying)
                     {
                         ani.Stop();
-                        ani.Start(200, bValue ? "On" : "Off", () => this.Invoke(new Action(() => Invalidate())));
+                        ani.Start(200, bValue ? "On" : "Off", () => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); });
                     }
                     ValueChanged?.Invoke(this, new EventArgs());
                     Invalidate();

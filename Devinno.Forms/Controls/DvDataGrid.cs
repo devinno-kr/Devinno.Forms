@@ -259,14 +259,14 @@ namespace Devinno.Forms.Controls
             hscroll.GetScrollTotal = () => hST;
             hscroll.GetScrollTick = () => 1;
             hscroll.GetScrollView = () => hSV;
-            hscroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
-            hscroll.ScrollEnded += (o, s) => this.Invoke(new Action(() => Invalidate()));
+            hscroll.ScrollChanged += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
+            hscroll.ScrollEnded += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
 
             vscroll.GetScrollTotal = () => vST;
             vscroll.GetScrollTick = () => RowHeight;
             vscroll.GetScrollView = () => vSV;
-            vscroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
-            vscroll.ScrollEnded += (o, s) => this.Invoke(new Action(() => Invalidate()));
+            vscroll.ScrollChanged += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
+            vscroll.ScrollEnded += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
             #endregion
 
             #region TextBox
@@ -1795,13 +1795,13 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region GetColumnsWidths
-        List<int> GetColumnsWidths(RectangleF rtScrollContent)
+        List<float> GetColumnsWidths(RectangleF rtScrollContent)
         {
-            var ret = new List<int>();
+            var ret = new List<float>();
             var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
             var tw = rtScrollContent.Width - (SelectionMode == DvDataGridSelectionMode.Selector ? spw : 0);
             var cw = tw - Convert.ToSingle(Columns.Where(x => x.SizeMode == DvSizeMode.Pixel).Sum(x => x.Width));
-            foreach (var v in Columns) ret.Add(v.SizeMode == DvSizeMode.Pixel ? Convert.ToInt32(v.Width) : Convert.ToInt32((decimal)cw * (v.Width / 100M)));
+            foreach (var v in Columns) ret.Add(v.SizeMode == DvSizeMode.Pixel ? Convert.ToSingle(v.Width) : Convert.ToSingle((decimal)cw * (v.Width / 100M)));
             return ret;
         }
         #endregion
@@ -1981,7 +1981,7 @@ namespace Devinno.Forms.Controls
         {
             var type = cell.GetType();
 
-            if (type == typeof(DvDataGridEditStringCell)) ((DvDataGridEditStringCell)cell).SetFocus(rt);
+            if (type == typeof(DvDataGridEditTextCell)) ((DvDataGridEditTextCell)cell).SetFocus(rt);
             else if (type == typeof(DvDataGridEditNumberCell<byte>)) ((DvDataGridEditNumberCell<byte>)cell).SetFocus(rt);
             else if (type == typeof(DvDataGridEditNumberCell<ushort>)) ((DvDataGridEditNumberCell<ushort>)cell).SetFocus(rt);
             else if (type == typeof(DvDataGridEditNumberCell<uint>)) ((DvDataGridEditNumberCell<uint>)cell).SetFocus(rt);
@@ -2218,7 +2218,7 @@ namespace Devinno.Forms.Controls
 
         #region Input
         #region SetInput
-        internal void SetInput(DvDataGridCell cell, RectangleF rtValue, Color BackColor, string Value)
+        public void SetInput(DvDataGridCell cell, RectangleF rtValue, Color BackColor, string Value)
         {
             var Wnd = FindForm() as DvForm;
             var Theme = GetTheme();
@@ -2301,10 +2301,10 @@ namespace Devinno.Forms.Controls
                 if (node != null)
                 {
                     var s = node.GetType().Name;
-                    if (node is DvDataGridEditStringCell)
+                    if (node is DvDataGridEditTextCell)
                     {
-                        ((DvDataGridEditStringCell)node).TextChange(OriginalTextBox);
-                        ((DvDataGridEditStringCell)node).Flush();
+                        ((DvDataGridEditTextCell)node).TextChange(OriginalTextBox);
+                        ((DvDataGridEditTextCell)node).Flush();
                     }
                     else if (node is DvDataGridEditNumberCell<byte>)
                     {

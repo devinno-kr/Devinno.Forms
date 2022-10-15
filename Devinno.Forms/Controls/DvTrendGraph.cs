@@ -286,8 +286,8 @@ namespace Devinno.Forms.Controls
 
             #region Scroll
             scroll = new Scroll() { TouchMode = true, Direction = ScrollDirection.Horizon };
-            scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
-            scroll.ScrollEnded += (o, s) => this.Invoke(new Action(() => Invalidate()));
+            scroll.ScrollChanged += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
+            scroll.ScrollEnded += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
             scroll.GetScrollTotal = () =>
             {
                 lock (oLock)
@@ -333,7 +333,7 @@ namespace Devinno.Forms.Controls
                     {
                         if (IsStart && IsHandleCreated)
                         {
-                            this.Invoke(new Action(() => Invalidate()));
+                            if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate()));
                         }
                         Thread.Sleep(Interval / 2);
                     }

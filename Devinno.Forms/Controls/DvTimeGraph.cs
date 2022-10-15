@@ -210,8 +210,8 @@ namespace Devinno.Forms.Controls
             Size = new Size(150, 100);
 
             scroll = new Scroll() { TouchMode = true, Direction = ScrollDirection.Horizon };
-            scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
-            scroll.ScrollEnded += (o, s) => this.Invoke(new Action(() => Invalidate()));
+            scroll.ScrollChanged += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
+            scroll.ScrollEnded += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
             scroll.GetScrollTotal = () => GraphDatas.Count > 1 && Series.Count > 0 ? (new DateTime(Convert.ToInt64(Math.Ceiling(Convert.ToDouble(GraphDatas.Last().Time.Ticks) / Convert.ToDouble(XAxisGraduation.Ticks))) * XAxisGraduation.Ticks) - new DateTime(GraphDatas.First().Time.Ticks / XAxisGraduation.Ticks * XAxisGraduation.Ticks)).Ticks : 0L;
             scroll.GetScrollTick = () => XAxisGraduation.Ticks;
             scroll.GetScrollView = () => XScale.Ticks;

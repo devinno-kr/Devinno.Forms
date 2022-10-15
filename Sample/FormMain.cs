@@ -6,6 +6,7 @@ using Devinno.Forms.Dialogs;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
+using Devinno.Forms.Tools;
 using Devinno.Forms.Utils;
 using Devinno.Timers;
 using Devinno.Tools;
@@ -196,7 +197,7 @@ namespace Sample
                         }
                         else if (c == 2)
                         {
-                            var vc = new DvTreeViewInputStringNode("Title") { TitleWidth = 60, ValueWidth = 120 };
+                            var vc = new DvTreeViewInputTextNode("Title") { TitleWidth = 60, ValueWidth = 120 };
                             vb.Nodes.Add(vc);
                         }
                         else if (c == 3)
@@ -394,7 +395,7 @@ namespace Sample
 
                 dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Name", HeaderText = "명칭", SizeMode = DvSizeMode.Pixel, Width = 80M });
                 dg.Columns.Add(new DvDataGridComboBoxColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = DvSizeMode.Pixel, Width = 80M, Items = ls, MaximumViewCount = 5, ButtonWidth = 40, });
-                dg.Columns.Add(new DvDataGridEditStringColumn(dg) { Name = "Message", HeaderText = "메시지", SizeMode = DvSizeMode.Pixel, Width = 80M });
+                dg.Columns.Add(new DvDataGridEditTextColumn(dg) { Name = "Message", HeaderText = "메시지", SizeMode = DvSizeMode.Pixel, Width = 80M });
                 dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer", HeaderText = "정수", SizeMode = DvSizeMode.Pixel, Width = 80M, Minimum = 0, Maximum = 100 });
                 dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer2", HeaderText = "정수2", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
                 dg.Columns.Add(new DvDataGridEditNumberColumn<int>(dg) { Name = "Integer3", HeaderText = "정수3", SizeMode = DvSizeMode.Pixel, Width = 70M, Minimum = 0, Maximum = 100 });
@@ -775,6 +776,8 @@ namespace Sample
             GraphSet();
             TimeGraphSet();
             trendGraph.Start<Data2>(v);
+
+            DwmTool.SetTheme(this, true);
         }
         #endregion
 

@@ -686,16 +686,16 @@ namespace Devinno.Forms.Controls
         #endregion
     }
     #endregion
-    #region class : DvDataGridEditStringColumn
-    public class DvDataGridEditStringColumn : DvDataGridColumn
+    #region class : DvDataGridEditTextColumn
+    public class DvDataGridEditTextColumn : DvDataGridColumn
     {
         #region Properties
         public KeyboardMode Mode { get; set; } = KeyboardMode.Korea;
         #endregion
         #region Constructor
-        public DvDataGridEditStringColumn(DvDataGrid dataGrid) : base(dataGrid)
+        public DvDataGridEditTextColumn(DvDataGrid dataGrid) : base(dataGrid)
         {
-            CellType = typeof(DvDataGridEditStringCell);
+            CellType = typeof(DvDataGridEditTextCell);
         }
         #endregion
     }
@@ -1448,7 +1448,12 @@ namespace Devinno.Forms.Controls
                     if (s.Item != null)
                     {
                         if (DropStateChanged != null) DropStateChanged.Invoke(this, new DropWindowEventArgs(DvDropState.Closing));
-                        c.Value = s.Item.Value;
+
+                        var v = s.Item.Value;
+                        var old = c.Value;
+                        c.Value = v;
+
+                        c.Grid.InvokeValueChanged(c, old, v);
                         this.Close();
                     }
                 };
@@ -1496,15 +1501,15 @@ namespace Devinno.Forms.Controls
         #endregion
     }
     #endregion
-    #region class : DvDataGridEditStringCell 
-    public class DvDataGridEditStringCell : DvDataGridCell
+    #region class : DvDataGridEditTextCell 
+    public class DvDataGridEditTextCell : DvDataGridCell
     {
         #region Properties
         public bool ReadOnly { get; set; }
         #endregion
 
         #region Constructor
-        public DvDataGridEditStringCell(DvDataGrid Grid, DvDataGridRow Row, DvDataGridColumn Column) : base(Grid, Row, Column)
+        public DvDataGridEditTextCell(DvDataGrid Grid, DvDataGridRow Row, DvDataGridColumn Column) : base(Grid, Row, Column)
         {
         }
         #endregion
@@ -1556,7 +1561,7 @@ namespace Devinno.Forms.Controls
             if (CollisionTool.Check(CellBounds, x, y) && !ReadOnly && MathTool.GetDistance(downPoint, new Point(x, y)) < 10)
             {
                 #region Click
-                var mode = Column is DvDataGridEditStringColumn ? ((DvDataGridEditStringColumn)Column).Mode : KeyboardMode.Korea;
+                var mode = Column is DvDataGridEditTextColumn ? ((DvDataGridEditTextColumn)Column).Mode : KeyboardMode.Korea;
 
                 var Wnd = Grid.FindForm() as DvForm;
                 var Theme = Grid.GetTheme();
@@ -1595,7 +1600,10 @@ namespace Devinno.Forms.Controls
         #region TextChange
         internal void TextChange(TextBox txt)
         {
-            Value = txt.Text;
+            var v = txt.Text;
+            var old = Value;
+            Value = v;
+            Grid.InvokeValueChanged(this, old, v);
         }
         #endregion
         #region Flush
@@ -2044,67 +2052,130 @@ namespace Devinno.Forms.Controls
                 {
                     var nMax = (byte?)(object)Maximum ?? byte.MaxValue;
                     var nMin = (byte?)(object)Minimum ?? byte.MinValue;
-                    if (nByte >= nMin && nByte <= nMax) Value = nByte;
+                    if (nByte >= nMin && nByte <= nMax)
+                    {
+                        var v = nByte;
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
                 }
                 else if (typeof(T) == typeof(ushort) && ushort.TryParse(sVal, out nUShort))
                 {
                     var nMax = (ushort?)(object)Maximum ?? ushort.MaxValue;
                     var nMin = (ushort?)(object)Minimum ?? ushort.MinValue;
-                    if (nUShort >= nMin && nUShort <= nMax) Value = nUShort;
+                    if (nUShort >= nMin && nUShort <= nMax)
+                    {
+                        var v = nUShort;
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
                 }
                 else if (typeof(T) == typeof(uint) && uint.TryParse(sVal, out nUInt))
                 {
                     var nMax = (uint?)(object)Maximum ?? uint.MaxValue;
                     var nMin = (uint?)(object)Minimum ?? uint.MinValue;
-                    if (nUInt >= nMin && nUInt <= nMax) Value = nUInt;
+                    if (nUInt >= nMin && nUInt <= nMax)
+                    {
+                        var v = nUInt;
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
                 }
                 else if (typeof(T) == typeof(ulong) && ulong.TryParse(sVal, out nULong))
                 {
                     var nMax = (ulong?)(object)Maximum ?? ulong.MaxValue;
                     var nMin = (ulong?)(object)Minimum ?? ulong.MinValue;
-                    if (nULong >= nMin && nULong <= nMax) Value = nULong;
+                    if (nULong >= nMin && nULong <= nMax)
+                    {
+                        var v = nULong;
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
                 }
                 else if (typeof(T) == typeof(sbyte) && sbyte.TryParse(sVal, out nSByte))
                 {
                     var nMax = (sbyte?)(object)Maximum ?? sbyte.MaxValue;
                     var nMin = (sbyte?)(object)Minimum ?? sbyte.MinValue;
-                    if (nSByte >= nMin && nSByte <= nMax) Value = nSByte;
+                    if (nSByte >= nMin && nSByte <= nMax)
+                    {
+                        Value = nSByte;
+                    }
                 }
                 else if (typeof(T) == typeof(short) && short.TryParse(sVal, out nShort))
                 {
                     var nMax = (short?)(object)Maximum ?? short.MaxValue;
                     var nMin = (short?)(object)Minimum ?? short.MinValue;
-                    if (nShort >= nMin && nShort <= nMax) Value = nShort;
+                    if (nShort >= nMin && nShort <= nMax)
+                    {
+                        var v = nShort;
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
                 }
                 else if (typeof(T) == typeof(int) && int.TryParse(sVal, out nInt))
                 {
                     var nMax = (int?)(object)Maximum ?? int.MaxValue;
                     var nMin = (int?)(object)Minimum ?? int.MinValue;
-                    if (nInt >= nMin && nInt <= nMax) Value = nInt;
+                    if (nInt >= nMin && nInt <= nMax)
+                    {
+                        var v = nInt;
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
                 }
                 else if (typeof(T) == typeof(long) && long.TryParse(sVal, out nLong))
                 {
                     var nMax = (long?)(object)Maximum ?? long.MaxValue;
                     var nMin = (long?)(object)Minimum ?? long.MinValue;
-                    if (nLong >= nMin && nLong <= nMax) Value = nLong;
+                    if (nLong >= nMin && nLong <= nMax)
+                    {
+                        var v = nLong;
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
                 }
                 else if (typeof(T) == typeof(float) && float.TryParse(sVal, out nFloat))
                 {
                     var nMax = (float?)(object)Maximum ?? float.MaxValue;
                     var nMin = (float?)(object)Minimum ?? float.MinValue;
-                    if (nFloat >= nMin && nFloat <= nMax) Value = nFloat;
+                    if (nFloat >= nMin && nFloat <= nMax)
+                    {
+                        var v = nFloat;
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
                 }
                 else if (typeof(T) == typeof(double) && double.TryParse(sVal, out nDouble))
                 {
                     var nMax = (double?)(object)Maximum ?? double.MaxValue;
                     var nMin = (double?)(object)Minimum ?? double.MinValue;
-                    if (nDouble >= nMin && nDouble <= nMax) Value = nDouble;
+                    if (nDouble >= nMin && nDouble <= nMax)
+                    {
+                        var v = nDouble;
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
                 }
                 else if (typeof(T) == typeof(decimal) && decimal.TryParse(sVal, out nDecimal))
                 {
                     var nMax = (decimal?)(object)Maximum ?? decimal.MaxValue;
                     var nMin = (decimal?)(object)Minimum ?? decimal.MinValue;
-                    if (nDecimal >= nMin && nDecimal <= nMax) Value = nDecimal;
+                    if (nDecimal >= nMin && nDecimal <= nMax)
+                    {
+                        var v = nDecimal;
+                        var old = Value;
+                        Value = v;
+                        Grid.InvokeValueChanged(this, old, v);
+                    }
                 }
             }
             #endregion
@@ -2263,9 +2334,33 @@ namespace Devinno.Forms.Controls
                     var val = Value;
                     if (val != null && val is bool)
                     {
-                        var v = (bool)val;
-                        if (CollisionTool.Check(rtOn, x, y) && !v) { Value = true; if (Theme?.Animation ?? false) { ani.Stop(); ani.Start(150, "", () => { Grid.Invoke(new Action(() => Grid.Invalidate())); }); } }
-                        if (CollisionTool.Check(rtOff, x, y) && v) { Value = false; if (Theme?.Animation ?? false) { ani.Stop(); ani.Start(150, "", () => { Grid.Invoke(new Action(() => Grid.Invalidate())); }); } }
+                        var vb = (bool)val;
+                        if (CollisionTool.Check(rtOn, x, y) && !vb)
+                        {
+                            var v = true;
+                            var old = Value;
+                            Value = v;
+                            Grid.InvokeValueChanged(this, old, v);
+
+                            if (Theme?.Animation ?? false)
+                            {
+                                ani.Stop(); 
+                                ani.Start(150, "", () => { if (Grid.Created && !Grid.IsDisposed && Grid.Visible) Grid.Invoke(new Action(() => Grid.Invalidate())); });
+                            }
+                        }
+                        if (CollisionTool.Check(rtOff, x, y) && vb)
+                        {
+                            var v = false;
+                            var old = Value;
+                            Value = v;
+                            Grid.InvokeValueChanged(this, old, v);
+
+                            if (Theme?.Animation ?? false)
+                            {
+                                ani.Stop();
+                                ani.Start(150, "", () => { if (Grid.Created && !Grid.IsDisposed && Grid.Visible) Grid.Invoke(new Action(() => Grid.Invalidate())); });
+                            }
+                        }
                     }
                 });
                 #endregion

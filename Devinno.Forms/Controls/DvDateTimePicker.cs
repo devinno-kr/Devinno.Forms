@@ -104,6 +104,7 @@ namespace Devinno.Forms.Controls
         private TextIcon texticonTitle = new TextIcon();
 
         public DvIcon TitleIcon => texticonTitle.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap TitleIconImage
         {
             get => texticonTitle.IconImage;

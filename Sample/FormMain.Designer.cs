@@ -31,11 +31,11 @@ namespace Sample
         {
             this.tab = new Devinno.Forms.Containers.DvTablessControl();
             this.tpControl = new System.Windows.Forms.TabPage();
-            this.inOnOff = new Devinno.Forms.Controls.DvValueInputBoolean();
+            this.inOnOff = new Devinno.Forms.Controls.DvValueInputBool();
             this.inTemp = new Devinno.Forms.Controls.DvValueInputFloat();
             this.inPos = new Devinno.Forms.Controls.DvValueInputInt();
-            this.inName = new Devinno.Forms.Controls.DvValueInputString();
-            this.vlblName = new Devinno.Forms.Controls.DvValueLabelString();
+            this.inName = new Devinno.Forms.Controls.DvValueInputText();
+            this.vlblName = new Devinno.Forms.Controls.DvValueLabelText();
             this.vlblPos = new Devinno.Forms.Controls.DvValueLabelInt();
             this.vlblTemp = new Devinno.Forms.Controls.DvValueLabelFloat();
             this.vlblOnOff = new Devinno.Forms.Controls.DvValueLabelBoolean();
@@ -191,6 +191,7 @@ namespace Sample
             this.dvLabel1 = new Devinno.Forms.Controls.DvLabel();
             this.btnKeypadInt = new Devinno.Forms.Controls.DvButton();
             this.tpTable = new System.Windows.Forms.TabPage();
+            this.dataGrid = new Devinno.Forms.Controls.DvDataGrid();
             this.btnTreeRemove = new Devinno.Forms.Controls.DvButton();
             this.btnTreeAdd = new Devinno.Forms.Controls.DvButton();
             this.treeView = new Devinno.Forms.Controls.DvTreeView();
@@ -200,7 +201,6 @@ namespace Sample
             this.listBox = new Devinno.Forms.Controls.DvListBox();
             this.dvButton2 = new Devinno.Forms.Controls.DvButton();
             this.dvButton1 = new Devinno.Forms.Controls.DvButton();
-            this.dataGrid = new Devinno.Forms.Controls.DvDataGrid();
             this.tab.SuspendLayout();
             this.tpControl.SuspendLayout();
             this.tblTriButton.SuspendLayout();
@@ -1202,7 +1202,6 @@ namespace Sample
             this.txtMultiLine.Location = new System.Drawing.Point(345, 49);
             this.txtMultiLine.MaxLength = 32767;
             this.txtMultiLine.MinusInput = false;
-            this.txtMultiLine.MultiLine = true;
             this.txtMultiLine.Name = "txtMultiLine";
             this.txtMultiLine.Round = null;
             this.txtMultiLine.ShadowGap = 1;
@@ -1224,7 +1223,6 @@ namespace Sample
             this.txtNumber.Location = new System.Drawing.Point(345, 13);
             this.txtNumber.MaxLength = 32767;
             this.txtNumber.MinusInput = false;
-            this.txtNumber.MultiLine = false;
             this.txtNumber.Name = "txtNumber";
             this.txtNumber.Round = null;
             this.txtNumber.ShadowGap = 1;
@@ -3657,6 +3655,28 @@ namespace Sample
             this.tpTable.TabIndex = 7;
             this.tpTable.Text = "tabPage2";
             // 
+            // dataGrid
+            // 
+            this.dataGrid.Bevel = true;
+            this.dataGrid.BoxColor = null;
+            this.dataGrid.ColumnColor = null;
+            this.dataGrid.ColumnHeight = 30;
+            this.dataGrid.HScrollPosition = 0D;
+            this.dataGrid.InputColor = null;
+            this.dataGrid.Location = new System.Drawing.Point(13, 318);
+            this.dataGrid.Name = "dataGrid";
+            this.dataGrid.RowColor = null;
+            this.dataGrid.RowHeight = 30;
+            this.dataGrid.ScrollMode = Devinno.Forms.Utils.ScrollMode.Vertical;
+            this.dataGrid.SelectedRowColor = null;
+            this.dataGrid.SelectionMode = Devinno.Forms.Controls.DvDataGridSelectionMode.Single;
+            this.dataGrid.ShadowGap = 1;
+            this.dataGrid.Size = new System.Drawing.Size(692, 383);
+            this.dataGrid.SummaryRowColor = null;
+            this.dataGrid.TabIndex = 7;
+            this.dataGrid.Text = "dvDataGrid1";
+            this.dataGrid.VScrollPosition = 0D;
+            // 
             // btnTreeRemove
             // 
             this.btnTreeRemove.BackgroundDraw = true;
@@ -3838,27 +3858,6 @@ namespace Sample
             this.dvButton1.TextPadding = new System.Windows.Forms.Padding(0);
             this.dvButton1.UseKey = false;
             // 
-            // dataGrid
-            // 
-            this.dataGrid.Bevel = true;
-            this.dataGrid.BoxColor = null;
-            this.dataGrid.ColumnColor = null;
-            this.dataGrid.ColumnHeight = 30;
-            this.dataGrid.HScrollPosition = 0D;
-            this.dataGrid.Location = new System.Drawing.Point(13, 318);
-            this.dataGrid.Name = "dataGrid";
-            this.dataGrid.RowColor = null;
-            this.dataGrid.RowHeight = 30;
-            this.dataGrid.ScrollMode = Devinno.Forms.Utils.ScrollMode.Vertical;
-            this.dataGrid.SelectedRowColor = null;
-            this.dataGrid.SelectionMode = Devinno.Forms.Controls.DvDataGridSelectionMode.Single;
-            this.dataGrid.ShadowGap = 1;
-            this.dataGrid.Size = new System.Drawing.Size(692, 383);
-            this.dataGrid.SummaryRowColor = null;
-            this.dataGrid.TabIndex = 7;
-            this.dataGrid.Text = "dvDataGrid1";
-            this.dataGrid.VScrollPosition = 0D;
-            // 
             // FormMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -3962,13 +3961,13 @@ namespace Sample
         private Devinno.Forms.Controls.DvCalendar calendar;
         private Devinno.Forms.Controls.DvAnimate ani;
         private Devinno.Forms.Controls.DvValueLabelBoolean vlblOnOff;
-        private Devinno.Forms.Controls.DvValueLabelString vlblName;
+        private Devinno.Forms.Controls.DvValueLabelText vlblName;
         private Devinno.Forms.Controls.DvValueLabelInt vlblPos;
         private Devinno.Forms.Controls.DvValueLabelFloat vlblTemp;
-        private Devinno.Forms.Controls.DvValueInputString inName;
+        private Devinno.Forms.Controls.DvValueInputText inName;
         private Devinno.Forms.Controls.DvValueInputInt inPos;
         private Devinno.Forms.Controls.DvValueInputFloat inTemp;
-        private Devinno.Forms.Controls.DvValueInputBoolean inOnOff;
+        private Devinno.Forms.Controls.DvValueInputBool inOnOff;
         private Devinno.Forms.Controls.DvProgressH pgsH_N;
         private Devinno.Forms.Controls.DvProgressV pgsV_N;
         private Devinno.Forms.Controls.DvProgressH pgsH_B;

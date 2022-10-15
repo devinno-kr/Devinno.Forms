@@ -165,8 +165,8 @@ namespace Devinno.Forms.Controls
             scroll.GetScrollTick = () => ItemHeight;
             scroll.GetScrollView = () => (this.Height - 2);
             scroll.GetConstrainIgnore = () => Animation && ani.IsPlaying;
-            scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
-            scroll.ScrollEnded += (o, s) => this.Invoke(new Action(() => Invalidate()));
+            scroll.ScrollChanged += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
+            scroll.ScrollEnded += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
 
         }
         #endregion
@@ -435,7 +435,7 @@ namespace Devinno.Forms.Controls
                                     aniItem = vcat;
 
                                     ani.Stop();
-                                    ani.Start(150, "", () => this.Invoke(new Action(() => Invalidate())));
+                                    ani.Start(150, "", () => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); });
                                 }
                             }
                             if (CollisionTool.Check(rtRow, x, y)) ItemUp?.Invoke(this, new ToolItemMouseEventArgs(x, y, v));

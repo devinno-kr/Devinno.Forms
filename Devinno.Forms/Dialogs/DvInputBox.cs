@@ -55,8 +55,8 @@ namespace Devinno.Forms.Dialogs
                 else if (c is DvValueInputNumber<float>) ret &= ((DvValueInputNumber<float>)c).Error == InputError.None;
                 else if (c is DvValueInputNumber<double>) ret &= ((DvValueInputNumber<double>)c).Error == InputError.None;
                 else if (c is DvValueInputNumber<decimal>) ret &= ((DvValueInputNumber<decimal>)c).Error == InputError.None;
-                else if (c is DvValueInputString) ret &= true;
-                else if (c is DvValueInputBoolean) ret &= true;
+                else if (c is DvValueInputText) ret &= true;
+                else if (c is DvValueInputBool) ret &= true;
                 else if (c is DvValueInputWheel) ret &= ((DvValueInputWheel)c).SelectedIndex != -1;
             }
 
@@ -241,7 +241,7 @@ namespace Devinno.Forms.Dialogs
                 else if (v.PropertyType == typeof(string))
                 {
                     #region string
-                    var c = new DvValueInputString { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
+                    var c = new DvValueInputText { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (string)v.GetValue((object)value);
                     #endregion
@@ -249,7 +249,7 @@ namespace Devinno.Forms.Dialogs
                 else if (v.PropertyType == typeof(bool))
                 {
                     #region bool
-                    var c = new DvValueInputBoolean { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
+                    var c = new DvValueInputBool { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (bool)v.GetValue((object)value);
                     #endregion
@@ -296,8 +296,8 @@ namespace Devinno.Forms.Dialogs
                         else if (c is DvValueInputNumber<float>) p.SetValue(v, ((DvValueInputNumber<float>)c).Value);
                         else if (c is DvValueInputNumber<double>) p.SetValue(v, ((DvValueInputNumber<double>)c).Value);
                         else if (c is DvValueInputNumber<decimal>) p.SetValue(v, ((DvValueInputNumber<decimal>)c).Value);
-                        else if (c is DvValueInputString) p.SetValue(v, ((DvValueInputString)c).Value);
-                        else if (c is DvValueInputBoolean) p.SetValue(v, ((DvValueInputBoolean)c).Value);
+                        else if (c is DvValueInputText) p.SetValue(v, ((DvValueInputText)c).Value);
+                        else if (c is DvValueInputBool) p.SetValue(v, ((DvValueInputBool)c).Value);
                         else if (c is DvValueInputWheel)
                         {
                             var vc = c as DvValueInputWheel;
@@ -354,8 +354,8 @@ namespace Devinno.Forms.Dialogs
         {
             string? ret = null;
 
-            show(Title, new DvValueInputString { Name = "value", Dock = DockStyle.Fill, Value = value },
-                () => ret = ((DvValueInputString)tpnl.Controls["value"]).Value);
+            show(Title, new DvValueInputText { Name = "value", Dock = DockStyle.Fill, Value = value },
+                () => ret = ((DvValueInputText)tpnl.Controls["value"]).Value);
             
             return ret;
         }
@@ -497,8 +497,8 @@ namespace Devinno.Forms.Dialogs
         {
             bool? ret = null;
 
-            show(Title, new DvValueInputBoolean { Name = "value", Dock = DockStyle.Fill, Value = value.HasValue && value.Value },
-                () => ret = ((DvValueInputBoolean)tpnl.Controls["value"]).Value);
+            show(Title, new DvValueInputBool { Name = "value", Dock = DockStyle.Fill, Value = value.HasValue && value.Value },
+                () => ret = ((DvValueInputBool)tpnl.Controls["value"]).Value);
 
             return ret;
         }

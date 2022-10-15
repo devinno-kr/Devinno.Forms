@@ -4,7 +4,9 @@ using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 using System.IO.Ports;
 using System.Linq;
 using System.Reflection;
@@ -72,6 +74,7 @@ namespace Devinno.Forms
 
         #region Properteis
         public DvIcon Icon => ico;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap IconImage
         {
             get => ico.IconImage;

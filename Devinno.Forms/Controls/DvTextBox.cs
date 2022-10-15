@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Linq;
@@ -307,19 +308,19 @@ namespace Devinno.Forms.Controls
                     var rt = OriginalTextBox.Bounds; rt.Offset(1, 0);
 
                     var flag = TextFormatFlags.Default;
-                    switch(ContentAlignment)
+                    switch (ContentAlignment)
                     {
-                        case DvContentAlignment.TopLeft:        flag |= TextFormatFlags.Left;             flag |= TextFormatFlags.Top; break;
-                        case DvContentAlignment.TopCenter:      flag |= TextFormatFlags.HorizontalCenter; flag |= TextFormatFlags.Top; break;
-                        case DvContentAlignment.TopRight:       flag |= TextFormatFlags.Right;            flag |= TextFormatFlags.Top; break;
+                        case DvContentAlignment.TopLeft: flag |= TextFormatFlags.Left; flag |= TextFormatFlags.Top; break;
+                        case DvContentAlignment.TopCenter: flag |= TextFormatFlags.HorizontalCenter; flag |= TextFormatFlags.Top; break;
+                        case DvContentAlignment.TopRight: flag |= TextFormatFlags.Right; flag |= TextFormatFlags.Top; break;
 
-                        case DvContentAlignment.MiddleLeft:     flag |= TextFormatFlags.Left;             flag |= TextFormatFlags.VerticalCenter; break;
-                        case DvContentAlignment.MiddleCenter:   flag |= TextFormatFlags.HorizontalCenter; flag |= TextFormatFlags.VerticalCenter; break;
-                        case DvContentAlignment.MiddleRight:    flag |= TextFormatFlags.Right;            flag |= TextFormatFlags.VerticalCenter; break;
+                        case DvContentAlignment.MiddleLeft: flag |= TextFormatFlags.Left; flag |= TextFormatFlags.VerticalCenter; break;
+                        case DvContentAlignment.MiddleCenter: flag |= TextFormatFlags.HorizontalCenter; flag |= TextFormatFlags.VerticalCenter; break;
+                        case DvContentAlignment.MiddleRight: flag |= TextFormatFlags.Right; flag |= TextFormatFlags.VerticalCenter; break;
 
-                        case DvContentAlignment.BottomLeft:     flag |= TextFormatFlags.Left;             flag |= TextFormatFlags.Bottom; break;
-                        case DvContentAlignment.BottomCenter:   flag |= TextFormatFlags.HorizontalCenter; flag |= TextFormatFlags.Bottom; break;
-                        case DvContentAlignment.BottomRight:    flag |= TextFormatFlags.Right;            flag |= TextFormatFlags.Bottom; break;
+                        case DvContentAlignment.BottomLeft: flag |= TextFormatFlags.Left; flag |= TextFormatFlags.Bottom; break;
+                        case DvContentAlignment.BottomCenter: flag |= TextFormatFlags.HorizontalCenter; flag |= TextFormatFlags.Bottom; break;
+                        case DvContentAlignment.BottomRight: flag |= TextFormatFlags.Right; flag |= TextFormatFlags.Bottom; break;
 
                     }
 

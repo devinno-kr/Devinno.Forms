@@ -221,8 +221,8 @@ namespace Devinno.Forms.Controls
             scroll.GetScrollTick = () => ItemHeight;
             scroll.GetScrollView = () => (this.Height - 2);
             scroll.GetConstrainIgnore = () => Animation && ani.IsPlaying;
-            scroll.ScrollChanged += (o, s) => this.Invoke(new Action(() => Invalidate()));
-            scroll.ScrollEnded += (o, s) => this.Invoke(new Action(() => Invalidate()));
+            scroll.ScrollChanged += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
+            scroll.ScrollEnded += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
             #endregion
 
             #region TextBox
@@ -490,7 +490,7 @@ namespace Devinno.Forms.Controls
                                         MS2(itm, anils);
 
                                         ani.Stop();
-                                        ani.Start(150, "", Invalidate);
+                                        ani.Start(150, "", new Action(() => { if (Created && !IsDisposed && Visible) Invalidate(); }));
                                     }
                                 }
 
@@ -895,7 +895,7 @@ namespace Devinno.Forms.Controls
                 if (node != null)
                 {
                     var s = node.GetType().Name;
-                    if (node is DvTreeViewInputStringNode) ((DvTreeViewInputStringNode)node).TextChange(OriginalTextBox);
+                    if (node is DvTreeViewInputTextNode) ((DvTreeViewInputTextNode)node).TextChange(OriginalTextBox);
                     else if (node is DvTreeViewInputNumberNode<byte>) ((DvTreeViewInputNumberNode<byte>)node).TextChange(OriginalTextBox);
                     else if (node is DvTreeViewInputNumberNode<ushort>) ((DvTreeViewInputNumberNode<ushort>)node).TextChange(OriginalTextBox);
                     else if (node is DvTreeViewInputNumberNode<uint>) ((DvTreeViewInputNumberNode<uint>)node).TextChange(OriginalTextBox);
@@ -1040,6 +1040,7 @@ namespace Devinno.Forms.Controls
         private TextIcon texticonBtn = new TextIcon();
 
         public DvIcon ButtonIcon => texticonBtn.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap ButtonIconImage
         {
             get => texticonBtn.IconImage;
@@ -1325,8 +1326,8 @@ namespace Devinno.Forms.Controls
         #endregion
     }
     #endregion
-    #region class : DvTreeViewInputStringNode
-    public class DvTreeViewInputStringNode : DvTreeViewNode
+    #region class : DvTreeViewInputTextNode
+    public class DvTreeViewInputTextNode : DvTreeViewNode
     {
         #region Properties
         #region ButtonColor
@@ -1387,6 +1388,7 @@ namespace Devinno.Forms.Controls
         private TextIcon texticonBtn = new TextIcon();
 
         public DvIcon ButtonIcon => texticonBtn.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap ButtonIconImage
         {
             get => texticonBtn.IconImage;
@@ -1502,8 +1504,8 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Constructor
-        public DvTreeViewInputStringNode(string Text) : base(Text) { }
-        public DvTreeViewInputStringNode(string Text, string IconString) : base(Text, IconString) { }
+        public DvTreeViewInputTextNode(string Text) : base(Text) { }
+        public DvTreeViewInputTextNode(string Text, string IconString) : base(Text, IconString) { }
         #endregion
 
         #region Override
@@ -1767,6 +1769,7 @@ namespace Devinno.Forms.Controls
         private TextIcon texticonBtn = new TextIcon();
 
         public DvIcon ButtonIcon => texticonBtn.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap ButtonIconImage
         {
             get => texticonBtn.IconImage;
@@ -2524,6 +2527,7 @@ namespace Devinno.Forms.Controls
         private TextIcon texticonBtn = new TextIcon();
 
         public DvIcon ButtonIcon => texticonBtn.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap ButtonIconImage
         {
             get => texticonBtn.IconImage;
@@ -3107,10 +3111,12 @@ namespace Devinno.Forms.Controls
         public bool Expands { get; set; } = true;
         public int Depth { get => (Parents != null ? Parents.Depth + 1 : 0); }
 
+        
         #region Text/Icon
         public TextIcon TextIcon { get; private set; } = new TextIcon();
 
         public DvIcon Icon => TextIcon.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap IconImage
         {
             get => TextIcon.IconImage;
@@ -3148,6 +3154,9 @@ namespace Devinno.Forms.Controls
             get => TextIcon.TextPadding;
             set { if (TextIcon.TextPadding != value) { TextIcon.TextPadding = value; Control?.Invalidate(); } }
         }
+
+        public object Tag { get => TextIcon.Tag; set => TextIcon.Tag = value; }
+
         #endregion
         #endregion
 

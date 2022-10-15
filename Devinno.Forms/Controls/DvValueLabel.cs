@@ -56,6 +56,7 @@ namespace Devinno.Forms.Controls
         private TextIcon texticonBtn = new TextIcon();
 
         public DvIcon ButtonIcon => texticonBtn.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap ButtonIconImage
         {
             get => texticonBtn.IconImage;
@@ -130,6 +131,7 @@ namespace Devinno.Forms.Controls
         private TextIcon texticonTitle = new TextIcon();
 
         public DvIcon TitleIcon => texticonTitle.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap TitleIconImage
         {
             get => texticonTitle.IconImage;
@@ -433,6 +435,8 @@ namespace Devinno.Forms.Controls
                     var cT = ButtonDownState ? ForeColor.BrightnessTransmit(Theme.DownBrightness) : ForeColor;
                     
                     Theme.DrawBox(g, rtButton, cV, cB, rndButton, !ButtonDownState ? Box.ButtonUp_V(true, ShadowGap) : Box.ButtonDown(ShadowGap));
+
+                    if (ButtonDownState) rtButton.Offset(0, 1);
                     Theme.DrawTextIcon(g, texticonBtn, Font, cT, rtButton);
                 }
                 #endregion
@@ -515,8 +519,8 @@ namespace Devinno.Forms.Controls
     }
     #endregion
 
-    #region DvValueLabelString
-    public class DvValueLabelString : DvValueLabel
+    #region DvValueLabelText
+    public class DvValueLabelText : DvValueLabel
     {
         #region Properties
         #region Value
@@ -619,8 +623,20 @@ namespace Devinno.Forms.Controls
         #endregion
     }
 
+    public class DvValueLabelSByte : DvValueLabelNumber<sbyte> { }
+    public class DvValueLabelShort : DvValueLabelNumber<short> { }
     public class DvValueLabelInt : DvValueLabelNumber<int> { }
+    public class DvValueLabelLong : DvValueLabelNumber<long> { }
+
+    public class DvValueLabelByte : DvValueLabelNumber<byte> { }
+    public class DvValueLabelUShort : DvValueLabelNumber<ushort> { }
+    public class DvValueLabelUInt : DvValueLabelNumber<uint> { }
+    public class DvValueLabelULong : DvValueLabelNumber<ulong> { }
+
     public class DvValueLabelFloat : DvValueLabelNumber<float> { }
+    public class DvValueLabelDouble : DvValueLabelNumber<double> { }
+    public class DvValueLabelDecimal : DvValueLabelNumber<decimal> { }
+
     #endregion
 
     #region DvValueLabelBoolean
@@ -640,7 +656,7 @@ namespace Devinno.Forms.Controls
                     if (Animation && !ani.IsPlaying)
                     {
                         ani.Stop();
-                        ani.Start(200, bValue ? "On" : "Off", () => this.Invoke(new Action(() => Invalidate())));
+                        ani.Start(200, bValue ? "On" : "Off", () => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); });
                     }
                     Invalidate();
                 }

@@ -3,7 +3,9 @@ using Devinno.Forms.Themes;
 using Devinno.Tools;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -20,6 +22,7 @@ namespace Devinno.Forms.Controls
         #endregion
         #region OffImage
         private Bitmap bmOff = null;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap OffImage
         {
             get => bmOff;
@@ -91,9 +94,9 @@ namespace Devinno.Forms.Controls
                     if (OnOff)
                     {
                         idx++;
-                        if (idx >= OnImages.Count) idx = 0; 
+                        if (idx >= OnImages.Count) idx = 0;
 
-                        this.Invoke(new Action(() => Invalidate()));
+                        if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate()));
                         Thread.Sleep(Interval);
                     }
                     else

@@ -14,6 +14,8 @@ namespace Devinno.Forms.Utils
     {
         #region Properties
         public double TotalMillls { get; private set; }
+        public double AclMillls { get; private set; }
+        public double DclMillls { get; private set; }
         public double PlayMillis => tmStart.HasValue ? (DateTime.Now - tmStart.Value).TotalMilliseconds : 0;
         public bool IsPlaying => tmStart.HasValue && PlayMillis < TotalMillls;
         public string Variable { get; private set; }
@@ -27,16 +29,18 @@ namespace Devinno.Forms.Utils
 
         #region Method
         #region Start
-        public void Start(double totalMillis, string variable = null, Action act = null)
+        public void Start(double totalMillis, string variable = null, Action act = null, Action complete = null)
         {
             this.tmStart = DateTime.Now;
             this.TotalMillls = totalMillis;
+            this.AclMillls = totalMillis / 20.0;
+            this.DclMillls = totalMillis / 20.0;
             this.Variable = variable;
 
             if (act != null)
             {
                 while (MO) Thread.Sleep(10);
-                
+
                 ThreadPool.QueueUserWorkItem((o) =>
                 {
                     MO = true;
@@ -44,10 +48,42 @@ namespace Devinno.Forms.Utils
                     var ts = totalMillis;
                     while (MO && tmStart.HasValue && (DateTime.Now - tmStart.Value).TotalMilliseconds < ts)
                     {
-                        act();
+                        if (act != null) act();
                         Thread.Sleep(Interval);
                     }
-                    act();
+                    if (act != null) act();
+                    if (complete != null) complete();
+
+                    tmStart = null;
+                    MO = false;
+                });
+            }
+        }
+
+        public void Start(double totalMillis, double aclMillis, double dclMillis, string variable = null, Action act = null, Action complete = null)
+        {
+            this.tmStart = DateTime.Now;
+            this.TotalMillls = totalMillis;
+            this.AclMillls = aclMillis;
+            this.DclMillls = dclMillis;
+            this.Variable = variable;
+
+            if (act != null)
+            {
+                while (MO) Thread.Sleep(10);
+
+                ThreadPool.QueueUserWorkItem((o) =>
+                {
+                    MO = true;
+                    var tm = DateTime.Now;
+                    var ts = totalMillis;
+                    while (MO && tmStart.HasValue && (DateTime.Now - tmStart.Value).TotalMilliseconds < ts)
+                    {
+                        if (act != null) act();
+                        Thread.Sleep(Interval);
+                    }
+                    if (act != null) act();
+                    if (complete != null) complete();
 
                     tmStart = null;
                     MO = false;
@@ -64,9 +100,35 @@ namespace Devinno.Forms.Utils
         }
         #endregion
         #region Linear / Accel / Decel
-        double Linear(double now, double goal) => now + (goal - now) * MathTool.Constrain(PlayMillis / TotalMillls, 0, 1);
-        double Accel(double now, double goal) => goal - (goal - now) * Math.Sqrt(1.0 - (Math.Pow(MathTool.Constrain(PlayMillis / TotalMillls, 0.0, 1.0), 2.0) / Math.Pow(1.0, 2.0)));
-        double Decel(double now, double goal) => now + (goal - now) * Math.Sqrt(1.0 - (Math.Pow(1.0 - MathTool.Constrain(PlayMillis / TotalMillls, 0.0, 1.0), 2.0) / Math.Pow(1.0, 2.0)));
+        double Linear(double now, double goal) => Linear(PlayMillis, TotalMillls, now, goal);
+        double Accel(double now, double goal) => Accel(PlayMillis, TotalMillls, now, goal);
+        double Decel(double now, double goal) => Decel(PlayMillis, TotalMillls, now, goal);
+        double Profile(double now, double goal) => Profile(PlayMillis, TotalMillls, AclMillls, DclMillls, now, goal);
+
+        public static double Linear(double val, double max, double now, double goal) => now + (goal - now) * MathTool.Constrain(val / max, 0, 1);
+        public static double Accel(double val, double max, double now, double goal) => goal - (goal - now) * Math.Sqrt(1.0 - (Math.Pow(MathTool.Constrain(val / max, 0.0, 1.0), 2.0) / Math.Pow(1.0, 2.0)));
+        public static double Decel(double val, double max, double now, double goal) => now + (goal - now) * Math.Sqrt(1.0 - (Math.Pow(1.0 - MathTool.Constrain(val / max, 0.0, 1.0), 2.0) / Math.Pow(1.0, 2.0)));
+        public static double Profile(double val, double max, double acl, double dcl, double now, double goal)
+        {
+            if (val < acl)
+            {
+                var goal2 = acl / max * goal;
+
+                return goal2 - (goal2 - now) * Math.Sqrt(1.0 - (Math.Pow(MathTool.Constrain(MathTool.Map(val, 0, acl, 0, 1), 0.0, 1.0), 2.0) / Math.Pow(1.0, 2.0)));
+            }
+            else if (val > max - dcl)
+            {
+                var goal2 = dcl / max * goal;
+                var now2 = now - (max - dcl);
+                var gap = goal - goal2;
+
+                return gap + now2 + (goal2 - now2) * Math.Sqrt(1.0 - (Math.Pow(1.0 - MathTool.Constrain(MathTool.Map(val, max - dcl, max, 0, 1), 0.0, 1.0), 2.0) / Math.Pow(1.0, 2.0)));
+            }
+            else
+            {
+                return now + (goal - now) * MathTool.Constrain(val / max, 0, 1);
+            }
+        }
         #endregion
 
         #region Value
@@ -81,6 +143,7 @@ namespace Devinno.Forms.Utils
                     case AnimationAccel.Linear: ret = Convert.ToInt32(Linear(start, end)); break;
                     case AnimationAccel.ACL: ret = Convert.ToInt32(Accel(start, end)); break;
                     case AnimationAccel.DCL: ret = Convert.ToInt32(Decel(start, end)); break;
+                    case AnimationAccel.Profile: ret = Convert.ToInt32(Profile(start, end)); break;
                 }
             }
             return ret;
@@ -97,6 +160,7 @@ namespace Devinno.Forms.Utils
                     case AnimationAccel.Linear: ret = Convert.ToSingle(Linear(start, end)); break;
                     case AnimationAccel.ACL: ret = Convert.ToSingle(Accel(start, end)); break;
                     case AnimationAccel.DCL: ret = Convert.ToSingle(Decel(start, end)); break;
+                    case AnimationAccel.Profile: ret = Convert.ToSingle(Profile(start, end)); break;
                 }
             }
             return ret;
@@ -127,6 +191,12 @@ namespace Devinno.Forms.Utils
                         ret.Y = Convert.ToSingle(Decel(start.Y, end.Top));
                         ret.Width = Convert.ToSingle(Decel(start.X, end.Right)) - ret.X;
                         ret.Height = Convert.ToSingle(Decel(start.Y, end.Bottom)) - ret.Y;
+                        break;
+                    case AnimationAccel.Profile:
+                        ret.X = Convert.ToSingle(Profile(start.X, end.Left));
+                        ret.Y = Convert.ToSingle(Profile(start.Y, end.Top));
+                        ret.Width = Convert.ToSingle(Profile(start.X, end.Right)) - ret.X;
+                        ret.Height = Convert.ToSingle(Profile(start.Y, end.Bottom)) - ret.Y;
                         break;
                 }
             }
@@ -159,6 +229,12 @@ namespace Devinno.Forms.Utils
                         ret.Width = Convert.ToSingle(Decel(start.Right, end.X)) - ret.X;
                         ret.Height = Convert.ToSingle(Decel(start.Bottom, end.Y)) - ret.Y;
                         break;
+                    case AnimationAccel.Profile:
+                        ret.X = Convert.ToSingle(Profile(start.Left, end.X));
+                        ret.Y = Convert.ToSingle(Profile(start.Top, end.Y));
+                        ret.Width = Convert.ToSingle(Profile(start.Right, end.X)) - ret.X;
+                        ret.Height = Convert.ToSingle(Profile(start.Bottom, end.Y)) - ret.Y;
+                        break;
                 }
             }
             return ret;
@@ -189,6 +265,12 @@ namespace Devinno.Forms.Utils
                         ret.Y = Convert.ToSingle(Decel(start.Top, end.Top));
                         ret.Width = Convert.ToSingle(Decel(start.Right, end.Right)) - ret.X;
                         ret.Height = Convert.ToSingle(Decel(start.Bottom, end.Bottom)) - ret.Y;
+                        break;
+                    case AnimationAccel.Profile:
+                        ret.X = Convert.ToSingle(Profile(start.Left, end.Left));
+                        ret.Y = Convert.ToSingle(Profile(start.Top, end.Top));
+                        ret.Width = Convert.ToSingle(Profile(start.Right, end.Right)) - ret.X;
+                        ret.Height = Convert.ToSingle(Profile(start.Bottom, end.Bottom)) - ret.Y;
                         break;
                 }
             }
@@ -221,6 +303,12 @@ namespace Devinno.Forms.Utils
                         g = Convert.ToByte(Decel(start.G, end.G));
                         b = Convert.ToByte(Decel(start.B, end.B));
                         break;
+                    case AnimationAccel.Profile:
+                        a = Convert.ToByte(Profile(start.A, end.A));
+                        r = Convert.ToByte(Profile(start.R, end.R));
+                        g = Convert.ToByte(Profile(start.G, end.G));
+                        b = Convert.ToByte(Profile(start.B, end.B));
+                        break;
                 }
             }
             return Util.FromArgb(a, r, g, b);
@@ -231,7 +319,7 @@ namespace Devinno.Forms.Utils
     }
 
     #region enum : AnimationAccel 
-    public enum AnimationAccel { Linear, ACL, DCL }
+    public enum AnimationAccel { Linear, ACL, DCL, Profile }
     #endregion
     #region enum : AnimationType 
     public enum AnimationType { SlideV, SlideH, Drill, Fade, None }

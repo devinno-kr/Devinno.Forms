@@ -306,7 +306,7 @@ namespace Devinno.Forms.Controls
                                     if (SelectedIndex < 0) SelectedIndex = Items.Count - 1;
                                 }
                                 else SelectedIndex = -1;
-                                ani.Start(250, "Left", () => this.Invoke(new Action(() => Invalidate())));
+                                ani.Start(250, "Left", () => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); });
                             }
                         }
                         else
@@ -338,7 +338,7 @@ namespace Devinno.Forms.Controls
                                     if (SelectedIndex >= Items.Count) SelectedIndex = 0;
                                 }
                                 else SelectedIndex = -1;
-                                ani.Start(250, "Right", () => this.Invoke(new Action(() => Invalidate())));
+                                ani.Start(250, "Right", () => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); });
                             }
                         }
                         else

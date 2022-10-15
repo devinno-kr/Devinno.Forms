@@ -95,7 +95,7 @@ namespace Devinno.Forms.Controls
                     if (Animation)
                     {
                         ani.Stop();
-                        ani.Start(200, OnOff ? "On" : "Off", () => this.Invoke(new Action(() => Invalidate())));
+                        ani.Start(200, OnOff ? "On" : "Off", () => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); });
                     }
 
                     Invalidate();

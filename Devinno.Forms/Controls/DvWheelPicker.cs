@@ -311,7 +311,7 @@ namespace Devinno.Forms.Controls
                                             ScrollPosition = newV;
                                             Thread.Sleep(10);
 
-                                            this.Invoke(new Action(() => Invalidate()));
+                                            if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => { Invalidate(); }));
                                         }
                                         isScroll = false;
 
@@ -326,7 +326,7 @@ namespace Devinno.Forms.Controls
                                             else if (off < -ItemHeight / 2F) off = off + ItemHeight;
 
                                             ani.Stop();
-                                            ani.Start(Math.Abs(off * 5), "E" + off.ToString(), () => { this.Invoke(new Action(() => Invalidate())); });
+                                            ani.Start(Math.Abs(off * 5), "E" + off.ToString(), () => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); });
                                         }
 
                                     });
@@ -347,7 +347,7 @@ namespace Devinno.Forms.Controls
                                         if (Animation && !ani.IsPlaying)
                                         {
                                             ani.Stop();
-                                            ani.Start(Math.Abs(ItemHeight * ni) * 5, "B" + (ItemHeight * ni), () => { this.Invoke(new Action(() => Invalidate())); });
+                                            ani.Start(Math.Abs(ItemHeight * ni) * 5, "B" + (ItemHeight * ni), () => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); });
                                         }
                                     }
                                     #endregion
@@ -390,7 +390,7 @@ namespace Devinno.Forms.Controls
                                     if (SelectedIndex < 0) SelectedIndex = Items.Count - 1;
                                 }
                                 else SelectedIndex = -1;
-                                ani.Start(250, "Up", () => this.Invoke(new Action(() => Invalidate())));
+                                ani.Start(250, "Up", () => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); });
                             }
                         }
                     }
@@ -409,7 +409,7 @@ namespace Devinno.Forms.Controls
                                     if (SelectedIndex >= Items.Count) SelectedIndex = 0;
                                 }
                                 else SelectedIndex = -1;
-                                ani.Start(250, "Down", () => this.Invoke(new Action(() => Invalidate())));
+                                ani.Start(250, "Down", () => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); });
                             }
                         }
                     }

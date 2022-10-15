@@ -281,8 +281,10 @@ namespace Devinno.Forms.Themes
 
                 if (shadow)
                 {
+                    icon.Shadow = true;
                     var rt = new RectangleF(bounds.X, bounds.Y + 1, bounds.Width, bounds.Height);
                     br.Color = c; g.DrawIcon(icon, br, rt, align);
+                    icon.Shadow = false;
                 }
 
                 br.Color = color; g.DrawIcon(icon, br, bounds, align);
@@ -320,9 +322,11 @@ namespace Devinno.Forms.Themes
 
                 if (shadow)
                 {
+                    icon.Shadow = true;
                     var rt = new RectangleF(bounds.X, bounds.Y + 1, bounds.Width, bounds.Height);
                     brText.Color = brIco.Color = c;
                     g.DrawTextIcon(icon, brIco, text, font, brText, rt, align, TextOffsetX, TextOffsetY);
+                    icon.Shadow = false;
                 }
 
                 brText.Color = colorText;
@@ -344,9 +348,11 @@ namespace Devinno.Forms.Themes
 
                 if (shadow)
                 {
+                    texticon.Icon.Shadow = true;
                     var rt = new RectangleF(bounds.X, bounds.Y + 1, bounds.Width, bounds.Height);
                     brText.Color = brIco.Color = c;
                     g.DrawTextIcon(texticon, brIco, brText, font, rt, align, TextOffsetX, TextOffsetY);
+                    texticon.Icon.Shadow = false;
                 }
 
                 brText.Color = colorText;

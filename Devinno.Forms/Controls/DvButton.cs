@@ -24,6 +24,7 @@ namespace Devinno.Forms.Controls
         private TextIcon texticon = new TextIcon();
 
         public DvIcon Icon => texticon.Icon;
+        [Editor(typeof(ImageEditor), typeof(UITypeEditor))]
         public Bitmap IconImage
         {
             get => texticon.IconImage; 
