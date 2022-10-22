@@ -1,1 +1,1 @@
-Devinno WinForm 라이브러리
+Devinno 윈폼 라이브러리
