@@ -364,6 +364,10 @@ namespace Devinno.Forms.Controls
         }
         #endregion
 
+        #region Member Variable
+        bool bDown = false;
+        #endregion
+
         #region Virtual Method
         #region Draw
         public virtual void Draw(Graphics g, DvTheme Theme, RectangleF CellBounds)
@@ -383,7 +387,7 @@ namespace Devinno.Forms.Controls
 
                 var inf = new DvDataGridCellDrawInfo();
                 CellDraw(g, Theme, CellBounds, inf);
-                using(var p = new Pen(Color.Black))
+                using (var p = new Pen(Color.Black))
                 {
                     #region Bevel
                     if (Grid.Bevel && inf.Bevel)
@@ -407,6 +411,7 @@ namespace Devinno.Forms.Controls
                         p.Width = 1;
                         g.DrawLine(p, rt.Left, rt.Top, rt.Right, rt.Top);
                         g.DrawLine(p, rt.Left, rt.Top, rt.Left, rt.Bottom);
+                        g.DrawLine(p, rt.Left, rt.Bottom, rt.Right, rt.Bottom);
                     }
                     #endregion
                 }
@@ -414,28 +419,51 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region CellDraw
-        public virtual void CellDraw(Graphics g, DvTheme Theme,  RectangleF CellBounds, DvDataGridCellDrawInfo Info) { }
+        public virtual void CellDraw(Graphics g, DvTheme Theme, RectangleF CellBounds, DvDataGridCellDrawInfo Info) { }
         #endregion
         #region MouseDown / MouseUp
         public virtual void MouseDown(RectangleF CellBounds, int x, int y)
         {
             if (Enabled && CollisionTool.Check(CellBounds, x, y))
+            {
+                bDown = true;
                 CellMouseDown(CellBounds, x, y);
+                Grid.InvokeCellMouseDown(this, x, y);
+            }
         }
         public virtual void MouseUp(RectangleF CellBounds, int x, int y)
         {
             if (Enabled)
-                CellMouseUp(CellBounds, x, y);
+            {
+                if (bDown)
+                {
+                    bDown = false;
+        
+                    CellMouseUp(CellBounds, x, y);
+                    Grid.InvokeCellMouseUp(this, x, y);
+
+                    if (CollisionTool.Check(CellBounds, x, y))
+                    {
+                        CellMouseClick(CellBounds, x, y);
+                        Grid.InvokeCellMouseClick(this, x, y);
+                    }
+                }
+            }
         }
+        
         public virtual void MouseDoubleClick(RectangleF CellBounds, int x, int y)
         {
             if (Enabled && CollisionTool.Check(CellBounds, x, y))
+            {
                 CellMouseDoubleClick(CellBounds, x, y);
+                Grid.InvokeCellDoubleClick(this, x, y);
+            }
         }
         #endregion
         #region Cell MouseDown / MouseUp
         public virtual void CellMouseDown(RectangleF CellBounds, int x, int y) { }
         public virtual void CellMouseUp(RectangleF CellBounds, int x, int y) { }
+        public virtual void CellMouseClick(RectangleF CellBounds, int x, int y) { }
         public virtual void CellMouseDoubleClick(RectangleF CellBounds, int x, int y) { }
         #endregion
         #region OnSetValue / OnGetValue
@@ -1570,6 +1598,7 @@ namespace Devinno.Forms.Controls
                 var BoxColor = (Row.Selected ? SelectedCellBackColor : CellBackColor).BrightnessTransmit(Theme.DataGridInputBright);
                 if (CollisionTool.Check(CellBounds, x, y))
                 {
+
                     if (Theme.KeyboardInput) Grid.SetInput(this, CellBounds, BoxColor,(string)this.Value);
                     else
                     {

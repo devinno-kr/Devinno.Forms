@@ -22,6 +22,8 @@ namespace Devinno.Forms.Dialogs
 
         public int MinWidth { get; set; } = 200;
         public int MinHeight { get; set; } = 100;
+
+        public bool UseEnterKey { get; set; } = false;
         #endregion
 
         #region Constructor
@@ -86,6 +88,12 @@ namespace Devinno.Forms.Dialogs
             else if (prop.PropertyType.IsEnum) ret = true;
 
             return ret && prop.CanWrite && prop.CanRead && !Attribute.IsDefined(prop, typeof(InputBoxIgnoreAttribute));
+        }
+        #endregion
+        #region OK
+        void OK()
+        {
+            if (ValidCheck()) DialogResult = DialogResult.OK;
         }
         #endregion
 
@@ -342,6 +350,23 @@ namespace Devinno.Forms.Dialogs
             tpnl.Controls.Add(c, 0, 0);
             #endregion
 
+            if (UseEnterKey)
+            {
+                if (c is DvValueInputText) { ((DvValueInputText)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<byte>) { ((DvValueInputNumber<byte>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<ushort>) { ((DvValueInputNumber<ushort>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<uint>) { ((DvValueInputNumber<uint>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<ulong>) { ((DvValueInputNumber<ulong>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<sbyte>) { ((DvValueInputNumber<sbyte>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<short>) { ((DvValueInputNumber<short>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<int>) { ((DvValueInputNumber<int>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<long>) { ((DvValueInputNumber<long>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<float>) { ((DvValueInputNumber<float>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<double>) { ((DvValueInputNumber<double>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+                else if (c is DvValueInputNumber<decimal>) { ((DvValueInputNumber<decimal>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
+
+            }
+
             if (this.ShowDialog() == DialogResult.OK)
             {
                 if (actReturn != null) actReturn();
@@ -527,6 +552,17 @@ namespace Devinno.Forms.Dialogs
     {
         public PropertyInfo p { get; set; }
         public InputBoxInfo info { get; set; }
+    }
+    #endregion
+    #region class : EnterKeyDownEventArgs
+    public class EnterKeyDownEventArgs : EventArgs
+    {
+        public Control Control { get; private set; }
+
+        public EnterKeyDownEventArgs(Control c)
+        {
+            this.Control = c;
+        }
     }
     #endregion
 

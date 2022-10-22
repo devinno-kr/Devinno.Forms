@@ -189,6 +189,14 @@ namespace Devinno.Forms.Controls
             set => OriginalTextBox.Multiline = value;
         }
         #endregion
+        #region FullMode
+        private bool bFullMode = false;
+        public bool FullMode
+        {
+            get => bFullMode;
+            set => bFullMode = value;
+        }
+        #endregion
 
         #region Unit
         private string strUnit = "";
@@ -390,7 +398,18 @@ namespace Devinno.Forms.Controls
 
             var sz = TextRenderer.MeasureText(Text, Font);
             var sz2 = TextRenderer.MeasureText("H", Font);
-            var rtText = Util.MakeRectangleAlign(rtTextArea, new SizeF(rtTextArea.Width - rtUnit.Width, Math.Max(Convert.ToInt32(sz2.Height), Convert.ToInt32(sz.Height))), ContentAlignment);
+
+            RectangleF rtText;
+            if (FullMode)
+            {
+                OriginalTextBox.Height = Convert.ToInt32(rtTextArea.Height);
+                rtText = Util.MakeRectangleAlign(rtTextArea, new SizeF(rtTextArea.Width - rtUnit.Width, OriginalTextBox.Height), ContentAlignment);
+            }
+            else
+            {
+                OriginalTextBox.Height = Math.Max(Convert.ToInt32(sz2.Height), Convert.ToInt32(sz.Height));
+                rtText = Util.MakeRectangleAlign(rtTextArea, new SizeF(rtTextArea.Width - rtUnit.Width, OriginalTextBox.Height), ContentAlignment);
+            }
 
             act(rtContent, rtText, rtUnit);
         }

@@ -155,6 +155,9 @@ namespace Sample
             this.grpBox = new Devinno.Forms.Containers.DvGroupBox();
             this.tab2 = new Devinno.Forms.Containers.DvTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.dvSplitterTableLayoutPanel1 = new Devinno.Forms.Containers.DvSplitterTableLayoutPanel();
+            this.dvControl3 = new Devinno.Forms.Controls.DvControl();
+            this.dvControl1 = new Devinno.Forms.Controls.DvControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tpDialog = new System.Windows.Forms.TabPage();
@@ -226,6 +229,8 @@ namespace Sample
             this.dvScrollablePanel1.SuspendLayout();
             this.dvTableLayoutPanel2.SuspendLayout();
             this.tab2.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.dvSplitterTableLayoutPanel1.SuspendLayout();
             this.tpDialog.SuspendLayout();
             this.tpTable.SuspendLayout();
             this.SuspendLayout();
@@ -1202,6 +1207,7 @@ namespace Sample
             this.txtMultiLine.Location = new System.Drawing.Point(345, 49);
             this.txtMultiLine.MaxLength = 32767;
             this.txtMultiLine.MinusInput = false;
+            this.txtMultiLine.MultiLine = true;
             this.txtMultiLine.Name = "txtMultiLine";
             this.txtMultiLine.Round = null;
             this.txtMultiLine.ShadowGap = 1;
@@ -1223,6 +1229,7 @@ namespace Sample
             this.txtNumber.Location = new System.Drawing.Point(345, 13);
             this.txtNumber.MaxLength = 32767;
             this.txtNumber.MinusInput = false;
+            this.txtNumber.MultiLine = false;
             this.txtNumber.Name = "txtNumber";
             this.txtNumber.Round = null;
             this.txtNumber.ShadowGap = 1;
@@ -2823,12 +2830,55 @@ namespace Sample
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.tabPage1.Controls.Add(this.dvSplitterTableLayoutPanel1);
             this.tabPage1.Location = new System.Drawing.Point(124, 4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(10);
             this.tabPage1.Size = new System.Drawing.Size(537, 627);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "테스트 1";
+            // 
+            // dvSplitterTableLayoutPanel1
+            // 
+            this.dvSplitterTableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.dvSplitterTableLayoutPanel1.ColumnCount = 1;
+            this.dvSplitterTableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.dvSplitterTableLayoutPanel1.Controls.Add(this.dvControl3, 0, 1);
+            this.dvSplitterTableLayoutPanel1.Controls.Add(this.dvControl1, 0, 0);
+            this.dvSplitterTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dvSplitterTableLayoutPanel1.DrawSplitter = false;
+            this.dvSplitterTableLayoutPanel1.Location = new System.Drawing.Point(10, 10);
+            this.dvSplitterTableLayoutPanel1.Name = "dvSplitterTableLayoutPanel1";
+            this.dvSplitterTableLayoutPanel1.RowCount = 2;
+            this.dvSplitterTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.dvSplitterTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.dvSplitterTableLayoutPanel1.Size = new System.Drawing.Size(517, 607);
+            this.dvSplitterTableLayoutPanel1.SplitterColor = System.Drawing.Color.Red;
+            this.dvSplitterTableLayoutPanel1.TabIndex = 0;
+            // 
+            // dvControl3
+            // 
+            this.dvControl3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvControl3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dvControl3.Location = new System.Drawing.Point(3, 306);
+            this.dvControl3.Name = "dvControl3";
+            this.dvControl3.ShadowGap = 1;
+            this.dvControl3.Size = new System.Drawing.Size(511, 298);
+            this.dvControl3.TabIndex = 2;
+            this.dvControl3.TabStop = false;
+            this.dvControl3.Text = "dvControl3";
+            // 
+            // dvControl1
+            // 
+            this.dvControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.dvControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dvControl1.Location = new System.Drawing.Point(3, 3);
+            this.dvControl1.Name = "dvControl1";
+            this.dvControl1.ShadowGap = 1;
+            this.dvControl1.Size = new System.Drawing.Size(511, 297);
+            this.dvControl1.TabIndex = 0;
+            this.dvControl1.TabStop = false;
+            this.dvControl1.Text = "dvControl1";
             // 
             // tabPage2
             // 
@@ -3899,6 +3949,8 @@ namespace Sample
             this.dvScrollablePanel1.ResumeLayout(false);
             this.dvTableLayoutPanel2.ResumeLayout(false);
             this.tab2.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.dvSplitterTableLayoutPanel1.ResumeLayout(false);
             this.tpDialog.ResumeLayout(false);
             this.tpTable.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -4080,5 +4132,8 @@ namespace Sample
         private Devinno.Forms.Controls.DvButton btnTreeRemove;
         private Devinno.Forms.Controls.DvButton btnTreeAdd;
         private Devinno.Forms.Controls.DvDataGrid dataGrid;
+        private Devinno.Forms.Containers.DvSplitterTableLayoutPanel dvSplitterTableLayoutPanel1;
+        private Devinno.Forms.Controls.DvControl dvControl3;
+        private Devinno.Forms.Controls.DvControl dvControl1;
     }
 }

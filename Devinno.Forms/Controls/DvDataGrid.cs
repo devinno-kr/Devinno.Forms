@@ -236,11 +236,10 @@ namespace Devinno.Forms.Controls
         public event EventHandler<ColumnMouseEventArgs> ColumnMouseUp;
         public event EventHandler<CellMouseEventArgs> CellMouseDown;
         public event EventHandler<CellMouseEventArgs> CellMouseUp;
+        public event EventHandler<CellMouseEventArgs> CellMouseClick;
         public event EventHandler<CellMouseEventArgs> CellMouseDoubleClick;
         public event EventHandler<CellValueChangedEventArgs> ValueChanged;
         public event EventHandler<CellButtonClickEventArgs> CellButtonClick;
-
-        public event EventHandler AutoSetChanged;
         #endregion
 
         #region Constructor
@@ -532,6 +531,8 @@ namespace Devinno.Forms.Controls
                             e.Graphics.SetClip(rtScrollContent);
                             #region Rows
                             {
+                                var last = GetRows().LastOrDefault();
+
                                 Loop((i, rtROW, v) =>
                                 {
                                     #region !Fixed
@@ -659,6 +660,7 @@ namespace Devinno.Forms.Controls
                                             p.Color = BorderColor;
                                             p.Width = 1;
                                             e.Graphics.DrawLine(p, rt.Left, rt.Top, rt.Right, rt.Top);
+                                            e.Graphics.DrawLine(p, rt.Left, rt.Bottom, rt.Right, rt.Bottom);
                                             e.Graphics.DrawLine(p, rt.Left, rt.Top, rt.Left, rt.Bottom);
                                             e.Graphics.DrawLine(p, rt.Right, rt.Top, rt.Right, rt.Bottom);
                                         }
@@ -688,6 +690,7 @@ namespace Devinno.Forms.Controls
                                         #endregion
                                     }
                                     #endregion
+
                                 });
                             }
                             #endregion
@@ -1420,6 +1423,41 @@ namespace Devinno.Forms.Controls
                     {
                         Loop((i, rtROW, v) =>
                         {
+                            #region MultiSelect
+                            if (SelectionMode == DvDataGridSelectionMode.Multi)
+                            {
+                                if (CollisionTool.Check(rtROW, x, y))
+                                {
+                                    if (SelectedRows.Contains(v))
+                                    {
+                                        SelectedRows.Remove(v);
+                                        bSelectionChange = true;
+                                    }
+                                    else
+                                    {
+                                        SelectedRows.Add(v);
+                                        bSelectionChange = true;
+                                    }
+                                }
+                            }
+                            #endregion
+                            #region SingleSelect
+                            if (SelectionMode == DvDataGridSelectionMode.Single)
+                            {
+                                if (CollisionTool.Check(rtROW, x, y))
+                                {
+                                    SelectedRows.Clear();
+                                    SelectedRows.Add(v);
+                                    bSelectionChange = true;
+                                }
+                            }
+                            #endregion
+                        });
+
+                        foreach (var v in Rows) v.Selected = SelectedRows.Contains(v);
+
+                        Loop((i, rtROW, v) =>
+                        {
                             #region !Fixed
                             if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                             {
@@ -1457,40 +1495,9 @@ namespace Devinno.Forms.Controls
                                 }
                             }
                             #endregion
-
-                            #region MultiSelect
-                            else if (SelectionMode == DvDataGridSelectionMode.Multi)
-                            {
-                                if (CollisionTool.Check(rtROW, x, y))
-                                {
-                                    if (SelectedRows.Contains(v))
-                                    {
-                                        SelectedRows.Remove(v);
-                                        bSelectionChange = true;
-                                    }
-                                    else
-                                    {
-                                        SelectedRows.Add(v);
-                                        bSelectionChange = true;
-                                    }
-                                }
-                            }
-                            #endregion
-                            #region SingleSelect
-                            else if (SelectionMode == DvDataGridSelectionMode.Single)
-                            {
-                                if (CollisionTool.Check(rtROW, x, y))
-                                {
-                                    SelectedRows.Clear();
-                                    SelectedRows.Add(v);
-                                    bSelectionChange = true;
-                                }
-                            }
-                            #endregion
-
                         });
+
                     }
-                    foreach (var v in Rows) v.Selected = SelectedRows.Contains(v);
                     if (bSelectionChange) SelectedChanged?.Invoke(this, null);
                     #endregion
                 }
@@ -1653,6 +1660,8 @@ namespace Devinno.Forms.Controls
             }
             else throw new Exception("VALID COUNT");
             bNotRaiseEvent = false;
+
+            Invalidate();
         }
         #endregion
         #region ResetDataSource
@@ -1947,6 +1956,12 @@ namespace Devinno.Forms.Controls
         public void InvokeCellMouseUp(IDvDataGridCell cell, int x, int y)
         {
             if (!bNotRaiseEvent && CellMouseUp != null) CellMouseUp.Invoke(this, new CellMouseEventArgs(cell, x, y));
+        }
+        #endregion
+        #region InvokeCellMouseClick
+        public void InvokeCellMouseClick(IDvDataGridCell cell, int x, int y)
+        {
+            if (!bNotRaiseEvent && CellMouseClick != null) CellMouseClick.Invoke(this, new CellMouseEventArgs(cell, x, y));
         }
         #endregion
         #region InvokeCellDoubleClick

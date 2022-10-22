@@ -364,7 +364,7 @@ namespace Sample
             var actInput = new Action(() =>
             {
                 var dg = dataGrid;
-                dg.SelectionMode = DvDataGridSelectionMode.Selector;
+                dg.SelectionMode = DvDataGridSelectionMode.Single;
                 dg.ColumnGroups.Clear();
                 dg.Columns.Clear();
                 dg.Rows.Clear();
@@ -411,7 +411,7 @@ namespace Sample
                 dg.ScrollMode = ScrollMode.Both;
 
                 var Items = new List<GridItem3>();
-                for (int i = 1; i <= 100; i++)
+                for (int i = 1; i <= 3; i++)
                 {
                     Items.Add(new GridItem3()
                     {
@@ -647,8 +647,10 @@ namespace Sample
             btnInputString.ButtonClick += (o, s) =>
             {
                 Block = true;
+                InputBox.UseEnterKey = true;
                 var ret = InputBox.ShowString("명칭", "테스트");
                 if (ret != null) MessageBox.ShowMessageBoxOk("결과", ret);
+                InputBox.UseEnterKey = false;
                 Block = false;
             };
             #endregion
