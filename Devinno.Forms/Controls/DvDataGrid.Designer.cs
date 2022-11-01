@@ -635,6 +635,7 @@ namespace Devinno.Forms.Controls
         #region Properties
         public Color? OnColor { get; set; } = null;
         public Color? OffColor { get; set; } = null;
+        public int? LampSize { get; set; } = null;
         #endregion
         #region Constructor
         public DvDataGridLampColumn(DvDataGrid dataGrid) : base(dataGrid)
@@ -832,6 +833,7 @@ namespace Devinno.Forms.Controls
         #region Properties
         public Color? OnColor { get; set; }
         public Color? OffColor { get; set; }
+        public int? LampSize { get; set; }
         #endregion
 
         #region Constructor
@@ -842,6 +844,7 @@ namespace Devinno.Forms.Controls
                 var c = Column as DvDataGridLampColumn;
                 this.OnColor = c.OnColor;
                 this.OffColor = c.OffColor;
+                this.LampSize = c.LampSize;
             }
         }
         #endregion
@@ -862,20 +865,12 @@ namespace Devinno.Forms.Controls
             var SelectedCellBackColor = this.SelectedCellBackColor ?? Grid.GetSelectedRowColor(Theme);
             var BorderColor = Theme.GetBorderColor(vc, vc);
             #endregion
-            #region Out 
-            {
-                var c = Row.Selected ? SelectedCellBackColor : CellBackColor;
-                var rt = Util.INT(CellBounds);
-                rt.Inflate(-3, -3);
-                Theme.DrawBox(g, rt, c, BorderColor, RoundType.All, BoxStyle.GradientV_R);
-            }
-            #endregion
             #region Lamp 
             {
                 var c = v ? OnColor : OffColor;
-                var sz = Math.Min(CellBounds.Width, CellBounds.Height) - 4;
+                var sz = LampSize ?? Math.Min(CellBounds.Width, CellBounds.Height) - 4;
                 var rt = Util.MakeRectangleAlign(CellBounds, new SizeF(sz, sz), DvContentAlignment.MiddleCenter);
-
+              
                 Theme.DrawLamp(g, rt, CellBackColor, OnColor, OffColor, v);
             }
             #endregion

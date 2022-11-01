@@ -34,6 +34,7 @@ namespace Sample
         DateTime prev = DateTime.Now;
         List<TextIcon> lsWP = new List<TextIcon>();
 
+        Timer tmr;
         HiResTimer tmrHi;
       
         DvKeypad keypad;
@@ -426,8 +427,8 @@ namespace Sample
             });
             #endregion
             //actMonth();
-            //actMonitor();
-            actInput();
+            actMonitor();
+            //actInput();
             #endregion
             #region Boxes
             InputBox = new DvInputBox { MinWidth = 220 };
@@ -537,6 +538,10 @@ namespace Sample
             tmrHi = new HiResTimer(5);
             tmrHi.Elapsed += (o, s) => TrendGraphSet();
             tmrHi.Start();
+            #endregion
+            #region tmr
+            tmr = new Timer { Interval = 10, Enabled = true };
+            tmr.Tick += (o, s) => dataGrid.Invalidate();
             #endregion
 
             #region btnKeypadInt.ButtonClick
