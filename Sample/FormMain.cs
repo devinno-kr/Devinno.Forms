@@ -328,8 +328,8 @@ namespace Sample
                 dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmT", HeaderText = "온도 알람", SizeMode = DvSizeMode.Percent, Width = 10M });
                 dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Humidity", HeaderText = "습도", SizeMode = DvSizeMode.Percent, Width = 10M, Format = "0 '%'" });
                 dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmH", HeaderText = "습도 알람", SizeMode = DvSizeMode.Percent, Width = 10M });
-                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Play", HeaderText = "동작", Text = "", IconString = "fa-play", IconSize = 11, SizeMode = DvSizeMode.Percent, Width = 10M });
-                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Stop", HeaderText = "정지", Text = "", IconString = "fa-stop", IconSize = 11, SizeMode = DvSizeMode.Percent, Width = 10M });
+                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Play", HeaderText = "동작", Text = "", IconString = "fa-play", IconSize = 12, SizeMode = DvSizeMode.Percent, Width = 10M });
+                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Stop", HeaderText = "정지", Text = "", IconString = "fa-stop", IconSize = 12, SizeMode = DvSizeMode.Percent, Width = 10M });
 
                 var Items = new List<GridItem2>();
                 for (int i = 1; i <= 100; i++)

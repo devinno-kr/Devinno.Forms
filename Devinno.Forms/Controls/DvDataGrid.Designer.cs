@@ -651,8 +651,8 @@ namespace Devinno.Forms.Controls
         #region Properties
         public string Text { get; set; }
         public string IconString { get; set; } = null;
-        public int IconSize { get; set; } = 15;
-        public int IconGap { get; set; } = 8;
+        public int IconSize { get; set; } = 14;
+        public int IconGap { get; set; } = 0;
         public DvTextIconAlignment IconAlignment { get; set; } = DvTextIconAlignment.LeftRight;
         #endregion
         #region Constructor
@@ -919,6 +919,9 @@ namespace Devinno.Forms.Controls
 
                 if (!bDown) Theme.DrawBox(g, rt, cF, cB, RoundType.Rect, BoxStyle.GradientV);
                 else Theme.DrawBox(g, rt, cF, cB, RoundType.Rect, BoxStyle.Fill | BoxStyle.InShadow);
+
+                Info.Bevel = !bDown;
+                
 
                 if (Column is DvDataGridButtonColumn)
                 {
