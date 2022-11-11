@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Thread = System.Threading.Thread;
-using ThreadStart = System.Threading.ThreadStart;
+using ThreadPool = System.Threading.ThreadPool;
 
 namespace Devinno.Forms.Controls
 {
@@ -187,31 +187,29 @@ namespace Devinno.Forms.Controls
                 {
                     if (s.KeyChar == '\r' || s.KeyChar == ' ')
                     {
-                        var th = new Thread(() =>
+                        ThreadPool.QueueUserWorkItem((o) =>
                         {
                             this.Invoke(new Action(() =>
-                            {
-                                bDown = true;
-                                Invalidate();
+                             {
+                                 bDown = true;
+                                 Invalidate();
 
-                            }));
+                             }));
 
                             Thread.Sleep(50);
 
                             this.Invoke(new Action(() =>
-                            {
-                                if (bDown)
-                                {
-                                    bDown = false;
-                                    Checked = !Checked;
-                                    Invalidate();
-                                    ButtonClick?.Invoke(this, null);
-                                }
-                            }));
+                             {
+                                 if (bDown)
+                                 {
+                                     bDown = false;
+                                     Checked = !Checked;
+                                     Invalidate();
+                                     ButtonClick?.Invoke(this, null);
+                                 }
+                             }));
 
-                        })
-                        { IsBackground = true };
-                        th.Start();
+                        });
                     }
                 }
             };

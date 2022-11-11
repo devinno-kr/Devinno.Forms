@@ -12,8 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ThreadPool = System.Threading.ThreadPool;
 using Thread = System.Threading.Thread;
-using ThreadStart = System.Threading.ThreadStart;
 
 namespace Devinno.Forms.Controls
 {
@@ -169,13 +169,12 @@ namespace Devinno.Forms.Controls
                 {
                     if (s.KeyChar == '\r' || s.KeyChar == ' ')
                     {
-                        var th = new Thread(() =>
+                        ThreadPool.QueueUserWorkItem((o) =>
                         {
                             this.Invoke(new Action(() =>
                             {
                                 bDown = true;
                                 Invalidate();
-
                             }));
 
                             Thread.Sleep(50);
@@ -190,9 +189,8 @@ namespace Devinno.Forms.Controls
                                 }
                             }));
 
-                        })
-                        { IsBackground = true };
-                        th.Start();
+                        });
+
                     }
                 }
             };

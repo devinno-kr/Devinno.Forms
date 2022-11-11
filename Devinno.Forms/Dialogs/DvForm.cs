@@ -20,9 +20,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using Thread = System.Threading.Thread;
-using ThreadStart = System.Threading.ThreadStart;
-
 namespace Devinno.Forms.Dialogs
 {
 
@@ -246,6 +243,21 @@ namespace Devinno.Forms.Dialogs
             }
         }
         #endregion
+        #region TitleIconBoxWidth
+        private int? nTitleIconBoxWidth = null;
+        public int? TitleIconBoxWidth
+        {
+            get => nTitleIconBoxWidth;
+            set
+            {
+                if (nTitleIconBoxWidth != value)
+                {
+                    nTitleIconBoxWidth = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
         #region TitleFont
         private Font ftTitle = new Font("나눔고딕", 9, FontStyle.Regular);
         public Font TitleFont
@@ -348,14 +360,8 @@ namespace Devinno.Forms.Dialogs
         #region Member Variable
         private bool bdExit = false, bdMax = false, bdMin = false;
 
-        private Thread th;
-
         private bool useTrayicon = false;
         private NotifyIcon notifyIcon;
-
-        private Size o_sz;
-        private FormWindowState o_st;
-        private Point o_oe;
 
         private Point? pdown = null;
         private Rectangle? pbounds = null;
@@ -399,69 +405,6 @@ namespace Devinno.Forms.Dialogs
             BackColor = DvTheme.DefaultTheme.BackColor;
             Font = new Font("나눔고딕", 9);
             ResizeRedraw = true;
-            #endregion
-            #region Thread
-            th = new Thread(() =>
-            {
-                if (!DesignMode)
-                {
-                    while (true)
-                    {
-                        if (this.Created && this.Loaded && !this.IsDisposed)
-                        {
-                            #region Invalidate
-                            try
-                            {
-                                bool bInv = false;
-
-                                #region Size / State / Move
-                                if (o_sz != this.Size) { o_sz = this.Size; bInv |= true; }
-                                if (o_st != this.WindowState) { o_st = this.WindowState; bInv |= true; }
-                                #endregion
-                                #region WindowButton
-                                var e = this.PointToClient(MousePosition);
-                                if (o_oe.X != e.X || o_oe.Y != e.Y)
-                                {
-                                    o_oe = e;
-
-                                    Areas((rtTitleBar, rtTitleIconBox, rtTitleArea, rtTitleText, rtMin, rtMax, rtExit, rtContent) =>
-                                    {
-                                        if (ExitBox)
-                                        {
-                                            var b = CollisionTool.Check(rtExit, e.X, e.Y);
-                                            bInv |= bdExit != b;
-                                            bdExit = b;
-                                        }
-                                        if (MaximizeBox)
-                                        {
-                                            var b = CollisionTool.Check(rtMax, e.X, e.Y);
-                                            bInv |= bdMax != b;
-                                            bdMax = b;
-                                        }
-                                        if (MinimizeBox)
-                                        {
-                                            var b = CollisionTool.Check(rtMin, e.X, e.Y);
-                                            bInv |= bdMin != b;
-                                            bdMin = b;
-                                        }
-
-                                    });
-                                }
-                                #endregion
-
-                                if (bInv) this.Invoke(new Action(() => this.Invalidate()));
-                            }
-                            catch { }
-                            #endregion
-                        }
-
-                        Thread.Sleep(50);
-                    }
-                }
-
-            })
-            { IsBackground = true };
-            //th.Start();
             #endregion
             
             Menus.Changed += (o, s) => { foreach (var v in Menus) v.form = this; };
@@ -744,6 +687,13 @@ namespace Devinno.Forms.Dialogs
             base.OnMouseMove(e);
         }
         #endregion
+        #region OnMouseEnter
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            Invalidate();
+            base.OnMouseEnter(e);
+        }
+        #endregion
         #region OnMouseLeave
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -980,7 +930,7 @@ namespace Devinno.Forms.Dialogs
             var rtMax = new RectangleF(rtExit.X - wh, 0, wh, wh);
             var rtMin = new RectangleF(rtMax.X - wh, 0, wh, wh);
             var rtTitleBar = new RectangleF(0, 0, this.Width, wh);
-            var rtTitleIconBox = new RectangleF(0, 0, wh, wh);
+            var rtTitleIconBox = new RectangleF(0, 0, TitleIconBoxWidth ?? wh, wh);
             var rtTitleArea = new RectangleF(wh + 15, 0, Width - (wh * (MaximizeBox || MinimizeBox ? 4 : 2)) - MenuGap - (Menus.Count > 0 ? Menus.Sum(x => x.Width) : 0) - 15, Padding.Top);
             var rtTitleText = new RectangleF(rtTitleArea.Left + TitlePadding.Left, rtTitleArea.Top + TitlePadding.Top, rtTitleArea.Width - (TitlePadding.Left + TitlePadding.Right), rtTitleArea.Height - (TitlePadding.Top + TitlePadding.Bottom));
 

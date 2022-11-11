@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using Devinno.Extensions;
 using System.Drawing.Drawing2D;
 using Thread = System.Threading.Thread;
-using ThreadStart = System.Threading.ThreadStart;
+using ThreadPool = System.Threading.ThreadPool;
 
 namespace Devinno.Forms.Controls
 {
@@ -132,7 +132,7 @@ namespace Devinno.Forms.Controls
                 {
                     if (s.KeyChar == '\r' || s.KeyChar == ' ')
                     {
-                        var th = new Thread(() =>
+                        ThreadPool.QueueUserWorkItem((o) =>
                         {
                             this.Invoke(new Action(() =>
                             {
@@ -153,9 +153,7 @@ namespace Devinno.Forms.Controls
                                 }
                             }));
 
-                        })
-                        { IsBackground = true };
-                        th.Start();
+                        });
                     }
                 }
             };
