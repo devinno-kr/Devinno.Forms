@@ -923,15 +923,16 @@ namespace Devinno.Forms.Dialogs
         /// <param name="act"></param>
         public void Areas(Action<RectangleF, RectangleF, RectangleF, RectangleF, RectangleF, RectangleF, RectangleF, RectangleF> act)
         {
-            int wh = Padding.Top;
+            int ih = Padding.Top;
+            int iw = TitleIconBoxWidth ?? Padding.Top;
             int szwh = Padding.Top / 4;
             var rtContent = new RectangleF(Padding.Left, Padding.Top, Width - Padding.Right - Padding.Left, Height - Padding.Bottom - Padding.Top);
-            var rtExit = new RectangleF(this.Width - wh, 0, wh, wh);
-            var rtMax = new RectangleF(rtExit.X - wh, 0, wh, wh);
-            var rtMin = new RectangleF(rtMax.X - wh, 0, wh, wh);
-            var rtTitleBar = new RectangleF(0, 0, this.Width, wh);
-            var rtTitleIconBox = new RectangleF(0, 0, TitleIconBoxWidth ?? wh, wh);
-            var rtTitleArea = new RectangleF(wh + 15, 0, Width - (wh * (MaximizeBox || MinimizeBox ? 4 : 2)) - MenuGap - (Menus.Count > 0 ? Menus.Sum(x => x.Width) : 0) - 15, Padding.Top);
+            var rtExit = new RectangleF(this.Width - ih, 0, ih, ih);
+            var rtMax = new RectangleF(rtExit.X - ih, 0, ih, ih);
+            var rtMin = new RectangleF(rtMax.X - ih, 0, ih, ih);
+            var rtTitleBar = new RectangleF(0, 0, this.Width, ih);
+            var rtTitleIconBox = new RectangleF(0, 0, iw, ih);
+            var rtTitleArea = new RectangleF(rtTitleIconBox.Right + 15, 0, Width - (rtTitleIconBox.Width * (MaximizeBox || MinimizeBox ? 4 : 2)) - MenuGap - (Menus.Count > 0 ? Menus.Sum(x => x.Width) : 0) - 15, Padding.Top);
             var rtTitleText = new RectangleF(rtTitleArea.Left + TitlePadding.Left, rtTitleArea.Top + TitlePadding.Top, rtTitleArea.Width - (TitlePadding.Left + TitlePadding.Right), rtTitleArea.Height - (TitlePadding.Top + TitlePadding.Bottom));
 
             act(rtTitleBar, rtTitleIconBox, rtTitleArea, rtTitleText, rtMin, rtMax, rtExit, rtContent);
