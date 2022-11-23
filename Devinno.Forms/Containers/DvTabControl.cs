@@ -1,5 +1,6 @@
 ﻿using Devinno.Extensions;
 using Devinno.Forms.Dialogs;
+using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
 using Devinno.Forms.Utils;
@@ -14,7 +15,7 @@ using System.Windows.Forms;
 
 namespace Devinno.Forms.Containers
 {
-    public class DvTabControl : TabControl
+    public class DvTabControl : TabControl, IMessageFilter
     {
         #region Properties
         #region TabIcons
@@ -44,6 +45,24 @@ namespace Devinno.Forms.Containers
             set { if (cPointColor != value) { cPointColor = value; Invalidate(); } }
         }
         #endregion
+        #region DrawBorder
+        private bool bDrawBorder = true;
+        public bool DrawBoarder
+        {
+            get => bDrawBorder;
+            set
+            {
+                if(bDrawBorder != value)
+                {
+                    bDrawBorder = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #region Buttons
+        public List<DvTabButton> Buttons { get; } = new List<DvTabButton>();
+        #endregion
 
         #region Round
         private RoundType? round = null;
@@ -62,6 +81,12 @@ namespace Devinno.Forms.Containers
         #endregion
         #endregion
 
+        #region Event
+        #region ButtonClicked
+        public event EventHandler<TabButtonClickedEventArgs> ButtonClicked;
+        #endregion
+        #endregion
+
         #region Member Variable
         List<_TPI> tps = new List<_TPI>();
         #endregion
@@ -75,6 +100,8 @@ namespace Devinno.Forms.Containers
 
             SizeMode = TabSizeMode.Fixed;
             ItemSize = new Size(120, 30);
+
+            Application.AddMessageFilter(this);
         }
         #endregion
 
@@ -234,7 +261,7 @@ namespace Devinno.Forms.Containers
                 #endregion
                 #region Background
                 {
-                    Theme.DrawBox(e.Graphics, rtNavi, TabBackColor, TabBackBorderColor, eNavi, Box.FlatBox(true, true), Corner);
+                    Theme.DrawBox(e.Graphics, rtNavi, TabBackColor, (!DrawBoarder ? TabBackColor : TabBackBorderColor), eNavi, Box.FlatBox(true, true), Corner);
                 }
                 #endregion
 
@@ -286,7 +313,16 @@ namespace Devinno.Forms.Containers
                     #endregion
                 }
 
-                Theme.DrawBox(e.Graphics, rtPage, TabColor, TabBorderColor, ePage, Box.FlatBox(true,true));
+                AreasButtons(rtNavi, (btn, rt) =>
+                {
+                    if (btn.Icon != null)
+                    {
+                        br.Color = !btn.bDown ? ForeColor : Color.FromArgb(60, ForeColor);
+                        e.Graphics.DrawIcon(btn.Icon, br, rt);
+                    }
+                });
+
+                Theme.DrawBox(e.Graphics, rtPage, TabColor, (!DrawBoarder ? TabColor : TabBorderColor), ePage, Box.FlatBox(true,true));
 
             });
 
@@ -352,6 +388,54 @@ namespace Devinno.Forms.Containers
             base.OnControlAdded(e);
         }
         #endregion
+
+        #region PreFilterMessage
+        public bool PreFilterMessage(ref System.Windows.Forms.Message m)
+        {
+            if (m.Msg == 0x0201) //WM_LBUTTONDOWN
+            {
+                var v = m.LParam.ToInt32();
+                int X = (v & 0x0000FFFF), Y = (int)((v & 0xFFFF0000) >> 16);
+                var p = new Point(X, Y); 
+
+                Areas((rtContent, rtPage, rtNavi) =>
+                {
+                    AreasButtons(rtNavi, (btn, rt) =>
+                    {
+                        if (CollisionTool.Check(rt, p))
+                        {
+                            btn.bDown = true;
+                        }
+                    });
+                });
+                Invalidate();
+            }
+            else if (m.Msg == 0x202) //WM_LBUTTONUP
+            {
+                var v = m.LParam.ToInt32();
+                int X = (v & 0x0000FFFF), Y = (int)((v & 0xFFFF0000) >> 16);
+                var p = new Point(X, Y); 
+
+                Areas((rtContent, rtPage, rtNavi) =>
+                {
+                    AreasButtons(rtNavi, (btn, rt) =>
+                    {
+                        if (btn.bDown)
+                        {
+                            btn.bDown = false;
+                            if (CollisionTool.Check(rt, p))
+                            {
+                                ButtonClicked?.Invoke(this, new TabButtonClickedEventArgs(btn));
+                            }
+                        }
+                    });
+                });
+                Invalidate();
+            }
+           
+            return false;
+        }
+        #endregion
         #endregion
 
         #region Method
@@ -380,25 +464,26 @@ namespace Devinno.Forms.Containers
             var rtContent = Util.FromRect(0, 0, this.Width - 1, this.Height - 1);
             var rtPage = rtContent;
             var rtNavi = new RectangleF();
- 
+
+            var ih = TabPages.Count > 0 ? GetTabRect(0).Height : ItemSize.Height;
 
             switch (Alignment)
             {
                 case TabAlignment.Left:
-                    rtNavi = Util.FromRect(rtContent.Left, rtContent.Top, ItemSize.Height - 1, rtContent.Height);
-                    rtPage = Util.FromRect(rtNavi.Right, rtContent.Top, rtContent.Width - ItemSize.Height, rtContent.Height);
+                    rtNavi = Util.FromRect(rtContent.Left, rtContent.Top, ih - 1, rtContent.Height);
+                    rtPage = Util.FromRect(rtNavi.Right, rtContent.Top, rtContent.Width - ih, rtContent.Height);
                     break;
                 case TabAlignment.Top:
-                    rtNavi = Util.FromRect(rtContent.Left, rtContent.Top, rtContent.Width, ItemSize.Height - 1);
-                    rtPage = Util.FromRect(rtContent.Left, rtNavi.Bottom, rtContent.Width, rtContent.Height - ItemSize.Height);
+                    rtNavi = Util.FromRect(rtContent.Left, rtContent.Top, rtContent.Width, ih - 1);
+                    rtPage = Util.FromRect(rtContent.Left, rtNavi.Bottom, rtContent.Width, rtContent.Height - ih);
                     break;
                 case TabAlignment.Right:
-                    rtNavi = Util.FromRect(rtContent.Right - ItemSize.Height + 1, rtContent.Top, ItemSize.Height - 1, rtContent.Height);
-                    rtPage = Util.FromRect(rtContent.Left, rtContent.Top, rtContent.Width - ItemSize.Height, rtContent.Height);
+                    rtNavi = Util.FromRect(rtContent.Right - ih + 1, rtContent.Top, ih - 1, rtContent.Height);
+                    rtPage = Util.FromRect(rtContent.Left, rtContent.Top, rtContent.Width - ih, rtContent.Height);
                     break;
                 case TabAlignment.Bottom:
-                    rtNavi = Util.FromRect(rtContent.Left, rtContent.Bottom - ItemSize.Height + 1, rtContent.Width, ItemSize.Height - 1);
-                    rtPage = Util.FromRect(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - ItemSize.Height);
+                    rtNavi = Util.FromRect(rtContent.Left, rtContent.Bottom - ih + 1, rtContent.Width, ih - 1);
+                    rtPage = Util.FromRect(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - ih);
                     break;
             }
              
@@ -406,12 +491,53 @@ namespace Devinno.Forms.Containers
             act(rtContent, rtPage, rtNavi);
         }
         #endregion
+        #region AreasButtons
+        void AreasButtons(RectangleF rtNavi, Action<DvTabButton, RectangleF> act)
+        {
+            if (Buttons.Count > 0)
+            {
+                for (int i = 0; i < Buttons.Count; i++)
+                {
+                    var btn = Buttons[i];
+                    switch (Alignment)
+                    {
+                        case TabAlignment.Top:
+                            {
+                                var wh = rtNavi.Height;
+                                var x = rtNavi.Right - (wh * Buttons.Count) + (wh * i);
+                                var y = rtNavi.Y;
+                                var rt = new RectangleF(x, y, wh, wh);
+                                act(btn, rt);
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        #endregion
         #endregion
     }
 
+    #region _TPI
     internal class _TPI
     {
         public TabPage Page { get; set; }
         public Color BackColor { get; set; }
     }
+    #endregion
+    #region DvTabButton
+    public class DvTabButton
+    {
+        public string Name { get; set; }
+        public DvIcon Icon { get; set; }
+        internal bool bDown { get; set; }
+    }
+    #endregion
+    #region TabButtonClickedEventArgs 
+    public class TabButtonClickedEventArgs : EventArgs
+    {
+        public DvTabButton Button { get; private set; }
+        public TabButtonClickedEventArgs(DvTabButton btn) => this.Button = btn;
+    }
+    #endregion
 }

@@ -60,12 +60,12 @@ namespace Devinno.Forms.Dialogs
             SizeF sz;
             using (var g = CreateGraphics()) sz = g.MeasureString(Message, Font);
             var btnSZ = Convert.ToInt32(ButtonHeight + 6);
-            var gapW = layout.Padding.Left + layout.Padding.Right + lbl.Margin.Left + lbl.Margin.Right;
-            var gapH = layout.Padding.Top + layout.Padding.Bottom + lbl.Margin.Top + lbl.Margin.Bottom;
+            var gapW = layout.Padding.Left + layout.Padding.Right + lbl.Margin.Left + lbl.Margin.Right +6;
+            var gapH = layout.Padding.Top + layout.Padding.Bottom + lbl.Margin.Top + lbl.Margin.Bottom +12;
             
 
             tpnl.RowStyles[1].Height = btnSZ;
-            Width = Math.Max(gapW + Convert.ToInt32(sz.Width), MinWidth);
+            Width = Math.Max(gapW + Convert.ToInt32(sz.Width)+1, MinWidth);
             Height = Math.Max(TitleHeight + gapH + btnSZ + Convert.ToInt32(sz.Height), MinHeight);
 
             this.Title = this.Text = Title;

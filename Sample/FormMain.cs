@@ -426,6 +426,7 @@ namespace Sample
                 dg.SetDataSource<GridItem3>(Items);
             });
             #endregion
+
             //actMonth();
             actMonitor();
             //actInput();
@@ -779,12 +780,11 @@ namespace Sample
             Theme.KeyboardInput = true;
 
             SetExComposited();
-
             GraphSet();
             TimeGraphSet();
             trendGraph.Start<Data2>(v);
-
             DwmTool.SetTheme(this, true);
+
         }
         #endregion
 
@@ -996,4 +996,5 @@ namespace Sample
 
     }
     #endregion
+
 }
