@@ -1,5 +1,4 @@
-﻿using Devinno.Extensions;
-using Devinno.Forms.Dialogs;
+﻿using Devinno.Forms.Dialogs;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
 using Devinno.Forms.Themes;
