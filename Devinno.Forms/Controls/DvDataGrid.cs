@@ -336,7 +336,7 @@ namespace Devinno.Forms.Controls
                             if (s.KeyCode == Keys.Right && rtCurrent.HasValue)
                             {
                                 var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
-                                var next = current.Row.Cells.Where(x => (x.GetType().Name.StartsWith("DvDataGridEditStringCell") || x.GetType().Name.StartsWith("DvDataGridEditNumberCell")) && x.ColumnIndex > ci)
+                                var next = current.Row.Cells.Where(x => (x.GetType().Name.StartsWith("DvDataGridEditTextCell") || x.GetType().Name.StartsWith("DvDataGridEditNumberCell")) && x.ColumnIndex > ci)
                                            .OrderBy(x => x.ColumnIndex).Select(x => x as DvDataGridCell).FirstOrDefault();
 
                                 if (next != null)
@@ -359,7 +359,7 @@ namespace Devinno.Forms.Controls
                             if (s.KeyCode == Keys.Left && rtCurrent.HasValue)
                             {
                                 var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
-                                var prev = current.Row.Cells.Where(x => (x.GetType().Name.StartsWith("DvDataGridEditStringCell") || x.GetType().Name.StartsWith("DvDataGridEditNumberCell")) && x.ColumnIndex < ci)
+                                var prev = current.Row.Cells.Where(x => (x.GetType().Name.StartsWith("DvDataGridEditTextCell") || x.GetType().Name.StartsWith("DvDataGridEditNumberCell")) && x.ColumnIndex < ci)
                                            .OrderBy(x => x.ColumnIndex).Select(x => x as DvDataGridCell).LastOrDefault();
 
                                 if (prev != null)
@@ -2279,9 +2279,9 @@ namespace Devinno.Forms.Controls
                             OriginalTextBox.ForeColor = ForeColor;
                             OriginalTextBox.Text = Value;
                             OriginalTextBox.Tag = cell;
+                            AlignInput(rt.Value);
                             OriginalTextBox.Visible = true;
                             OriginalTextBox.Focus();
-                            AlignInput(rt.Value);
                         }
                     }
                 });

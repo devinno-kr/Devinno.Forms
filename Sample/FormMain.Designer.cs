@@ -2811,6 +2811,7 @@ namespace Sample
             this.tab2.Controls.Add(this.tabPage2);
             this.tab2.Controls.Add(this.tabPage3);
             this.tab2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tab2.DrawBoarder = true;
             this.tab2.ItemSize = new System.Drawing.Size(40, 120);
             this.tab2.Location = new System.Drawing.Point(3, 403);
             this.tab2.Multiline = true;

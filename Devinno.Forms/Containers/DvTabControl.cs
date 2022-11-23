@@ -286,12 +286,11 @@ namespace Devinno.Forms.Containers
                     var rtTab = GetTabRect(i);
                     switch (Alignment)
                     {
-                        case TabAlignment.Left: rtTab = new Rectangle(rtTab.X, rtTab.Y, rtTab.Width - 5, rtTab.Height); break;
-                        case TabAlignment.Top: rtTab = new Rectangle(rtTab.X, rtTab.Y, rtTab.Width, rtTab.Height - 5); break;
-                        case TabAlignment.Right: rtTab = new Rectangle(rtTab.X + 5, rtTab.Y, rtTab.Width - 5, rtTab.Height); break;
-                        case TabAlignment.Bottom: rtTab = new Rectangle(rtTab.X, rtTab.Y + 5, rtTab.Width, rtTab.Height - 5); break;
+                        case TabAlignment.Left: rtTab = new Rectangle(rtTab.X, rtTab.Y, Convert.ToInt32(rtNavi.Width), rtTab.Height); break;
+                        case TabAlignment.Top: rtTab = new Rectangle(rtTab.X, rtTab.Y, rtTab.Width, Convert.ToInt32(rtNavi.Height)); break;
+                        case TabAlignment.Right: rtTab = new Rectangle(rtTab.X + 5, rtTab.Y, Convert.ToInt32(rtNavi.Width), rtTab.Height); break;
+                        case TabAlignment.Bottom: rtTab = new Rectangle(rtTab.X, rtTab.Y + 5, rtTab.Width, Convert.ToInt32(rtNavi.Height)); break;
                     }
-
 
                     Theme.DrawTextIcon(e.Graphics, ti, Font, cT, rtTab);
                     #endregion
@@ -465,7 +464,7 @@ namespace Devinno.Forms.Containers
             var rtPage = rtContent;
             var rtNavi = new RectangleF();
 
-            var ih = TabPages.Count > 0 ? GetTabRect(0).Height : ItemSize.Height;
+            var ih = SizeMode == TabSizeMode.Fixed && TabPages.Count > 0 ? ItemSize.Height : GetTabRect(0).Height;
 
             switch (Alignment)
             {
@@ -486,7 +485,6 @@ namespace Devinno.Forms.Containers
                     rtPage = Util.FromRect(rtContent.Left, rtContent.Top, rtContent.Width, rtContent.Height - ih);
                     break;
             }
-             
 
             act(rtContent, rtPage, rtNavi);
         }

@@ -171,10 +171,12 @@ namespace Sample
             inDoW.SelectedIndex = 0;
             #endregion
             #region tab2
-            //tab2.ItemSize = new Size(40, 120);
+            tab2.ItemSize = new Size(40, 120);
+            tab2.SizeMode = TabSizeMode.Fixed;
             tab2.TabIcons.Add("tabPage1", new DvIcon("fa-tablet", 12));
             tab2.TabIcons.Add("tabPage2", new DvIcon("fa-cube", 12));
             tab2.TabIcons.Add("tabPage3", new DvIcon("fa-bell", 12));
+            //tab2.SizeMode = TabSizeMode.Normal;
             #endregion
             #region treeView
             for (int a = 1; a <= 3; a++)
@@ -365,7 +367,7 @@ namespace Sample
             var actInput = new Action(() =>
             {
                 var dg = dataGrid;
-                dg.SelectionMode = DvDataGridSelectionMode.Single;
+                dg.SelectionMode = DvDataGridSelectionMode.Selector;
                 dg.ColumnGroups.Clear();
                 dg.Columns.Clear();
                 dg.Rows.Clear();
@@ -412,7 +414,7 @@ namespace Sample
                 dg.ScrollMode = ScrollMode.Both;
 
                 var Items = new List<GridItem3>();
-                for (int i = 1; i <= 3; i++)
+                for (int i = 1; i <= 30; i++)
                 {
                     Items.Add(new GridItem3()
                     {
@@ -428,8 +430,8 @@ namespace Sample
             #endregion
 
             //actMonth();
-            actMonitor();
-            //actInput();
+            //actMonitor();
+            actInput();
             #endregion
             #region Boxes
             InputBox = new DvInputBox { MinWidth = 220 };
@@ -784,7 +786,6 @@ namespace Sample
             TimeGraphSet();
             trendGraph.Start<Data2>(v);
             DwmTool.SetTheme(this, true);
-
         }
         #endregion
 
