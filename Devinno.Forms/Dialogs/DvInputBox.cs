@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -133,7 +134,7 @@ namespace Devinno.Forms.Dialogs
             foreach (var v in props)
             {
                 var p = infos.ContainsKey(v.Name) ? infos[v.Name] : null;
-                
+
                 #region Var
                 var title = p != null ? p.Title : v.Name;
                 var count = tpnl.Controls.Count;
@@ -350,6 +351,7 @@ namespace Devinno.Forms.Dialogs
             tpnl.Controls.Add(c, 0, 0);
             #endregion
 
+           
             if (UseEnterKey)
             {
                 if (c is DvValueInputText) { ((DvValueInputText)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
@@ -367,6 +369,28 @@ namespace Devinno.Forms.Dialogs
 
             }
 
+            ThreadPool.QueueUserWorkItem((o) =>
+            {
+                Thread.Sleep(300);
+
+                this.Invoke(new Action(() =>
+                {
+                    if (c is DvValueInputText) { var v = ((DvValueInputText)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<byte>) { var v = ((DvValueInputNumber<byte>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<ushort>) { var v = ((DvValueInputNumber<ushort>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<uint>) { var v = ((DvValueInputNumber<uint>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<ulong>) { var v = ((DvValueInputNumber<ulong>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<sbyte>) { var v = ((DvValueInputNumber<sbyte>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<short>) { var v = ((DvValueInputNumber<short>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<int>) { var v = ((DvValueInputNumber<int>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<long>) { var v = ((DvValueInputNumber<long>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<float>) { var v = ((DvValueInputNumber<float>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<double>) { var v = ((DvValueInputNumber<double>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    else if (c is DvValueInputNumber<decimal>) { var v = ((DvValueInputNumber<decimal>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+
+                }));
+            });
+            
             if (this.ShowDialog() == DialogResult.OK)
             {
                 if (actReturn != null) actReturn();

@@ -483,6 +483,7 @@ namespace Devinno.Forms.Themes
         public override Color MenuItemBorderColor { get; set; } = Util.FromArgb(90, 90, 90);
         public override Color MenuBorderColor { get; set; } = Util.FromArgb(90, 90, 90);
         public override Color SeparatorColor { get; set; } = Util.FromArgb(90, 90, 90);
+
     }
     #endregion
 }

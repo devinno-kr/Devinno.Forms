@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -84,6 +85,11 @@ namespace Devinno.Forms.Containers
         #region ButtonClicked
         public event EventHandler<TabButtonClickedEventArgs> ButtonClicked;
         #endregion
+        #endregion
+
+        #region Interop
+        [DllImport("user32")]
+        private static extern bool ClientToScreen(IntPtr windowHandle, ref Point screenPoint);
         #endregion
 
         #region Member Variable
@@ -291,7 +297,35 @@ namespace Devinno.Forms.Containers
                         case TabAlignment.Bottom: rtTab = new Rectangle(rtTab.X, rtTab.Y + 5, rtTab.Width, Convert.ToInt32(rtNavi.Height)); break;
                     }
 
-                    Theme.DrawTextIcon(e.Graphics, ti, Font, cT, rtTab);
+                    //Theme.DrawTextIcon(e.Graphics, ti, Font, cT, rtTab);
+                    if (ti != null)
+                    {
+                        br.Color = cT;
+
+                        if (FA.Contains(ti.IconString) || ti.IconImage != null)
+                        {
+                            TextIconBounds(e.Graphics, rtTab, DvContentAlignment.MiddleCenter, ti.Text, Font, ti.IconGap, new SizeF(ti.IconSize, ti.IconSize), ti.IconAlignment,
+                            (rtIco, rtText) =>
+                            {
+                                e.Graphics.DrawIcon(ti.Icon, br, rtIco);
+                                using (var strfrm = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center, Trimming = StringTrimming.EllipsisCharacter })
+                                {
+                                    var sz = e.Graphics.MeasureString(ti.Text, Font);
+                                    var vrt = Util.MakeRectangleAlign(rtText, new SizeF(rtText.Width, sz.Height), DvContentAlignment.MiddleCenter);
+                                    e.Graphics.DrawString(ti.Text, Font, br, vrt, strfrm);
+                                }
+                            });
+                        }
+                        else
+                        {
+                            using (var strfrm = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center, Trimming = StringTrimming.EllipsisCharacter })
+                            {
+                                var sz = e.Graphics.MeasureString(ti.Text, Font);
+                                var vrt = Util.MakeRectangleAlign(rtTab, new SizeF(rtTab.Width, sz.Height), DvContentAlignment.MiddleCenter);
+                                e.Graphics.DrawString(ti.Text, Font, br, vrt, strfrm);
+                            }
+                        }
+                    }
                     #endregion
 
                     #region Point
@@ -394,13 +428,16 @@ namespace Devinno.Forms.Containers
             {
                 var v = m.LParam.ToInt32();
                 int X = (v & 0x0000FFFF), Y = (int)((v & 0xFFFF0000) >> 16);
-                var p = new Point(X, Y); 
+                var p = new Point(X, Y);
+
+                var sp = ClientToScreen(m.HWnd, ref p);
 
                 Areas((rtContent, rtPage, rtNavi) =>
                 {
                     AreasButtons(rtNavi, (btn, rt) =>
                     {
-                        if (CollisionTool.Check(rt, p))
+                        var srt = this.RectangleToScreen(Util.INT(rt));
+                        if (CollisionTool.Check(srt, new Point(Convert.ToInt32(p.X), Convert.ToInt32(p.Y))))
                         {
                             btn.bDown = true;
                         }
@@ -412,7 +449,9 @@ namespace Devinno.Forms.Containers
             {
                 var v = m.LParam.ToInt32();
                 int X = (v & 0x0000FFFF), Y = (int)((v & 0xFFFF0000) >> 16);
-                var p = new Point(X, Y); 
+                var p = new Point(X, Y);
+
+                var sp = ClientToScreen(m.HWnd, ref p);
 
                 Areas((rtContent, rtPage, rtNavi) =>
                 {
@@ -421,7 +460,9 @@ namespace Devinno.Forms.Containers
                         if (btn.bDown)
                         {
                             btn.bDown = false;
-                            if (CollisionTool.Check(rt, p))
+
+                            var srt = this.RectangleToScreen(Util.INT(rt));
+                            if (CollisionTool.Check(srt, new Point(Convert.ToInt32(p.X), Convert.ToInt32(p.Y))))
                             {
                                 ButtonClicked?.Invoke(this, new TabButtonClickedEventArgs(btn));
                             }
@@ -430,7 +471,7 @@ namespace Devinno.Forms.Containers
                 });
                 Invalidate();
             }
-           
+
             return false;
         }
         #endregion
@@ -509,6 +550,38 @@ namespace Devinno.Forms.Containers
                             break;
                     }
                 }
+            }
+        }
+        #endregion
+
+        #region TextIconBounds
+        void TextIconBounds(Graphics g, RectangleF bounds, DvContentAlignment align, string text, Font font, float iconGap, SizeF iconSize, DvTextIconAlignment iconAlign, Action<RectangleF, RectangleF> act)
+        {
+            var gap = string.IsNullOrWhiteSpace(text) ? 0F : iconGap;
+            var szTX = g.MeasureString(text, font);
+            var szFA = iconSize;
+            var szv = g.MeasureTextIcon(iconAlign, szFA, gap, text, font);
+            if (szv.Width > bounds.Width - 10)
+            {
+                var gp = szv.Width - (bounds.Width - 10);
+                szTX.Width -= gp;
+                szv.Width -= gp;
+            }
+            var rt = Util.MakeRectangleAlign(bounds, szv, align);
+
+            if (iconAlign == DvTextIconAlignment.LeftRight)
+            {
+                var rtFA = new RectangleF(rt.X, Util.CenterY(rt, szFA), szFA.Width, szFA.Height);
+                var rtTX = new RectangleF(rt.Right - szTX.Width, Util.CenterY(rt, szTX), szTX.Width, szTX.Height);
+
+                act(rtFA, rtTX);
+            }
+            else
+            {
+                var rtFA = new RectangleF(Util.CenterX(rt, szFA), rt.Y, szFA.Width, szFA.Height);
+                var rtTX = new RectangleF(Util.CenterX(rt, szTX), rt.Bottom - szTX.Height, szTX.Width, szTX.Height);
+
+                act(rtFA, rtTX);
             }
         }
         #endregion

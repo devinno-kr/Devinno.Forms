@@ -173,9 +173,9 @@ namespace Sample
             #region tab2
             tab2.ItemSize = new Size(40, 120);
             tab2.SizeMode = TabSizeMode.Fixed;
-            tab2.TabIcons.Add("tabPage1", new DvIcon("fa-tablet", 12));
-            tab2.TabIcons.Add("tabPage2", new DvIcon("fa-cube", 12));
-            tab2.TabIcons.Add("tabPage3", new DvIcon("fa-bell", 12));
+            tab2.TabIcons.Add("tabPage1", new DvIcon("fa-tablet", 12) { Gap = 5 });
+            tab2.TabIcons.Add("tabPage2", new DvIcon("fa-cube", 12) { Gap = 5 });
+            tab2.TabIcons.Add("tabPage3", new DvIcon("fa-bell", 12) { Gap = 5 });
             //tab2.SizeMode = TabSizeMode.Normal;
             #endregion
             #region treeView
