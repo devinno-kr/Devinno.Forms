@@ -252,6 +252,8 @@ namespace Sample
             #region actMonth
             var actMonth = new Action(() =>
             {
+                var nds = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
                 var dg = dataGrid;
                 dg.SelectionMode = DvDataGridSelectionMode.Selector;
                 dg.ColumnGroups.Clear();
@@ -265,7 +267,7 @@ namespace Sample
                 dg.ColumnGroups.Add(new DvDataGridColumn(dg) { Name = "G2", HeaderText = "일일 수집량" });
                 dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Name", GroupName = "G1", HeaderText = "이름", SizeMode = DvSizeMode.Pixel, Width = Convert.ToInt32(100), Fixed = true, UseFilter = true, CellType = typeof(DvDataGridLabelCell) });
                 dg.Columns.Add(new DvDataGridColumn(dg) { Name = "State", GroupName = "G1", HeaderText = "상태", SizeMode = DvSizeMode.Pixel, Width = Convert.ToInt32(70), Fixed = true, CellType = typeof(DvDataGridLabelCell) });
-                for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
+                for (int i = 1; i <= nds; i++)
                     dg.Columns.Add(new DvDataGridColumn(dg) { Name = "Day" + i, GroupName = "G2", HeaderText = i + "일", SizeMode = DvSizeMode.Pixel, Width = Convert.ToInt32(70), CellType = typeof(DvDataGridLabelCell) });
 
                 var srow = new DvDataGridSummaryRow(dg);
@@ -274,7 +276,7 @@ namespace Sample
                 srow.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "", ColumnIndex = 0, ColumnSpan = 1, Visible = false });
                 srow2.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "평균", ColumnIndex = 0, ColumnSpan = 2 });
                 srow2.Cells.Add(new DvDataGridSummaryLabelCell(dg, srow) { Text = "", ColumnIndex = 0, ColumnSpan = 1, Visible = false });
-                for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
+                for (int i = 1; i <= nds; i++)
                 {
                     srow.Cells.Add(new DvDataGridSummarySumCell(dg, srow) { ColumnIndex = 1 + i, ColumnSpan = 1, Format = "N0" });
                     srow2.Cells.Add(new DvDataGridSummaryAverageCell(dg, srow) { ColumnIndex = 1 + i, ColumnSpan = 1, Format = "N0" });
@@ -429,9 +431,9 @@ namespace Sample
             });
             #endregion
 
-            //actMonth();
+            actMonth();
             //actMonitor();
-            actInput();
+            //actInput();
             #endregion
             #region Boxes
             InputBox = new DvInputBox { MinWidth = 220 };

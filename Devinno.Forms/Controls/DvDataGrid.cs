@@ -454,7 +454,7 @@ namespace Devinno.Forms.Controls
                     var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
 
                     hST = Columns.Where(x => !x.Fixed).Select(x => ColWidths[Columns.IndexOf(x)]).Sum();
-                    hSV = rtScrollArea.Width - Columns.Where(x => x.Fixed).Select(x => ColWidths[Columns.IndexOf(x)]).Sum();
+                    hSV = rtScrollArea.Width;
                     vSV = rtScrollArea.Height;
 
                     var bAllSelect = GetRows().Where(x => x.Selected).Count() > 0;
@@ -462,6 +462,7 @@ namespace Devinno.Forms.Controls
                     #endregion
                     #region Draw
                     Theme.DrawBox(e.Graphics, rtBox, BoxColor, BorderColor, RoundType.L, Box.ListBox(ShadowGap));
+
 
                     using (var path = DrawingTool.GetRoundRectPath(rtContent, Corner))
                     {
@@ -528,7 +529,7 @@ namespace Devinno.Forms.Controls
                         #endregion
                         #region Content
                         {
-                            e.Graphics.SetClip(rtScrollContent);
+                            //e.Graphics.SetClip(rtScrollContent);
                             #region Rows
                             {
                                 var last = GetRows().LastOrDefault();
@@ -551,6 +552,18 @@ namespace Devinno.Forms.Controls
                                                 if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
                                                 if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
                                                 cell.Draw(e.Graphics, thm, rt);
+
+                                                if (last != null && cell == last)
+                                                {
+                                                    p.Width = 1F;
+                                                    p.Color = BorderColor;
+
+                                                    var l = rt.Left;
+                                                    var r = rt.Right;
+                                                    var b = rt.Bottom;
+                                                    var t = rt.Top;
+                                                    e.Graphics.DrawLine(p, r, t, r, b);
+                                                }
 
                                                 if (CheckInput((DvDataGridCell)cell))
                                                 {
@@ -790,8 +803,8 @@ namespace Devinno.Forms.Controls
                                 }
                             }
                             #endregion
-                            e.Graphics.ResetClip();
-                            e.Graphics.SetClip(path);
+                            //e.Graphics.ResetClip();
+                            //e.Graphics.SetClip(path);
                         }
                         #endregion
                         #region Column
@@ -2216,7 +2229,7 @@ namespace Devinno.Forms.Controls
 
             var ColWidths = GetColumnsWidths(Util.FromRect(rtContent.Left, rtContent.Bottom, rtContent.Width - (usv ? scwh : 0), rtContent.Height - columnH - (ush ? scwh : 0)));
             var cfx = Columns.Where(x => x.Fixed).LastOrDefault();
-            var nfx = (cfx != null ? ColWidths.GetRange(0, Columns.IndexOf(cfx)).Sum() + 1 : 0) + (SelectionMode == DvDataGridSelectionMode.Selector ? SPECIAL_CELL_WIDTH : 0);
+            var nfx = (cfx != null ? ColWidths.GetRange(0, Columns.IndexOf(cfx)+1).Sum() + 1 : 0) + (SelectionMode == DvDataGridSelectionMode.Selector ? SPECIAL_CELL_WIDTH : 0);
 
             var rtColumn = Util.FromRect(rtContent.Left, rtContent.Top, rtContent.Width, columnH);
             var rtBox = Util.FromRect(rtColumn.Left, rtColumn.Bottom, rtContent.Width - (usv ? scwh : 0), rtContent.Height - columnH - (ush ? scwh : 0));

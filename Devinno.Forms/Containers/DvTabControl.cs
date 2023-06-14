@@ -504,7 +504,7 @@ namespace Devinno.Forms.Containers
             var rtPage = rtContent;
             var rtNavi = new RectangleF();
 
-            var ih = SizeMode == TabSizeMode.Fixed && TabPages.Count > 0 ? ItemSize.Height : GetTabRect(0).Height;
+            var ih = TabPages.Count > 0 ? (SizeMode == TabSizeMode.Fixed ? ItemSize.Height : GetTabRect(0).Height) : 10;
 
             switch (Alignment)
             {
