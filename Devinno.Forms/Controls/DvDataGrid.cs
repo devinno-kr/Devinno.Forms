@@ -529,7 +529,7 @@ namespace Devinno.Forms.Controls
                         #endregion
                         #region Content
                         {
-                            //e.Graphics.SetClip(rtScrollContent);
+                            e.Graphics.SetClip(rtScrollContent, System.Drawing.Drawing2D.CombineMode.Intersect);
                             #region Rows
                             {
                                 var last = GetRows().LastOrDefault();
@@ -803,8 +803,8 @@ namespace Devinno.Forms.Controls
                                 }
                             }
                             #endregion
-                            //e.Graphics.ResetClip();
-                            //e.Graphics.SetClip(path);
+                            e.Graphics.ResetClip();
+                            e.Graphics.SetClip(path);
                         }
                         #endregion
                         #region Column
