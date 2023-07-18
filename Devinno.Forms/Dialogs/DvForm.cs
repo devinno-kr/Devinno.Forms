@@ -351,6 +351,9 @@ namespace Devinno.Forms.Dialogs
             }
         }
         #endregion
+        #region UseWindowDock
+        public bool UseWindowDock { get; set; } = true;
+        #endregion
 
         #region Loaded
         public bool Loaded { get; private set; }
@@ -368,7 +371,6 @@ namespace Devinno.Forms.Dialogs
         private Rectangle? plast = null;
         private DwmTool.RECT prc_m = new DwmTool.RECT() { Left = 500, Top = 500, Right = 500, Bottom = 500 };
         private DwmTool.RECT prc_s = new DwmTool.RECT() { Left = 500, Top = 500, Right = 500, Bottom = 500 };
-        private int offsetT = 0, offsetB = 0;
         #endregion
 
         #region Interop
@@ -742,6 +744,9 @@ namespace Devinno.Forms.Dialogs
                     {
                         if (Movable && CollisionTool.Check(rtTitleArea, x, y))
                         {
+                            pbounds = Bounds;
+                            pdown = MousePosition;
+
                             Win32Tool.ReleaseCapture();
                             Win32Tool.SendMessage(Handle, Win32Tool.WM_NCLBUTTONDOWN, Win32Tool.HT_CAPTION, 0);
                         }
@@ -769,9 +774,9 @@ namespace Devinno.Forms.Dialogs
                 }
                 #endregion
                 #region WM_SIZING
-                if (m.Msg == WM_SIZING && !Fixed)
+                if (m.Msg == WM_SIZING && !Fixed && Movable && UseWindowDock)
                 {
-                    if (pbounds.HasValue)
+                    if (pdown.HasValue && pbounds.HasValue)
                     {
                         var rc = (DwmTool.RECT)Marshal.PtrToStructure(m.LParam, typeof(DwmTool.RECT));
 
@@ -827,73 +832,97 @@ namespace Devinno.Forms.Dialogs
                 }
                 #endregion
                 #region WM_MOVING
-                if (m.Msg == 0x0216 && !Fixed)
+                if (m.Msg == 0x0216 && !Fixed && UseWindowDock)
                 {
-                    var ox = 0;
-                    var oy = 0;
-
-                    if(pdown.HasValue)
+                    if (pdown.HasValue && pbounds.HasValue)
                     {
+                        var rc = (DwmTool.RECT)Marshal.PtrToStructure(m.LParam, typeof(DwmTool.RECT));
+
+                        var ox = 0;
+                        var oy = 0;
+                        var ow = 0;
+                        var oh = 0;
+
                         ox = MousePosition.X - pdown.Value.X;
-                        oy = MousePosition.X - pdown.Value.Y;
-                    }
+                        oy = MousePosition.Y - pdown.Value.Y;
+                        ow = pdown.Value.X - pbounds.Value.Left;
+                        oh = pdown.Value.Y - pbounds.Value.Top;
 
-                    var rc = (DwmTool.RECT)Marshal.PtrToStructure(m.LParam, typeof(DwmTool.RECT));
-                    
-                    int w = rc.Right - rc.Left;
-                    int h = rc.Bottom - rc.Top;
-                    var scr = Screen.FromControl(this);
-                    var type = m.WParam.ToInt32();
+                        var w = rc.Right - rc.Left;
+                        var h = rc.Bottom - rc.Top;
+                        var scr = Screen.FromControl(this);
+                        var type = m.WParam.ToInt32();
 
-                    if (MousePosition.Y + offsetT <= scr.WorkingArea.Top)
-                    {
-                        rc.Left = scr.WorkingArea.Left;
-                        rc.Right = scr.WorkingArea.Right;
-                        rc.Top = scr.WorkingArea.Top;
-                        rc.Bottom = scr.WorkingArea.Bottom;
-                    }
-                    else if (prc_m.Top <= scr.WorkingArea.Top && rc.Top > scr.WorkingArea.Top)
-                    {
+                        var oxy = 30;
+                        var bL = MousePosition.X <= scr.WorkingArea.Left + oxy;
+                        var bR = MousePosition.X >= scr.WorkingArea.Right - oxy;
+                        var bT = MousePosition.Y <= scr.WorkingArea.Top + oxy;
+                        var bB = MousePosition.Y >= scr.WorkingArea.Bottom - oxy;
+                        var bCH = MousePosition.Y > MathTool.Map(0.3, 0, 1, scr.WorkingArea.Top, scr.WorkingArea.Bottom) && MousePosition.Y < MathTool.Map(0.6, 0, 1, scr.WorkingArea.Top, scr.WorkingArea.Bottom);
+                        var bCW = MousePosition.X > MathTool.Map(0.3, 0, 1, scr.WorkingArea.Left, scr.WorkingArea.Right) && MousePosition.X < MathTool.Map(0.6, 0, 1, scr.WorkingArea.Left, scr.WorkingArea.Right);
 
-                        if (plast.HasValue)
+                        if (bL && bT)
                         {
-                            pbounds = plast;
-                            plast = null;
+                            rc.Left = scr.WorkingArea.Left;
+                            rc.Right = MathTool.Center(scr.WorkingArea.Left, scr.WorkingArea.Right);
+                            rc.Top = scr.WorkingArea.Top;
+                            rc.Bottom = MathTool.Center(scr.WorkingArea.Top, scr.WorkingArea.Bottom);
                         }
-
-                        //rc.Left = MousePosition.X - (pbounds.Value.Width / 2);
-                        rc.Left = pbounds.Value.Left + ox;
-                        rc.Top = Math.Max(scr.WorkingArea.Top, MousePosition.Y + offsetT);
-                        rc.Right = rc.Left + pbounds.Value.Width;
-                        rc.Bottom = rc.Top + pbounds.Value.Height;
-
+                        else if (bR && bT)
+                        {
+                            rc.Left = MathTool.Center(scr.WorkingArea.Left, scr.WorkingArea.Right);
+                            rc.Right = scr.WorkingArea.Right;
+                            rc.Top = scr.WorkingArea.Top;
+                            rc.Bottom = MathTool.Center(scr.WorkingArea.Top, scr.WorkingArea.Bottom);
+                        }
+                        else if (bL && bB)
+                        {
+                            rc.Left = scr.WorkingArea.Left;
+                            rc.Right = MathTool.Center(scr.WorkingArea.Left, scr.WorkingArea.Right);
+                            rc.Top = MathTool.Center(scr.WorkingArea.Top, scr.WorkingArea.Bottom);
+                            rc.Bottom = scr.WorkingArea.Bottom;
+                        }
+                        else if (bR && bB)
+                        {
+                            rc.Left = MathTool.Center(scr.WorkingArea.Left, scr.WorkingArea.Right);
+                            rc.Right = scr.WorkingArea.Right;
+                            rc.Top = MathTool.Center(scr.WorkingArea.Top, scr.WorkingArea.Bottom);
+                            rc.Bottom = scr.WorkingArea.Bottom;
+                        }
+                        else if (bL && bCH)
+                        {
+                            rc.Left = scr.WorkingArea.Left;
+                            rc.Right = MathTool.Center(scr.WorkingArea.Left, scr.WorkingArea.Right);
+                            rc.Top = scr.WorkingArea.Top;
+                            rc.Bottom = scr.WorkingArea.Bottom;
+                        }
+                        else if (bR && bCH)
+                        {
+                            rc.Left = MathTool.Center(scr.WorkingArea.Left, scr.WorkingArea.Right);
+                            rc.Right = scr.WorkingArea.Right;
+                            rc.Top = scr.WorkingArea.Top;
+                            rc.Bottom = scr.WorkingArea.Bottom;
+                        }
+                        else if (bT && bCW)
+                        {
+                            rc.Left = scr.WorkingArea.Left;
+                            rc.Right = scr.WorkingArea.Right;
+                            rc.Top = scr.WorkingArea.Top;
+                            rc.Bottom = scr.WorkingArea.Bottom;
+                        }
+                        else
+                        {
+                            //rc.Left = MathTool.Constrain(MousePosition.X - ow, scr.WorkingArea.Left, scr.WorkingArea.Right - pbounds.Value.Width);
+                            //rc.Top = MathTool.Constrain(MousePosition.Y - oh, scr.WorkingArea.Top, scr.WorkingArea.Bottom - pbounds.Value.Height);
+                            rc.Left = MousePosition.X - ow;
+                            rc.Top = MousePosition.Y - oh;
+                            rc.Right = rc.Left + pbounds.Value.Width;
+                            rc.Bottom = rc.Top + pbounds.Value.Height;
+                        }
+                     
+                        prc_m = rc;
+                        Marshal.StructureToPtr(rc, m.LParam, true);
                     }
-
-                    prc_m = rc;
-                    Marshal.StructureToPtr(rc, m.LParam, true);
-                }
-                #endregion
-
-                #region WM_ENTERSIZEMOVE
-                if (m.Msg == WM_ENTERSIZEMOVE)
-                {
-                    pbounds = Bounds;
-                    pdown = MousePosition;
-
-                    var p = MousePosition;
-                    offsetT = Bounds.Top - p.Y;
-                    offsetB = Bounds.Bottom - p.Y;
-                    prc_m = new DwmTool.RECT() { Left = Left, Right = Right, Top = Top, Bottom = Bottom };
-                    prc_s = new DwmTool.RECT() { Left = Left, Right = Right, Top = Top, Bottom = Bottom };
-                }
-                #endregion
-                #region WM_EXITSIZEMOVE
-                if (m.Msg == WM_EXITSIZEMOVE)
-                {
-                    plast = pbounds;
-                    pbounds = null;
-                    pdown = null;
-                    offsetT = offsetB = 0;
                 }
                 #endregion
             }

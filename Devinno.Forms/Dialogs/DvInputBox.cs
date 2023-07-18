@@ -25,6 +25,9 @@ namespace Devinno.Forms.Dialogs
         public int MinHeight { get; set; } = 100;
 
         public bool UseEnterKey { get; set; } = false;
+
+        public DvButton ButtonOK => btnOk;
+        public DvButton ButtonCancel => btnCancel;
         #endregion
 
         #region Constructor

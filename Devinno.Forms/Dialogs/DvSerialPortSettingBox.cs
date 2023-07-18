@@ -1,4 +1,5 @@
 ﻿using Devinno.Communications.Setting;
+using Devinno.Forms.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,16 @@ namespace Devinno.Forms.Dialogs
 {
     public partial class DvSerialPortSettingBox : DvForm
     {
+        #region Properties
+        public DvButton ButtonOK => btnOk;
+        public DvButton ButtonCancel => btnCancel;
+        public DvValueInputCombo InputPort => inPort;
+        public DvValueInputCombo InputBaudrate => inBaudrate;
+        public DvValueInputCombo InputData => inDataBit;
+        public DvValueInputCombo InputParity => inParityBit;
+        public DvValueInputCombo InputStop => inStopBit;
+        #endregion
+
         #region Constructor
         public DvSerialPortSettingBox()
         {

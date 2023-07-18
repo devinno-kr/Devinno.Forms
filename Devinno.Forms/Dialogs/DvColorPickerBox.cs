@@ -1,4 +1,5 @@
 ﻿using Devinno.Extensions;
+using Devinno.Forms.Controls;
 using Devinno.Forms.Tools;
 using Devinno.Tools;
 using System;
@@ -26,6 +27,9 @@ namespace Devinno.Forms.Dialogs
                 return c.ToRGB();
             }
         }
+
+        public DvButton ButtonOK => btnOK;
+        public DvButton ButtonCancel => btnCancel;
         #endregion
 
         #region Member Variable

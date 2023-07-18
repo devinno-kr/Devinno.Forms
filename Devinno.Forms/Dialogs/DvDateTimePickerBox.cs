@@ -49,6 +49,12 @@ namespace Devinno.Forms.Dialogs
                 return ret;
             }
         }
+
+        public DvButton ButtonOK => btnOK;
+        public DvButton ButtonCancel => btnCancel;
+        public DvValueInputInt InputHour => inHour;
+        public DvValueInputInt InputMin => inMin;
+        public DvValueInputInt InputSec => inSec;
         #endregion
 
         #region Member Variable

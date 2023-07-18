@@ -1,4 +1,5 @@
-﻿using Devinno.Forms.Extensions;
+﻿using Devinno.Forms.Controls;
+using Devinno.Forms.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +21,9 @@ namespace Devinno.Forms.Dialogs
 
         public int MinWidth { get; set; } = 200;
         public int MinHeight { get; set; } = 140;
+
+        public DvButton ButtonOK => btnOK;
+        public DvButton ButtonCancel => btnCancel;
         #endregion
 
         #region Constructor

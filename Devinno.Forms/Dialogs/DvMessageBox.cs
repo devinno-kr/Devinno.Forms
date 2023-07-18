@@ -21,6 +21,11 @@ namespace Devinno.Forms.Dialogs
 
         public int MinWidth { get; set; } = 240;
         public int MinHeight { get; set; } = 150;
+
+        public DvButton ButtonOk => btnOK;
+        public DvButton ButtonCancel => btnCancel;
+        public DvButton ButtonYes => btnYes;
+        public DvButton ButtonNo => btnNo;
         #endregion
 
         #region Member Variable
@@ -60,12 +65,12 @@ namespace Devinno.Forms.Dialogs
             SizeF sz;
             using (var g = CreateGraphics()) sz = g.MeasureString(Message, Font);
             var btnSZ = Convert.ToInt32(ButtonHeight + 6);
-            var gapW = layout.Padding.Left + layout.Padding.Right + lbl.Margin.Left + lbl.Margin.Right +6;
-            var gapH = layout.Padding.Top + layout.Padding.Bottom + lbl.Margin.Top + lbl.Margin.Bottom +12;
-            
+            var gapW = layout.Padding.Left + layout.Padding.Right + lbl.Margin.Left + lbl.Margin.Right + 6;
+            var gapH = layout.Padding.Top + layout.Padding.Bottom + lbl.Margin.Top + lbl.Margin.Bottom + 12;
+
 
             tpnl.RowStyles[1].Height = btnSZ;
-            Width = Math.Max(gapW + Convert.ToInt32(sz.Width)+1, MinWidth);
+            Width = Math.Max(gapW + Convert.ToInt32(sz.Width) + 1, MinWidth);
             Height = Math.Max(TitleHeight + gapH + btnSZ + Convert.ToInt32(sz.Height), MinHeight);
 
             this.Title = this.Text = Title;
@@ -88,7 +93,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region ShowMessageBoxYesNo
-        public DialogResult ShowMessageBoxYesNo(string Title, string Message )
+        public DialogResult ShowMessageBoxYesNo(string Title, string Message)
         {
             return show(Title, Message, () =>
             {
@@ -100,7 +105,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region ShowMessageBoxOkCancel
-        public DialogResult ShowMessageBoxOkCancel(string Title, string Message )
+        public DialogResult ShowMessageBoxOkCancel(string Title, string Message)
         {
             return show(Title, Message, () =>
             {
@@ -112,7 +117,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region ShowMessageBoxYesNoCancel
-        public DialogResult ShowMessageBoxYesNoCancel(string Title, string Message )
+        public DialogResult ShowMessageBoxYesNoCancel(string Title, string Message)
         {
             return show(Title, Message, () =>
             {
