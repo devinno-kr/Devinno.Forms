@@ -781,11 +781,7 @@ namespace Sample
             };
             #endregion
             #endregion
-
-            sg.ButtonStyle = DvStepButtonStyle.PlusMinus;
-
-            Theme.KeyboardInput = true;
-
+             
             SetExComposited();
             GraphSet();
             TimeGraphSet();
