@@ -789,7 +789,6 @@ namespace Sample
             GraphSet();
             TimeGraphSet();
             trendGraph.Start<Data2>(v);
-            DwmTool.SetTheme(this, true);
         }
         #endregion
 
