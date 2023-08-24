@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -14,7 +16,7 @@ namespace Devinno.Forms.Icons
     {
         private static Dictionary<string, Dictionary<string, int>> dic;
         public static PrivateFontCollection FontAwesome { get; set; }
-        private static int ifar = -1, ifas = -1, ifab = -1;
+        private static int ifar = -1, ifas = -1, ifab = -1, imt = -1;
         static FA()
         {
             #region FontAwesome
@@ -24,22 +26,27 @@ namespace Devinno.Forms.Icons
                 var baBrands = Properties.Resources.Font_Awesome_6_Brands_Regular_400;
                 var baRegular = Properties.Resources.Font_Awesome_6_Free_Regular_400;
                 var baSolid = Properties.Resources.Font_Awesome_6_Free_Solid_900;
+                var baMaterial = Properties.Resources.MaterialIcons_Regular;
 
                 IntPtr pBrands = Marshal.AllocHGlobal(baBrands.Length);
                 IntPtr pRegular = Marshal.AllocHGlobal(baRegular.Length);
                 IntPtr pSolid = Marshal.AllocHGlobal(baSolid.Length);
+                IntPtr pMaterial = Marshal.AllocHGlobal(baMaterial.Length);
 
                 Marshal.Copy(baBrands, 0, pBrands, baBrands.Length);
                 Marshal.Copy(baRegular, 0, pRegular, baRegular.Length);
                 Marshal.Copy(baSolid, 0, pSolid, baSolid.Length);
+                Marshal.Copy(baMaterial, 0, pMaterial, baMaterial.Length);
 
                 FontAwesome.AddMemoryFont(pBrands, baBrands.Length);
                 FontAwesome.AddMemoryFont(pRegular, baRegular.Length);
                 FontAwesome.AddMemoryFont(pSolid, baSolid.Length);
+                FontAwesome.AddMemoryFont(pMaterial, baMaterial.Length);
 
                 Marshal.FreeHGlobal(pBrands);
                 Marshal.FreeHGlobal(pRegular);
                 Marshal.FreeHGlobal(pSolid);
+                Marshal.FreeHGlobal(pMaterial);
 
                 for (int i = 0; i < FA.FontAwesome.Families.Length; i++)
                 {
@@ -47,6 +54,7 @@ namespace Devinno.Forms.Icons
                     if (nm == "Font Awesome 6 Brands Regular") ifab = i;
                     if (nm == "Font Awesome 6 Free Regular") ifar = i;
                     if (nm == "Font Awesome 6 Free Solid") ifas = i;
+                    if (nm == "Material Icons") imt = i;
                 }
             }
             #endregion
@@ -56,6 +64,7 @@ namespace Devinno.Forms.Icons
             dic.Add("fas", new Dictionary<string, int>());
             dic.Add("far", new Dictionary<string, int>());
             dic.Add("fab", new Dictionary<string, int>());
+            dic.Add("mt", new Dictionary<string, int>());
             #endregion
             #region fas
             dic["fas"].Add("fa-0", 0x30);
@@ -2081,6 +2090,22 @@ namespace Devinno.Forms.Icons
             dic["fab"].Add("fa-youtube", 0xf167);
             dic["fab"].Add("fa-zhihu", 0xf63f);
             #endregion
+            #region mt
+            using (var sr = new StreamReader(new MemoryStream(Properties.Resources.MaterialIcons_Regular_Code)))
+            {
+                while (!sr.EndOfStream)
+                {
+                    var line = sr.ReadLine();
+                    var sp = line.Split(' ');
+                    var n = 0;
+                    if (sp.Length == 2 && int.TryParse(sp[1], NumberStyles.HexNumber, CultureInfo.CurrentCulture, out n))
+                    {
+                        if (!dic["mt"].ContainsKey(sp[0]))
+                            dic["mt"].Add(sp[0], n);
+                    }
+                }
+            }
+            #endregion
         }
 
         public static FAI GetFAI(string IconString)
@@ -2109,12 +2134,25 @@ namespace Devinno.Forms.Icons
                         font = FontAwesome.Families[ifas];
                         if (dic["fas"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fas"][_icon]);
                     }
+                    else if (ls.FirstOrDefault() == "mt")
+                    {
+                        font = FontAwesome.Families[imt];
+                        if (dic["fas"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fas"][_icon]);
+                    }
                 }
                 else if (ls.Count == 1)
                 {
                     var _icon = ls.LastOrDefault();
-                    font = FontAwesome.Families[ifas];
-                    if (dic["fas"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fas"][_icon]);
+                    if (_icon.StartsWith("fa-"))
+                    {
+                        font = FontAwesome.Families[ifas];
+                        if (dic["fas"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fas"][_icon]);
+                    }
+                    else
+                    {
+                        font = FontAwesome.Families[imt];
+                        if (dic["mt"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["mt"][_icon]);
+                    }
                 }
             }
 
@@ -2135,11 +2173,13 @@ namespace Devinno.Forms.Icons
                     if (_font == "fab") ret = dic["fab"].ContainsKey(_icon);
                     else if (_font == "far") ret = dic["far"].ContainsKey(_icon);
                     else if (_font == "fas") ret = dic["fas"].ContainsKey(_icon);
+                    else if (_font == "mt") ret = dic["mt"].ContainsKey(_icon);
                 }
                 else if (ls.Count == 1)
                 {
                     var _icon = ls.LastOrDefault();
-                    ret = dic["fas"].ContainsKey(_icon);
+                    if (_icon.StartsWith("fa-")) ret = dic["fas"].ContainsKey(_icon);
+                    else ret = dic["mt"].ContainsKey(_icon);
                 }
             }
             return ret;

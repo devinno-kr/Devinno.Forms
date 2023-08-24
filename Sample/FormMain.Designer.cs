@@ -1480,7 +1480,7 @@ namespace Sample
             this.tpGauge.Location = new System.Drawing.Point(4, 5);
             this.tpGauge.Name = "tpGauge";
             this.tpGauge.Padding = new System.Windows.Forms.Padding(10);
-            this.tpGauge.Size = new System.Drawing.Size(718, 690);
+            this.tpGauge.Size = new System.Drawing.Size(718, 714);
             this.tpGauge.TabIndex = 1;
             this.tpGauge.Text = "tabPage2";
             // 
@@ -2373,7 +2373,7 @@ namespace Sample
             this.tpGraph.Location = new System.Drawing.Point(4, 5);
             this.tpGraph.Name = "tpGraph";
             this.tpGraph.Padding = new System.Windows.Forms.Padding(10);
-            this.tpGraph.Size = new System.Drawing.Size(718, 690);
+            this.tpGraph.Size = new System.Drawing.Size(718, 714);
             this.tpGraph.TabIndex = 2;
             this.tpGraph.Text = "tabPage3";
             // 
@@ -2393,7 +2393,7 @@ namespace Sample
             this.dvTableLayoutPanel1.RowCount = 2;
             this.dvTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.dvTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.dvTableLayoutPanel1.Size = new System.Drawing.Size(698, 670);
+            this.dvTableLayoutPanel1.Size = new System.Drawing.Size(698, 694);
             this.dvTableLayoutPanel1.TabIndex = 1;
             // 
             // btnPause
@@ -2409,7 +2409,7 @@ namespace Sample
             this.btnPause.IconImage = null;
             this.btnPause.IconSize = 12F;
             this.btnPause.IconString = "fa-pause";
-            this.btnPause.Location = new System.Drawing.Point(3, 637);
+            this.btnPause.Location = new System.Drawing.Point(3, 661);
             this.btnPause.Name = "btnPause";
             this.btnPause.Round = null;
             this.btnPause.ShadowGap = 1;
@@ -2435,7 +2435,7 @@ namespace Sample
             this.tabGraph.Multiline = true;
             this.tabGraph.Name = "tabGraph";
             this.tabGraph.SelectedIndex = 0;
-            this.tabGraph.Size = new System.Drawing.Size(692, 628);
+            this.tabGraph.Size = new System.Drawing.Size(692, 652);
             this.tabGraph.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabGraph.TabIndex = 0;
             // 
@@ -2446,7 +2446,7 @@ namespace Sample
             this.tpBarGraphH.Location = new System.Drawing.Point(4, 5);
             this.tpBarGraphH.Name = "tpBarGraphH";
             this.tpBarGraphH.Padding = new System.Windows.Forms.Padding(3);
-            this.tpBarGraphH.Size = new System.Drawing.Size(684, 619);
+            this.tpBarGraphH.Size = new System.Drawing.Size(684, 643);
             this.tpBarGraphH.TabIndex = 0;
             this.tpBarGraphH.Text = "tabPage1";
             // 
@@ -2467,7 +2467,7 @@ namespace Sample
             this.barGraphH.RemarkColor = null;
             this.barGraphH.Scrollable = true;
             this.barGraphH.ShadowGap = 1;
-            this.barGraphH.Size = new System.Drawing.Size(678, 613);
+            this.barGraphH.Size = new System.Drawing.Size(678, 637);
             this.barGraphH.TabIndex = 0;
             this.barGraphH.Text = "dvBarGraphh1";
             this.barGraphH.ValueDraw = true;
@@ -2479,7 +2479,7 @@ namespace Sample
             this.tpBarGraphV.Location = new System.Drawing.Point(4, 5);
             this.tpBarGraphV.Name = "tpBarGraphV";
             this.tpBarGraphV.Padding = new System.Windows.Forms.Padding(3);
-            this.tpBarGraphV.Size = new System.Drawing.Size(684, 643);
+            this.tpBarGraphV.Size = new System.Drawing.Size(684, 619);
             this.tpBarGraphV.TabIndex = 1;
             this.tpBarGraphV.Text = "tabPage2";
             // 
@@ -2501,7 +2501,7 @@ namespace Sample
             this.barGraphV.RemarkColor = null;
             this.barGraphV.Scrollable = true;
             this.barGraphV.ShadowGap = 1;
-            this.barGraphV.Size = new System.Drawing.Size(678, 637);
+            this.barGraphV.Size = new System.Drawing.Size(678, 613);
             this.barGraphV.TabIndex = 0;
             this.barGraphV.Text = "dvBarGraphv1";
             this.barGraphV.ValueDraw = true;
@@ -2513,7 +2513,7 @@ namespace Sample
             this.tpCircleGraph.Location = new System.Drawing.Point(4, 5);
             this.tpCircleGraph.Name = "tpCircleGraph";
             this.tpCircleGraph.Padding = new System.Windows.Forms.Padding(3);
-            this.tpCircleGraph.Size = new System.Drawing.Size(684, 643);
+            this.tpCircleGraph.Size = new System.Drawing.Size(684, 619);
             this.tpCircleGraph.TabIndex = 2;
             this.tpCircleGraph.Text = "tabPage3";
             // 
@@ -2525,7 +2525,7 @@ namespace Sample
             this.circleGraph.Location = new System.Drawing.Point(3, 3);
             this.circleGraph.Name = "circleGraph";
             this.circleGraph.ShadowGap = 1;
-            this.circleGraph.Size = new System.Drawing.Size(678, 637);
+            this.circleGraph.Size = new System.Drawing.Size(678, 613);
             this.circleGraph.TabIndex = 0;
             this.circleGraph.Text = "dvCircleGraph1";
             this.circleGraph.ValueFont = new System.Drawing.Font("나눔고딕", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -2537,7 +2537,7 @@ namespace Sample
             this.tpLineGraph.Location = new System.Drawing.Point(4, 5);
             this.tpLineGraph.Name = "tpLineGraph";
             this.tpLineGraph.Padding = new System.Windows.Forms.Padding(3);
-            this.tpLineGraph.Size = new System.Drawing.Size(684, 643);
+            this.tpLineGraph.Size = new System.Drawing.Size(684, 619);
             this.tpLineGraph.TabIndex = 3;
             this.tpLineGraph.Text = "tabPage4";
             // 
@@ -2557,7 +2557,7 @@ namespace Sample
             this.lineGraph.Scrollable = true;
             this.lineGraph.SectionWidth = 80;
             this.lineGraph.ShadowGap = 1;
-            this.lineGraph.Size = new System.Drawing.Size(678, 637);
+            this.lineGraph.Size = new System.Drawing.Size(678, 613);
             this.lineGraph.TabIndex = 0;
             this.lineGraph.Text = "dvLineGraph1";
             this.lineGraph.ValueDraw = true;
@@ -2569,7 +2569,7 @@ namespace Sample
             this.tpTrendGraph.Location = new System.Drawing.Point(4, 5);
             this.tpTrendGraph.Name = "tpTrendGraph";
             this.tpTrendGraph.Padding = new System.Windows.Forms.Padding(3);
-            this.tpTrendGraph.Size = new System.Drawing.Size(684, 643);
+            this.tpTrendGraph.Size = new System.Drawing.Size(684, 619);
             this.tpTrendGraph.TabIndex = 4;
             this.tpTrendGraph.Text = "tabPage5";
             // 
@@ -2585,7 +2585,7 @@ namespace Sample
             this.trendGraph.Pause = false;
             this.trendGraph.RemarkColor = null;
             this.trendGraph.ShadowGap = 1;
-            this.trendGraph.Size = new System.Drawing.Size(678, 637);
+            this.trendGraph.Size = new System.Drawing.Size(678, 613);
             this.trendGraph.TabIndex = 0;
             this.trendGraph.Text = "dvTrendGraph1";
             this.trendGraph.TimeFormatString = null;
@@ -2603,7 +2603,7 @@ namespace Sample
             this.tpTimeGraph.Location = new System.Drawing.Point(4, 5);
             this.tpTimeGraph.Name = "tpTimeGraph";
             this.tpTimeGraph.Padding = new System.Windows.Forms.Padding(3);
-            this.tpTimeGraph.Size = new System.Drawing.Size(684, 643);
+            this.tpTimeGraph.Size = new System.Drawing.Size(684, 619);
             this.tpTimeGraph.TabIndex = 5;
             this.tpTimeGraph.Text = "tabPage6";
             // 
@@ -2616,7 +2616,7 @@ namespace Sample
             this.timeGraph.Name = "timeGraph";
             this.timeGraph.RemarkColor = null;
             this.timeGraph.ShadowGap = 1;
-            this.timeGraph.Size = new System.Drawing.Size(678, 637);
+            this.timeGraph.Size = new System.Drawing.Size(678, 613);
             this.timeGraph.TabIndex = 0;
             this.timeGraph.Text = "dvTimeGraph1";
             this.timeGraph.TimeFormatString = null;
@@ -2637,7 +2637,7 @@ namespace Sample
             this.menuGraph.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             this.menuGraph.Direction = Devinno.Forms.DvDirectionHV.Horizon;
             this.menuGraph.Gradient = true;
-            this.menuGraph.Location = new System.Drawing.Point(104, 637);
+            this.menuGraph.Location = new System.Drawing.Point(104, 661);
             this.menuGraph.Name = "menuGraph";
             this.menuGraph.Round = null;
             this.menuGraph.SelectionMode = false;
@@ -2659,7 +2659,7 @@ namespace Sample
             this.btnGraphRefresh.IconImage = null;
             this.btnGraphRefresh.IconSize = 12F;
             this.btnGraphRefresh.IconString = "fa-rotate";
-            this.btnGraphRefresh.Location = new System.Drawing.Point(665, 637);
+            this.btnGraphRefresh.Location = new System.Drawing.Point(665, 661);
             this.btnGraphRefresh.Name = "btnGraphRefresh";
             this.btnGraphRefresh.Round = null;
             this.btnGraphRefresh.ShadowGap = 1;
@@ -2676,7 +2676,7 @@ namespace Sample
             this.tpContainer.Location = new System.Drawing.Point(4, 5);
             this.tpContainer.Name = "tpContainer";
             this.tpContainer.Padding = new System.Windows.Forms.Padding(10);
-            this.tpContainer.Size = new System.Drawing.Size(718, 690);
+            this.tpContainer.Size = new System.Drawing.Size(718, 714);
             this.tpContainer.TabIndex = 4;
             this.tpContainer.Text = "tabPage5";
             // 
@@ -2689,7 +2689,7 @@ namespace Sample
             this.dvScrollablePanel1.Name = "dvScrollablePanel1";
             this.dvScrollablePanel1.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
             this.dvScrollablePanel1.ShadowGap = 1;
-            this.dvScrollablePanel1.Size = new System.Drawing.Size(698, 670);
+            this.dvScrollablePanel1.Size = new System.Drawing.Size(698, 694);
             this.dvScrollablePanel1.TabIndex = 5;
             this.dvScrollablePanel1.TabStop = false;
             this.dvScrollablePanel1.Text = "dvScrollablePanel1";
@@ -2892,7 +2892,7 @@ namespace Sample
             this.tpDialog.Location = new System.Drawing.Point(4, 5);
             this.tpDialog.Name = "tpDialog";
             this.tpDialog.Padding = new System.Windows.Forms.Padding(10);
-            this.tpDialog.Size = new System.Drawing.Size(718, 690);
+            this.tpDialog.Size = new System.Drawing.Size(718, 714);
             this.tpDialog.TabIndex = 6;
             // 
             // btnPortSettingSimple
@@ -3656,7 +3656,7 @@ namespace Sample
             this.tpTable.Location = new System.Drawing.Point(4, 5);
             this.tpTable.Name = "tpTable";
             this.tpTable.Padding = new System.Windows.Forms.Padding(10);
-            this.tpTable.Size = new System.Drawing.Size(718, 690);
+            this.tpTable.Size = new System.Drawing.Size(718, 714);
             this.tpTable.TabIndex = 7;
             this.tpTable.Text = "tabPage2";
             // 

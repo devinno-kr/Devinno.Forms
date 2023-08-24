@@ -707,6 +707,9 @@ namespace Devinno.Forms.Controls
                                 });
                             }
                             #endregion
+                            e.Graphics.ResetClip();
+                            e.Graphics.SetClip(path);
+
                             #region Summary 
                             if (SummaryRows.Count > 0)
                             {
@@ -803,8 +806,7 @@ namespace Devinno.Forms.Controls
                                 }
                             }
                             #endregion
-                            e.Graphics.ResetClip();
-                            e.Graphics.SetClip(path);
+                           
                         }
                         #endregion
                         #region Column
