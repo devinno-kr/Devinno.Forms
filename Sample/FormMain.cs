@@ -431,8 +431,8 @@ namespace Sample
             });
             #endregion
 
-            //actMonth();
-            actMonitor();
+            actMonth();
+            //actMonitor();
             //actInput();
             #endregion
             #region Boxes
@@ -780,6 +780,8 @@ namespace Sample
             };
             #endregion
             #endregion
+
+            sg.ButtonStyle = DvStepButtonStyle.PlusMinus;
 
             Theme.KeyboardInput = true;
 

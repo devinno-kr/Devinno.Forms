@@ -352,7 +352,7 @@ namespace Devinno.Forms.Dialogs
         }
         #endregion
         #region UseWindowDock
-        public bool UseWindowDock { get; set; } = true;
+        public bool UseWindowDock { get; set; } = false;
         #endregion
 
         #region Loaded
