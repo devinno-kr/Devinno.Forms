@@ -57,6 +57,7 @@ namespace Sample
             MinimizeBox = false;
             Fixed = true;
             #endregion
+
             #region Menus
             Menus.Add(new DvFormMenuSelector("Control") { Text = "Control", Width = 70, NextSep = true, Selected = true });
             Menus.Add(new DvFormMenuSelector("Gauge") { Text = "Gauge", Width = 65, NextSep = true });
