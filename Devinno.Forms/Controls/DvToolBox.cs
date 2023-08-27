@@ -19,7 +19,6 @@ namespace Devinno.Forms.Controls
     public class DvToolBox : DvControl
     {
         #region Const
-        const int IndentWidth = 30;
         const int StartIndent = 10;
         //const int RadioSize = 6;
         #endregion
@@ -59,7 +58,7 @@ namespace Devinno.Forms.Controls
         #region Categories
         public EventList<ToolCategoryItem> Categories { get; } = new EventList<ToolCategoryItem>();
         #endregion
-        
+
         #region RadioSize
         private int nRadioSize = 16;
         public int RadioSize
@@ -85,6 +84,21 @@ namespace Devinno.Forms.Controls
                 if (nItemHeight != value)
                 {
                     nItemHeight = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #region CategoryHeight
+        private int nCategoryHeight = 30;
+        public int CategoryHeight
+        {
+            get => nCategoryHeight;
+            set
+            {
+                if (nCategoryHeight != value)
+                {
+                    nCategoryHeight = value;
                     Invalidate();
                 }
             }
@@ -137,6 +151,9 @@ namespace Devinno.Forms.Controls
         #region Animation
         private bool Animation => GetTheme()?.Animation ?? false;
         #endregion
+
+        public DvContentAlignment ContentAlignment { get; set; } = DvContentAlignment.MiddleCenter;
+        public int IndentWidth { get; set; } = 30;
         #endregion
 
         #region Member Variable
@@ -158,7 +175,7 @@ namespace Devinno.Forms.Controls
         public DvToolBox()
         {
             scroll = new Scroll() { Direction = ScrollDirection.Vertical, TouchMode = true };
-            scroll.GetScrollTotal = () => ls.Count * ItemHeight + (Animation && ani.IsPlaying ?
+            scroll.GetScrollTotal = () => (ls.Select(x => x is ToolCategoryItem ? CategoryHeight : ItemHeight).Sum()) + (Animation && ani.IsPlaying ?
             (aniItem.Expands ? -ani.Value(AnimationAccel.DCL, aniItem.Items.Count * ItemHeight, 0)
                              : -ani.Value(AnimationAccel.DCL, 0, aniItem.Items.Count * ItemHeight))
             : 0);
@@ -263,8 +280,8 @@ namespace Devinno.Forms.Controls
                                 {
                                     wh = Math.Abs(ani.Value(AnimationAccel.DCL, -9, 9)) + 3;
 
-                                    var rtH = DrawingTool.GetRoundRectPath(Util.MakeRectangle(cp, wh, bw), bw);  
-                                    var rtV = DrawingTool.GetRoundRectPath(Util.MakeRectangle(cp, bw, wh), bw); 
+                                    var rtH = DrawingTool.GetRoundRectPath(Util.MakeRectangle(cp, wh, bw), bw);
+                                    var rtV = DrawingTool.GetRoundRectPath(Util.MakeRectangle(cp, bw, wh), bw);
 
                                     if (v.Expands)
                                     {
@@ -332,7 +349,7 @@ namespace Devinno.Forms.Controls
                     e.Graphics.ResetClip();
                 }
                 #endregion
-               
+
             });
 
             #region Dispose
@@ -348,7 +365,7 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             int x = e.X, y = e.Y;
-            
+
             scroll.TouchMode = GetTheme()?.TouchMode ?? false;
 
             Areas((rtContent, rtBox, rtScroll) =>
@@ -540,8 +557,9 @@ namespace Devinno.Forms.Controls
                     {
                         if (aniItem != null)
                         {
+
                             var anils = aniItem.Items.Cast<TextIcon>().ToList();
-                            var nh = anils.Count * ItemHeight;
+                            var nh = anils.Select(x => x is ToolCategoryItem ? CategoryHeight : ItemHeight).Sum();
                             var anih = aniItem.Expands ? ani.Value(AnimationAccel.DCL, 0, nh) : ani.Value(AnimationAccel.DCL, nh, 0);
 
                             var si = Convert.ToInt32(Math.Floor((double)Math.Abs(spos) / (double)ItemHeight));   //0;
@@ -553,6 +571,7 @@ namespace Devinno.Forms.Controls
                             while (i < ei + 1 && i < ls.Count && y <= rtBox.Bottom)
                             {
                                 var itm = ls[i];
+                                var ItemHeight = itm is ToolCategoryItem ? this.CategoryHeight : this.ItemHeight;
                                 var rt = Util.FromRect(rtBox.Left, y, rtBox.Width, ItemHeight);
                                 if (CollisionTool.Check(Util.FromRect(rt.Left + 1, rt.Top + 1, rt.Width - 2, rt.Height - 2), rtBox))
                                 {
@@ -593,7 +612,8 @@ namespace Devinno.Forms.Controls
                                             else
                                             {
                                                 var ro = 5;
-                                                var rtRow = Util.MakeRectangleAlign(rtv, new SizeF(ro + GP + w, rtv.Height), DvContentAlignment.MiddleCenter);
+                                                var rtz = Util.FromRect(rtv); rtz.Inflate(-IndentWidth, 0);
+                                                var rtRow = Util.MakeRectangleAlign(rtz, new SizeF(ro + GP + w, rtv.Height), ContentAlignment);
                                                 var cp = MathTool.CenterPoint(rtRow);
                                                 var rtRadio = Util.FromRect(rtRow.Left, cp.Y - (ro / 2), ro, ro);
                                                 var rtText = Util.FromRect(rtRadio.Right + GP, rt.Top, w + 2, rt.Height);
@@ -624,7 +644,8 @@ namespace Devinno.Forms.Controls
                                         else
                                         {
                                             var ro = 5;
-                                            var rtRow = Util.MakeRectangleAlign(rtv, new SizeF(ro + GP + w, rtv.Height), DvContentAlignment.MiddleCenter);
+                                            var rtz = Util.FromRect(rtv); rtz.Inflate(-IndentWidth, 0);
+                                            var rtRow = Util.MakeRectangleAlign(rtz, new SizeF(ro + GP + w, rtv.Height), ContentAlignment);
                                             var cp = MathTool.CenterPoint(rtRow);
                                             var rtRadio = Util.FromRect(rtRow.Left, cp.Y - (ro / 2), ro, ro);
                                             var rtText = Util.FromRect(rtRadio.Right + GP, rt.Top, w + 2, rt.Height);
@@ -647,10 +668,12 @@ namespace Devinno.Forms.Controls
                         var cnt = Convert.ToInt32(Math.Ceiling((double)(rtBox.Height - Math.Min(0, scroll.TouchOffset)) / (double)ItemHeight));
                         var ei = si + cnt;
 
+                        var ysum = ls.GetRange(0, Math.Max(0, si)).Sum(x => x is ToolCategoryItem ? this.CategoryHeight : this.ItemHeight);
                         for (int i = Math.Max(0, si); i < ei + 1 && i < ls.Count; i++)
                         {
                             var itm = ls[i];
-                            var rt = Util.FromRect(rtBox.Left, spos + rtBox.Top + (ItemHeight * i), rtBox.Width, ItemHeight);
+                            var ItemHeight = itm is ToolCategoryItem ? this.CategoryHeight : this.ItemHeight;
+                            var rt = Util.FromRect(rtBox.Left, spos + rtBox.Top + ysum, rtBox.Width, ItemHeight);
                             if (CollisionTool.Check(Util.FromRect(rt.Left + 1, rt.Top + 1, rt.Width - 2, rt.Height - 2), rtBox))
                             {
                                 var sz = g.MeasureTextIcon(itm, Font);
@@ -672,7 +695,8 @@ namespace Devinno.Forms.Controls
                                 else
                                 {
                                     var ro = 5;
-                                    var rtRow = Util.MakeRectangleAlign(rtv, new SizeF(ro + GP + w, rtv.Height), DvContentAlignment.MiddleCenter);
+                                    var rtz = Util.FromRect(rtv); rtz.Inflate(-IndentWidth, 0);
+                                    var rtRow = Util.MakeRectangleAlign(rtz, new SizeF(ro + GP + w, rtv.Height), ContentAlignment);
                                     var cp = MathTool.CenterPoint(rtRow);
                                     var rtRadio = Util.FromRect(rtRow.Left, cp.Y - (ro / 2), ro, ro);
                                     var rtText = Util.FromRect(rtRadio.Right + GP, rt.Top, w + 2, rt.Height);
@@ -681,6 +705,7 @@ namespace Devinno.Forms.Controls
                                     Func(i, rt, itm, rtv, rtRadio, rtText, rtRow);
                                 }
                             }
+                            ysum += ItemHeight;
                         }
                     }
                 }
