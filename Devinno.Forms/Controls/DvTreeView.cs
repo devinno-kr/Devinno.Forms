@@ -59,6 +59,21 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region RadioBoxColor
+        private Color? cRadioBoxColor = null;
+        public Color? RadioBoxColor
+        {
+            get => cRadioBoxColor;
+            set
+            {
+                if (cRadioBoxColor != value)
+                {
+                    cRadioBoxColor = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
         #region SelectedColor
         private Color? cSelectedColor = null;
         public Color? SelectedColor
@@ -251,7 +266,7 @@ namespace Devinno.Forms.Controls
             var BoxColor = this.BoxColor ?? Theme.ListBackColor;
             var SelectedColor = this.SelectedColor ?? Theme.PointColor;
             var RadioColor = this.RadioColor ?? Theme.ForeColor;
-            var RadioBoxColor = Theme.CheckBoxColor;
+            var RadioBoxColor = this.RadioBoxColor ?? Theme.CheckBoxColor;
             var BorderColor = Theme.GetBorderColor(BoxColor, BackColor);
             var SelectedBorderColor = Theme.GetBorderColor(SelectedColor, BackColor);
             var ScrollBorderColor = Theme.GetBorderColor(Theme.ScrollBarColor, BackColor);
