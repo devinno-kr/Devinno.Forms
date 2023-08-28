@@ -220,6 +220,9 @@ namespace Devinno.Forms.Dialogs
         {
             Theme = GetCallerFormTheme();
 
+            this.Height = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? 292 : 332;
+            Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
+
             Color? ret = null;
 
             var vc = value ?? Color.White;

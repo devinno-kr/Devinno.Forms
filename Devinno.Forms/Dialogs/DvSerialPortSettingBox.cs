@@ -62,6 +62,8 @@ namespace Devinno.Forms.Dialogs
 
             #region Size
             this.Size = new Size(300, 40 + 10 + (39 * 5 + 10) + 36 + 10);
+            Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
+
             #endregion
             #region UI
             tpnl.SuspendLayout();
@@ -131,6 +133,8 @@ namespace Devinno.Forms.Dialogs
             SerialPortSetting ret = null;
             #region Size
             this.Size = new Size(300, 40 + 10 + (39 * 2 + 10) + 36 + 10);
+            Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
+
             #endregion
             #region UI
             tpnl.SuspendLayout();

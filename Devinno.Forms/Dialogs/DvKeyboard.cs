@@ -635,6 +635,7 @@ namespace Devinno.Forms.Dialogs
 
             this.Width = Math.Max(480, Width);
             this.Height = Math.Max(320, Height);
+            Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
 
             this.Title = this.Text = Title;
 

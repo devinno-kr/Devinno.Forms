@@ -200,7 +200,7 @@ namespace Devinno.Forms.Controls
 
         #region Member Variable
         private bool bValueDown = false;
-        private DvColorPickerBox dlg;
+        private DvColorPickerBox dlg => DvDialogs.ColorBox;
         #endregion
 
         #region Event
@@ -218,8 +218,6 @@ namespace Devinno.Forms.Controls
             #endregion
 
             Size = new Size(150, 30);
-
-            dlg = new DvColorPickerBox();
         }
         #endregion
 

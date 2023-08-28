@@ -168,7 +168,7 @@ namespace Sample
             #region wheelPicker
             foreach (var v in Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>())
                 inDoW.Items.Add(new TextIcon { Text = v.ToString() });
-            
+
             inDoW.SelectedIndex = 0;
             #endregion
             #region tab2
@@ -539,7 +539,7 @@ namespace Sample
                 btnPause.IconString = trendGraph.Pause ? "fa-play" : "fa-pause";
             };
             #endregion
-       
+
             #region tmrHi.Tick
             tmrHi = new HiResTimer(5);
             tmrHi.Elapsed += (o, s) => TrendGraphSet();
@@ -639,7 +639,7 @@ namespace Sample
                 infos.Add("DayOfWeek", new InputBoxInfo { Title = "요일" });
                 infos.Add("Step", new InputBoxInfo { Title = "단계", Items = new int[] { 0, 10, 20, 30, 40, 50 }.Select(x => new TextIcon() { Text = x.ToString(), Value = x }).ToList() });
                 infos.Add("Use", new InputBoxInfo { Title = "사용여부" });
-                
+
                 Block = true;
                 InputBox.ItemWidth = 200;
                 var ret = InputBox.ShowInputBox<Data3>("입력", new Data3 { Name = "테스트", Distance = 100, Temperature = 36.5, DayOfWeek = DayOfWeek.Monday }, infos);
@@ -649,7 +649,7 @@ namespace Sample
                     var set = new JsonSerializerSettings() { Formatting = Formatting.Indented };
                     var ss = Serialize.JsonSerialize(ret, set);
 
-                   MessageBox.ShowMessageBoxOk("JSON", ss);
+                    MessageBox.ShowMessageBoxOk("JSON", ss);
                 }
                 Block = false;
             };
@@ -730,7 +730,7 @@ namespace Sample
             {
                 Block = true;
                 var ret = portBox.ShowSerialPortSetting();
-                if(ret != null)
+                if (ret != null)
                 {
                     var set = new JsonSerializerSettings() { Formatting = Formatting.Indented };
                     var ss = Serialize.JsonSerialize(ret, set);
@@ -775,17 +775,40 @@ namespace Sample
                 {
                     var v = treeView.SelectedNodes.First();
                     if (v.Parents != null) v.Parents.Nodes.Remove(v);
-                    else treeView.Nodes.Remove(v);   
+                    else treeView.Nodes.Remove(v);
                 }
                 treeView.Invalidate();
             };
             #endregion
             #endregion
-             
+
             SetExComposited();
             GraphSet();
             TimeGraphSet();
             trendGraph.Start<Data2>(v);
+
+            MessageBox.BlankForm = true;
+            MessageBox.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            keypad.BlankForm = true;
+            keypad.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            keyboard.BlankForm = true;
+            keyboard.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            InputBox.BlankForm = true;
+            InputBox.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            SelBox.BlankForm = true;
+            SelBox.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            WheelBox.BlankForm = true;
+            WheelBox.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            portBox.BlankForm = true;
+            portBox.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            DvDialogs.Set(true, FormBorderStyle.FixedSingle);
         }
         #endregion
 

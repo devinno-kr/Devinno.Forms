@@ -118,7 +118,8 @@ namespace Devinno.Forms.Dialogs
             var rsz = 100F / RowCount;
 
             this.Width = Math.Max(MinWidth, 10 + (ColumnCount * (ItemWidth + 6)) + 10);
-            this.Height = Math.Max(MinHeight, TitleHeight + 10 + (RowCount * (ItemHeight + 6)) + 10 + 36 + 10);
+            this.Height = Math.Max(MinHeight, 40 + 10 + (RowCount * (ItemHeight + 6)) + 10 + 36 + 10);
+            Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
             #endregion
             #region Layout
             tpnl.RowStyles.Clear();
@@ -340,7 +341,8 @@ namespace Devinno.Forms.Dialogs
             this.Title = this.Text = Title;
 
             this.Width = Math.Max(MinWidth, 10 + (ColumnCount * (ItemWidth + 6)) + 10);
-            this.Height = Math.Max(MinHeight, TitleHeight + 10 + (ItemHeight + 6) + 10 + 36 + 10);
+            this.Height = Math.Max(MinHeight, 40 + 10 + (ItemHeight + 6) + 10 + 36 + 10);
+            Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
             #endregion
             #region Layout
             tpnl.RowStyles.Clear();

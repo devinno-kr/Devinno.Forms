@@ -59,7 +59,9 @@ namespace Devinno.Forms.Dialogs
             }
 
             this.Width = Math.Max(MinWidth, w + 20 + 40);
-            this.Height = Math.Max(MinHeight, TitleHeight + 20 + 36 + (wheelPicker.ItemHeight * ItemViewCount));
+            this.Height = Math.Max(MinHeight, 40 + 20 + 36 + (wheelPicker.ItemHeight * ItemViewCount));
+            Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
+
             #endregion
 
             #region Set

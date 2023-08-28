@@ -119,7 +119,8 @@ namespace Devinno.Forms.Dialogs
             Theme = GetCallerFormTheme();
 
             this.Width = 10 + (256 + 6) + 10 + 20 + 10 + 100 + 10;
-            this.Height = TitleHeight + 10 + (256 + 6) + 10;
+            this.Height = 40 + 10 + (256 + 6) + 10;
+            Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
 
             this.Title = this.Text = Title;
 
@@ -136,8 +137,9 @@ namespace Devinno.Forms.Dialogs
             return show(Title, () =>
             {
                 this.Width = 300;
-                this.Height = TitleHeight + 10 + 246 + 4 + 36 + 4 + 36 + 10;
+                this.Height = 40 + 10 + 246 + 4 + 36 + 4 + 36 + 10;
                 this.TitleIconString = "fa-calendar-check";
+                Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
 
                 #region Set
                 if (value.HasValue)
@@ -186,8 +188,9 @@ namespace Devinno.Forms.Dialogs
             return show(Title, () =>
             {
                 this.Width = 300;
-                this.Height = TitleHeight + 10 + 246 + 4 + 36 + 10;
+                this.Height = 40 + 10 + 246 + 4 + 36 + 10;
                 this.TitleIconString = "fa-calendar-check";
+                Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
 
                 #region Set
                 if (value.HasValue)
@@ -223,8 +226,9 @@ namespace Devinno.Forms.Dialogs
             return show(Title, () =>
             {
                 this.Width = 300;
-                this.Height = TitleHeight + 10 + 36 + 4 + 36 + 10;
+                this.Height = 40 + 10 + 36 + 4 + 36 + 10;
                 this.TitleIconString = "fa-clock";
+                Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
 
                 #region Set
                 if (value.HasValue)

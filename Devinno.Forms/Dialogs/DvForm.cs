@@ -436,6 +436,9 @@ namespace Devinno.Forms.Dialogs
         protected override void OnLoad(EventArgs e)
         {
             Loaded = true;
+
+            Icon = IconTool.GetIcon(new Devinno.Forms.Icons.DvIcon(TitleIconString, 16), Theme.ForeColor);
+
             base.OnLoad(e);
         }
         #endregion

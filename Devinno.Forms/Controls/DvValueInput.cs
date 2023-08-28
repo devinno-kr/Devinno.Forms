@@ -1395,7 +1395,7 @@ namespace Devinno.Forms.Controls
 
         #region Member Variable
         bool bDown = false;
-        DvWheelPickerBox box = new DvWheelPickerBox();
+        DvWheelPickerBox box => DvDialogs.WheelBox;
         #endregion
 
         #region Event

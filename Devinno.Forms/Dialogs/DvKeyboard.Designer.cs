@@ -29,6 +29,7 @@ namespace Devinno.Forms.Dialogs
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DvKeyboard));
             this.layout = new Devinno.Forms.Containers.DvContainer();
             this.tpnl = new Devinno.Forms.Containers.DvTableLayoutPanel();
             this.layout.SuspendLayout();
@@ -71,6 +72,7 @@ namespace Devinno.Forms.Dialogs
             this.Controls.Add(this.layout);
             this.Fixed = true;
             this.ForeColor = System.Drawing.Color.White;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(480, 320);
@@ -78,7 +80,7 @@ namespace Devinno.Forms.Dialogs
             this.Text = "키보드";
             this.Title = "키보드";
             this.TitleIconSize = 14F;
-            this.TitleIconString = "fa-keyboard";
+            this.TitleIconString = "far fa-keyboard";
             this.layout.ResumeLayout(false);
             this.ResumeLayout(false);
 

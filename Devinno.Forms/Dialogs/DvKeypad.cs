@@ -2,6 +2,7 @@
 using Devinno.Forms.Controls;
 using Devinno.Forms.Extensions;
 using Devinno.Forms.Icons;
+using Devinno.Forms.Tools;
 using Devinno.Tools;
 using System;
 using System.Collections.Generic;
@@ -283,6 +284,7 @@ namespace Devinno.Forms.Dialogs
 
             this.Width = Math.Max(240, Width);
             this.Height = Math.Max(320, Height);
+            Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
 
             minI8 = null; minI16 = null; minI32 = null; minI64 = null;
             minU8 = null; minU16 = null; minU32 = null; minU64 = null;
@@ -475,6 +477,7 @@ namespace Devinno.Forms.Dialogs
             string? ret = null;
             this.Width = Math.Max(240, Width);
             this.Height = Math.Max(320, Height);
+            Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
 
             show(Title, () =>
             {
