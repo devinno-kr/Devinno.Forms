@@ -131,13 +131,13 @@ namespace Devinno.Forms.Dialogs
             #region New
             tpnl.Controls.Clear();
 
-            var nstr = props.Select(x => infos.ContainsKey(x.Name) ? infos[x.Name].Title : x.Name).OrderByDescending(x => x.Length).FirstOrDefault();
+            var nstr = props.Select(x => infos != null && infos.ContainsKey(x.Name) ? infos[x.Name].Title : x.Name).OrderByDescending(x => x.Length).FirstOrDefault();
             var nsz = 0;
             using (var g = CreateGraphics()) nsz = Math.Max(60, Convert.ToInt32(g.MeasureString(nstr, Font).Width + 20));
 
             foreach (var v in props)
             {
-                var p = infos.ContainsKey(v.Name) ? infos[v.Name] : null;
+                var p = infos != null && infos.ContainsKey(v.Name) ? infos[v.Name] : null;
 
                 #region Var
                 var title = p != null ? p.Title : v.Name;

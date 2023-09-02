@@ -69,7 +69,7 @@ namespace Devinno.Forms.Dialogs
             var gapW = layout.Padding.Left + layout.Padding.Right + lbl.Margin.Left + lbl.Margin.Right + 6;
             var gapH = layout.Padding.Top + layout.Padding.Bottom + lbl.Margin.Top + lbl.Margin.Bottom + 12;
             tpnl.RowStyles[1].Height = btnSZ;
-            Width = Math.Max(gapW + Convert.ToInt32(sz.Width) + 1, MinWidth);
+            Width = Math.Max(gapW + Convert.ToInt32(sz.Width) + 1, MinWidth) + 20;
             Height = Math.Max(40 + gapH + btnSZ + Convert.ToInt32(sz.Height), MinHeight);
             Padding = (BlankForm && FormBorderStyle != FormBorderStyle.None) ? new Padding(0) : new Padding(0, 40, 0, 0);
 

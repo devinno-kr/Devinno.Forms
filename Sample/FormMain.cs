@@ -600,7 +600,9 @@ namespace Sample
             btnMbOK.ButtonClick += (o, s) =>
             {
                 Block = true;
-                lblMb.Text = MessageBox.ShowMessageBoxOk("애국가", "동해물과 백두산이 마르고 닳도록\r\n하나님이 보우하사 우리나라 만세\r\n무궁화 삼천리 화려강산\r\n대한사람 대한으로 길이 보전하세").ToString();
+                //lblMb.Text = MessageBox.ShowMessageBoxOk("애국가", "동해물과 백두산이 마르고 닳도록\r\n하나님이 보우하사 우리나라 만세\r\n무궁화 삼천리 화려강산\r\n대한사람 대한으로 길이 보전하세").ToString();
+
+                MessageBox.ShowMessageBoxYesNo("삭제", $"'PageInput' 페이지를 삭제를 삭제하시겠습니까?");
                 Block = false;
             };
             #endregion
@@ -633,6 +635,14 @@ namespace Sample
             btnInputClass.ButtonClick += (o, s) =>
             {
                 Dictionary<string, InputBoxInfo> infos = new Dictionary<string, InputBoxInfo>();
+                infos.Add("Width", new InputBoxInfo { Title = "너비" });
+                infos.Add("Height", new InputBoxInfo { Title = "높이" });
+                infos.Add("Name", new InputBoxInfo { Title = "이름" });
+
+                var ret = InputBox.ShowInputBox<PageInfo>("새 파일");
+
+                /*
+                Dictionary<string, InputBoxInfo> infos = new Dictionary<string, InputBoxInfo>();
                 infos.Add("Name", new InputBoxInfo { Title = "명칭" });
                 infos.Add("Distance", new InputBoxInfo { Title = "길이", Unit = "㎜" });
                 infos.Add("Temperature", new InputBoxInfo { Title = "온도", Unit = "℃" });
@@ -652,6 +662,7 @@ namespace Sample
                     MessageBox.ShowMessageBoxOk("JSON", ss);
                 }
                 Block = false;
+                */
             };
             #endregion
             #region btnInputString.ButtonClick
@@ -1021,4 +1032,12 @@ namespace Sample
     }
     #endregion
 
+    #region class : PageInfo
+    public class PageInfo
+    {
+        public int Width { get; set; } = 800;
+        public int Height { get; set; } = 480;
+        public string Name { get; set; } = "";
+    }
+    #endregion
 }
