@@ -30,6 +30,11 @@ namespace Devinno.Forms.Dialogs
         public DvButton ButtonCancel => btnCancel;
         #endregion
 
+        #region Member Variable
+        bool noraiseev => (DateTime.Now - showtime).TotalMilliseconds < 250;
+        DateTime showtime = DateTime.Now;
+        #endregion
+
         #region Constructor
         public DvInputBox()
         {
@@ -104,6 +109,7 @@ namespace Devinno.Forms.Dialogs
         #region ShowInputBox
         public T? ShowInputBox<T>(string Title, T value, Dictionary<string, InputBoxInfo> infos) where T : class
         {
+            showtime = DateTime.Now;
             Theme = GetCallerFormTheme();
 
             T? ret = default(T);
@@ -135,6 +141,8 @@ namespace Devinno.Forms.Dialogs
             var nsz = 0;
             using (var g = CreateGraphics()) nsz = Math.Max(60, Convert.ToInt32(g.MeasureString(nstr, Font).Width + 20));
 
+            #region Add
+            DvControl first = null;
             foreach (var v in props)
             {
                 var p = infos != null && infos.ContainsKey(v.Name) ? infos[v.Name] : null;
@@ -170,6 +178,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (sbyte)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(short))
                 {
@@ -178,6 +189,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (short)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(int))
                 {
@@ -186,6 +200,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (int)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(long))
                 {
@@ -194,6 +211,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (long)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(byte))
                 {
@@ -202,6 +222,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (byte)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(ushort))
                 {
@@ -210,6 +233,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (ushort)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(uint))
                 {
@@ -218,6 +244,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (uint)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(ulong))
                 {
@@ -226,6 +255,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (ulong)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(float))
                 {
@@ -234,6 +266,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (float)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(double))
                 {
@@ -242,6 +277,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (double)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(decimal))
                 {
@@ -250,6 +288,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (decimal)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(string))
                 {
@@ -258,6 +299,9 @@ namespace Devinno.Forms.Dialogs
                     tpnl.Controls.Add(c, col, row);
                     if (value != null) c.Value = (string)v.GetValue((object)value);
                     #endregion
+
+                    if (UseEnterKey) c.OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); };
+                    if (first == null) first = c;
                 }
                 else if (v.PropertyType == typeof(bool))
                 {
@@ -282,6 +326,32 @@ namespace Devinno.Forms.Dialogs
                     }
                     #endregion
                 }
+            }
+            #endregion
+
+            if (first != null)
+            {
+                var c = first;
+                ThreadPool.QueueUserWorkItem((o) =>
+                {
+                    Thread.Sleep(50);
+
+                    this.Invoke(new Action(() =>
+                    {
+                        if (c is DvValueInputText) { var v = ((DvValueInputText)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<byte>) { var v = ((DvValueInputNumber<byte>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<ushort>) { var v = ((DvValueInputNumber<ushort>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<uint>) { var v = ((DvValueInputNumber<uint>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<ulong>) { var v = ((DvValueInputNumber<ulong>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<sbyte>) { var v = ((DvValueInputNumber<sbyte>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<short>) { var v = ((DvValueInputNumber<short>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<int>) { var v = ((DvValueInputNumber<int>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<long>) { var v = ((DvValueInputNumber<long>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<float>) { var v = ((DvValueInputNumber<float>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<double>) { var v = ((DvValueInputNumber<double>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                        else if (c is DvValueInputNumber<decimal>) { var v = ((DvValueInputNumber<decimal>)c).OriginalTextBox; v.Focus(); v.SelectAll(); }
+                    }));
+                });
             }
             #endregion
 
@@ -335,6 +405,7 @@ namespace Devinno.Forms.Dialogs
         #region show
         private void show(string Title, Control c, Action actReturn)
         {
+            showtime = DateTime.Now;
             Theme = GetCallerFormTheme();
 
             #region Var
@@ -356,27 +427,25 @@ namespace Devinno.Forms.Dialogs
             tpnl.Controls.Add(c, 0, 0);
             #endregion
 
-           
             if (UseEnterKey)
             {
-                if (c is DvValueInputText) { ((DvValueInputText)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<byte>) { ((DvValueInputNumber<byte>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<ushort>) { ((DvValueInputNumber<ushort>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<uint>) { ((DvValueInputNumber<uint>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<ulong>) { ((DvValueInputNumber<ulong>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<sbyte>) { ((DvValueInputNumber<sbyte>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<short>) { ((DvValueInputNumber<short>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<int>) { ((DvValueInputNumber<int>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<long>) { ((DvValueInputNumber<long>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<float>) { ((DvValueInputNumber<float>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<double>) { ((DvValueInputNumber<double>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-                else if (c is DvValueInputNumber<decimal>) { ((DvValueInputNumber<decimal>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter) OK(); }; }
-
+                if (c is DvValueInputText) { ((DvValueInputText)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<byte>) { ((DvValueInputNumber<byte>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<ushort>) { ((DvValueInputNumber<ushort>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<uint>) { ((DvValueInputNumber<uint>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<ulong>) { ((DvValueInputNumber<ulong>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<sbyte>) { ((DvValueInputNumber<sbyte>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<short>) { ((DvValueInputNumber<short>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<int>) { ((DvValueInputNumber<int>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<long>) { ((DvValueInputNumber<long>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<float>) { ((DvValueInputNumber<float>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<double>) { ((DvValueInputNumber<double>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
+                else if (c is DvValueInputNumber<decimal>) { ((DvValueInputNumber<decimal>)c).OriginalTextBox.KeyUp += (o, s) => { if (s.KeyCode == Keys.Enter && !noraiseev) OK(); }; }
             }
 
             ThreadPool.QueueUserWorkItem((o) =>
             {
-                Thread.Sleep(300);
+                Thread.Sleep(50);
 
                 this.Invoke(new Action(() =>
                 {
