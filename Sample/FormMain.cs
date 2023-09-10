@@ -547,7 +547,11 @@ namespace Sample
             #endregion
             #region tmr
             tmr = new Timer { Interval = 10, Enabled = true };
-            tmr.Tick += (o, s) => dataGrid.Invalidate();
+            tmr.Tick += (o, s) =>
+            {
+                dataGrid.Invalidate();
+                tab2.Enabled = DateTime.Now.Second / 3 % 2 == 0;
+            };
             #endregion
 
             #region btnKeypadInt.ButtonClick
@@ -820,6 +824,7 @@ namespace Sample
             portBox.FormBorderStyle = FormBorderStyle.FixedSingle;
 
             DvDialogs.Set(true, FormBorderStyle.FixedSingle);
+ 
         }
         #endregion
 

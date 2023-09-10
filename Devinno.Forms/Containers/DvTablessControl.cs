@@ -88,11 +88,8 @@ namespace Devinno.Forms.Containers
         #region OnThemeEnableDraw
         protected virtual void OnThemeEnableDraw(PaintEventArgs e, DvTheme Theme)
         {
-            var bgColor = this.BackColor;
-            if (this.BackColor == Color.Transparent)
-            {
-                if (Parent != null) bgColor = Parent.BackColor;
-            }
+            var TabColor = Parent.BackColor;
+            var bgColor = TabColor;
             if (!Enabled)
             {
                 using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))

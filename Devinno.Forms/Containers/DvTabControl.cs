@@ -367,17 +367,20 @@ namespace Devinno.Forms.Containers
         #region OnThemeEnableDraw
         protected virtual void OnThemeEnableDraw(PaintEventArgs e, DvTheme Theme)
         {
-            var bgColor = this.BackColor;
-            if (this.BackColor == Color.Transparent)
-            {
-                if (Parent != null) bgColor = Parent.BackColor;
-            }
+            var TabColor = this.TabColor ?? Theme.TabPageColor;
+            var bgColor = Parent.BackColor;
             if (!Enabled)
             {
+
+                foreach (var tp in TabPages.Cast<TabPage>()) tp.BackColor = ColorTool.MixColorAlpha(TabColor, Parent.BackColor, Theme.DisableAlpha);
                 using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
                 {
                     e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
                 }
+            }
+            else
+            {
+                foreach (var tp in TabPages.Cast<TabPage>()) tp.BackColor = TabColor;
             }
         }
         #endregion

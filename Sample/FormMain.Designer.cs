@@ -29,6 +29,7 @@ namespace Sample
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.tab = new Devinno.Forms.Containers.DvTablessControl();
             this.tpControl = new System.Windows.Forms.TabPage();
             this.inOnOff = new Devinno.Forms.Controls.DvValueInputBool();
@@ -2479,7 +2480,7 @@ namespace Sample
             this.tpBarGraphV.Location = new System.Drawing.Point(4, 5);
             this.tpBarGraphV.Name = "tpBarGraphV";
             this.tpBarGraphV.Padding = new System.Windows.Forms.Padding(3);
-            this.tpBarGraphV.Size = new System.Drawing.Size(684, 619);
+            this.tpBarGraphV.Size = new System.Drawing.Size(684, 643);
             this.tpBarGraphV.TabIndex = 1;
             this.tpBarGraphV.Text = "tabPage2";
             // 
@@ -2501,7 +2502,7 @@ namespace Sample
             this.barGraphV.RemarkColor = null;
             this.barGraphV.Scrollable = true;
             this.barGraphV.ShadowGap = 1;
-            this.barGraphV.Size = new System.Drawing.Size(678, 613);
+            this.barGraphV.Size = new System.Drawing.Size(678, 637);
             this.barGraphV.TabIndex = 0;
             this.barGraphV.Text = "dvBarGraphv1";
             this.barGraphV.ValueDraw = true;
@@ -2513,7 +2514,7 @@ namespace Sample
             this.tpCircleGraph.Location = new System.Drawing.Point(4, 5);
             this.tpCircleGraph.Name = "tpCircleGraph";
             this.tpCircleGraph.Padding = new System.Windows.Forms.Padding(3);
-            this.tpCircleGraph.Size = new System.Drawing.Size(684, 619);
+            this.tpCircleGraph.Size = new System.Drawing.Size(684, 643);
             this.tpCircleGraph.TabIndex = 2;
             this.tpCircleGraph.Text = "tabPage3";
             // 
@@ -2525,7 +2526,7 @@ namespace Sample
             this.circleGraph.Location = new System.Drawing.Point(3, 3);
             this.circleGraph.Name = "circleGraph";
             this.circleGraph.ShadowGap = 1;
-            this.circleGraph.Size = new System.Drawing.Size(678, 613);
+            this.circleGraph.Size = new System.Drawing.Size(678, 637);
             this.circleGraph.TabIndex = 0;
             this.circleGraph.Text = "dvCircleGraph1";
             this.circleGraph.ValueFont = new System.Drawing.Font("나눔고딕", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -2537,7 +2538,7 @@ namespace Sample
             this.tpLineGraph.Location = new System.Drawing.Point(4, 5);
             this.tpLineGraph.Name = "tpLineGraph";
             this.tpLineGraph.Padding = new System.Windows.Forms.Padding(3);
-            this.tpLineGraph.Size = new System.Drawing.Size(684, 619);
+            this.tpLineGraph.Size = new System.Drawing.Size(684, 643);
             this.tpLineGraph.TabIndex = 3;
             this.tpLineGraph.Text = "tabPage4";
             // 
@@ -2557,7 +2558,7 @@ namespace Sample
             this.lineGraph.Scrollable = true;
             this.lineGraph.SectionWidth = 80;
             this.lineGraph.ShadowGap = 1;
-            this.lineGraph.Size = new System.Drawing.Size(678, 613);
+            this.lineGraph.Size = new System.Drawing.Size(678, 637);
             this.lineGraph.TabIndex = 0;
             this.lineGraph.Text = "dvLineGraph1";
             this.lineGraph.ValueDraw = true;
@@ -2569,7 +2570,7 @@ namespace Sample
             this.tpTrendGraph.Location = new System.Drawing.Point(4, 5);
             this.tpTrendGraph.Name = "tpTrendGraph";
             this.tpTrendGraph.Padding = new System.Windows.Forms.Padding(3);
-            this.tpTrendGraph.Size = new System.Drawing.Size(684, 619);
+            this.tpTrendGraph.Size = new System.Drawing.Size(684, 643);
             this.tpTrendGraph.TabIndex = 4;
             this.tpTrendGraph.Text = "tabPage5";
             // 
@@ -2585,7 +2586,7 @@ namespace Sample
             this.trendGraph.Pause = false;
             this.trendGraph.RemarkColor = null;
             this.trendGraph.ShadowGap = 1;
-            this.trendGraph.Size = new System.Drawing.Size(678, 613);
+            this.trendGraph.Size = new System.Drawing.Size(678, 637);
             this.trendGraph.TabIndex = 0;
             this.trendGraph.Text = "dvTrendGraph1";
             this.trendGraph.TimeFormatString = null;
@@ -2603,7 +2604,7 @@ namespace Sample
             this.tpTimeGraph.Location = new System.Drawing.Point(4, 5);
             this.tpTimeGraph.Name = "tpTimeGraph";
             this.tpTimeGraph.Padding = new System.Windows.Forms.Padding(3);
-            this.tpTimeGraph.Size = new System.Drawing.Size(684, 619);
+            this.tpTimeGraph.Size = new System.Drawing.Size(684, 643);
             this.tpTimeGraph.TabIndex = 5;
             this.tpTimeGraph.Text = "tabPage6";
             // 
@@ -2616,7 +2617,7 @@ namespace Sample
             this.timeGraph.Name = "timeGraph";
             this.timeGraph.RemarkColor = null;
             this.timeGraph.ShadowGap = 1;
-            this.timeGraph.Size = new System.Drawing.Size(678, 613);
+            this.timeGraph.Size = new System.Drawing.Size(678, 637);
             this.timeGraph.TabIndex = 0;
             this.timeGraph.Text = "dvTimeGraph1";
             this.timeGraph.TimeFormatString = null;
@@ -3733,6 +3734,7 @@ namespace Sample
             this.treeView.ItemHeight = 30;
             this.treeView.Location = new System.Drawing.Point(425, 13);
             this.treeView.Name = "treeView";
+            this.treeView.RadioBoxColor = null;
             this.treeView.RadioColor = null;
             this.treeView.RadioSize = 16;
             this.treeView.Round = null;
@@ -3773,6 +3775,9 @@ namespace Sample
             this.toolBox.BackgroundDraw = true;
             this.toolBox.BoxColor = null;
             this.toolBox.CategoryColor = null;
+            this.toolBox.CategoryHeight = 30;
+            this.toolBox.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
+            this.toolBox.IndentWidth = 30;
             this.toolBox.ItemHeight = 30;
             this.toolBox.Location = new System.Drawing.Point(219, 13);
             this.toolBox.Name = "toolBox";
@@ -3869,6 +3874,7 @@ namespace Sample
             this.ClientSize = new System.Drawing.Size(740, 770);
             this.Controls.Add(this.tab);
             this.ForeColor = System.Drawing.Color.White;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(740, 770);
             this.Name = "FormMain";
             this.Padding = new System.Windows.Forms.Padding(7, 40, 7, 7);
