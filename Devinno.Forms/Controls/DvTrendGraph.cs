@@ -47,21 +47,6 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-        #region RemarkColor
-        private Color? cRemarkColor = null;
-        public Color? RemarkColor
-        {
-            get => cRemarkColor;
-            set
-            {
-                if (cRemarkColor != value)
-                {
-                    cRemarkColor = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
 
         #region YAxisGraduationCount
         private int nYAxisGraduationCount = 10;
@@ -243,6 +228,8 @@ namespace Devinno.Forms.Controls
                         if (pGraphDatas.Count > 0)
                         {
                             var last = pGraphDatas.LastOrDefault();
+                            if (last != null && GraphDatas.Count == 0) firstAppendTime = last.Time;
+
                             GraphDatas.AddRange(pGraphDatas);
                             var ar = GraphDatas.ToArray();
                             GraphDatas = ar.Where(x => last.Time - MaximumXScale - TimeSpan.FromMilliseconds(Interval * 2) <= x.Time).ToList();
@@ -269,6 +256,7 @@ namespace Devinno.Forms.Controls
         private Thread thData, thRefresh;
         private Dictionary<string, PropertyInfo> dicProps = new Dictionary<string, PropertyInfo>();
         private object oLock = new object();
+        private DateTime firstAppendTime = DateTime.Now;
         #endregion
 
         #region Constructor
@@ -282,7 +270,6 @@ namespace Devinno.Forms.Controls
             #endregion
 
             Size = new Size(150, 100);
-
 
             #region Scroll
             scroll = new Scroll() { TouchMode = true, Direction = ScrollDirection.Horizon };
@@ -300,7 +287,7 @@ namespace Devinno.Forms.Controls
             scroll.GetScrollScaleFactor = () =>
             {
                 long v = 0;
-                Areas((rtContent, rtRemark, rtNameAxis, rtValueAxis, rtGraphAl, rtGraph, rtScroll, dicSer, GP, CH) =>
+                Areas((rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks) =>
                 {
                     v = Convert.ToInt64(XScale.Ticks / (double)rtGraph.Width);
                 });
@@ -352,9 +339,7 @@ namespace Devinno.Forms.Controls
         {
             #region Var
             var GridColor = this.GridColor ?? Theme.GridColor;
-            var RemarkColor = this.RemarkColor ?? Theme.ButtonColor;
             var GraphBackColor = this.GraphBackColor ?? Color.Transparent;
-            var RemarkBorderColor = Theme.GetBorderColor(RemarkColor, BackColor);
             var ScrollBorderColor = Theme.GetBorderColor(Theme.ScrollBarColor, BackColor);
 
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
@@ -366,161 +351,28 @@ namespace Devinno.Forms.Controls
             #endregion
 
             scroll.TouchMode = Theme.TouchMode;
-
-            Areas((rtContent, rtRemark, rtNameAxis, rtValueAxis, rtGraphAl, rtGraph, rtScroll, dicSer, GP, CH) =>
+ 
+            Areas((rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks) =>
             {
-                var spos = scroll.ScrollPositionWithOffsetR;
-
-                #region GraphBG
-                if (GraphBackColor != Color.Transparent)
-                {
-                    br.Color = GraphBackColor;
-                    e.Graphics.FillRectangle(br, rtGraph);
-                }
+                #region var
+                var GridColor = this.GridColor ?? Theme.GridColor;
+                var GraphBackColor = this.GraphBackColor ?? Color.Transparent;
                 #endregion
-                #region Remark
-                if (Series.Count > 0)
+
+                lock (oLock)
                 {
-                    #region var ls;
-                    var ls = new List<SizeF>();
-                    foreach (var v in Series)
-                    {
-                        ls.Add(e.Graphics.MeasureString(v.Alias, Font));
-                    }
-                    #endregion
-                    var nwbr = 10;
-                    var nwgp = 5;
-                    var RemarkW = (GP * 2) + ls.Sum(x => nwbr + nwgp + Convert.ToInt32(x.Width) + (GP * 2) + 2);
-                    var rtRemarkBox = Util.MakeRectangleAlign(rtRemark, new SizeF(RemarkW, rtRemark.Height), DvContentAlignment.MiddleCenter);
-                    Theme.DrawBox(e.Graphics, Util.INT(rtRemarkBox), RemarkColor, RemarkBorderColor, RoundType.All, Box.ButtonUp_Flat(ShadowGap));
-
-                    var ix = rtRemarkBox.Left + (GP * 2);
-                    for (int i = 0; i < Series.Count; i++)
-                    {
-                        var s = Series[i];
-                        var sz = ls[i];
-                        var rtBR = Util.MakeRectangleAlign(Util.FromRect(ix, rtRemarkBox.Top, nwbr, rtRemarkBox.Height), new SizeF(nwbr, nwgp), DvContentAlignment.MiddleCenter);
-                        ix += rtBR.Width;
-                        ix += nwgp;
-                        var rtTX = Util.FromRect(ix, rtRemarkBox.Top, Convert.ToInt32(ls[i].Width) + 2, rtRemarkBox.Height);
-                        ix += rtTX.Width;
-                        ix += GP * 2;
-
-                        var SeriesBorderColor = Theme.GetBorderColor(s.SeriesColor, BackColor);
-                        Theme.DrawBox(e.Graphics, Util.INT(rtBR), s.SeriesColor, SeriesBorderColor, RoundType.Rect, Box.ButtonUp_Flat(ShadowGap));
-                        Theme.DrawText(e.Graphics, s.Alias, Font, ForeColor, rtTX, DvContentAlignment.MiddleLeft, true);
-                    }
+                    Draw(e.Graphics, Theme,
+                         rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks,
+                         GridColor, GraphBackColor, ForeColor, BackColor,
+                         Font,
+                         XAxisGraduation, YAxisGraduationCount, XAxisGridDraw, YAxisGridDraw,
+                         ValueFormatString, TimeFormatString,
+                         XScale, Series,
+                         scroll, true, Theme.TouchMode,
+                         GraphDatas,
+                         firstAppendTime);
                 }
-                #endregion
-                #region Value Axis
-                if (YAxisGraduationCount > 0)
-                {
-                    for (var i = 0; i <= YAxisGraduationCount; i++)
-                    {
-                        var y = Convert.ToInt32(MathTool.Map(i, 0, YAxisGraduationCount, rtGraph.Bottom, rtGraph.Top));
 
-                        if (i == 0)
-                        {
-                            p.Color = GridColor;
-                            p.Width = 1;
-                            p.DashStyle = DashStyle.Solid;
-                            e.Graphics.DrawLine(p, rtGraph.Left, y + 1, rtGraph.Right, y + 1);
-                        }
-                        else if (i == YAxisGraduationCount)
-                        {
-                            p.Color = GridColor;
-                            p.Width = 1;
-                            p.DashStyle = DashStyle.Solid;
-                            e.Graphics.DrawLine(p, rtGraph.Left, y, rtGraph.Right, y);
-                        }
-                        else if (YAxisGridDraw)
-                        {
-                            p.Color = GridColor;
-                            p.Width = 1;
-                            p.DashStyle = DashStyle.Custom;
-                            p.DashPattern = new float[] { 2, 2 };
-                            e.Graphics.DrawLine(p, rtGraph.Left, y, rtGraph.Right, y);
-                        }
-
-                        foreach (var ser in Series)
-                        {
-                            if (dicSer.ContainsKey(ser.Name))
-                            {
-                                var vrt = dicSer[ser.Name];
-                                var val = MathTool.Map(i, 0, YAxisGraduationCount, ser.Minimum, ser.Maximum);
-                                var sval = string.IsNullOrWhiteSpace(ValueFormatString) ? val.ToString("0") : val.ToString(ValueFormatString);
-                                var sz = e.Graphics.MeasureString(sval, Font);
-                                var rt = Util.FromRect(vrt.Left, y - ((sz.Height + 2F) / 2F), vrt.Width, (sz.Height) + 2F);
-                                Theme.DrawText(e.Graphics, sval, Font, ser.SeriesColor, rt, DvContentAlignment.MiddleRight, true);
-
-                                if (i == 0)
-                                {
-                                    var rtTitle = Util.FromRect(rt.Left, rtContent.Top, rt.Width, rt.Height);
-                                    Theme.DrawText(e.Graphics, ser.Alias, Font, ser.SeriesColor, rtTitle, DvContentAlignment.TopRight, true);
-                                }
-                            }
-                        }
-
-                    }
-                }
-                #endregion
-                #region Time Axis
-                if (GraphDatas.Count > 0)
-                {
-                    p.Color = GridColor;
-                    p.Width = 1;
-
-                    var st = GraphDatas.First().Time;
-                    var ed = GraphDatas.Last().Time;
-
-                    for (DateTime i = ed; i >= st; i -= XAxisGraduation)
-                    {
-                        var ts = ed - i;
-                        var x = Convert.ToSingle(MathTool.Map(i.Ticks + spos, ed.Ticks, ed.Ticks - XScale.Ticks, rtGraph.Right, rtGraph.Left));
-                        if (x >= rtGraph.Left && x <= rtGraph.Right)
-                        {
-                            if (XAxisGridDraw && x > rtGraph.Left && x < rtGraph.Right)
-                            {
-                                p.Color = GridColor;
-                                p.Width = 1;
-                                p.DashStyle = DashStyle.Custom;
-                                p.DashPattern = new float[] { 2, 2 };
-
-                                e.Graphics.DrawLine(p, x, rtGraph.Top, x, rtGraph.Bottom);
-                            }
-
-                            var sval = i.ToString(string.IsNullOrWhiteSpace(TimeFormatString) ? "yyyy.MM.dd\r\nHH:mm:ss.fff" : TimeFormatString);
-                            var sz = e.Graphics.MeasureString(sval, Font);
-                            var rt = MathTool.MakeRectangle(new PointF(x, rtNameAxis.Top + (rtNameAxis.Height / 2)), (sz.Width) + 2, (sz.Height) + 2);
-                            Theme.DrawText(e.Graphics, sval, Font, GridColor, rt);
-                        }
-
-                    }
-                }
-                #endregion
-                #region Data
-                if (Series.Count > 0 && GraphDatas.Count > 0)
-                {
-                    var ls = new List<TGV>();
-                    lock (oLock) ls = GraphDatas.ToList();
-                    var st = ls.First().Time;
-                    var ed = ls.Last().Time;
-
-                    e.Graphics.SetClip(rtGraph);
-                    foreach (var v in Series)
-                    {
-                        var pts = ls.Select(x => new PointF(Convert.ToSingle(MathTool.Map((double)x.Time.Ticks + (double)spos, ed.Ticks, ed.Ticks - XScale.Ticks, rtGraph.Right, rtGraph.Left)),
-                                                            Convert.ToSingle(MathTool.Map(x.Values[v.Name], v.Minimum, v.Maximum, rtGraph.Bottom, rtGraph.Top)))).ToArray();
-
-                        pts = pts.Where(x => x.X >= rtGraph.Left - 10 && x.X <= rtGraph.Right + 10).ToArray();
-                        p.Width = 2;
-                        p.Color = v.SeriesColor;
-                        p.DashStyle = DashStyle.Solid;
-                        if (pts.Length > 1) e.Graphics.DrawLines(p, pts);
-                    }
-                    e.Graphics.ResetClip();
-                }
-                #endregion
                 #region Scroll
                 if (scroll.ScrollTotal > scroll.ScrollView)
                 {
@@ -537,7 +389,6 @@ namespace Devinno.Forms.Controls
                     e.Graphics.ResetClip();
                 }
                 #endregion
-
             });
 
             #region Dispose
@@ -552,14 +403,13 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             int x = e.X, y = e.Y;
-
-            scroll.TouchMode = GetTheme()?.TouchMode ?? false;
-
-            Areas((rtContent, rtRemark, rtNameAxis, rtValueAxis, rtGraphAl, rtGraph, rtScroll, dicSer, GP, CH) =>
+ 
+            Areas((rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks) =>
             {
                 scroll.MouseDownR(x, y, rtScroll);
                 if (scroll.TouchMode && CollisionTool.Check(rtGraph, x, y)) scroll.TouchDownR(x, y);
             });
+
             Invalidate();
             base.OnMouseDown(e);
         }
@@ -567,9 +417,9 @@ namespace Devinno.Forms.Controls
         #region OnMouseMove
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            int x = e.X, y = e.Y;
-            Areas((rtContent, rtRemark, rtNameAxis, rtValueAxis, rtGraphAl, rtGraph, rtScroll, dicSer, GP, CH) =>
+            Areas((rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks) =>
             {
+                int x = e.X, y = e.Y;
                 scroll.MouseMoveR(x, y, rtScroll);
                 if (scroll.TouchMode) scroll.TouchMoveR(x, y);
             });
@@ -581,7 +431,7 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseUp(MouseEventArgs e)
         {
             int x = e.X, y = e.Y;
-            Areas((rtContent, rtRemark, rtNameAxis, rtValueAxis, rtGraphAl, rtGraph, rtScroll, dicSer, GP, CH) =>
+            Areas((rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks) =>
             {
                 scroll.MouseUpR(x, y);
                 if (scroll.TouchMode) scroll.TouchUpR(x, y);
@@ -594,60 +444,87 @@ namespace Devinno.Forms.Controls
 
         #region Method
         #region Areas
-        void Areas(Action<RectangleF, RectangleF, RectangleF, RectangleF, RectangleF, RectangleF, RectangleF, Dictionary<string, RectangleF>, float, float> act)
+        public void Areas(Action<RectangleF, RectangleF, RectangleF, RectangleF, RectangleF, RectangleF, RectangleF, List<SizeF>> act)
         {
+            var rtContent = Util.FromRect(0, 0, Width, Height);
+            var rtRemark = new RectangleF();
+            var rtTimeAxis = new RectangleF();
+            var rtValueTitle = new RectangleF();
+            var rtValueAxis = new RectangleF();
+            var rtGraph = new RectangleF();
+            var rtScroll = new RectangleF();
+
             using (var g = CreateGraphics())
             {
-                var CH = g.MeasureString("H", Font).Height;
-                var GP = 5;
-                #region var dicSer;
-                var vx = 0F;
-                var dicSer = new Dictionary<string, RectangleF>();
+                #region var
+                var szCH = g.MeasureString("H", Font);
+                var CH = szCH.Height;
+                var GP = 10;
+                var SCWH = Scroll.SC_WH;
+                #endregion
+                #region Min / Max / Remark
+                var dic = new Dictionary<string, _ValueAxisBounds_>();
                 foreach (var x in Series)
                 {
-                    var sMin = string.IsNullOrWhiteSpace(ValueFormatString) ? x.Minimum.ToString("0") : x.Minimum.ToString(ValueFormatString);
-                    var sMax = string.IsNullOrWhiteSpace(ValueFormatString) ? x.Maximum.ToString("0") : x.Maximum.ToString(ValueFormatString);
+                    var vrt = new _ValueAxisBounds_();
+
+                    var sMin = string.IsNullOrWhiteSpace(ValueFormatString) ? x.Minimum.ToString() : x.Minimum.ToString(ValueFormatString);
+                    var sMax = string.IsNullOrWhiteSpace(ValueFormatString) ? x.Maximum.ToString() : x.Maximum.ToString(ValueFormatString);
                     var sTxt = x.Alias;
 
-                    var szMin = g.MeasureString(sMin, Font);
-                    var szMax = g.MeasureString(sMax, Font);
-                    var szTxt = g.MeasureString(sTxt, Font);
+                    vrt.szMin = g.MeasureString(sMin, Font);
+                    vrt.szMax = g.MeasureString(sMax, Font);
+                    vrt.szAlias = g.MeasureString(sTxt, Font);
 
-                    var w = Math.Max(Math.Ceiling(szMax.Width) + 1 + GP, Math.Ceiling(szMin.Width) + 1 + GP) - GP;
-
-                    var vw = Math.Max(Convert.ToInt32(szTxt.Width + 2), Convert.ToInt32(w));
-                    dicSer.Add(x.Name, Util.FromRect(vx, 0, vw, 1));
-                    vx += vw;
-                    vx += GP;
+                    dic.Add(x.Name, vrt);
                 }
-                vx -= GP;
                 #endregion
 
-                var sz = g.MeasureString(DateTime.Now.ToString(string.IsNullOrWhiteSpace(TimeFormatString) ? "yyyy.MM.dd\r\nHH:mm:ss.fff" : TimeFormatString), Font);
-                var ValueAxisWidth = Series.Count > 0 ? vx : 0;
-                var NameAxisHeight = (GP + sz.Height);
-                var RemarkAreaHeight = (GP + (CH * 1.5F) + GP);
-                var gpTopMargin = (CH + 2) + GP;
-                var scwh = Scroll.SC_WH;
+                {
+                    #region var
+                    var rmkW = GP + dic.Sum(x => 10 + 7 + x.Value.szAlias.Width + GP);
+                    var rmkH = GP + CH + GP;
 
+                    var frmt = TimeFormatString ?? "yyyy.MM.dd\r\nHH:mm:ss";
+                    var sval = DateTime.Now.ToString(frmt);
+                    var szTime = g.MeasureString(sval, Font);
 
-                var rtContent = GetContentBounds();
-                var rtRemark = Util.FromRect(rtContent.Left + ValueAxisWidth + GP, rtContent.Bottom - RemarkAreaHeight, rtContent.Width - (ValueAxisWidth + GP) - Convert.ToInt32(sz.Width / 2), RemarkAreaHeight);
-                var rtNameAxis = Util.FromRect(rtContent.Left + ValueAxisWidth + GP, rtRemark.Top - 10 - scwh - NameAxisHeight - GP, rtContent.Width - (ValueAxisWidth + GP), NameAxisHeight);
-                var rtValueAxis = Util.FromRect(rtContent.Left, rtContent.Left + gpTopMargin, ValueAxisWidth, rtNameAxis.Top - rtContent.Top - gpTopMargin - GP);
-                var rtGraphAl = Util.FromRect(rtContent.Left + ValueAxisWidth + GP, rtContent.Left + gpTopMargin, rtContent.Width - (ValueAxisWidth + GP), rtValueAxis.Height);
-                var rtGraph = Util.FromRect(rtGraphAl.Left, rtGraphAl.Top, rtGraphAl.Width - Convert.ToInt32(sz.Width / 2), rtGraphAl.Height);
-                var rtScroll = Util.FromRect(rtGraph.Left, rtRemark.Top - 10 - scwh, rtGraph.Width, scwh);
+                    var nmW = dic.Select(x => Math.Max(Math.Max(x.Value.szMin.Width, x.Value.szMax.Width), x.Value.szAlias.Width) + GP).Sum();
+                    var tmH = szTime.Height;
+                    #endregion
+                    #region bounds
+                    var lsr = new List<SizeInfo>();
+                    var lsc = new List<SizeInfo>();
 
+                    lsr.Add(new SizeInfo(DvSizeMode.Pixel, CH + GP));
+                    lsr.Add(new SizeInfo(DvSizeMode.Pixel, GP / 2));
+                    lsr.Add(new SizeInfo(DvSizeMode.Percent, 100));
+                    lsr.Add(new SizeInfo(DvSizeMode.Pixel, GP));
+                    lsr.Add(new SizeInfo(DvSizeMode.Pixel, tmH));
+                    lsr.Add(new SizeInfo(DvSizeMode.Pixel, GP));
+                    lsr.Add(new SizeInfo(DvSizeMode.Pixel, SCWH));
+                    lsr.Add(new SizeInfo(DvSizeMode.Pixel, GP));
+                    lsr.Add(new SizeInfo(DvSizeMode.Pixel, rmkH));
 
-                rtValueAxis.Height = (rtValueAxis.Top + rtGraph.Height) - rtValueAxis.Top;
-                rtGraphAl.Height = (rtGraphAl.Top + rtGraph.Height) - rtGraphAl.Top;
-                rtNameAxis.Y += 2;
+                    lsc.Add(new SizeInfo(DvSizeMode.Pixel, nmW));
+                    lsc.Add(new SizeInfo(DvSizeMode.Pixel, GP));
+                    lsc.Add(new SizeInfo(DvSizeMode.Percent, 100));
+                    lsc.Add(new SizeInfo(DvSizeMode.Pixel, szTime.Width / 2F));
 
-                //rtScroll = Util.INT(rtScroll);
-                //rtRemark = Util.INT(rtRemark);
+                    var rts = Util.DevideSizeVH(rtContent, lsr, lsc);
+                    #endregion
+                    #region set
+                    rtValueTitle = rts[0, 0];
+                    rtValueAxis = rts[2, 0];
+                    rtTimeAxis = rts[4, 2];
+                    rtGraph = rts[2, 2];
+                    rtScroll = rts[6, 2];
+                    rtRemark = Util.MakeRectangleAlign(rts[8, 2], new SizeF(rmkW, rts[8, 2].Height - 2), DvContentAlignment.MiddleCenter);
+                    var szRemarks = dic.Values.Select(x => x.szAlias).ToList();
+                    #endregion
 
-                act(rtContent, rtRemark, rtNameAxis, rtValueAxis, rtGraphAl, rtGraph, rtScroll, dicSer, GP, CH);
+                    act(rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks);
+                }
             }
         }
         #endregion
@@ -712,12 +589,215 @@ namespace Devinno.Forms.Controls
                     }
                     else
                     {
+                        if (GraphDatas.Count == 0) firstAppendTime = tgv.Time;
                         GraphDatas.Add(tgv);
                         var ar = GraphDatas.ToArray();
                         GraphDatas = ar.Where(x => tgv.Time - MaximumXScale - TimeSpan.FromMilliseconds(Interval * 2) <= x.Time).ToList();
                     }
                 }
             }
+        }
+        #endregion
+
+        #region Draw 
+        void Draw(Graphics g, DvTheme thm,
+            RectangleF rtContent, RectangleF rtRemark, RectangleF rtTimeAxis, RectangleF rtValueTitle, RectangleF rtValueAxis, RectangleF rtGraph, RectangleF rtScroll, List<SizeF> szRemarks,
+            Color gridColor, Color graphBackColor, Color foreColor, Color backColor,
+            Font font,
+            TimeSpan xAxisGraduation, int yAxisGraduationCount,
+            bool xAxisGridDraw, bool yAxisGridDraw, string valueFormatString, string timeFormatString,
+            TimeSpan xScale, List<GraphSeries2> series,
+            Scroll scroll, bool scrollable, bool touchMode,
+            List<TGV> graphDatas, DateTime firstAppendTime)
+        {
+            #region var
+            var scrollBorderColor = thm.GetBorderColor(thm.ScrollBarColor, backColor);
+            var seriasBorderColor = thm.GetBorderColor(backColor, backColor);
+            var barBorderColor = thm.GetBorderColor(graphBackColor, backColor);
+
+            var spos = scroll.ScrollPositionWithOffsetR;
+            var GP = 10F;
+
+            var br = new SolidBrush(backColor);
+            var p = new Pen(gridColor);
+            #endregion
+
+            #region Draw
+            {
+                #region GraphBG
+                if (backColor != Color.Transparent)
+                {
+                    br.Color = backColor;
+                    g.FillRectangle(br, rtGraph);
+                }
+                #endregion
+                #region Min / Max / Remark
+                var dic = new Dictionary<string, _ValueAxisBounds_>();
+                foreach (var x in Series)
+                {
+                    var vrt = new _ValueAxisBounds_();
+
+                    var sMin = string.IsNullOrWhiteSpace(ValueFormatString) ? x.Minimum.ToString() : x.Minimum.ToString(ValueFormatString);
+                    var sMax = string.IsNullOrWhiteSpace(ValueFormatString) ? x.Maximum.ToString() : x.Maximum.ToString(ValueFormatString);
+                    var sTxt = x.Alias;
+
+                    vrt.szMin = g.MeasureString(sMin, Font);
+                    vrt.szMax = g.MeasureString(sMax, Font);
+                    vrt.szAlias = g.MeasureString(sTxt, Font);
+
+                    dic.Add(x.Name, vrt);
+                }
+                #endregion
+
+                #region Remark
+                if (series.Count > 0)
+                {
+                    thm.DrawBox(g, rtRemark, gridColor, gridColor, RoundType.All, BoxStyle.Border, thm.Corner);
+
+                    var ix = GP;
+                    for (int i = 0; i < series.Count; i++)
+                    {
+                        var s = series[i];
+                        var sz = szRemarks[i];
+                        var rt = Util.FromRect(rtRemark.Left + ix, rtRemark.Top, 10 + 7 + sz.Width + GP, rtRemark.Height);
+                        var rticon = Util.FromRect(0, 0, 10, 10);
+
+                        Util.TextIconBounds(g, rt, DvContentAlignment.MiddleLeft,
+                            s.Alias, font, 7, rticon.Size, DvTextIconAlignment.LeftRight,
+                            (rtico, rtText) =>
+                            {
+                                var rti = Util.INT(rtico); rti.Offset(0, 1);
+                                thm.DrawBox(g, rti, s.SeriesColor, seriasBorderColor, RoundType.Rect, BoxStyle.Fill | BoxStyle.Border, thm.Corner);
+                                thm.DrawText(g, s.Alias, font, foreColor, rtText, DvContentAlignment.MiddleLeft);
+                            });
+
+                        ix += rt.Width;
+                    }
+                }
+                #endregion
+                #region Value Axis
+                if (yAxisGraduationCount > 0)
+                {
+                    for (var i = 0; i <= yAxisGraduationCount; i++)
+                    {
+                        var y = Convert.ToInt32(MathTool.Map(i, 0, yAxisGraduationCount, rtGraph.Bottom, rtGraph.Top));
+                        #region Grid
+                        var oo = 0.5f;
+                        if (i == 0)
+                        {
+                            p.Color = gridColor; p.Width = 1;
+                            g.DrawLine(p, rtGraph.Left + oo, y + 1 + oo,
+                                          rtGraph.Right + oo, y + 1 + oo);
+                        }
+                        else if (i == yAxisGraduationCount)
+                        {
+                            p.Color = gridColor; p.Width = 1;
+                            g.DrawLine(p, rtGraph.Left + oo, y + oo,
+                                          rtGraph.Right + oo, y + oo);
+                        }
+                        else if (yAxisGridDraw)
+                        {
+                            p.DashStyle = DashStyle.Custom;
+                            p.DashPattern = new float[] { 2, 2 };
+
+                            p.Color = gridColor; p.Width = 1;
+                            g.DrawLine(p, rtGraph.Left + oo, y + oo,
+                                          rtGraph.Right + oo, y + oo);
+
+                            p.DashStyle = DashStyle.Solid;
+                        }
+                        #endregion
+
+                        var vx = 0F;
+                        foreach (var ser in series)
+                        {
+                            if (dic.ContainsKey(ser.Name))
+                            {
+                                var c = ser.SeriesColor;
+                                var v = dic[ser.Name];
+                                var vw = Math.Max(Math.Max(v.szMin.Width, v.szMax.Width), v.szAlias.Width);
+                                var val = MathTool.Map(i, 0, yAxisGraduationCount, ser.Minimum, ser.Maximum);
+                                var sval = val.ToString(valueFormatString ?? "0");
+                                var sz = g.MeasureString(sval, font);
+                                var rt = Util.FromRect(vx, y - ((sz.Height + 2F) / 2F), vw, (sz.Height) + 2F);
+                                thm.DrawText(g, sval, font, c, rt, DvContentAlignment.MiddleRight);
+
+                                if (i == 0)
+                                {
+                                    var rtTitle = Util.FromRect(rt.Left, rtContent.Top, rt.Width, rt.Height);
+                                    thm.DrawText(g, ser.Alias, font, c, rtTitle, DvContentAlignment.MiddleRight);
+                                }
+
+                                vx += vw + GP;
+                            }
+                        }
+                    }
+                }
+                #endregion
+                #region Time Axis
+                if (graphDatas.Count > 0)
+                {
+                    p.Color = gridColor; p.Width = 1;
+                    p.DashStyle = DashStyle.Custom;
+                    p.DashPattern = new float[] { 2, 2 };
+
+                    {
+                        var st = graphDatas.First().Time;
+                        var ed = graphDatas.Last().Time;
+
+                        var ots = TimeSpan.FromTicks((ed.Ticks - firstAppendTime.Ticks) % xAxisGraduation.Ticks);
+                        var ox = Convert.ToSingle(MathTool.Map(ots.Ticks, 0, xScale.Ticks, 0, rtGraph.Width));
+
+                        for (DateTime i = ed; i >= st; i -= xAxisGraduation)
+                        {
+                            var vx = Convert.ToSingle(MathTool.Map(i.Ticks + spos, ed.Ticks, ed.Ticks - xScale.Ticks, rtGraph.Right, rtGraph.Left));
+                            var x = vx - ox;
+                            var vs = i - ots;
+                            var sval = vs.ToString(timeFormatString ?? "yyyy.MM.dd\r\nHH:mm:ss");
+                            var sz = g.MeasureString(sval, font);
+                            var rt = MathTool.MakeRectangle(new PointF(x, rtTimeAxis.Top + (rtTimeAxis.Height / 2)), (sz.Width) + 2, (sz.Height) + 2);
+
+                            if (x > rtGraph.Left && x < rtGraph.Right)
+                            {
+                                if (xAxisGridDraw) g.DrawLine(p, x, rtGraph.Top, x, rtGraph.Bottom);
+
+                                thm.DrawText(g, sval, font, gridColor, rt, DvContentAlignment.MiddleCenter);       
+                            }
+                        }
+                    }
+
+                    p.DashStyle = DashStyle.Solid;
+                }
+                #endregion
+                #region Data
+                if (series.Count > 0 && graphDatas.Count > 0)
+                {
+                    var ls = graphDatas.ToList();
+                    var st = ls.First().Time;
+                    var ed = ls.Last().Time;
+
+                    g.SetClip(rtGraph);
+                    foreach (var v in series)
+                    {
+                        var pts = ls.Select(x => new PointF(Convert.ToSingle(MathTool.Map((double)x.Time.Ticks + (double)spos, ed.Ticks, ed.Ticks - xScale.Ticks, rtGraph.Right, rtGraph.Left)),
+                                                            Convert.ToSingle(MathTool.Map(x.Values[v.Name], v.Minimum, v.Maximum, rtGraph.Bottom, rtGraph.Top)))).ToArray();
+
+                        pts = pts.Where(x => x.X >= rtGraph.Left - 10 && x.X <= rtGraph.Right + 10).ToArray();
+                        p.Width = 2F;
+                        p.Color = v.SeriesColor;
+
+                        if (pts.Length > 1) g.DrawLines(p, pts);
+                    }
+                    g.ResetClip();
+                }
+                #endregion
+            }
+            #endregion
+
+            #region Dispose
+            p.Dispose();
+            br.Dispose();
+            #endregion
         }
         #endregion
         #endregion

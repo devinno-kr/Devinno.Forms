@@ -2582,7 +2582,6 @@ namespace Sample
             this.trendGraph.MaximumXScale = System.TimeSpan.Parse("01:00:00");
             this.trendGraph.Name = "trendGraph";
             this.trendGraph.Pause = false;
-            this.trendGraph.RemarkColor = null;
             this.trendGraph.ShadowGap = 1;
             this.trendGraph.Size = new System.Drawing.Size(678, 637);
             this.trendGraph.TabIndex = 0;
@@ -2613,7 +2612,6 @@ namespace Sample
             this.timeGraph.GridColor = null;
             this.timeGraph.Location = new System.Drawing.Point(3, 3);
             this.timeGraph.Name = "timeGraph";
-            this.timeGraph.RemarkColor = null;
             this.timeGraph.ShadowGap = 1;
             this.timeGraph.Size = new System.Drawing.Size(678, 637);
             this.timeGraph.TabIndex = 0;
