@@ -824,7 +824,8 @@ namespace Sample
             portBox.FormBorderStyle = FormBorderStyle.FixedSingle;
 
             DvDialogs.Set(true, FormBorderStyle.FixedSingle);
- 
+
+            knob.Tick = 10;
         }
         #endregion
 

@@ -2345,8 +2345,6 @@ namespace Sample
             this.knob.EmptyColor = null;
             this.knob.FillColor = null;
             this.knob.FormatString = "0";
-            this.knob.GraduationLarge = 10D;
-            this.knob.GraduationSmall = 2D;
             this.knob.KnobColor = null;
             this.knob.Location = new System.Drawing.Point(463, 3);
             this.knob.Maximum = 100D;

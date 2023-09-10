@@ -138,32 +138,16 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
-
-        #region GraduationLarge
-        private double nGraduationLarge = 10D;
-        public double GraduationLarge
+        #region Tick
+        private double? nTick = null;
+        public double? Tick
         {
-            get => nGraduationLarge;
+            get => nTick;
             set
             {
-                if (nGraduationLarge != value)
+                if (nTick != value)
                 {
-                    nGraduationLarge = value;
-                    Invalidate();
-                }
-            }
-        }
-        #endregion
-        #region GraduationSmall
-        private double nGraduationSmall = 2D;
-        public double GraduationSmall
-        {
-            get => nGraduationSmall;
-            set
-            {
-                if (nGraduationSmall != value)
-                {
-                    nGraduationSmall = value;
+                    nTick = value;
                     Invalidate();
                 }
             }
@@ -537,6 +521,7 @@ namespace Devinno.Forms.Controls
 
                     var cv = MathTool.Map(calcAngle, 0D, SweepAngle, Minimum, Maximum);
                     Value = MathTool.Constrain(DownValue + cv, Minimum, Maximum);
+                    if (Tick.HasValue && Tick != 0) Value = Math.Round(Value / Tick.Value) * Tick.Value;
                     #endregion
                     prev = ptLoc;
                 }
@@ -574,6 +559,7 @@ namespace Devinno.Forms.Controls
 
                     var cv = MathTool.Map(calcAngle, 0D, SweepAngle, Minimum, Maximum);
                     Value = MathTool.Constrain(DownValue + cv, Minimum, Maximum);
+                    if (Tick.HasValue && Tick != 0) Value = Math.Round(Value / Tick.Value) * Tick.Value;
                     #endregion
                     CursorDownState = false;
                 }
