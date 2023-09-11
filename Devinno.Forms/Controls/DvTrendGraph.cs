@@ -547,7 +547,7 @@ namespace Devinno.Forms.Controls
                     int nCnt = Series.Where(x => nmls.Contains(x.Name)).Count();
                     if (nCnt == Series.Count)
                     {
-                        dicProps = props.ToDictionary(x => x.Name);
+                        dicProps = props.Where(x => Series.Select(x => x.Name).Contains(x.Name)).ToDictionary(x => x.Name);
                         GraphDatas.Clear();
                         this.value = value;
                         IsStart = true;

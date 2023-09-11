@@ -933,6 +933,7 @@ namespace Sample
     #region class : Data2
     class Data2 : TimeGraphData
     {
+        public long ID { get; set; }
         public override DateTime Time { get; set; }
         public double CSharp { get; set; }
         public double Cpp { get; set; }
