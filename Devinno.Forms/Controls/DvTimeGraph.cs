@@ -180,6 +180,8 @@ namespace Devinno.Forms.Controls
         #region Member Variable
         private List<TGV> GraphDatas = new List<TGV>();
         private Scroll scroll = new Scroll();
+        private DateTime? vst = null;
+        private DateTime? ved = null;
         #endregion
 
         #region Constructor
@@ -197,7 +199,17 @@ namespace Devinno.Forms.Controls
             scroll = new Scroll() { TouchMode = true, Direction = ScrollDirection.Horizon };
             scroll.ScrollChanged += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
             scroll.ScrollEnded += (o, s) => { if (Created && !IsDisposed && Visible) this.Invoke(new Action(() => Invalidate())); };
-            scroll.GetScrollTotal = () => GraphDatas.Count > 1 && Series.Count > 0 ? (new DateTime(Convert.ToInt64(Math.Ceiling(Convert.ToDouble(GraphDatas.Last().Time.Ticks) / Convert.ToDouble(XAxisGraduation.Ticks))) * XAxisGraduation.Ticks) - new DateTime(GraphDatas.First().Time.Ticks / XAxisGraduation.Ticks * XAxisGraduation.Ticks)).Ticks : 0L;
+            scroll.GetScrollTotal = () =>
+            {
+                var ret = 0L;
+                if (GraphDatas.Count > 1 && Series.Count > 0)
+                {
+                    var st = vst ?? GraphDatas.First().Time;
+                    var ed = ved ?? GraphDatas.Last().Time;
+                    ret = (ed - st).Ticks;
+                }
+                return ret;
+            };
             scroll.GetScrollTick = () => XAxisGraduation.Ticks;
             scroll.GetScrollView = () => XScale.Ticks;
             scroll.GetScrollScaleFactor = () =>
@@ -244,7 +256,7 @@ namespace Devinno.Forms.Controls
                         Font,
                         XAxisGraduation, YAxisGraduationCount, XAxisGridDraw, YAxisGridDraw,
                         ValueFormatString, TimeFormatString,
-                        XScale, Series,
+                        XScale, Series.Where(x => x.Visible).ToList(),
                         scroll, true, Theme.TouchMode,
                         GraphDatas);
 
@@ -432,6 +444,43 @@ namespace Devinno.Forms.Controls
                         GraphDatas.Add(tgv);
                     }
 
+                    vst = null;
+                    ved = null;
+                    Invalidate();
+                }
+                else throw new Exception("잘못된 데이터 입니다.");
+            }
+            else throw new Exception("GraphSeries는 최소 1개 이상이어야 합니다.");
+        }
+
+        public void SetDataSource<T>(IEnumerable<T> values, DateTime start, DateTime end) where T : TimeGraphData
+        {
+            if (Series.Count > 0)
+            {
+                var pls = typeof(T).GetProperties();
+                var props = typeof(T).GetProperties().Where(x => x.PropertyType == typeof(double) || x.PropertyType == typeof(float) || x.PropertyType == typeof(decimal) ||
+                                                                 x.PropertyType == typeof(byte) || x.PropertyType == typeof(sbyte) ||
+                                                                 x.PropertyType == typeof(short) || x.PropertyType == typeof(ushort) ||
+                                                                 x.PropertyType == typeof(int) || x.PropertyType == typeof(uint) ||
+                                                                 x.PropertyType == typeof(long) || x.PropertyType == typeof(ulong));
+                var nmls = props.Select(x => x.Name).ToList();
+                int nCnt = Series.Where(x => nmls.Contains(x.Name)).Count();
+                if (nCnt == Series.Count)
+                {
+                    var dic = props.Where(x => Series.Select(x => x.Name).Contains(x.Name)).ToDictionary(x => x.Name);
+
+                    GraphDatas.Clear();
+                    foreach (var v in values)
+                    {
+                        var tgv = new TGV() { Time = v.Time };
+
+                        foreach (var vk in dic.Keys) tgv.Values.Add(vk, (double)dic[vk].GetValue(v));
+
+                        GraphDatas.Add(tgv);
+                    }
+
+                    vst = start;
+                    ved = end;
                     Invalidate();
                 }
                 else throw new Exception("잘못된 데이터 입니다.");
@@ -462,7 +511,7 @@ namespace Devinno.Forms.Controls
             var br = new SolidBrush(backColor);
             var p = new Pen(gridColor);
             #endregion
-            series = series.Where(x => x.Visible).ToList();
+             
             #region Draw
             {
                 #region GraphBG
@@ -583,8 +632,8 @@ namespace Devinno.Forms.Controls
                     p.DashPattern = new float[] { 2, 2 };
 
                     {
-                        var st = new DateTime(graphDatas.First().Time.Ticks / xAxisGraduation.Ticks * xAxisGraduation.Ticks);
-                        var ed = new DateTime(Convert.ToInt64(Math.Ceiling(Convert.ToDouble(graphDatas.Last().Time.Ticks) / Convert.ToDouble(xAxisGraduation.Ticks))) * xAxisGraduation.Ticks);
+                        var st = vst ?? GraphDatas.First().Time;
+                        var ed = ved ?? GraphDatas.Last().Time;
 
                         for (DateTime i = st; i <= ed; i += xAxisGraduation)
                         {
@@ -608,9 +657,9 @@ namespace Devinno.Forms.Controls
                 #region Data
                 if (series.Count > 0 && graphDatas.Count > 0)
                 {
-                    var st = new DateTime(graphDatas.First().Time.Ticks / xAxisGraduation.Ticks * xAxisGraduation.Ticks);
-                    var ed = new DateTime(Convert.ToInt64(Math.Ceiling(Convert.ToDouble(graphDatas.Last().Time.Ticks) / Convert.ToDouble(xAxisGraduation.Ticks))) * xAxisGraduation.Ticks);
-
+                    var st = vst ?? GraphDatas.First().Time;
+                    var ed = ved ?? GraphDatas.Last().Time;
+                     
                     g.SetClip(rtGraph);
                     foreach (var v in series)
                     {

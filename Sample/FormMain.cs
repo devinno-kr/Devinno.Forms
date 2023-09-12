@@ -872,16 +872,16 @@ namespace Sample
             var java = 70D;
             var cpp = 50D;
             var csharp = 30D;
-            for (var dt = DateTime.Now.Date; dt <= DateTime.Now.Date + TimeSpan.FromHours(5); dt += TimeSpan.FromSeconds(5 * 2))
+            for (var dt = DateTime.Now.Date + TimeSpan.FromHours(5); dt <= DateTime.Now.Date + TimeSpan.FromHours(10); dt += TimeSpan.FromSeconds(10))
             {
-                cpp = MathTool.Constrain(cpp + (rnd.Next() % 2 == 0 ? 3 : -3), 0, 100);
-                java = MathTool.Constrain(java + (rnd.Next() % 2 == 0 ? 3 : -3), 0, 100);
-                csharp = MathTool.Constrain(csharp + (rnd.Next() % 2 == 0 ? 3 : -3), 0, 100);
+                cpp = MathTool.Constrain(cpp + (rnd.Next() % 2 == 0 ? 1 : -1), 0, 100);
+                java = MathTool.Constrain(java + (rnd.Next() % 2 == 0 ? 1 : -1), 0, 100);
+                csharp = MathTool.Constrain(csharp + (rnd.Next() % 2 == 0 ? 1 : -1), 0, 100);
 
                 ls1.Add(new Data2() { Time = dt, Cpp = cpp, CSharp = csharp, Java = java });
             }
 
-            timeGraph.SetDataSource<Data2>(ls1);
+            timeGraph.SetDataSource<Data2>(ls1, DateTime.Now.Date, DateTime.Now + (TimeSpan.FromDays(1) - TimeSpan.FromMilliseconds(1)));
         }
         #endregion
         #region TrendGraphSet

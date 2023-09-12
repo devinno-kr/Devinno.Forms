@@ -367,7 +367,7 @@ namespace Devinno.Forms.Controls
                          Font,
                          XAxisGraduation, YAxisGraduationCount, XAxisGridDraw, YAxisGridDraw,
                          ValueFormatString, TimeFormatString,
-                         XScale, Series,
+                         XScale, Series.Where(x => x.Visible).ToList(),
                          scroll, true, Theme.TouchMode,
                          GraphDatas,
                          firstAppendTime);
@@ -621,7 +621,7 @@ namespace Devinno.Forms.Controls
             var br = new SolidBrush(backColor);
             var p = new Pen(gridColor);
             #endregion
-            series = series.Where(x => x.Visible).ToList();
+          
             #region Draw
             {
                 #region GraphBG
