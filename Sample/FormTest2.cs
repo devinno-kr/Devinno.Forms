@@ -1,4 +1,7 @@
-﻿using Devinno.Forms.Dialogs;
+﻿using Devinno.Database;
+using Devinno.Forms;
+using Devinno.Forms.Controls;
+using Devinno.Forms.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,8 +19,7 @@ namespace Sample
         public FormTest2()
         {
             InitializeComponent();
-
-            UseWindowDock = true;
         }
     }
+ 
 }

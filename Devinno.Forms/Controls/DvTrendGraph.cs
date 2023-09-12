@@ -464,7 +464,7 @@ namespace Devinno.Forms.Controls
                 #endregion
                 #region Min / Max / Remark
                 var dic = new Dictionary<string, _ValueAxisBounds_>();
-                foreach (var x in Series)
+                foreach (var x in Series.Where(x => x.Visible))
                 {
                     var vrt = new _ValueAxisBounds_();
 
@@ -621,7 +621,7 @@ namespace Devinno.Forms.Controls
             var br = new SolidBrush(backColor);
             var p = new Pen(gridColor);
             #endregion
-
+            series = series.Where(x => x.Visible).ToList();
             #region Draw
             {
                 #region GraphBG

@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Devinno.Database" Version="1.1.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Devinno.Forms\Devinno.Forms.csproj" />
   </ItemGroup>
 
