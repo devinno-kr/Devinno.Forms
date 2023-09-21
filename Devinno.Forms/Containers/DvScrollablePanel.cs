@@ -1,4 +1,6 @@
-﻿using Devinno.Forms.Themes;
+﻿using Devinno.Forms.Dialogs;
+using Devinno.Forms.Themes;
+using Devinno.Forms.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -42,6 +44,14 @@ namespace Devinno.Forms.Containers
                 bFirst = false;
             }
             base.OnThemeDraw(e, Theme);
+        }
+        #endregion
+        #region OnVisibleChanged
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            var wnd = FindForm() as DvForm;
+            DwmTool.SetTheme(this.Handle, wnd.Theme.Brightness == ThemeBrightness.Dark);
+            base.OnVisibleChanged(e);
         }
         #endregion
         #endregion

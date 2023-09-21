@@ -432,6 +432,16 @@ namespace Devinno.Forms.Dialogs
             base.OnShown(e);
         }
         #endregion
+        #region OnVisibleChanged
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            if (BlankForm && FormBorderStyle != FormBorderStyle.None)
+            {
+                DwmTool.SetTheme(this, Theme.Brightness == ThemeBrightness.Dark);
+            }
+            base.OnVisibleChanged(e);
+        }
+        #endregion
         #region OnLoad
         protected override void OnLoad(EventArgs e)
         {
