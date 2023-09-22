@@ -50,7 +50,7 @@ namespace Devinno.Forms.Containers
         protected override void OnVisibleChanged(EventArgs e)
         {
             var wnd = FindForm() as DvForm;
-            DwmTool.SetTheme(this.Handle, wnd.Theme.Brightness == ThemeBrightness.Dark);
+            if (wnd != null) DwmTool.SetTheme(this.Handle, wnd.Theme.Brightness == ThemeBrightness.Dark);
             base.OnVisibleChanged(e);
         }
         #endregion
