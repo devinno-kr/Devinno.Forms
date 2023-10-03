@@ -1634,6 +1634,8 @@ namespace Devinno.Forms.Controls
         #region SetDataSource<T>
         public void SetDataSource<T>(IEnumerable<T> values)
         {
+            ClearInput();
+
             objs = values;
             bNotRaiseEvent = true;
             DataType = typeof(T);
@@ -2306,7 +2308,7 @@ namespace Devinno.Forms.Controls
         }
         #endregion
         #region ClearInput
-        void ClearInput()
+        public void ClearInput()
         {
             var Wnd = FindForm() as DvForm;
             var Theme = GetTheme();
