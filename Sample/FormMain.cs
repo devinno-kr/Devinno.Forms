@@ -829,7 +829,8 @@ namespace Sample
 
             knob.Tick = 10;
 
-            timeGraph.ValueDraw = true;
+            trendGraph.ValueDraw = timeGraph.ValueDraw = true;
+            trendGraph.TimeFormatString = timeGraph.TimeFormatString = "HH:mm:ss.fff";
         }
         #endregion
 
@@ -887,8 +888,8 @@ namespace Sample
 
                 ls1.Add(new Data2() { Time = dt, Cpp = cpp, CSharp = csharp, Java = java });
             }
-
-            timeGraph.SetDataSource<Data2>(ls1, DateTime.Now.Date, DateTime.Now.Date + TimeSpan.FromDays(1));
+            timeGraph.SetDataSource<Data2>(ls1);
+            //timeGraph.SetDataSource<Data2>(ls1, DateTime.Now.Date, DateTime.Now.Date + TimeSpan.FromDays(1));
         }
         #endregion
         #region TrendGraphSet

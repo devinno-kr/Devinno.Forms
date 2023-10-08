@@ -89,7 +89,6 @@ namespace Devinno.Forms.Containers
                 if (nTitleHeight != value)
                 {
                     nTitleHeight = value;
-                    Padding = new Padding(Padding.Left, nTitleHeight, Padding.Right, Padding.Bottom);
                     Invalidate();
                 }
             }
