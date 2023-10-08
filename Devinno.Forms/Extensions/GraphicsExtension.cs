@@ -148,19 +148,21 @@ namespace Devinno.Forms.Extensions
                 else if (FA.Contains(icon.IconString) && icon.IconSize > 0)
                 {
                     var r = FA.GetFAI(icon.IconString);
-
-                    var old = g.TextRenderingHint;
-                    g.TextRenderingHint = icon.RenderingHint.HasValue ? icon.RenderingHint.Value : TextRenderingHint.AntiAlias;
-                    using (var ft = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
+                    if (r != null)
                     {
-                        var text = r.IconText;
-                        var sz = g.MeasureIcon(icon);
-                                          
-                        var rt = Util.MakeRectangleAlign(bounds, sz, align);
-                        rt.Offset(0, 1);
-                        g.DrawString(text, ft, br, rt);
+                        var old = g.TextRenderingHint;
+                        g.TextRenderingHint = icon.RenderingHint.HasValue ? icon.RenderingHint.Value : TextRenderingHint.AntiAlias;
+                        using (var ft = new Font(r.FontFamily, icon.IconSize, FontStyle.Regular))
+                        {
+                            var text = r.IconText;
+                            var sz = g.MeasureIcon(icon);
+
+                            var rt = Util.MakeRectangleAlign(bounds, sz, align);
+                            rt.Offset(0, 1);
+                            g.DrawString(text, ft, br, rt);
+                        }
+                        g.TextRenderingHint = old;
                     }
-                    g.TextRenderingHint = old;
                 }
             }
         }

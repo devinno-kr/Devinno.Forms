@@ -140,6 +140,45 @@ namespace Devinno.Forms.Utils
             return ret;
         }
         #endregion
+        #region MergeBounds
+        public static RectangleF MergeBounds(RectangleF[,] rts, int col, int row, int colspan, int rowspan)
+        {
+            var rtLT = Util.FromRect(rts[row, col]);
+            var rtRB = rts[row + rowspan - 1, col + colspan - 1];
+            var rtLT_Right = rtRB.Right;
+            var rtLT_Bottom = rtRB.Bottom;
+
+            return new RectangleF(rtLT.X, rtLT.Y, rtLT_Right - rtLT.Left, rtLT_Bottom - rtLT.Top);
+        }
+
+        public static RectangleF MergeBoundsH(RectangleF[] rts, int col, int colspan)
+        {
+            var rtL = Util.FromRect(rts[col]);
+            var rtR = rts[col + colspan - 1];
+            var rtL_Right = rtR.Right;
+
+            return new RectangleF(rtL.X, rtL.Y, rtL_Right - rtL.Left, rtL.Top);
+        }
+
+        public static RectangleF MergeBoundsV(RectangleF[] rts, int row, int rowspan)
+        {
+            var rtT = Util.FromRect(rts[row]);
+            var rtB = rts[row + rowspan - 1];
+            var rtT_Bottom = rtB.Bottom;
+
+            return new RectangleF(rtT.X, rtT.Y, rtT.Width, rtT_Bottom - rtT.Top);
+        }
+
+        public static RectangleF MergeBounds(RectangleF rt1, RectangleF rt2)
+        {
+            var L = Math.Min(rt1.Left, rt2.Left);
+            var R = Math.Max(rt1.Right, rt2.Right);
+            var T = Math.Min(rt1.Top, rt2.Top);
+            var B = Math.Max(rt1.Bottom, rt2.Bottom);
+
+            return new RectangleF(L, T, R, B);
+        }
+        #endregion
 
         #region CenterPoint
         public static PointF CenterPoint(List<PointF> vertices)

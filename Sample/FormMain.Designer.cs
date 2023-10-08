@@ -1417,7 +1417,7 @@ namespace Sample
             this.btnIcon.IconAlignment = Devinno.Forms.DvTextIconAlignment.TopBottom;
             this.btnIcon.IconGap = 3;
             this.btnIcon.IconImage = null;
-            this.btnIcon.IconSize = 18F;
+            this.btnIcon.IconSize = 24F;
             this.btnIcon.IconString = "fa-cube";
             this.btnIcon.Location = new System.Drawing.Point(13, 85);
             this.btnIcon.Name = "btnIcon";
@@ -2358,6 +2358,7 @@ namespace Sample
             this.knob.TabIndex = 18;
             this.knob.Text = "dvKnob1";
             this.knob.TextDistance = 0.5F;
+            this.knob.Tick = null;
             this.knob.Unit = "PERCENT";
             this.knob.UnitDistance = 0.7F;
             this.knob.UnitFont = new System.Drawing.Font("나눔고딕", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);

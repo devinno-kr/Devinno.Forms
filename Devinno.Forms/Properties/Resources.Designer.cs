@@ -143,6 +143,26 @@ namespace Devinno.Forms.Properties {
         /// <summary>
         ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static byte[] MaterialIconsOutlined_Regular {
+            get {
+                object obj = ResourceManager.GetObject("MaterialIconsOutlined_Regular", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static byte[] MaterialIconsOutlined_Regular_Code {
+            get {
+                object obj = ResourceManager.GetObject("MaterialIconsOutlined_Regular_Code", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static byte[] NanumGothic {
             get {
                 object obj = ResourceManager.GetObject("NanumGothic", resourceCulture);

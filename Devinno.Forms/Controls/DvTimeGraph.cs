@@ -1,8 +1,11 @@
-﻿using Devinno.Forms.Themes;
+﻿using Devinno.Extensions;
+using Devinno.Forms.Extensions;
+using Devinno.Forms.Themes;
 using Devinno.Forms.Utils;
 using Devinno.Tools;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -40,6 +43,21 @@ namespace Devinno.Forms.Controls
                 if (cGridColor != value)
                 {
                     cGridColor = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
+        #region ValueBoxColor
+        private Color? cValueBoxColor = null;
+        public Color? ValueBoxColor
+        {
+            get => cValueBoxColor;
+            set
+            {
+                if (cValueBoxColor != value)
+                {
+                    cValueBoxColor = value;
                     Invalidate();
                 }
             }
@@ -153,6 +171,9 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region ValueDraw
+        public bool ValueDraw { get; set; } = false;
+        #endregion
 
         #region Scrollable
         /*
@@ -182,6 +203,8 @@ namespace Devinno.Forms.Controls
         private Scroll scroll = new Scroll();
         private DateTime? vst = null;
         private DateTime? ved = null;
+        private int mx = 0, my = 0;
+        private bool bRightDown = false;
         #endregion
 
         #region Constructor
@@ -295,8 +318,13 @@ namespace Devinno.Forms.Controls
 
             Areas((rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks) =>
             {
-                scroll.MouseDown(x, y, rtScroll);
-                if (scroll.TouchMode && CollisionTool.Check(rtGraph, x, y)) scroll.TouchDown(x, y);
+                if (e.Button == MouseButtons.Left)
+                {
+                    scroll.MouseDown(x, y, rtScroll);
+                    if (scroll.TouchMode && CollisionTool.Check(rtGraph, x, y)) scroll.TouchDown(x, y);
+                }
+                else if (e.Button == MouseButtons.Right) bRightDown = true;
+               
             });
             Invalidate();
             base.OnMouseDown(e);
@@ -306,6 +334,7 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseMove(MouseEventArgs e)
         {
             int x = e.X, y = e.Y;
+            mx = x; my = y;
             Areas((rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks) =>
             {
                 scroll.MouseMove(x, y, rtScroll);
@@ -323,6 +352,8 @@ namespace Devinno.Forms.Controls
             {
                 scroll.MouseUp(x, y);
                 if (scroll.TouchMode) scroll.TouchUp(x, y);
+
+                bRightDown = false;
             });
             Invalidate();
             base.OnMouseUp(e);
@@ -504,6 +535,7 @@ namespace Devinno.Forms.Controls
             var scrollBorderColor = thm.GetBorderColor(thm.ScrollBarColor, backColor);
             var seriasBorderColor = thm.GetBorderColor(backColor, backColor);
             var barBorderColor = thm.GetBorderColor(graphBackColor, backColor);
+            var valueBoxColor = ValueBoxColor ?? thm.LabelColor;
 
             var spos = scroll.ScrollPositionWithOffset;
             var GP = 10F;
@@ -673,6 +705,97 @@ namespace Devinno.Forms.Controls
                         if (pts.Length > 1) g.DrawLines(p, pts);
                     }
                     g.ResetClip();
+                }
+                #endregion
+                #region Value
+                if (ValueDraw && bRightDown && (!scroll.IsScrolling && !scroll.IsTouchMoving && !scroll.IsTouchScrolling))
+                {
+                    var st = vst ?? GraphDatas.First().Time;
+                    var ed = ved ?? GraphDatas.Last().Time;
+                    var tm = st + TimeSpan.FromTicks(Convert.ToInt64(-spos)) + TimeSpan.FromSeconds(MathTool.Map(MathTool.Constrain(mx, rtGraph.Left, rtGraph.Right), rtGraph.Left, rtGraph.Right, 0, XScale.TotalSeconds));
+
+                    var v1 = GraphDatas.OrderBy(x => Math.Abs((x.Time - tm).TotalSeconds)).FirstOrDefault();
+                    var iv1 = GraphDatas.IndexOf(v1);
+                    if (iv1 >= 1 && iv1 <= graphDatas.Count - 2)
+                    {
+                        #region v1 / v2 
+                        var v2 = (v1.Time < tm ? GraphDatas[iv1 + 1] : (GraphDatas[iv1 - 1]));
+
+                        TGV tmp = null;
+                        if (v1.Time > v2.Time) { tmp = v1; v1 = v2; v2 = tmp; }
+
+                        var vr = MathTool.Map(tm.Ticks, v1.Time.Ticks, v2.Time.Ticks, 0D, 1D);
+                        #endregion
+
+                        if (v1.Values.Count == v2.Values.Count && v1.Values.Count == Series.Count)
+                        {
+                            #region var
+                            var ls = new List<double>();
+                            ls.AddRange(v1.Values.Values);
+                            ls.AddRange(v2.Values.Values);
+                            var szt = g.MeasureString(tm.ToString("yyyy.MM.dd HH:mm:ss"), Font);
+                            var szn = g.MeasureString(series.OrderByDescending(x => x.Alias.Length).FirstOrDefault().Alias + " : ", Font);
+                            var szv = g.MeasureString(string.IsNullOrWhiteSpace(ValueFormatString) ? ls.Select(x => x.ToString("0")).OrderByDescending(x => x.Length).FirstOrDefault() : ls.Select(x => x.ToString(ValueFormatString)).OrderByDescending(x => x.Length).FirstOrDefault(), Font);
+                            var w = Convert.ToSingle(Math.Max(szt.Width + 20, szn.Width + 10 + szv.Width + 20)) + 10;
+                            var h = Convert.ToSingle((szt.Height * (Series.Count + 1)) + ((10 * (Series.Count + 2))));
+                            var cx = Convert.ToSingle(MathTool.Constrain(mx, rtGraph.Left + w / 2D, rtGraph.Right - w / 2D));
+                            var cy = Convert.ToSingle(MathTool.Constrain(my, rtGraph.Top + h / 2D, rtGraph.Bottom - h / 2D));
+                            var rt = Util.INT(MathTool.MakeRectangle(new PointF(cx, cy), w / 2F, h / 2F));
+                            var rtv = MathTool.MakeRectangle(rt, new Size(Convert.ToInt32(rt.Width) - 20, Convert.ToInt32(rt.Height) - 20));
+
+                            var lsr = new List<SizeInfo>();
+                            var lsc = new List<SizeInfo>();
+                            var vrh = 100F / Convert.ToSingle(1 + Series.Count);
+                            lsc.Add(new SizeInfo(DvSizeMode.Pixel, szn.Width + 10));
+                            lsc.Add(new SizeInfo(DvSizeMode.Percent, 100));
+
+                            for (int i = 0; i < 1 + series.Count; i++)
+                            {
+                                lsr.Add(new SizeInfo(DvSizeMode.Percent, vrh));
+                               if(i < Series.Count) lsr.Add(new SizeInfo(DvSizeMode.Pixel, 10));
+                            }
+
+                            var rts = Util.DevideSizeVH(rtv, lsr, lsc);
+                            #endregion
+
+                            #region Line
+                            p.Width = 1;
+                            p.DashStyle = DashStyle.Solid;
+                            p.Color = Color.Red;
+                            g.DrawLine(p, mx, rtGraph.Top, mx, rtGraph.Bottom);
+                            #region values
+                            for (int i = 0; i < v1.Values.Count; i++)
+                            {
+                                var ser = Series[i];
+                                var val = MathTool.Map(vr, 0D, 1D, v1.Values[ser.Name], v2.Values[ser.Name]);
+                                var y = Convert.ToSingle(MathTool.Map(val, ser.Minimum, ser.Maximum, rtGraph.Bottom, rtGraph.Top));
+
+                                thm.DrawBox(g, MathTool.MakeRectangle(new PointF(mx, y), 5, 5), ser.SeriesColor.BrightnessTransmit(0.3), thm.GetBorderColor(ser.SeriesColor, graphBackColor), RoundType.Ellipse, BoxStyle.Fill | BoxStyle.Border | BoxStyle.OutShadow);
+                            }
+                            #endregion
+                            #endregion
+                            #region Box
+                            thm.DrawBox(g, rt, Color.FromArgb(200, valueBoxColor), thm.GetBorderColor(valueBoxColor, graphBackColor), RoundType.All, BoxStyle.Fill | BoxStyle.Border | BoxStyle.OutShadow);
+                            #endregion
+                            #region Time
+                            var rtTime = Util.MergeBounds(rts, 0, 0, 2, 1);
+                            thm.DrawText(g, tm.ToString("yyyy.MM.dd HH:mm:ss"), Font, foreColor, rtTime);
+                            #endregion
+                            #region values
+                            for (int i = 0; i < v1.Values.Count; i++)
+                            {
+                                var ser = Series[i];
+                                var val = MathTool.Map(vr, 0D, 1D, v1.Values[ser.Name], v2.Values[ser.Name]);
+                                var sVal = string.IsNullOrWhiteSpace(ValueFormatString) ? val.ToString("0") : val.ToString(valueFormatString);
+                                var rtName = rts[i * 2 + 2, 0];
+                                var rtVal = rts[i * 2 + 2, 1];
+                                var c = ser.SeriesColor.BrightnessTransmit(0.3);
+                                thm.DrawText(g, ser.Alias + " | ", Font, c, rtName, DvContentAlignment.MiddleRight);
+                                thm.DrawText(g, sVal, Font, c, rtVal, DvContentAlignment.MiddleCenter);
+                            }
+                            #endregion
+                        }
+                    }
                 }
                 #endregion
             }

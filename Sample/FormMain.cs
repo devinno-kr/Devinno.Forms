@@ -116,14 +116,14 @@ namespace Sample
             #region timeGraph
             timeGraph.XAxisGridDraw = true;
             timeGraph.YAxisGridDraw = true;
-            timeGraph.Series.Add(new GraphSeries2() { Name = "Java", Alias = "Java", SeriesColor = Color.FromArgb(0, 0, 200), Minimum = 0, Maximum = 100 });
-            timeGraph.Series.Add(new GraphSeries2() { Name = "Cpp", Alias = "C++", SeriesColor = Color.FromArgb(0, 150, 0), Minimum = 0, Maximum = 300 });
-            timeGraph.Series.Add(new GraphSeries2() { Name = "CSharp", Alias = "C#", SeriesColor = Color.FromArgb(220, 0, 0), Minimum = 0, Maximum = 500 });
+            timeGraph.Series.Add(new GraphSeries2() { Name = "Java", Alias = "Java", SeriesColor = Color.Blue, Minimum = 0, Maximum = 100 });
+            timeGraph.Series.Add(new GraphSeries2() { Name = "Cpp", Alias = "C++", SeriesColor = Color.DarkRed, Minimum = 0, Maximum = 100 });
+            timeGraph.Series.Add(new GraphSeries2() { Name = "CSharp", Alias = "C#", SeriesColor = Color.Green, Minimum = 0, Maximum = 100 });
             #endregion
             #region TrendGraph
-            trendGraph.Series.Add(new GraphSeries2() { Name = "Java", Alias = "Java", SeriesColor = Color.FromArgb(0, 0, 200), Minimum = 0, Maximum = 100 });
-            trendGraph.Series.Add(new GraphSeries2() { Name = "Cpp", Alias = "C++", SeriesColor = Color.FromArgb(0, 150, 0), Minimum = 0, Maximum = 300 });
-            trendGraph.Series.Add(new GraphSeries2() { Name = "CSharp", Alias = "C#", SeriesColor = Color.FromArgb(220, 0, 0), Minimum = 0, Maximum = 500 });
+            trendGraph.Series.Add(new GraphSeries2() { Name = "Java", Alias = "Java", SeriesColor = Color.Blue, Minimum = 0, Maximum = 100 });
+            trendGraph.Series.Add(new GraphSeries2() { Name = "Cpp", Alias = "C++", SeriesColor = Color.DarkRed, Minimum = 0, Maximum = 100 });
+            trendGraph.Series.Add(new GraphSeries2() { Name = "CSharp", Alias = "C#", SeriesColor = Color.Green, Minimum = 0, Maximum = 100 });
             trendGraph.MaximumXScale = TimeSpan.FromSeconds(10);
             trendGraph.XScale = TimeSpan.FromSeconds(1);
             trendGraph.XAxisGraduation = TimeSpan.FromSeconds(0.2);
@@ -432,8 +432,8 @@ namespace Sample
             });
             #endregion
 
-            actMonth();
-            //actMonitor();
+            //actMonth();
+            actMonitor();
             //actInput();
             #endregion
             #region Boxes
@@ -802,6 +802,7 @@ namespace Sample
             TimeGraphSet();
             trendGraph.Start<Data2>(v);
 
+            #region Dialogs
             MessageBox.BlankForm = true;
             MessageBox.FormBorderStyle = FormBorderStyle.FixedSingle;
 
@@ -824,8 +825,11 @@ namespace Sample
             portBox.FormBorderStyle = FormBorderStyle.FixedSingle;
 
             DvDialogs.Set(true, FormBorderStyle.FixedSingle);
+            #endregion
 
             knob.Tick = 10;
+
+            timeGraph.ValueDraw = true;
         }
         #endregion
 
@@ -845,16 +849,17 @@ namespace Sample
         {
             var ls1 = new List<Data1>();
             var java = 70D;
-            var cpp = 150D;
-            var csharp = 300D;
+            var cpp = 50D;
+            var csharp = 30D;
             var vcs = new Color[] { Color.Red, Color.DarkOrange, Color.LimeGreen, Color.Green, Color.Teal, Color.SteelBlue, Color.DodgerBlue, Color.DeepSkyBlue, Color.Violet, Color.Crimson, Color.Brown, Color.Maroon };
             for (int y = 2018; y <= 2021; y++)
                 for (int m = 1; m <= 12; m++)
                 {
                     int n = 5;
+
                     java = MathTool.Constrain(java + (rnd.Next() % 2 == 0 ? n : -n), 0, 100);
-                    cpp = MathTool.Constrain(cpp + (rnd.Next() % 2 == 0 ? n : -n), 0, 300);
-                    csharp = MathTool.Constrain(csharp + (rnd.Next() % 2 == 0 ? n : -n), 0, 500);
+                    cpp = MathTool.Constrain(cpp + (rnd.Next() % 2 == 0 ? n : -n), 0, 100);
+                    csharp = MathTool.Constrain(csharp + (rnd.Next() % 2 == 0 ? n : -n), 0, 100);
 
                     ls1.Add(new Data1() { Name = (y) + "." + m, Cpp = cpp, CSharp = csharp, Java = java, Color = vcs[m - 1] });
                 }
@@ -870,24 +875,20 @@ namespace Sample
         {
             var ls1 = new List<Data2>();
             var java = 70D;
-            var cpp = 150D;
-            var csharp = 300D;
+            var cpp = 50D;
+            var csharp = 30D;
             for (var dt = DateTime.Now.Date + TimeSpan.FromHours(5); dt <= DateTime.Now.Date + TimeSpan.FromHours(10); dt += TimeSpan.FromSeconds(10))
             {
                 int n = 5;
+
                 java = MathTool.Constrain(java + (rnd.Next() % 2 == 0 ? n : -n), 0, 100);
-                cpp = MathTool.Constrain(cpp + (rnd.Next() % 2 == 0 ? n : -n), 0, 300);
-                csharp = MathTool.Constrain(csharp + (rnd.Next() % 2 == 0 ? n : -n), 0, 500);
-
-                java = 80;
-                cpp = 120;
-                csharp = 360;
-
+                cpp = MathTool.Constrain(cpp + (rnd.Next() % 2 == 0 ? n : -n), 0, 100);
+                csharp = MathTool.Constrain(csharp + (rnd.Next() % 2 == 0 ? n : -n), 0, 100);
 
                 ls1.Add(new Data2() { Time = dt, Cpp = cpp, CSharp = csharp, Java = java });
             }
 
-            timeGraph.SetDataSource<Data2>(ls1);
+            timeGraph.SetDataSource<Data2>(ls1, DateTime.Now.Date, DateTime.Now.Date + TimeSpan.FromDays(1));
         }
         #endregion
         #region TrendGraphSet
@@ -898,12 +899,8 @@ namespace Sample
                 int n = 5;
 
                 v.Java = MathTool.Constrain(v.Java + rnd.Next(-n, n + 1), 0, 100);
-                v.Cpp = MathTool.Constrain(v.Cpp + rnd.Next(-n, n + 1), 0, 300);
-                v.CSharp = MathTool.Constrain(v.CSharp + rnd.Next(-n, n + 1), 0, 500);
-
-                v.Java = 80;
-                v.Cpp = 120;
-                v.CSharp = 360;
+                v.Cpp = MathTool.Constrain(v.Cpp + rnd.Next(-n, n + 1), 0, 100);
+                v.CSharp = MathTool.Constrain(v.CSharp + rnd.Next(-n, n + 1), 0, 100);
 
                 trendGraph.SetData<Data2>(v);
             }

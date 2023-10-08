@@ -15,46 +15,52 @@ namespace Devinno.Forms.Icons
     public class FA
     {
         private static Dictionary<string, Dictionary<string, int>> dic;
-        public static PrivateFontCollection FontAwesome { get; set; }
-        private static int ifar = -1, ifas = -1, ifab = -1, imt = -1;
+        public static PrivateFontCollection IconFont { get; set; }
+        private static int ifar = -1, ifas = -1, ifab = -1, ifill = -1, iline = -1;
         static FA()
         {
             #region FontAwesome
             {
-                FontAwesome = new PrivateFontCollection();
+                IconFont = new PrivateFontCollection();
 
                 var baBrands = Properties.Resources.Font_Awesome_6_Brands_Regular_400;
                 var baRegular = Properties.Resources.Font_Awesome_6_Free_Regular_400;
                 var baSolid = Properties.Resources.Font_Awesome_6_Free_Solid_900;
-                var baMaterial = Properties.Resources.MaterialIcons_Regular;
+                var baMaterialFill = Properties.Resources.MaterialIcons_Regular;
+                var baMaterialLine = Properties.Resources.MaterialIconsOutlined_Regular;
 
                 IntPtr pBrands = Marshal.AllocHGlobal(baBrands.Length);
                 IntPtr pRegular = Marshal.AllocHGlobal(baRegular.Length);
                 IntPtr pSolid = Marshal.AllocHGlobal(baSolid.Length);
-                IntPtr pMaterial = Marshal.AllocHGlobal(baMaterial.Length);
+                IntPtr pMaterialFill = Marshal.AllocHGlobal(baMaterialFill.Length);
+                IntPtr pMaterialLine = Marshal.AllocHGlobal(baMaterialLine.Length);
 
                 Marshal.Copy(baBrands, 0, pBrands, baBrands.Length);
                 Marshal.Copy(baRegular, 0, pRegular, baRegular.Length);
                 Marshal.Copy(baSolid, 0, pSolid, baSolid.Length);
-                Marshal.Copy(baMaterial, 0, pMaterial, baMaterial.Length);
+                Marshal.Copy(baMaterialFill, 0, pMaterialFill, baMaterialFill.Length);
+                Marshal.Copy(baMaterialLine, 0, pMaterialLine, baMaterialLine.Length);
 
-                FontAwesome.AddMemoryFont(pBrands, baBrands.Length);
-                FontAwesome.AddMemoryFont(pRegular, baRegular.Length);
-                FontAwesome.AddMemoryFont(pSolid, baSolid.Length);
-                FontAwesome.AddMemoryFont(pMaterial, baMaterial.Length);
+                IconFont.AddMemoryFont(pBrands, baBrands.Length);
+                IconFont.AddMemoryFont(pRegular, baRegular.Length);
+                IconFont.AddMemoryFont(pSolid, baSolid.Length);
+                IconFont.AddMemoryFont(pMaterialFill, baMaterialFill.Length);
+                IconFont.AddMemoryFont(pMaterialLine, baMaterialLine.Length);
 
                 Marshal.FreeHGlobal(pBrands);
                 Marshal.FreeHGlobal(pRegular);
                 Marshal.FreeHGlobal(pSolid);
-                Marshal.FreeHGlobal(pMaterial);
+                Marshal.FreeHGlobal(pMaterialFill);
+                Marshal.FreeHGlobal(pMaterialLine);
 
-                for (int i = 0; i < FA.FontAwesome.Families.Length; i++)
+                for (int i = 0; i < FA.IconFont.Families.Length; i++)
                 {
-                    var nm = FA.FontAwesome.Families[i].Name;
+                    var nm = FA.IconFont.Families[i].Name;
                     if (nm == "Font Awesome 6 Brands Regular") ifab = i;
                     if (nm == "Font Awesome 6 Free Regular") ifar = i;
                     if (nm == "Font Awesome 6 Free Solid") ifas = i;
-                    if (nm == "Material Icons") imt = i;
+                    if (nm == "Material Icons") ifill = i;
+                    if (nm == "Material Icons Outlined") iline = i;
                 }
             }
             #endregion
@@ -64,8 +70,11 @@ namespace Devinno.Forms.Icons
             dic.Add("fas", new Dictionary<string, int>());
             dic.Add("far", new Dictionary<string, int>());
             dic.Add("fab", new Dictionary<string, int>());
-            dic.Add("mt", new Dictionary<string, int>());
+            dic.Add("fill", new Dictionary<string, int>());
+            dic.Add("line", new Dictionary<string, int>());
+            dic.Add("two", new Dictionary<string, int>());
             #endregion
+
             #region fas
             dic["fas"].Add("fa-0", 0x30);
             dic["fas"].Add("fa-1", 0x31);
@@ -2090,7 +2099,8 @@ namespace Devinno.Forms.Icons
             dic["fab"].Add("fa-youtube", 0xf167);
             dic["fab"].Add("fa-zhihu", 0xf63f);
             #endregion
-            #region mt
+
+            #region fill
             using (var sr = new StreamReader(new MemoryStream(Properties.Resources.MaterialIcons_Regular_Code)))
             {
                 while (!sr.EndOfStream)
@@ -2100,8 +2110,24 @@ namespace Devinno.Forms.Icons
                     var n = 0;
                     if (sp.Length == 2 && int.TryParse(sp[1], NumberStyles.HexNumber, CultureInfo.CurrentCulture, out n))
                     {
-                        if (!dic["mt"].ContainsKey(sp[0]))
-                            dic["mt"].Add(sp[0], n);
+                        if (!dic["fill"].ContainsKey(sp[0]))
+                            dic["fill"].Add(sp[0], n);
+                    }
+                }
+            }
+            #endregion
+            #region line
+            using (var sr = new StreamReader(new MemoryStream(Properties.Resources.MaterialIconsOutlined_Regular_Code)))
+            {
+                while (!sr.EndOfStream)
+                {
+                    var line = sr.ReadLine();
+                    var sp = line.Split(' ');
+                    var n = 0;
+                    if (sp.Length == 2 && int.TryParse(sp[1], NumberStyles.HexNumber, CultureInfo.CurrentCulture, out n))
+                    {
+                        if (!dic["line"].ContainsKey(sp[0]))
+                            dic["line"].Add(sp[0], n);
                     }
                 }
             }
@@ -2121,23 +2147,28 @@ namespace Devinno.Forms.Icons
                     var _icon = ls.LastOrDefault();
                     if (ls.FirstOrDefault() == "fab")
                     {
-                        font = FontAwesome.Families[ifab];
+                        font = IconFont.Families[ifab];
                         if (dic["fab"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fab"][_icon]);
                     }
                     else if (ls.FirstOrDefault() == "far")
                     {
-                        font = FontAwesome.Families[ifar];
+                        font = IconFont.Families[ifar];
                         if (dic["far"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["far"][_icon]);
                     }
                     else if (ls.FirstOrDefault() == "fas")
                     {
-                        font = FontAwesome.Families[ifas];
+                        font = IconFont.Families[ifas];
                         if (dic["fas"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fas"][_icon]);
                     }
-                    else if (ls.FirstOrDefault() == "mt")
+                    else if (ls.FirstOrDefault() == "fill")
                     {
-                        font = FontAwesome.Families[imt];
-                        if (dic["fas"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fas"][_icon]);
+                        font = IconFont.Families[ifill];
+                        if (dic["fill"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fill"][_icon]);
+                    }
+                    else if (ls.FirstOrDefault() == "line")
+                    {
+                        font = IconFont.Families[iline];
+                        if (dic["line"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["line"][_icon]);
                     }
                 }
                 else if (ls.Count == 1)
@@ -2145,13 +2176,13 @@ namespace Devinno.Forms.Icons
                     var _icon = ls.LastOrDefault();
                     if (_icon.StartsWith("fa-"))
                     {
-                        font = FontAwesome.Families[ifas];
+                        font = IconFont.Families[ifas];
                         if (dic["fas"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fas"][_icon]);
                     }
                     else
                     {
-                        font = FontAwesome.Families[imt];
-                        if (dic["mt"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["mt"][_icon]);
+                        font = IconFont.Families[ifill];
+                        if (dic["fill"].ContainsKey(_icon)) icon = char.ConvertFromUtf32(dic["fill"][_icon]);
                     }
                 }
             }
@@ -2173,13 +2204,14 @@ namespace Devinno.Forms.Icons
                     if (_font == "fab") ret = dic["fab"].ContainsKey(_icon);
                     else if (_font == "far") ret = dic["far"].ContainsKey(_icon);
                     else if (_font == "fas") ret = dic["fas"].ContainsKey(_icon);
-                    else if (_font == "mt") ret = dic["mt"].ContainsKey(_icon);
+                    else if (_font == "fill") ret = dic["fill"].ContainsKey(_icon);
+                    else if (_font == "line") ret = dic["line"].ContainsKey(_icon);
                 }
                 else if (ls.Count == 1)
                 {
                     var _icon = ls.LastOrDefault();
                     if (_icon.StartsWith("fa-")) ret = dic["fas"].ContainsKey(_icon);
-                    else ret = dic["mt"].ContainsKey(_icon);
+                    else ret = dic["fill"].ContainsKey(_icon);
                 }
             }
             return ret;
