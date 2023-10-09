@@ -208,6 +208,8 @@ namespace Devinno.Forms.Containers
                         Areas2(rtButtons, (btns) =>
                         {
                             var ls = btns.ToList();
+                            var rnds = Util.Rounds(DvDirectionHV.Horizon, Round, Buttons.Count);
+
                             foreach (var btn in btns)
                             {
                                 #region Var
@@ -217,65 +219,11 @@ namespace Devinno.Forms.Containers
                                 var rnd = Round;
                                 #endregion
                                 #region Round
-                                var first = i == 0;
-                                var last = i == ls.Count - 1;
                                 {
-                                    switch (Round)
+                                    var idx = btns.ToList().IndexOf(btn);
+                                    if (idx >= 0 && idx < btns.Length)
                                     {
-                                        #region Ellipse / Rect
-                                        case RoundType.Ellipse:
-                                        case RoundType.Rect:
-                                            rnd = RoundType.Rect;
-                                            break;
-                                        #endregion
-
-                                        #region L / T / R / B
-                                        case RoundType.L:
-                                            if (first) rnd = RoundType.L;
-                                            else rnd = RoundType.Rect;
-                                            break;
-                                        case RoundType.R:
-                                            if (last) rnd = RoundType.R;
-                                            else rnd = RoundType.Rect;
-                                            break;
-                                        case RoundType.T:
-                                            if (first) rnd = RoundType.LT;
-                                            else if (last) rnd = RoundType.RT;
-                                            else rnd = RoundType.Rect;
-                                            break;
-                                        case RoundType.B:
-                                            if (first) rnd = RoundType.LB;
-                                            else if (last) rnd = RoundType.RB;
-                                            else rnd = RoundType.Rect;
-                                            break;
-                                        #endregion
-
-                                        #region LT / RT / LB / RB
-                                        case RoundType.LT:
-                                            if (first) rnd = RoundType.LT;
-                                            else rnd = RoundType.Rect;
-                                            break;
-                                        case RoundType.RT:
-                                            if (last) rnd = RoundType.RT;
-                                            else rnd = RoundType.Rect;
-                                            break;
-                                        case RoundType.LB:
-                                            if (first) rnd = RoundType.LB;
-                                            else rnd = RoundType.Rect;
-                                            break;
-                                        case RoundType.RB:
-                                            if (last) rnd = RoundType.RB;
-                                            else rnd = RoundType.Rect;
-                                            break;
-                                        #endregion
-
-                                        #region All
-                                        case RoundType.All:
-                                            if (first) rnd = RoundType.L;
-                                            else if (last) rnd = RoundType.R;
-                                            else rnd = RoundType.Rect;
-                                            break;
-                                            #endregion
+                                        rnd = rnds[idx];
                                     }
                                 }
                                 #endregion

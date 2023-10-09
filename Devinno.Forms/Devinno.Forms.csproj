@@ -13,9 +13,9 @@
     <PackageProjectUrl></PackageProjectUrl>
     <PackageIcon>ico.png</PackageIcon>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.1.0.27</AssemblyVersion>
-    <FileVersion>1.1.0.27</FileVersion>
-    <Version>1.1.0.27</Version>
+    <AssemblyVersion>1.1.0.28</AssemblyVersion>
+    <FileVersion>1.1.0.28</FileVersion>
+    <Version>1.1.0.28</Version>
     <RepositoryUrl>https://github.com/devinno-kr/Devinno.Forms</RepositoryUrl>
     <PackageIconUrl />
   </PropertyGroup>

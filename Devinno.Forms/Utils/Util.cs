@@ -456,6 +456,73 @@ namespace Devinno.Forms.Utils
         #region INT
         public static Rectangle INT(RectangleF rt) => new Rectangle(Convert.ToInt32(rt.X), Convert.ToInt32(rt.Y), Convert.ToInt32(rt.Width), Convert.ToInt32(rt.Height));
         #endregion
+
+        #region Rounds
+        public static RoundType[] Rounds(DvDirectionHV dir, RoundType round, int count)
+        {
+            var ret = new RoundType[count];
+
+            for (int i = 0; i < count; i++) ret[i] = RoundType.Rect;
+
+            if (ret.Length == 1)
+            {
+                ret[0] = round;
+            }
+            else if (ret.Length > 1)
+            {
+                var si = 0;
+                var ei = count - 1;
+
+                if (dir == DvDirectionHV.Horizon)
+                {
+                    switch (round)
+                    {
+                        #region L / T / R / B
+                        case RoundType.L: ret[si] = RoundType.L; ret[ei] = RoundType.Rect; break;
+                        case RoundType.R: ret[si] = RoundType.Rect; ret[ei] = RoundType.R; break;
+                        case RoundType.T: ret[si] = RoundType.LT; ret[ei] = RoundType.RT; break;
+                        case RoundType.B: ret[si] = RoundType.LB; ret[ei] = RoundType.RB; break;
+                        #endregion
+
+                        #region LT / RT / LB / RB
+                        case RoundType.LT: ret[si] = RoundType.LT; ret[ei] = RoundType.Rect; break;
+                        case RoundType.RT: ret[si] = RoundType.Rect; ret[ei] = RoundType.RT; break;
+                        case RoundType.LB: ret[si] = RoundType.LB; ret[ei] = RoundType.Rect; break;
+                        case RoundType.RB: ret[si] = RoundType.Rect; ret[ei] = RoundType.RB; break;
+                        #endregion
+
+                        #region All
+                        case RoundType.All: ret[si] = RoundType.L; ret[ei] = RoundType.R; break;
+                            #endregion
+                    }
+                }
+                else if (dir == DvDirectionHV.Vertical)
+                {
+                    switch (round)
+                    {
+                        #region L / T / R / B
+                        case RoundType.L: ret[si] = RoundType.LT; ret[ei] = RoundType.LB; break;
+                        case RoundType.R: ret[si] = RoundType.RT; ret[ei] = RoundType.RB; break;
+                        case RoundType.T: ret[si] = RoundType.T; ret[ei] = RoundType.Rect; break;
+                        case RoundType.B: ret[si] = RoundType.Rect; ret[ei] = RoundType.B; break;
+                        #endregion
+
+                        #region LT / RT / LB / RB
+                        case RoundType.LT: ret[si] = RoundType.LT; ret[ei] = RoundType.Rect; break;
+                        case RoundType.RT: ret[si] = RoundType.RT; ret[ei] = RoundType.Rect; break;
+                        case RoundType.LB: ret[si] = RoundType.Rect; ret[ei] = RoundType.LB; break;
+                        case RoundType.RB: ret[si] = RoundType.Rect; ret[ei] = RoundType.RB; break;
+                        #endregion
+
+                        #region All
+                        case RoundType.All: ret[si] = RoundType.T; ret[ei] = RoundType.B; break;
+                            #endregion
+                    }
+                }
+            }
+            return ret;
+        }
+        #endregion
     }
 
     internal struct Vector
