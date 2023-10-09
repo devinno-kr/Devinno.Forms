@@ -829,6 +829,8 @@ namespace Sample
 
             knob.Tick = 10;
 
+            dataGrid.SelectionMode = DvDataGridSelectionMode.Multi;
+
             trendGraph.ValueDraw = timeGraph.ValueDraw = true;
             trendGraph.TimeFormatString = timeGraph.TimeFormatString = "HH:mm:ss.fff";
 

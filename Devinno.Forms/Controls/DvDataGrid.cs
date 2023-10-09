@@ -226,6 +226,8 @@ namespace Devinno.Forms.Controls
        
         double hST = 0, vST = 0;
         double hSV = 0, vSV = 0;
+
+        DvDataGridRow first;
         #endregion
 
         #region Event
@@ -1445,15 +1447,58 @@ namespace Devinno.Forms.Controls
                             {
                                 if (CollisionTool.Check(rtROW, x, y))
                                 {
-                                    if (SelectedRows.Contains(v))
+                                    if ((ModifierKeys & Keys.Control) == Keys.Control)
                                     {
-                                        SelectedRows.Remove(v);
-                                        bSelectionChange = true;
+                                        #region Control
+                                        if (SelectedRows.Contains(v))
+                                        {
+                                            SelectedRows.Remove(v);
+                                            bSelectionChange = true;
+                                        }
+                                        else
+                                        {
+                                            SelectedRows.Add(v);
+                                            if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                            first = v;
+                                        }
+                                        #endregion
+                                    }
+                                    else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+                                    {
+                                        #region Shift
+                                        if (first == null)
+                                        {
+                                            SelectedRows.Add(v);
+                                            if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                        }
+                                        else
+                                        {
+                                            int idx1 = Rows.IndexOf(first);
+                                            int idx2 = i;
+                                            int min = Math.Min(idx1, idx2);
+                                            int max = Math.Max(idx1, idx2);
+
+                                            bool b = false;
+                                            for (int ii = min; ii <= max; ii++)
+                                            {
+                                                if (!SelectedRows.Contains(Rows[ii]))
+                                                {
+                                                    SelectedRows.Add(Rows[ii]);
+                                                    b = true;
+                                                }
+                                            }
+                                            if (b && SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                        }
+                                        #endregion
                                     }
                                     else
                                     {
+                                        #region Select
+                                        SelectedRows.Clear();
                                         SelectedRows.Add(v);
-                                        bSelectionChange = true;
+                                        if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                        first = v;
+                                        #endregion
                                     }
                                 }
                             }
