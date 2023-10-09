@@ -1136,6 +1136,7 @@ namespace Devinno.Forms.Controls
                         {
                             var bAllSelect = GetRows().Where(x => x.Selected).Count() > 0;
                             foreach (var v in GetRows()) v.Selected = !bAllSelect;
+                            SelectedChanged?.Invoke(this, null);
                         }
                     }
                     #endregion
@@ -1214,6 +1215,7 @@ namespace Devinno.Forms.Controls
                                     if (CollisionTool.Check(rtSelectorBox, x, y))
                                     {
                                         v.Selected = !v.Selected;
+                                        SelectedChanged?.Invoke(this, null);
                                     }
                                 }
                                 #endregion
