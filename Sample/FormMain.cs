@@ -835,6 +835,10 @@ namespace Sample
             panel.ButtonsWidth = 100;
             panel.Buttons.Add(new ButtonInfo("Add") { Size = new SizeInfo(DvSizeMode.Percent, 50F), IconString = "fa-plus" });
             panel.Buttons.Add(new ButtonInfo("Del") { Size = new SizeInfo(DvSizeMode.Percent, 50F), IconString = "fa-minus" });
+            panel.ButtonClick += (o, s) =>
+            {
+
+            };
         }
         #endregion
 

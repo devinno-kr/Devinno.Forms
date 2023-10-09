@@ -321,7 +321,8 @@ namespace Devinno.Forms.Containers
                         var ls = btns.ToList();
                         foreach (var btn in btns)
                         {
-                            if (CollisionTool.Check(btn.Bounds, e.Location)) btn.Button.DownState = true;
+                            if (CollisionTool.Check(btn.Bounds, e.Location)) 
+                                btn.Button.DownState = true;
                         }
                     });
                 }
@@ -337,7 +338,7 @@ namespace Devinno.Forms.Containers
             {
                 if (Buttons.Count > 0 && ButtonsWidth.HasValue && DrawTitle)
                 {
-                    Areas2(rtContent, (btns) =>
+                    Areas2(rtButtons, (btns) =>
                     {
                         var ls = btns.ToList();
                         foreach (var btn in btns)
