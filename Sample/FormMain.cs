@@ -831,6 +831,10 @@ namespace Sample
 
             trendGraph.ValueDraw = timeGraph.ValueDraw = true;
             trendGraph.TimeFormatString = timeGraph.TimeFormatString = "HH:mm:ss.fff";
+
+            panel.ButtonsWidth = 100;
+            panel.Buttons.Add(new ButtonInfo("Add") { Size = new SizeInfo(DvSizeMode.Percent, 50F), IconString = "fa-plus" });
+            panel.Buttons.Add(new ButtonInfo("Del") { Size = new SizeInfo(DvSizeMode.Percent, 50F), IconString = "fa-minus" });
         }
         #endregion
 

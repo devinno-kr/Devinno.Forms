@@ -153,7 +153,7 @@ namespace Devinno.Forms.Controls
             TabStop = true;
             #endregion
 
-            Buttons.Changed += (o, s) => { foreach (var v in Buttons) v.btns = this; };
+            Buttons.Changed += (o, s) => { foreach (var v in Buttons) v.control = this; };
             Size = new Size(150, 30);
         }
         #endregion
@@ -481,7 +481,7 @@ namespace Devinno.Forms.Controls
                 if (bCheck != value)
                 {
                     bCheck = value;
-                    btns?.Invalidate();
+                    control?.Invalidate();
                 }
             }
         }
@@ -492,7 +492,7 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region Member Variable
-        internal DvButtons btns;
+        internal Control control;
         #endregion
 
         public ButtonInfo(string Name)

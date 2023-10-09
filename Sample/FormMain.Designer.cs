@@ -2588,6 +2588,8 @@ namespace Sample
             this.trendGraph.TabIndex = 0;
             this.trendGraph.Text = "dvTrendGraph1";
             this.trendGraph.TimeFormatString = null;
+            this.trendGraph.ValueBoxColor = null;
+            this.trendGraph.ValueDraw = false;
             this.trendGraph.ValueFormatString = null;
             this.trendGraph.XAxisGraduation = System.TimeSpan.Parse("00:10:00");
             this.trendGraph.XAxisGridDraw = true;
@@ -2618,6 +2620,8 @@ namespace Sample
             this.timeGraph.TabIndex = 0;
             this.timeGraph.Text = "dvTimeGraph1";
             this.timeGraph.TimeFormatString = null;
+            this.timeGraph.ValueBoxColor = null;
+            this.timeGraph.ValueDraw = false;
             this.timeGraph.ValueFormatString = null;
             this.timeGraph.XAxisGraduation = System.TimeSpan.Parse("00:10:00");
             this.timeGraph.XAxisGridDraw = true;
@@ -2715,6 +2719,7 @@ namespace Sample
             // panel
             // 
             this.panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.panel.ButtonsWidth = null;
             this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel.DrawTitle = true;
             this.panel.IconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
@@ -2733,7 +2738,7 @@ namespace Sample
             this.panel.TabStop = false;
             this.panel.Text = "Panel";
             this.panel.TextPadding = new System.Windows.Forms.Padding(0);
-            this.panel.TitleHeight = 30;
+            this.panel.TitleHeight = 40;
             // 
             // pnlBox
             // 
@@ -2779,7 +2784,7 @@ namespace Sample
             this.borderPanel.TabStop = false;
             this.borderPanel.Text = "Border Panel";
             this.borderPanel.TextPadding = new System.Windows.Forms.Padding(0);
-            this.borderPanel.TitleHeight = 30;
+            this.borderPanel.TitleHeight = 40;
             // 
             // grpBox
             // 
