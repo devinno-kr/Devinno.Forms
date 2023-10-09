@@ -187,6 +187,21 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region TitleGradient
+        private bool bTitleGradient = false;
+        public bool TitleGradient
+        {
+            get => bTitleGradient;
+            set
+            {
+                if (bTitleGradient != value)
+                {
+                    bTitleGradient = value;
+                    Invalidate();
+                }
+            }
+        }
+        #endregion
 
         #region Unit
         private string strUnit = "";
@@ -381,7 +396,7 @@ namespace Devinno.Forms.Controls
                     var cB = TitleBorderColor;
                     var cT = ForeColor;
 
-                    Theme.DrawBox(g, rtTitle, TitleColor, TitleBorderColor, rndTitle, Box.ButtonUp_Flat(ShadowGap));
+                    Theme.DrawBox(g, rtTitle, TitleColor, TitleBorderColor, rndTitle, Box.ButtonUp_V(TitleGradient, ShadowGap));
                     Theme.DrawTextIcon(g, texticonTitle, Font, cT, rtTitle);
                 }
                 #endregion
