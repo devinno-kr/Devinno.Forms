@@ -830,6 +830,11 @@ namespace Sample
             knob.Tick = 10;
 
             dataGrid.SelectionMode = DvDataGridSelectionMode.Multi;
+            dataGrid.SelectedChanged += (o, s) =>
+            {
+                var ls = dataGrid.Rows.Where(X => X.Selected).ToList();
+                System.Diagnostics.Debug.WriteLine(ls.Count);
+            };
 
             trendGraph.ValueDraw = timeGraph.ValueDraw = true;
             trendGraph.TimeFormatString = timeGraph.TimeFormatString = "HH:mm:ss.fff";

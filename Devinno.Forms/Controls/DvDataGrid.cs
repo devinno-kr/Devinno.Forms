@@ -1458,7 +1458,7 @@ namespace Devinno.Forms.Controls
                                         else
                                         {
                                             SelectedRows.Add(v);
-                                            if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                            bSelectionChange = true;
                                             first = v;
                                         }
                                         #endregion
@@ -1469,7 +1469,7 @@ namespace Devinno.Forms.Controls
                                         if (first == null)
                                         {
                                             SelectedRows.Add(v);
-                                            if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                            bSelectionChange = true;
                                         }
                                         else
                                         {
@@ -1487,7 +1487,7 @@ namespace Devinno.Forms.Controls
                                                     b = true;
                                                 }
                                             }
-                                            if (b && SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                            if (b) bSelectionChange = true;
                                         }
                                         #endregion
                                     }
@@ -1496,7 +1496,7 @@ namespace Devinno.Forms.Controls
                                         #region Select
                                         SelectedRows.Clear();
                                         SelectedRows.Add(v);
-                                        if (SelectedChanged != null) SelectedChanged.Invoke(this, new EventArgs());
+                                        bSelectionChange = true;
                                         first = v;
                                         #endregion
                                     }
