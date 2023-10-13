@@ -354,6 +354,9 @@ namespace Devinno.Forms.Dialogs
         #region UseWindowDock
         public bool UseWindowDock { get; set; } = false;
         #endregion
+        #region DrawBorder
+        public bool DrawBorder { get; set; } = false;
+        #endregion
 
         #region Loaded
         public bool Loaded { get; private set; }
@@ -616,6 +619,12 @@ namespace Devinno.Forms.Dialogs
                     #endregion
                 });
                 #endregion
+
+                if(DrawBorder)
+                {
+                    using (var pv = new Pen(TitleBarColor)) e.Graphics.DrawRectangle(pv, new Rectangle(0, 0, Width - 1, Height - 1));
+                }
+
                 #region Dispose
                 br.Dispose();
                 p.Dispose();
