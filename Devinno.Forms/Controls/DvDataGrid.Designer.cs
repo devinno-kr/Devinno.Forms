@@ -870,8 +870,8 @@ namespace Devinno.Forms.Controls
                 var c = v ? OnColor : OffColor;
                 var sz = LampSize ?? Math.Min(CellBounds.Width, CellBounds.Height) - 4;
                 var rt = Util.MakeRectangleAlign(CellBounds, new SizeF(sz, sz), DvContentAlignment.MiddleCenter);
-              
-                Theme.DrawLamp(g, rt, CellBackColor, OnColor, OffColor, v);
+
+                Theme.DrawLamp(g, rt, Row.Selected ? SelectedCellBackColor : CellBackColor, OnColor, OffColor, v);
             }
             #endregion
             base.CellDraw(g, Theme, CellBounds, Info);

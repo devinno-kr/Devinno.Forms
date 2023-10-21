@@ -228,6 +228,7 @@ namespace Devinno.Forms.Controls
         double hSV = 0, vSV = 0;
 
         DvDataGridRow first;
+        Point downPoint;
         #endregion
 
         #region Event
@@ -1284,6 +1285,8 @@ namespace Devinno.Forms.Controls
                     #endregion
                 }
             });
+
+            downPoint = e.Location;
             Invalidate();
             base.OnMouseDown(e);
         }
@@ -1442,78 +1445,81 @@ namespace Devinno.Forms.Controls
                     {
                         Loop((i, rtROW, v) =>
                         {
-                            #region MultiSelect
-                            if (SelectionMode == DvDataGridSelectionMode.Multi)
+                            if (MathTool.GetDistance(downPoint, new PointF(x, y)) < 10)
                             {
-                                if (CollisionTool.Check(rtROW, x, y))
+                                #region MultiSelect
+                                if (SelectionMode == DvDataGridSelectionMode.Multi)
                                 {
-                                    if ((ModifierKeys & Keys.Control) == Keys.Control)
+                                    if (CollisionTool.Check(rtROW, x, y))
                                     {
-                                        #region Control
-                                        if (SelectedRows.Contains(v))
+                                        if ((ModifierKeys & Keys.Control) == Keys.Control)
                                         {
-                                            SelectedRows.Remove(v);
-                                            bSelectionChange = true;
+                                            #region Control
+                                            if (SelectedRows.Contains(v))
+                                            {
+                                                SelectedRows.Remove(v);
+                                                bSelectionChange = true;
+                                            }
+                                            else
+                                            {
+                                                SelectedRows.Add(v);
+                                                bSelectionChange = true;
+                                                first = v;
+                                            }
+                                            #endregion
+                                        }
+                                        else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+                                        {
+                                            #region Shift
+                                            if (first == null)
+                                            {
+                                                SelectedRows.Add(v);
+                                                bSelectionChange = true;
+                                            }
+                                            else
+                                            {
+                                                int idx1 = Rows.IndexOf(first);
+                                                int idx2 = i;
+                                                int min = Math.Min(idx1, idx2);
+                                                int max = Math.Max(idx1, idx2);
+
+                                                bool b = false;
+                                                for (int ii = min; ii <= max; ii++)
+                                                {
+                                                    if (!SelectedRows.Contains(Rows[ii]))
+                                                    {
+                                                        SelectedRows.Add(Rows[ii]);
+                                                        b = true;
+                                                    }
+                                                }
+                                                if (b) bSelectionChange = true;
+                                            }
+                                            #endregion
                                         }
                                         else
                                         {
+                                            #region Select
+                                            SelectedRows.Clear();
                                             SelectedRows.Add(v);
                                             bSelectionChange = true;
                                             first = v;
+                                            #endregion
                                         }
-                                        #endregion
                                     }
-                                    else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+                                }
+                                #endregion
+                                #region SingleSelect
+                                if (SelectionMode == DvDataGridSelectionMode.Single)
+                                {
+                                    if (CollisionTool.Check(rtROW, x, y))
                                     {
-                                        #region Shift
-                                        if (first == null)
-                                        {
-                                            SelectedRows.Add(v);
-                                            bSelectionChange = true;
-                                        }
-                                        else
-                                        {
-                                            int idx1 = Rows.IndexOf(first);
-                                            int idx2 = i;
-                                            int min = Math.Min(idx1, idx2);
-                                            int max = Math.Max(idx1, idx2);
-
-                                            bool b = false;
-                                            for (int ii = min; ii <= max; ii++)
-                                            {
-                                                if (!SelectedRows.Contains(Rows[ii]))
-                                                {
-                                                    SelectedRows.Add(Rows[ii]);
-                                                    b = true;
-                                                }
-                                            }
-                                            if (b) bSelectionChange = true;
-                                        }
-                                        #endregion
-                                    }
-                                    else
-                                    {
-                                        #region Select
                                         SelectedRows.Clear();
                                         SelectedRows.Add(v);
                                         bSelectionChange = true;
-                                        first = v;
-                                        #endregion
                                     }
                                 }
+                                #endregion
                             }
-                            #endregion
-                            #region SingleSelect
-                            if (SelectionMode == DvDataGridSelectionMode.Single)
-                            {
-                                if (CollisionTool.Check(rtROW, x, y))
-                                {
-                                    SelectedRows.Clear();
-                                    SelectedRows.Add(v);
-                                    bSelectionChange = true;
-                                }
-                            }
-                            #endregion
                         });
 
                         foreach (var v in Rows) v.Selected = SelectedRows.Contains(v);
