@@ -255,7 +255,7 @@ namespace Devinno.Forms.Controls
             var GridColor = this.GridColor ?? Theme.GridColor;
             var GraphBackColor = this.GraphBackColor ?? Color.Transparent;
             var ScrollBorderColor = Theme.GetBorderColor(Theme.ScrollBarColor, BackColor);
-            
+
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             #endregion
@@ -324,7 +324,7 @@ namespace Devinno.Forms.Controls
                     if (scroll.TouchMode && CollisionTool.Check(rtGraph, x, y)) scroll.TouchDown(x, y);
                 }
                 else if (e.Button == MouseButtons.Right) bRightDown = true;
-               
+
             });
             Invalidate();
             base.OnMouseDown(e);
@@ -463,7 +463,7 @@ namespace Devinno.Forms.Controls
                 int nCnt = Series.Where(x => nmls.Contains(x.Name)).Count();
                 if (nCnt == Series.Count)
                 {
-                    var dic = props.Where(x => Series.Select(x=>x.Name).Contains(x.Name)).ToDictionary(x => x.Name);
+                    var dic = props.Where(x => Series.Select(x => x.Name).Contains(x.Name)).ToDictionary(x => x.Name);
 
                     GraphDatas.Clear();
                     foreach (var v in values)
@@ -543,7 +543,7 @@ namespace Devinno.Forms.Controls
             var br = new SolidBrush(backColor);
             var p = new Pen(gridColor);
             #endregion
-             
+
             #region Draw
             {
                 #region GraphBG
@@ -691,7 +691,7 @@ namespace Devinno.Forms.Controls
                 {
                     var st = vst ?? GraphDatas.First().Time;
                     var ed = ved ?? GraphDatas.Last().Time;
-                     
+
                     g.SetClip(rtGraph);
                     foreach (var v in series)
                     {
@@ -738,7 +738,8 @@ namespace Devinno.Forms.Controls
                             var szn = g.MeasureString(series.OrderByDescending(x => x.Alias.Length).FirstOrDefault().Alias + " : ", Font);
                             var szv = g.MeasureString(string.IsNullOrWhiteSpace(ValueFormatString) ? ls.Select(x => x.ToString("0")).OrderByDescending(x => x.Length).FirstOrDefault() : ls.Select(x => x.ToString(ValueFormatString)).OrderByDescending(x => x.Length).FirstOrDefault(), Font);
                             var w = Convert.ToSingle(Math.Max(szt.Width + 20, szn.Width + 10 + szv.Width + 20)) + 10;
-                            var h = Convert.ToSingle((szt.Height * (Series.Count + 1)) + ((10 * (Series.Count + 2))));
+                            var sercnt = Series.Where(x => x.Visible).Count();
+                            var h = Convert.ToSingle(((szt.Height + 4) * (sercnt + 1)) + ((10 * sercnt + 2)));
                             var cx = Convert.ToSingle(MathTool.Constrain(vmx, rtGraph.Left + w / 2D, rtGraph.Right - w / 2D));
                             var cy = Convert.ToSingle(MathTool.Constrain(my, rtGraph.Top + h / 2D, rtGraph.Bottom - h / 2D));
                             var rt = Util.INT(MathTool.MakeRectangle(new PointF(cx, cy), w / 2F, h / 2F));
@@ -746,14 +747,14 @@ namespace Devinno.Forms.Controls
 
                             var lsr = new List<SizeInfo>();
                             var lsc = new List<SizeInfo>();
-                            var vrh = 100F / Convert.ToSingle(1 + Series.Count);
+                            var vrh = 100F / Convert.ToSingle(1 + sercnt);
                             lsc.Add(new SizeInfo(DvSizeMode.Pixel, szn.Width + 10));
                             lsc.Add(new SizeInfo(DvSizeMode.Percent, 100));
 
-                            for (int i = 0; i < 1 + series.Count; i++)
+                            for (int i = 0; i < 1 + sercnt; i++)
                             {
                                 lsr.Add(new SizeInfo(DvSizeMode.Percent, vrh));
-                               if(i < Series.Count) lsr.Add(new SizeInfo(DvSizeMode.Pixel, 10));
+                                if (i < sercnt) lsr.Add(new SizeInfo(DvSizeMode.Pixel, 10));
                             }
 
                             var rts = Util.DevideSizeVH(rtv, lsr, lsc);
@@ -765,9 +766,10 @@ namespace Devinno.Forms.Controls
                             p.Color = Color.Red;
                             g.DrawLine(p, vmx, rtGraph.Top, vmx, rtGraph.Bottom);
                             #region values
-                            for (int i = 0; i < v1.Values.Count; i++)
+                            var idxs = Series.Where(x => x.Visible).Select(x => Series.IndexOf(x)).ToList();
+                            for (int i = 0; i < idxs.Count; i++)
                             {
-                                var ser = Series[i];
+                                var ser = Series[idxs[i]];
                                 var val = MathTool.Map(vr, 0D, 1D, v1.Values[ser.Name], v2.Values[ser.Name]);
                                 var y = Convert.ToSingle(MathTool.Map(val, ser.Minimum, ser.Maximum, rtGraph.Bottom, rtGraph.Top));
 
@@ -783,14 +785,16 @@ namespace Devinno.Forms.Controls
                             thm.DrawText(g, tm.ToString(timeFormatString ?? "yyyy.MM.dd\r\nHH:mm:ss"), Font, foreColor, rtTime);
                             #endregion
                             #region values
-                            for (int i = 0; i < v1.Values.Count; i++)
+                            for (int i = 0; i < idxs.Count; i++)
                             {
-                                var ser = Series[i];
+                                var ser = Series[idxs[i]];
                                 var val = MathTool.Map(vr, 0D, 1D, v1.Values[ser.Name], v2.Values[ser.Name]);
                                 var sVal = string.IsNullOrWhiteSpace(ValueFormatString) ? val.ToString("0") : val.ToString(valueFormatString);
                                 var rtName = rts[i * 2 + 2, 0];
                                 var rtVal = rts[i * 2 + 2, 1];
                                 var c = ser.SeriesColor.BrightnessTransmit(0.3);
+                                var y = Convert.ToSingle(MathTool.Map(val, ser.Minimum, ser.Maximum, rtGraph.Bottom, rtGraph.Top));
+
                                 thm.DrawText(g, ser.Alias, Font, c, rtName, DvContentAlignment.MiddleRight);
                                 thm.DrawText(g, sVal, Font, c, rtVal, DvContentAlignment.MiddleCenter);
                             }
@@ -806,7 +810,8 @@ namespace Devinno.Forms.Controls
                         var szn = g.MeasureString(series.OrderByDescending(x => x.Alias.Length).FirstOrDefault().Alias + " : ", Font);
                         var szv = g.MeasureString(string.IsNullOrWhiteSpace(ValueFormatString) ? ls.Select(x => x.ToString("0")).OrderByDescending(x => x.Length).FirstOrDefault() : ls.Select(x => x.ToString(ValueFormatString)).OrderByDescending(x => x.Length).FirstOrDefault(), Font);
                         var w = Convert.ToSingle(Math.Max(szt.Width + 20, szn.Width + 10 + szv.Width + 20)) + 10;
-                        var h = Convert.ToSingle((szt.Height * (Series.Count + 1)) + ((10 * (Series.Count + 2))));
+                        var sercnt = Series.Where(x => x.Visible).Count();
+                        var h = Convert.ToSingle(((szt.Height + 4) * (sercnt + 1)) + ((10 * (sercnt + 2))));
                         var cx = Convert.ToSingle(MathTool.Constrain(vmx, rtGraph.Left + w / 2D, rtGraph.Right - w / 2D));
                         var cy = Convert.ToSingle(MathTool.Constrain(my, rtGraph.Top + h / 2D, rtGraph.Bottom - h / 2D));
                         var rt = Util.INT(MathTool.MakeRectangle(new PointF(cx, cy), w / 2F, h / 2F));
@@ -814,14 +819,14 @@ namespace Devinno.Forms.Controls
 
                         var lsr = new List<SizeInfo>();
                         var lsc = new List<SizeInfo>();
-                        var vrh = 100F / Convert.ToSingle(1 + Series.Count);
+                        var vrh = 100F / Convert.ToSingle(1 + sercnt);
                         lsc.Add(new SizeInfo(DvSizeMode.Pixel, szn.Width + 10));
                         lsc.Add(new SizeInfo(DvSizeMode.Percent, 100));
 
                         for (int i = 0; i < 1 + series.Count; i++)
                         {
                             lsr.Add(new SizeInfo(DvSizeMode.Percent, vrh));
-                            if (i < Series.Count) lsr.Add(new SizeInfo(DvSizeMode.Pixel, 10));
+                            if (i < sercnt) lsr.Add(new SizeInfo(DvSizeMode.Pixel, 10));
                         }
 
                         var rts = Util.DevideSizeVH(rtv, lsr, lsc);
@@ -832,16 +837,15 @@ namespace Devinno.Forms.Controls
                         p.DashStyle = DashStyle.Solid;
                         p.Color = Color.Red;
                         g.DrawLine(p, vmx, rtGraph.Top, vmx, rtGraph.Bottom);
-                        #region values
-                        for (int i = 0; i < v1.Values.Count; i++)
+                        var idxs = Series.Where(x => x.Visible).Select(x => Series.IndexOf(x)).ToList();
+                        for (int i = 0; i < idxs.Count; i++)
                         {
-                            var ser = Series[i];
+                            var ser = Series[idxs[i]];
                             var val = v1.Values[ser.Name];
                             var y = Convert.ToSingle(MathTool.Map(val, ser.Minimum, ser.Maximum, rtGraph.Bottom, rtGraph.Top));
 
                             thm.DrawBox(g, MathTool.MakeRectangle(new PointF(vmx, y), 5, 5), ser.SeriesColor.BrightnessTransmit(0.3), thm.GetBorderColor(ser.SeriesColor, graphBackColor), RoundType.Ellipse, BoxStyle.Fill | BoxStyle.Border | BoxStyle.OutShadow);
                         }
-                        #endregion
                         #endregion
                         #region Box
                         thm.DrawBox(g, rt, Color.FromArgb(200, valueBoxColor), thm.GetBorderColor(valueBoxColor, graphBackColor), RoundType.All, BoxStyle.Fill | BoxStyle.Border | BoxStyle.OutShadow);
@@ -851,16 +855,20 @@ namespace Devinno.Forms.Controls
                         thm.DrawText(g, tm.ToString(timeFormatString ?? "yyyy.MM.dd\r\nHH:mm:ss"), Font, foreColor, rtTime);
                         #endregion
                         #region values
-                        for (int i = 0; i < v1.Values.Count; i++)
+                        for (int i = 0; i < idxs.Count; i++)
                         {
-                            var ser = Series[i];
+                            var ser = Series[idxs[i]];
                             var val = v1.Values[ser.Name];
                             var sVal = string.IsNullOrWhiteSpace(ValueFormatString) ? val.ToString("0") : val.ToString(valueFormatString);
                             var rtName = rts[i * 2 + 2, 0];
                             var rtVal = rts[i * 2 + 2, 1];
                             var c = ser.SeriesColor.BrightnessTransmit(0.3);
+                            var y = Convert.ToSingle(MathTool.Map(val, ser.Minimum, ser.Maximum, rtGraph.Bottom, rtGraph.Top));
+
                             thm.DrawText(g, ser.Alias, Font, c, rtName, DvContentAlignment.MiddleRight);
                             thm.DrawText(g, sVal, Font, c, rtVal, DvContentAlignment.MiddleCenter);
+                            thm.DrawBox(g, MathTool.MakeRectangle(new PointF(vmx, y), 5, 5), ser.SeriesColor.BrightnessTransmit(0.3), thm.GetBorderColor(ser.SeriesColor, graphBackColor), RoundType.Ellipse, BoxStyle.Fill | BoxStyle.Border | BoxStyle.OutShadow);
+
                         }
                         #endregion
                     }

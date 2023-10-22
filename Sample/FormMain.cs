@@ -1,5 +1,6 @@
 ﻿using Devinno.Communications.Modbus.TCP;
 using Devinno.Data;
+using Devinno.Database;
 using Devinno.Forms;
 using Devinno.Forms.Controls;
 using Devinno.Forms.Dialogs;
@@ -124,6 +125,7 @@ namespace Sample
             trendGraph.Series.Add(new GraphSeries2() { Name = "Java", Alias = "Java", SeriesColor = Color.Blue, Minimum = 0, Maximum = 100 });
             trendGraph.Series.Add(new GraphSeries2() { Name = "Cpp", Alias = "C++", SeriesColor = Color.DarkRed, Minimum = 0, Maximum = 100 });
             trendGraph.Series.Add(new GraphSeries2() { Name = "CSharp", Alias = "C#", SeriesColor = Color.Green, Minimum = 0, Maximum = 100 });
+            trendGraph.Series.Add(new GraphSeries2() { Name = "Python", Alias = "Python", SeriesColor = Color.Lime, Minimum = 0, Maximum = 100, Visible = false });
             trendGraph.MaximumXScale = TimeSpan.FromSeconds(10);
             trendGraph.XScale = TimeSpan.FromSeconds(1);
             trendGraph.XAxisGraduation = TimeSpan.FromSeconds(0.2);
@@ -838,14 +840,6 @@ namespace Sample
 
             trendGraph.ValueDraw = timeGraph.ValueDraw = true;
             trendGraph.TimeFormatString = timeGraph.TimeFormatString = "HH:mm:ss.fff";
-
-            panel.ButtonsWidth = 100;
-            panel.Buttons.Add(new ButtonInfo("Add") { Size = new SizeInfo(DvSizeMode.Percent, 100F), IconString = "fa-plus" });
-            //panel.Buttons.Add(new ButtonInfo("Del") { Size = new SizeInfo(DvSizeMode.Percent, 50F), IconString = "fa-minus" });
-            panel.ButtonClick += (o, s) =>
-            {
-
-            };
         }
         #endregion
 
@@ -944,6 +938,28 @@ namespace Sample
         #endregion
         #endregion
     }
+    #region class : ModbusValue
+    public class ModbusValue : TimeGraphData
+    {
+        [SqlKey(AutoIncrement = true)]
+        public long Id { get; set; }
+        public string TestID { get; set; }
+        public double Value1 { get; set; }
+        public double Value2 { get; set; }
+        public double Value3 { get; set; }
+        public double Value4 { get; set; }
+        public double Value5 { get; set; }
+        public double Value6 { get; set; }
+        public double Value7 { get; set; }
+        public double Value8 { get; set; }
+        public double Value9 { get; set; }
+        public double Value10 { get; set; }
+        public override DateTime Time { get; set; }
+
+       
+
+    }
+    #endregion
 
     #region class : Data1 
     class Data1 : GraphData
@@ -962,6 +978,7 @@ namespace Sample
         public double CSharp { get; set; }
         public double Cpp { get; set; }
         public double Java { get; set; }
+        public double Python { get; set; }
     }
     #endregion
     #region class : Data3
