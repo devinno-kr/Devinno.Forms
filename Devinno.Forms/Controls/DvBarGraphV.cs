@@ -108,6 +108,9 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region Gradient
+        public bool Gradient { get; set; } = true;
+        #endregion
 
         #region FormatString
         private string sFormatString = "0";
@@ -406,7 +409,7 @@ namespace Devinno.Forms.Controls
                                         var rtv = Util.FromRect(lgp + rt.Left + (ic * iw), rtGraph.Bottom - (h), iw, (h + 1));
                                         var ser = dicSer[vk];
                                         var bc = ser.SeriesColor.BrightnessTransmit(Theme.BorderBrightness);
-                                        Theme.DrawBox(e.Graphics, (rtv), ser.SeriesColor, bc, RoundType.Rect, Box.ButtonUp_H(true, ShadowGap));
+                                        Theme.DrawBox(e.Graphics, (rtv), ser.SeriesColor, bc, RoundType.Rect, Gradient ? Box.ButtonUp_V(true, 0) : (BoxStyle.Fill | BoxStyle.Border));
 
                                         if (ValueDraw)
                                         {
@@ -443,7 +446,7 @@ namespace Devinno.Forms.Controls
 
                                         var ser = dicSer[vk];
                                         var bc = ser.SeriesColor.BrightnessTransmit(Theme.BorderBrightness);
-                                        Theme.DrawBox(e.Graphics, (rtv), ser.SeriesColor, bc, RoundType.Rect, Box.ButtonUp_H(true, ShadowGap));
+                                        Theme.DrawBox(e.Graphics, (rtv), ser.SeriesColor, bc, RoundType.Rect, Gradient ? Box.ButtonUp_V(true, 0) : (BoxStyle.Fill | BoxStyle.Border));
 
                                         if (ValueDraw)
                                         {

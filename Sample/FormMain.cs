@@ -11,6 +11,7 @@ using Devinno.Forms.Tools;
 using Devinno.Forms.Utils;
 using Devinno.Timers;
 using Devinno.Tools;
+using MySqlConnector;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -20,6 +21,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -95,11 +97,13 @@ namespace Sample
             meter.Bars.Add(new MeterBar(90, 100, Color.Red));
             #endregion
             #region barGraphH
+            barGraphH.Gradient = false;
             barGraphH.Series.Add(new GraphSeries { Name = "CSharp", Alias = "C#", SeriesColor = Color.FromArgb(220, 0, 0) });
             barGraphH.Series.Add(new GraphSeries { Name = "Cpp", Alias = "C++", SeriesColor = Color.FromArgb(0, 150, 0) });
             barGraphH.Series.Add(new GraphSeries { Name = "Java", Alias = "Java", SeriesColor = Color.FromArgb(0, 0, 200) });
             #endregion
             #region barGraphV
+            barGraphV.Gradient = false;
             barGraphV.Series.Add(new GraphSeries { Name = "CSharp", Alias = "C#", SeriesColor = Color.FromArgb(220, 0, 0) });
             barGraphV.Series.Add(new GraphSeries { Name = "Cpp", Alias = "C++", SeriesColor = Color.FromArgb(0, 150, 0) });
             barGraphV.Series.Add(new GraphSeries { Name = "Java", Alias = "Java", SeriesColor = Color.FromArgb(0, 0, 200) });
@@ -873,6 +877,7 @@ namespace Sample
 
                     ls1.Add(new Data1() { Name = (y) + "." + m, Cpp = cpp, CSharp = csharp, Java = java, Color = vcs[m - 1] });
                 }
+            ls1.FirstOrDefault().Java = 1;
 
             lineGraph.SetDataSource<Data1>(ls1);
             barGraphV.SetDataSource<Data1>(ls1);
@@ -883,6 +888,7 @@ namespace Sample
         #region TimeGraphSet
         void TimeGraphSet()
         {
+            
             var ls1 = new List<Data2>();
             var java = 70D;
             var cpp = 50D;
@@ -898,7 +904,8 @@ namespace Sample
                 ls1.Add(new Data2() { Time = dt, Cpp = cpp, CSharp = csharp, Java = java });
             }
             timeGraph.SetDataSource<Data2>(ls1);
-            //timeGraph.SetDataSource<Data2>(ls1, DateTime.Now.Date, DateTime.Now.Date + TimeSpan.FromDays(1));
+            
+            timeGraph.SetDataSource<Data2>(ls1, DateTime.Now.Date, DateTime.Now.Date + TimeSpan.FromDays(1));
         }
         #endregion
         #region TrendGraphSet
@@ -1088,4 +1095,5 @@ namespace Sample
         public string Name { get; set; } = "";
     }
     #endregion
+
 }

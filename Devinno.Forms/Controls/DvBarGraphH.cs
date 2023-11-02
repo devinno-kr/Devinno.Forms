@@ -108,6 +108,9 @@ namespace Devinno.Forms.Controls
             }
         }
         #endregion
+        #region Gradient
+        public bool Gradient { get; set; } = true;
+        #endregion
 
         #region FormatString
         private string sFormatString = "0";
@@ -401,14 +404,19 @@ namespace Devinno.Forms.Controls
                                         var rtv = Util.FromRect(rtGraph.Left - gp, tgp + rt.Top + (ic * ih), (w + gp), ih);
                                         var ser = dicSer[vk];
                                         var bc = ser.SeriesColor.BrightnessTransmit(Theme.BorderBrightness);
-                                        Theme.DrawBox(e.Graphics, (rtv), ser.SeriesColor, bc, RoundType.Rect, Box.ButtonUp_V(true, 0));
+                                        Theme.DrawBox(e.Graphics, (rtv), ser.SeriesColor, bc, RoundType.Rect, Gradient ? Box.ButtonUp_V(true, 0) : (BoxStyle.Fill | BoxStyle.Border));
                                         if (ValueDraw)
                                         {
                                             if (n > 0)
                                             {
                                                 var txt = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
+                                                var rtm = e.Graphics.MeasureString(txt, Font);
                                                 var rtt = Util.FromRect(rtv.Left, rtv.Top, rtv.Width - 5, rtv.Height);
-                                                Theme.DrawText(e.Graphics, txt, Font, ForeColor, rtt, DvContentAlignment.MiddleRight);
+
+                                                if (rtt.Width < rtm.Width) 
+                                                    Theme.DrawText(e.Graphics, txt, Font, ForeColor, new RectangleF(rtv.Right, rtv.Top, rtm.Width + 10, rtv.Height), DvContentAlignment.MiddleCenter); 
+                                                else 
+                                                    Theme.DrawText(e.Graphics, txt, Font, ForeColor, rtt, DvContentAlignment.MiddleRight);
                                             }
                                         }
                                     }
@@ -440,12 +448,13 @@ namespace Devinno.Forms.Controls
                                         var rtv = !Scrollable ? Util.FromRect(ix, rt.Top + (rt.Height / 2) - (BarSize / 2), (w), BarSize) : Util.FromRect(ix, rt.Top, Convert.ToInt32(w), rt.Height);
                                         var ser = dicSer[vk];
                                         var bc = ser.SeriesColor.BrightnessTransmit(Theme.BorderBrightness);
-                                        Theme.DrawBox(e.Graphics, (rtv), ser.SeriesColor, bc, RoundType.Rect, Box.ButtonUp_V(true, 0));
+                                        Theme.DrawBox(e.Graphics, (rtv), ser.SeriesColor, bc, RoundType.Rect, Gradient ? Box.ButtonUp_V(true, 0) : (BoxStyle.Fill | BoxStyle.Border));
                                         if (ValueDraw)
                                         {
                                             if (n > 0)
                                             {
                                                 var txt = string.IsNullOrWhiteSpace(FormatString) ? n.ToString() : n.ToString(FormatString);
+                                                var rtm = e.Graphics.MeasureString(txt, Font);
                                                 var rtt = Util.FromRect(rtv.Left, rtv.Top, rtv.Width - 5, rtv.Height);
                                                 Theme.DrawText(e.Graphics, txt, Font, ForeColor, rtt, DvContentAlignment.MiddleRight);
                                             }
