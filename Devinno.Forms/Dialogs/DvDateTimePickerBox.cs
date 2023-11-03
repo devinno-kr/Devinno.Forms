@@ -133,6 +133,13 @@ namespace Devinno.Forms.Dialogs
         public DateTime? ShowDateTimePicker(string Title, DateTime? value)
         {
             pickerType = DateTimePickerType.DateTime;
+            calendar.SelectedDays.Clear();
+            if (value.HasValue)
+            {
+                calendar.CurrentYear = value.Value.Year;
+                calendar.CurrentMonth = value.Value.Month;
+                calendar.SelectedDays.Add(value.Value);
+            }
 
             return show(Title, () =>
             {
@@ -184,6 +191,13 @@ namespace Devinno.Forms.Dialogs
         public DateTime? ShowDatePicker(string Title, DateTime? value)
         {
             pickerType = DateTimePickerType.Date;
+            calendar.SelectedDays.Clear();
+            if (value.HasValue)
+            {
+                calendar.CurrentYear = value.Value.Year;
+                calendar.CurrentMonth = value.Value.Month;
+                calendar.SelectedDays.Add(value.Value);
+            }
 
             return show(Title, () =>
             {

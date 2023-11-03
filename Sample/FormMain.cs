@@ -943,7 +943,23 @@ namespace Sample
             return s;
         }
         #endregion
+
         #endregion
+
+        private void tpDialog_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dvDateTimePicker1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dvDateTimePicker2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
     #region class : ModbusValue
     public class ModbusValue : TimeGraphData

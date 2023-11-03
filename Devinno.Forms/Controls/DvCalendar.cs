@@ -78,10 +78,10 @@ namespace Devinno.Forms.Controls
         #endregion
 
         #region CurrentYear
-        public int CurrentYear { get; private set; } = DateTime.Now.Year;
+        public int CurrentYear { get; set; } = DateTime.Now.Year;
         #endregion
         #region CurrentMonth
-        public int CurrentMonth { get; private set; } = DateTime.Now.Month;
+        public int CurrentMonth { get; set; } = DateTime.Now.Month;
         #endregion
         #region CurrentMonthText
         public string CurrentMonthText => CurrentYear + "." + CurrentMonth;

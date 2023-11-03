@@ -202,6 +202,8 @@ namespace Sample
             this.listBox = new Devinno.Forms.Controls.DvListBox();
             this.dvButton2 = new Devinno.Forms.Controls.DvButton();
             this.dvButton1 = new Devinno.Forms.Controls.DvButton();
+            this.dvDateTimePicker1 = new Devinno.Forms.Controls.DvDateTimePicker();
+            this.dvDateTimePicker2 = new Devinno.Forms.Controls.DvDateTimePicker();
             this.tab.SuspendLayout();
             this.tpControl.SuspendLayout();
             this.tblTriButton.SuspendLayout();
@@ -332,6 +334,7 @@ namespace Sample
             this.inOnOff.Text = "dvValueInputBoolean1";
             this.inOnOff.Title = null;
             this.inOnOff.TitleColor = null;
+            this.inOnOff.TitleGradient = false;
             this.inOnOff.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inOnOff.TitleIconGap = 0;
             this.inOnOff.TitleIconImage = null;
@@ -367,6 +370,7 @@ namespace Sample
             this.inTemp.Text = "온도";
             this.inTemp.Title = "온도";
             this.inTemp.TitleColor = null;
+            this.inTemp.TitleGradient = false;
             this.inTemp.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inTemp.TitleIconGap = 0;
             this.inTemp.TitleIconImage = null;
@@ -402,6 +406,7 @@ namespace Sample
             this.inPos.Text = "위치";
             this.inPos.Title = "위치";
             this.inPos.TitleColor = null;
+            this.inPos.TitleGradient = false;
             this.inPos.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inPos.TitleIconGap = 0;
             this.inPos.TitleIconImage = null;
@@ -434,6 +439,7 @@ namespace Sample
             this.inName.Text = "명칭";
             this.inName.Title = "명칭";
             this.inName.TitleColor = null;
+            this.inName.TitleGradient = false;
             this.inName.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inName.TitleIconGap = 0;
             this.inName.TitleIconImage = null;
@@ -466,6 +472,7 @@ namespace Sample
             this.vlblName.Text = "명칭";
             this.vlblName.Title = "명칭";
             this.vlblName.TitleColor = null;
+            this.vlblName.TitleGradient = false;
             this.vlblName.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.vlblName.TitleIconGap = 0;
             this.vlblName.TitleIconImage = null;
@@ -499,6 +506,7 @@ namespace Sample
             this.vlblPos.Text = "위치";
             this.vlblPos.Title = "위치";
             this.vlblPos.TitleColor = null;
+            this.vlblPos.TitleGradient = false;
             this.vlblPos.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.vlblPos.TitleIconGap = 0;
             this.vlblPos.TitleIconImage = null;
@@ -532,6 +540,7 @@ namespace Sample
             this.vlblTemp.Text = "온도";
             this.vlblTemp.Title = "온도";
             this.vlblTemp.TitleColor = null;
+            this.vlblTemp.TitleGradient = false;
             this.vlblTemp.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.vlblTemp.TitleIconGap = 0;
             this.vlblTemp.TitleIconImage = null;
@@ -565,6 +574,7 @@ namespace Sample
             this.vlblOnOff.TabIndex = 47;
             this.vlblOnOff.Title = "";
             this.vlblOnOff.TitleColor = null;
+            this.vlblOnOff.TitleGradient = false;
             this.vlblOnOff.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.vlblOnOff.TitleIconGap = 0;
             this.vlblOnOff.TitleIconImage = null;
@@ -2456,6 +2466,7 @@ namespace Sample
             this.barGraphH.BarSize = 24;
             this.barGraphH.Dock = System.Windows.Forms.DockStyle.Fill;
             this.barGraphH.FormatString = "0";
+            this.barGraphH.Gradient = true;
             this.barGraphH.Graduation = 10D;
             this.barGraphH.GraphBackColor = null;
             this.barGraphH.GraphMode = Devinno.Forms.DvBarGraphMode.List;
@@ -2490,6 +2501,7 @@ namespace Sample
             this.barGraphV.Cursor = System.Windows.Forms.Cursors.Default;
             this.barGraphV.Dock = System.Windows.Forms.DockStyle.Fill;
             this.barGraphV.FormatString = "0";
+            this.barGraphV.Gradient = true;
             this.barGraphV.Graduation = 10D;
             this.barGraphV.GraphBackColor = null;
             this.barGraphV.GraphMode = Devinno.Forms.DvBarGraphMode.List;
@@ -2860,6 +2872,8 @@ namespace Sample
             // tpDialog
             // 
             this.tpDialog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tpDialog.Controls.Add(this.dvDateTimePicker2);
+            this.tpDialog.Controls.Add(this.dvDateTimePicker1);
             this.tpDialog.Controls.Add(this.btnPortSettingSimple);
             this.tpDialog.Controls.Add(this.btnPortSetting);
             this.tpDialog.Controls.Add(this.dvLabel6);
@@ -2897,6 +2911,7 @@ namespace Sample
             this.tpDialog.Padding = new System.Windows.Forms.Padding(10);
             this.tpDialog.Size = new System.Drawing.Size(718, 714);
             this.tpDialog.TabIndex = 6;
+            this.tpDialog.Click += new System.EventHandler(this.tpDialog_Click);
             // 
             // btnPortSettingSimple
             // 
@@ -2989,6 +3004,7 @@ namespace Sample
             this.inCombo.Text = "dvValueInputCombo1";
             this.inCombo.Title = null;
             this.inCombo.TitleColor = null;
+            this.inCombo.TitleGradient = false;
             this.inCombo.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inCombo.TitleIconGap = 0;
             this.inCombo.TitleIconImage = null;
@@ -3269,6 +3285,7 @@ namespace Sample
             this.inDoW.Text = "dvValueInputSelector1";
             this.inDoW.Title = null;
             this.inDoW.TitleColor = null;
+            this.inDoW.TitleGradient = false;
             this.inDoW.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
             this.inDoW.TitleIconGap = 0;
             this.inDoW.TitleIconImage = null;
@@ -3870,6 +3887,56 @@ namespace Sample
             this.dvButton1.TextPadding = new System.Windows.Forms.Padding(0);
             this.dvButton1.UseKey = false;
             // 
+            // dvDateTimePicker1
+            // 
+            this.dvDateTimePicker1.ButtonColor = null;
+            this.dvDateTimePicker1.ButtonWidth = 30;
+            this.dvDateTimePicker1.DateTimeType = Devinno.Forms.DateTimePickerType.Date;
+            this.dvDateTimePicker1.Location = new System.Drawing.Point(13, 475);
+            this.dvDateTimePicker1.Name = "dvDateTimePicker1";
+            this.dvDateTimePicker1.Round = null;
+            this.dvDateTimePicker1.SelectedValue = new System.DateTime(2022, 8, 29, 18, 30, 52, 248);
+            this.dvDateTimePicker1.ShadowGap = 1;
+            this.dvDateTimePicker1.Size = new System.Drawing.Size(150, 30);
+            this.dvDateTimePicker1.TabIndex = 32;
+            this.dvDateTimePicker1.Text = "dvDateTimePicker1";
+            this.dvDateTimePicker1.Title = null;
+            this.dvDateTimePicker1.TitleColor = null;
+            this.dvDateTimePicker1.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvDateTimePicker1.TitleIconGap = 0;
+            this.dvDateTimePicker1.TitleIconImage = null;
+            this.dvDateTimePicker1.TitleIconSize = 12F;
+            this.dvDateTimePicker1.TitleIconString = null;
+            this.dvDateTimePicker1.TitleTextPadding = new System.Windows.Forms.Padding(0);
+            this.dvDateTimePicker1.TitleWidth = null;
+            this.dvDateTimePicker1.ValueColor = null;
+            this.dvDateTimePicker1.Click += new System.EventHandler(this.dvDateTimePicker1_Click);
+            // 
+            // dvDateTimePicker2
+            // 
+            this.dvDateTimePicker2.ButtonColor = null;
+            this.dvDateTimePicker2.ButtonWidth = 30;
+            this.dvDateTimePicker2.DateTimeType = Devinno.Forms.DateTimePickerType.Date;
+            this.dvDateTimePicker2.Location = new System.Drawing.Point(13, 511);
+            this.dvDateTimePicker2.Name = "dvDateTimePicker2";
+            this.dvDateTimePicker2.Round = null;
+            this.dvDateTimePicker2.SelectedValue = new System.DateTime(2022, 8, 29, 18, 30, 52, 248);
+            this.dvDateTimePicker2.ShadowGap = 1;
+            this.dvDateTimePicker2.Size = new System.Drawing.Size(150, 30);
+            this.dvDateTimePicker2.TabIndex = 33;
+            this.dvDateTimePicker2.Text = "dvDateTimePicker2";
+            this.dvDateTimePicker2.Title = null;
+            this.dvDateTimePicker2.TitleColor = null;
+            this.dvDateTimePicker2.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvDateTimePicker2.TitleIconGap = 0;
+            this.dvDateTimePicker2.TitleIconImage = null;
+            this.dvDateTimePicker2.TitleIconSize = 12F;
+            this.dvDateTimePicker2.TitleIconString = null;
+            this.dvDateTimePicker2.TitleTextPadding = new System.Windows.Forms.Padding(0);
+            this.dvDateTimePicker2.TitleWidth = null;
+            this.dvDateTimePicker2.ValueColor = null;
+            this.dvDateTimePicker2.Click += new System.EventHandler(this.dvDateTimePicker2_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -4093,5 +4160,7 @@ namespace Sample
         private Devinno.Forms.Controls.DvButton btnTreeRemove;
         private Devinno.Forms.Controls.DvButton btnTreeAdd;
         private Devinno.Forms.Controls.DvDataGrid dataGrid;
+        private Devinno.Forms.Controls.DvDateTimePicker dvDateTimePicker2;
+        private Devinno.Forms.Controls.DvDateTimePicker dvDateTimePicker1;
     }
 }
