@@ -1,4 +1,5 @@
 ﻿using Devinno.Extensions;
+using Devinno.Forms.Extensions;
 using Devinno.Forms.Themes;
 using Devinno.Forms.Utils;
 using Devinno.Tools;
@@ -262,6 +263,9 @@ namespace Devinno.Forms.Controls
 
         #region Series
         public List<GraphSeries2> Series { get; } = new List<GraphSeries2>();
+        #endregion
+        #region ValueBoxWidth
+        public int? ValueBoxWidth { get; set; } = null;
         #endregion
         #endregion
 
@@ -850,7 +854,7 @@ namespace Devinno.Forms.Controls
                             var szt = g.MeasureString(tm.ToString(timeFormatString ?? "yyyy.MM.dd\r\nHH:mm:ss"), Font);
                             var szn = g.MeasureString(series.OrderByDescending(x => x.Alias.Length).FirstOrDefault().Alias + " : ", Font);
                             var szv = g.MeasureString(string.IsNullOrWhiteSpace(ValueFormatString) ? ls.Select(x => x.ToString("0")).OrderByDescending(x => x.Length).FirstOrDefault() : ls.Select(x => x.ToString(ValueFormatString)).OrderByDescending(x => x.Length).FirstOrDefault(), Font);
-                            var w = Convert.ToSingle(Math.Max(szt.Width + 20, szn.Width + 10 + szv.Width + 20)) + 10;
+                            var w = ValueBoxWidth ?? (Convert.ToSingle(Math.Max(szt.Width + 20, szn.Width + 10 + szv.Width + 20)) + 10);
                             var sercnt = Series.Where(x => x.Visible).Count();
                             var h = Convert.ToSingle(((szt.Height + 4) * (sercnt + 1)) + ((10 * sercnt + 2)));
                             var cx = Convert.ToSingle(MathTool.Constrain(vmx, rtGraph.Left + w / 2D, rtGraph.Right - w / 2D));
@@ -861,7 +865,7 @@ namespace Devinno.Forms.Controls
                             var lsr = new List<SizeInfo>();
                             var lsc = new List<SizeInfo>();
                             var vrh = 100F / Convert.ToSingle(1 + sercnt);
-                            lsc.Add(new SizeInfo(DvSizeMode.Pixel, szn.Width + 10));
+                            lsc.Add(new SizeInfo(DvSizeMode.Pixel, szn.Width + 2));
                             lsc.Add(new SizeInfo(DvSizeMode.Percent, 100));
 
                             for (int i = 0; i < 1 + series.Count; i++)
@@ -909,7 +913,6 @@ namespace Devinno.Forms.Controls
 
                                 thm.DrawText(g, ser.Alias , Font, c, rtName, DvContentAlignment.MiddleRight);
                                 thm.DrawText(g, sVal, Font, c, rtVal, DvContentAlignment.MiddleCenter);
-
                             }
                             #endregion
                         }
@@ -922,7 +925,7 @@ namespace Devinno.Forms.Controls
                         var szt = g.MeasureString(tm.ToString(timeFormatString ?? "yyyy.MM.dd\r\nHH:mm:ss"), Font);
                         var szn = g.MeasureString(series.OrderByDescending(x => x.Alias.Length).FirstOrDefault().Alias + " : ", Font);
                         var szv = g.MeasureString(string.IsNullOrWhiteSpace(ValueFormatString) ? ls.Select(x => x.ToString("0")).OrderByDescending(x => x.Length).FirstOrDefault() : ls.Select(x => x.ToString(ValueFormatString)).OrderByDescending(x => x.Length).FirstOrDefault(), Font);
-                        var w = Convert.ToSingle(Math.Max(szt.Width + 20, szn.Width + 10 + szv.Width + 20)) + 10;
+                        var w = ValueBoxWidth ?? (Convert.ToSingle(Math.Max(szt.Width + 20, szn.Width + 10 + szv.Width + 20)) + 10);
                         var h = Convert.ToSingle((szt.Height * (Series.Count + 1)) + ((10 * (Series.Count + 2))));
                         var cx = Convert.ToSingle(MathTool.Constrain(vmx, rtGraph.Left + w / 2D, rtGraph.Right - w / 2D));
                         var cy = Convert.ToSingle(MathTool.Constrain(my, rtGraph.Top + h / 2D, rtGraph.Bottom - h / 2D));
@@ -932,7 +935,7 @@ namespace Devinno.Forms.Controls
                         var lsr = new List<SizeInfo>();
                         var lsc = new List<SizeInfo>();
                         var vrh = 100F / Convert.ToSingle(1 + Series.Count);
-                        lsc.Add(new SizeInfo(DvSizeMode.Pixel, szn.Width + 10));
+                        lsc.Add(new SizeInfo(DvSizeMode.Pixel, szn.Width + 2));
                         lsc.Add(new SizeInfo(DvSizeMode.Percent, 100));
 
                         for (int i = 0; i < 1 + series.Count; i++)

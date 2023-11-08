@@ -47,7 +47,6 @@ namespace Devinno.Forms.ImageCanvas
             }
         }
         #endregion
-
         #endregion
 
         #region Constructor
@@ -56,8 +55,6 @@ namespace Devinno.Forms.ImageCanvas
             Padding = new System.Windows.Forms.Padding(0);
         }
         #endregion
-
-       
 
         #region Add/Remove
         public void RemovePage(IvPage page)

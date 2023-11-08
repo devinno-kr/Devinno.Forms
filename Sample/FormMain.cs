@@ -844,6 +844,8 @@ namespace Sample
 
             trendGraph.ValueDraw = timeGraph.ValueDraw = true;
             trendGraph.TimeFormatString = timeGraph.TimeFormatString = "HH:mm:ss.fff";
+            //timeGraph.ValueBoxWidth = trendGraph.ValueBoxWidth = 200;
+
         }
         #endregion
 
