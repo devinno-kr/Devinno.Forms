@@ -1610,9 +1610,140 @@ namespace Devinno.Forms.Controls
                         }
                     }
                     #endregion
+                    
                 }
             });
             base.OnMouseClick(e);
+        }
+        #endregion
+        #region OnMouseDoubleClick
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
+            {
+                var x = e.X;
+                var y = e.Y;
+                var thm = GetTheme();
+                if (thm != null)
+                {
+                    #region Bounds
+                    var rts = GetColumnBounds(rtColumn, rtScrollContent);
+                    var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
+                    var sbw = Convert.ToInt32(SELECTOR_BOX_WIDTH);
+
+                    var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
+                    var ColWidths = GetColumnsWidths(rtScrollContent);
+                    var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
+                    var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
+                    #endregion
+                    #region Rows
+                    #region Column Index 
+
+                    var rtnm = "rtColumn";
+                    var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (RectangleF?)null;
+                    int? isnf = null, ienf = null;
+                    if (vsnf != null && venf != null && rts.ContainsKey(rtnm + vsnf.Name) && rts.ContainsKey(rtnm + venf.Name))
+                    {
+                        var rtsv = rts[rtnm + vsnf.Name];
+                        var rtev = rts[rtnm + venf.Name];
+                        var mrt = Util.FromRect(rtsv.Left, rtColumn.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
+
+                        var vls = lsnf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left + hspos, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                        isnf = Columns.IndexOf(vls.FirstOrDefault());
+                        ienf = Columns.IndexOf(vls.LastOrDefault());
+                        mrtNF = mrt;
+                    }
+
+                    var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (RectangleF?)null;
+                    int? isf = null, ief = null;
+                    if (vsf != null && vef != null && rts.ContainsKey(rtnm + vsf.Name) && rts.ContainsKey(rtnm + vef.Name))
+                    {
+                        var rtsv = rts[rtnm + vsf.Name];
+                        var rtev = rts[rtnm + vef.Name];
+                        var mrt = Util.FromRect(rtsv.Left, rtColumn.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+
+                        var vls = lsf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                        isf = Columns.IndexOf(vls.FirstOrDefault());
+                        ief = Columns.IndexOf(vls.LastOrDefault());
+                        mrtF = mrt;
+                    }
+
+                    rtnm = "rtColumnGroup";
+                    var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (RectangleF?)null;
+                    int? isgnf = null, iegnf = null;
+                    if (vsgnf != null && vegnf != null && rts.ContainsKey(rtnm + vsgnf.Name) && rts.ContainsKey(rtnm + vegnf.Name))
+                    {
+                        var rtsv = rts[rtnm + vsgnf.Name];
+                        var rtev = rts[rtnm + vegnf.Name];
+                        var mrt = Util.FromRect(rtsv.Left, rtsv.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
+
+                        var vls = lsgnf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left + hspos, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                        isgnf = ColumnGroups.IndexOf(vls.FirstOrDefault());
+                        iegnf = ColumnGroups.IndexOf(vls.LastOrDefault());
+                        mrtGNF = mrt;
+                    }
+
+                    var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (RectangleF?)null;
+                    int? isgf = null, iegf = null;
+                    if (vsgf != null && vegf != null && rts.ContainsKey(rtnm + vsgf.Name) && rts.ContainsKey(rtnm + vegf.Name))
+                    {
+                        var rtsv = rts[rtnm + vsgf.Name];
+                        var rtev = rts[rtnm + vegf.Name];
+                        var mrt = Util.FromRect(rtsv.Left, rtsv.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+
+                        var vls = lsgf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                        isgf = ColumnGroups.IndexOf(vls.FirstOrDefault());
+                        iegf = ColumnGroups.IndexOf(vls.LastOrDefault());
+                        mrtGF = mrt;
+                    }
+                    #endregion
+
+                    if (!VisibleDropDown)
+                    {
+                        Loop((i, rtROW, v) =>
+                        {
+                            #region !Fixed
+                            if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
+                            {
+                                var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
+                                var mrt = Util.FromRect(mrtNF.Value.Left, rtScrollContent.Top, mrtNF.Value.Width, rtScrollContent.Height);
+                                foreach (var cell in vls)
+                                {
+                                    if (cell.Visible)
+                                    {
+                                        var rtCol = rts["rtColumn" + cell.Column.Name];
+                                        var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
+                                        if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
+                                        if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
+                                        cell.MouseDoubleClick(Util.INT(rt), x, y);
+                                    }
+                                }
+                            }
+                            #endregion
+                            #region Fixed
+                            if (mrtF.HasValue && isf.HasValue && ief.HasValue)
+                            {
+                                var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
+                                var mrt = Util.FromRect(mrtF.Value.Left, rtScrollContent.Top, mrtF.Value.Width + 1, rtScrollContent.Height);
+                                foreach (var cell in vls)
+                                {
+                                    if (cell.Visible)
+                                    {
+                                        var rtCol = rts["rtColumn" + cell.Column.Name];
+                                        var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height);
+                                        if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
+                                        if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
+                                        cell.MouseDoubleClick(Util.INT(rt), x, y);
+                                    }
+                                }
+                            }
+                            #endregion
+                        });
+                    }
+                    #endregion
+                }
+            });
+            base.OnMouseDoubleClick(e);
         }
         #endregion
         #region OnMouseWheel
