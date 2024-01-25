@@ -768,7 +768,12 @@ namespace Devinno.Forms.Dialogs
 
                     Areas((rtTitleBar, rtTitleIconBox, rtTitleArea, rtTitleText, rtMin, rtMax, rtExit, rtContent) =>
                     {
-                        if (Movable && CollisionTool.Check(rtTitleArea, x, y))
+                        bool b1 = false, b2 = false, b3 = false;
+                        if (ExitBox && CollisionTool.Check(rtExit, x, y)) { b1 = true; Invalidate(); }
+                        if (MaximizeBox && CollisionTool.Check(rtMax, x, y)) { b2 = true; Invalidate(); }
+                        if (MinimizeBox && CollisionTool.Check(rtMin, x, y)) { b3 = true; Invalidate(); }
+
+                        if (Movable && CollisionTool.Check(rtTitleArea, x, y) && (!b1 && !b2 && !b3))
                         {
                             pbounds = Bounds;
                             pdown = MousePosition;

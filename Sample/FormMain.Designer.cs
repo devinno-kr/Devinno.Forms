@@ -159,6 +159,8 @@ namespace Sample
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tpDialog = new System.Windows.Forms.TabPage();
+            this.dvDateTimePicker2 = new Devinno.Forms.Controls.DvDateTimePicker();
+            this.dvDateTimePicker1 = new Devinno.Forms.Controls.DvDateTimePicker();
             this.btnPortSettingSimple = new Devinno.Forms.Controls.DvButton();
             this.btnPortSetting = new Devinno.Forms.Controls.DvButton();
             this.dvLabel6 = new Devinno.Forms.Controls.DvLabel();
@@ -202,8 +204,6 @@ namespace Sample
             this.listBox = new Devinno.Forms.Controls.DvListBox();
             this.dvButton2 = new Devinno.Forms.Controls.DvButton();
             this.dvButton1 = new Devinno.Forms.Controls.DvButton();
-            this.dvDateTimePicker1 = new Devinno.Forms.Controls.DvDateTimePicker();
-            this.dvDateTimePicker2 = new Devinno.Forms.Controls.DvDateTimePicker();
             this.tab.SuspendLayout();
             this.tpControl.SuspendLayout();
             this.tblTriButton.SuspendLayout();
@@ -602,6 +602,8 @@ namespace Sample
             // 
             // calendar
             // 
+            this.calendar.CurrentMonth = 1;
+            this.calendar.CurrentYear = 2024;
             this.calendar.DaysBoxColor = null;
             this.calendar.Font = new System.Drawing.Font("나눔고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.calendar.Location = new System.Drawing.Point(499, 563);
@@ -2601,6 +2603,7 @@ namespace Sample
             this.trendGraph.Text = "dvTrendGraph1";
             this.trendGraph.TimeFormatString = null;
             this.trendGraph.ValueBoxColor = null;
+            this.trendGraph.ValueBoxWidth = null;
             this.trendGraph.ValueDraw = false;
             this.trendGraph.ValueFormatString = null;
             this.trendGraph.XAxisGraduation = System.TimeSpan.Parse("00:10:00");
@@ -2633,6 +2636,7 @@ namespace Sample
             this.timeGraph.Text = "dvTimeGraph1";
             this.timeGraph.TimeFormatString = null;
             this.timeGraph.ValueBoxColor = null;
+            this.timeGraph.ValueBoxWidth = null;
             this.timeGraph.ValueDraw = false;
             this.timeGraph.ValueFormatString = null;
             this.timeGraph.XAxisGraduation = System.TimeSpan.Parse("00:10:00");
@@ -2912,6 +2916,56 @@ namespace Sample
             this.tpDialog.Size = new System.Drawing.Size(718, 714);
             this.tpDialog.TabIndex = 6;
             this.tpDialog.Click += new System.EventHandler(this.tpDialog_Click);
+            // 
+            // dvDateTimePicker2
+            // 
+            this.dvDateTimePicker2.ButtonColor = null;
+            this.dvDateTimePicker2.ButtonWidth = 30;
+            this.dvDateTimePicker2.DateTimeType = Devinno.Forms.DateTimePickerType.Date;
+            this.dvDateTimePicker2.Location = new System.Drawing.Point(13, 511);
+            this.dvDateTimePicker2.Name = "dvDateTimePicker2";
+            this.dvDateTimePicker2.Round = null;
+            this.dvDateTimePicker2.SelectedValue = new System.DateTime(2022, 8, 29, 18, 30, 52, 248);
+            this.dvDateTimePicker2.ShadowGap = 1;
+            this.dvDateTimePicker2.Size = new System.Drawing.Size(150, 30);
+            this.dvDateTimePicker2.TabIndex = 33;
+            this.dvDateTimePicker2.Text = "dvDateTimePicker2";
+            this.dvDateTimePicker2.Title = null;
+            this.dvDateTimePicker2.TitleColor = null;
+            this.dvDateTimePicker2.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvDateTimePicker2.TitleIconGap = 0;
+            this.dvDateTimePicker2.TitleIconImage = null;
+            this.dvDateTimePicker2.TitleIconSize = 12F;
+            this.dvDateTimePicker2.TitleIconString = null;
+            this.dvDateTimePicker2.TitleTextPadding = new System.Windows.Forms.Padding(0);
+            this.dvDateTimePicker2.TitleWidth = null;
+            this.dvDateTimePicker2.ValueColor = null;
+            this.dvDateTimePicker2.Click += new System.EventHandler(this.dvDateTimePicker2_Click);
+            // 
+            // dvDateTimePicker1
+            // 
+            this.dvDateTimePicker1.ButtonColor = null;
+            this.dvDateTimePicker1.ButtonWidth = 30;
+            this.dvDateTimePicker1.DateTimeType = Devinno.Forms.DateTimePickerType.Date;
+            this.dvDateTimePicker1.Location = new System.Drawing.Point(13, 475);
+            this.dvDateTimePicker1.Name = "dvDateTimePicker1";
+            this.dvDateTimePicker1.Round = null;
+            this.dvDateTimePicker1.SelectedValue = new System.DateTime(2022, 8, 29, 18, 30, 52, 248);
+            this.dvDateTimePicker1.ShadowGap = 1;
+            this.dvDateTimePicker1.Size = new System.Drawing.Size(150, 30);
+            this.dvDateTimePicker1.TabIndex = 32;
+            this.dvDateTimePicker1.Text = "dvDateTimePicker1";
+            this.dvDateTimePicker1.Title = null;
+            this.dvDateTimePicker1.TitleColor = null;
+            this.dvDateTimePicker1.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
+            this.dvDateTimePicker1.TitleIconGap = 0;
+            this.dvDateTimePicker1.TitleIconImage = null;
+            this.dvDateTimePicker1.TitleIconSize = 12F;
+            this.dvDateTimePicker1.TitleIconString = null;
+            this.dvDateTimePicker1.TitleTextPadding = new System.Windows.Forms.Padding(0);
+            this.dvDateTimePicker1.TitleWidth = null;
+            this.dvDateTimePicker1.ValueColor = null;
+            this.dvDateTimePicker1.Click += new System.EventHandler(this.dvDateTimePicker1_Click);
             // 
             // btnPortSettingSimple
             // 
@@ -3887,56 +3941,6 @@ namespace Sample
             this.dvButton1.TextPadding = new System.Windows.Forms.Padding(0);
             this.dvButton1.UseKey = false;
             // 
-            // dvDateTimePicker1
-            // 
-            this.dvDateTimePicker1.ButtonColor = null;
-            this.dvDateTimePicker1.ButtonWidth = 30;
-            this.dvDateTimePicker1.DateTimeType = Devinno.Forms.DateTimePickerType.Date;
-            this.dvDateTimePicker1.Location = new System.Drawing.Point(13, 475);
-            this.dvDateTimePicker1.Name = "dvDateTimePicker1";
-            this.dvDateTimePicker1.Round = null;
-            this.dvDateTimePicker1.SelectedValue = new System.DateTime(2022, 8, 29, 18, 30, 52, 248);
-            this.dvDateTimePicker1.ShadowGap = 1;
-            this.dvDateTimePicker1.Size = new System.Drawing.Size(150, 30);
-            this.dvDateTimePicker1.TabIndex = 32;
-            this.dvDateTimePicker1.Text = "dvDateTimePicker1";
-            this.dvDateTimePicker1.Title = null;
-            this.dvDateTimePicker1.TitleColor = null;
-            this.dvDateTimePicker1.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
-            this.dvDateTimePicker1.TitleIconGap = 0;
-            this.dvDateTimePicker1.TitleIconImage = null;
-            this.dvDateTimePicker1.TitleIconSize = 12F;
-            this.dvDateTimePicker1.TitleIconString = null;
-            this.dvDateTimePicker1.TitleTextPadding = new System.Windows.Forms.Padding(0);
-            this.dvDateTimePicker1.TitleWidth = null;
-            this.dvDateTimePicker1.ValueColor = null;
-            this.dvDateTimePicker1.Click += new System.EventHandler(this.dvDateTimePicker1_Click);
-            // 
-            // dvDateTimePicker2
-            // 
-            this.dvDateTimePicker2.ButtonColor = null;
-            this.dvDateTimePicker2.ButtonWidth = 30;
-            this.dvDateTimePicker2.DateTimeType = Devinno.Forms.DateTimePickerType.Date;
-            this.dvDateTimePicker2.Location = new System.Drawing.Point(13, 511);
-            this.dvDateTimePicker2.Name = "dvDateTimePicker2";
-            this.dvDateTimePicker2.Round = null;
-            this.dvDateTimePicker2.SelectedValue = new System.DateTime(2022, 8, 29, 18, 30, 52, 248);
-            this.dvDateTimePicker2.ShadowGap = 1;
-            this.dvDateTimePicker2.Size = new System.Drawing.Size(150, 30);
-            this.dvDateTimePicker2.TabIndex = 33;
-            this.dvDateTimePicker2.Text = "dvDateTimePicker2";
-            this.dvDateTimePicker2.Title = null;
-            this.dvDateTimePicker2.TitleColor = null;
-            this.dvDateTimePicker2.TitleIconAlignment = Devinno.Forms.DvTextIconAlignment.LeftRight;
-            this.dvDateTimePicker2.TitleIconGap = 0;
-            this.dvDateTimePicker2.TitleIconImage = null;
-            this.dvDateTimePicker2.TitleIconSize = 12F;
-            this.dvDateTimePicker2.TitleIconString = null;
-            this.dvDateTimePicker2.TitleTextPadding = new System.Windows.Forms.Padding(0);
-            this.dvDateTimePicker2.TitleWidth = null;
-            this.dvDateTimePicker2.ValueColor = null;
-            this.dvDateTimePicker2.Click += new System.EventHandler(this.dvDateTimePicker2_Click);
-            // 
             // FormMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -3944,6 +3948,8 @@ namespace Sample
             this.Controls.Add(this.tab);
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(740, 770);
             this.Name = "FormMain";
             this.Padding = new System.Windows.Forms.Padding(7, 40, 7, 7);
