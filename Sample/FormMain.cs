@@ -343,7 +343,7 @@ namespace Sample
                 dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Stop", HeaderText = "정지", Text = "", IconString = "fa-stop", IconSize = 12, SizeMode = DvSizeMode.Percent, Width = 10M });
 
                 var Items = new List<GridItem2>();
-                for (int i = 1; i <= 100; i++)
+                for (int i = 1; i <= 10; i++)
                 {
                     Items.Add(new GridItem2()
                     {

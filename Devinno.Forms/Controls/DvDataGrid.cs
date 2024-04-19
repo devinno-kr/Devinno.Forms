@@ -1104,49 +1104,292 @@ namespace Devinno.Forms.Controls
 
             vscroll.TouchMode = hscroll.TouchMode = GetTheme()?.TouchMode ?? false;
 
-            Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
+            try
             {
-                var x = e.X;
-                var y = e.Y;
-                var thm = GetTheme();
-                if (thm != null)
+                Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
                 {
+                    var x = e.X;
+                    var y = e.Y;
+                    var thm = GetTheme();
+                    if (thm != null)
+                    {
                     #region Bounds
                     var rts = GetColumnBounds(rtColumn, rtScrollContent);
-                    var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
-                    var sbw = Convert.ToInt32(SELECTOR_BOX_WIDTH);
+                        var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
+                        var sbw = Convert.ToInt32(SELECTOR_BOX_WIDTH);
 
-                    var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
-                    var ColWidths = GetColumnsWidths(rtScrollContent);
-                    var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
-                    var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
+                        var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
+                        var ColWidths = GetColumnsWidths(rtScrollContent);
+                        var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
+                        var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
                     #endregion
                     #region Column
                     foreach (var col in Columns)
-                    {
-                        var rt = rts["rtColumn" + col.Name];
-                        col.MouseDown(rt, x, y);
-                    }
+                        {
+                            var rt = rts["rtColumn" + col.Name];
+                            col.MouseDown(rt, x, y);
+                        }
                     #endregion
                     #region SelectorAll
                     if (SelectionMode == DvDataGridSelectionMode.Selector)
-                    {
-                        var wh = Convert.ToInt32(SELECTOR_BOX_WIDTH);
-                        var rtSelector = Util.FromRect(rtColumn.Left, rtColumn.Top, spw, rtColumn.Height);
-                        var rtSelectorBox = MathTool.MakeRectangle(rtSelector, new SizeF(wh, wh));
-
-                        if (CollisionTool.Check(rtSelectorBox, x, y))
                         {
-                            var bAllSelect = GetRows().Where(x => x.Selected).Count() > 0;
-                            foreach (var v in GetRows()) v.Selected = !bAllSelect;
-                            SelectedChanged?.Invoke(this, null);
+                            var wh = Convert.ToInt32(SELECTOR_BOX_WIDTH);
+                            var rtSelector = Util.FromRect(rtColumn.Left, rtColumn.Top, spw, rtColumn.Height);
+                            var rtSelectorBox = MathTool.MakeRectangle(rtSelector, new SizeF(wh, wh));
+
+                            if (CollisionTool.Check(rtSelectorBox, x, y))
+                            {
+                                var bAllSelect = GetRows().Where(x => x.Selected).Count() > 0;
+                                foreach (var v in GetRows()) v.Selected = !bAllSelect;
+                                SelectedChanged?.Invoke(this, null);
+                            }
                         }
-                    }
                     #endregion
                     #region Rows
                     if (CollisionTool.Check(rtScrollContent, x, y))
-                    {
+                        {
                         #region Column Index 
+                        var rtnm = "rtColumn";
+                            var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (RectangleF?)null;
+                            int? isnf = null, ienf = null;
+                            if (vsnf != null && venf != null && rts.ContainsKey(rtnm + vsnf.Name) && rts.ContainsKey(rtnm + venf.Name))
+                            {
+                                var rtsv = rts[rtnm + vsnf.Name];
+                                var rtev = rts[rtnm + venf.Name];
+                                var mrt = Util.FromRect(rtsv.Left, rtColumn.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
+
+                                var vls = lsnf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left + hspos, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                                isnf = Columns.IndexOf(vls.FirstOrDefault());
+                                ienf = Columns.IndexOf(vls.LastOrDefault());
+                                mrtNF = mrt;
+                            }
+
+                            var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (RectangleF?)null;
+                            int? isf = null, ief = null;
+                            if (vsf != null && vef != null && rts.ContainsKey(rtnm + vsf.Name) && rts.ContainsKey(rtnm + vef.Name))
+                            {
+                                var rtsv = rts[rtnm + vsf.Name];
+                                var rtev = rts[rtnm + vef.Name];
+                                var mrt = Util.FromRect(rtsv.Left, rtColumn.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+
+                                var vls = lsf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                                isf = Columns.IndexOf(vls.FirstOrDefault());
+                                ief = Columns.IndexOf(vls.LastOrDefault());
+                                mrtF = mrt;
+                            }
+
+                            rtnm = "rtColumnGroup";
+                            var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (RectangleF?)null;
+                            int? isgnf = null, iegnf = null;
+                            if (vsgnf != null && vegnf != null && rts.ContainsKey(rtnm + vsgnf.Name) && rts.ContainsKey(rtnm + vegnf.Name))
+                            {
+                                var rtsv = rts[rtnm + vsgnf.Name];
+                                var rtev = rts[rtnm + vegnf.Name];
+                                var mrt = Util.FromRect(rtsv.Left, rtsv.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
+
+                                var vls = lsgnf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left + hspos, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                                isgnf = ColumnGroups.IndexOf(vls.FirstOrDefault());
+                                iegnf = ColumnGroups.IndexOf(vls.LastOrDefault());
+                                mrtGNF = mrt;
+                            }
+
+                            var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (RectangleF?)null;
+                            int? isgf = null, iegf = null;
+                            if (vsgf != null && vegf != null && rts.ContainsKey(rtnm + vsgf.Name) && rts.ContainsKey(rtnm + vegf.Name))
+                            {
+                                var rtsv = rts[rtnm + vsgf.Name];
+                                var rtev = rts[rtnm + vegf.Name];
+                                var mrt = Util.FromRect(rtsv.Left, rtsv.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+
+                                var vls = lsgf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                                isgf = ColumnGroups.IndexOf(vls.FirstOrDefault());
+                                iegf = ColumnGroups.IndexOf(vls.LastOrDefault());
+                                mrtGF = mrt;
+                            }
+                        #endregion
+
+                        if (!VisibleDropDown)
+                            {
+                                Loop((i, rtROW, v) =>
+                                {
+                                #region Selector
+                                if (SelectionMode == DvDataGridSelectionMode.Selector)
+                                    {
+                                        var rt = Util.INT(Util.FromRect(rtROW.Left, rtROW.Top, spw, rtROW.Height));
+                                        var rtSelectorBox = MathTool.MakeRectangle(rt, new SizeF(sbw, sbw));
+                                        if (CollisionTool.Check(rtSelectorBox, x, y))
+                                        {
+                                            v.Selected = !v.Selected;
+                                            SelectedChanged?.Invoke(this, null);
+                                        }
+                                    }
+                                #endregion
+                                #region !Fixed
+                                if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
+                                    {
+                                        var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
+                                        var mrt = Util.FromRect(mrtNF.Value.Left, rtScrollContent.Top, mrtNF.Value.Width, rtScrollContent.Height);
+                                        foreach (var cell in vls)
+                                        {
+                                            if (cell.Visible)
+                                            {
+                                                var rtCol = rts["rtColumn" + cell.Column.Name];
+                                                var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
+
+                                                if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
+                                                if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
+                                                cell.MouseDown(Util.INT(rt), x, y);
+                                            }
+                                        }
+                                    }
+                                #endregion
+                                #region Fixed
+                                if (mrtF.HasValue && isf.HasValue && ief.HasValue)
+                                    {
+                                        var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
+                                        var mrt = Util.FromRect(mrtF.Value.Left, rtScrollContent.Top, mrtF.Value.Width + 1, rtScrollContent.Height);
+                                        foreach (var cell in vls)
+                                        {
+                                            if (cell.Visible)
+                                            {
+                                                var rtCol = rts["rtColumn" + cell.Column.Name];
+                                                var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height);
+                                                if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
+                                                if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
+                                                cell.MouseDown(Util.INT(rt), x, y);
+                                            }
+                                        }
+                                    }
+                                #endregion
+                            });
+                            }
+                        }
+                    #endregion
+
+                    #region Scroll / Touch
+                    if (ScrollMode == ScrollMode.Vertical)
+                        {
+                            vscroll.MouseDown(x, y, rtScrollV);
+                            if (vscroll.TouchMode && CollisionTool.Check(rtScrollContent, x, y) && !CollisionTool.Check(rtScrollV, x, y)) vscroll.TouchDown(x, y);
+                        }
+                        else if (ScrollMode == ScrollMode.Horizon)
+                        {
+                            hscroll.MouseDown(x, y, rtScrollH);
+                            if (hscroll.TouchMode && CollisionTool.Check(rtScrollContent, x, y) && !CollisionTool.Check(rtScrollH, x, y)) hscroll.TouchDown(x, y);
+                        }
+                        else
+                        {
+                            vscroll.MouseDown(x, y, rtScrollV);
+                            hscroll.MouseDown(x, y, rtScrollH);
+                            if (hscroll.TouchMode && CollisionTool.Check(rtScrollContent, x, y) && !CollisionTool.Check(rtScrollH, x, y)) hscroll.TouchDown(x, y);
+                            if (vscroll.TouchMode && CollisionTool.Check(rtScrollContent, x, y) && !CollisionTool.Check(rtScrollV, x, y)) vscroll.TouchDown(x, y);
+                        }
+                    #endregion
+                }
+                });
+            }
+            catch { }
+
+            downPoint = e.Location;
+            Invalidate();
+            base.OnMouseDown(e);
+        }
+        #endregion
+        #region OnMouseMove
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            try
+            {
+                Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
+                {
+                    var x = e.X;
+                    var y = e.Y;
+                    var thm = GetTheme();
+                    if (thm != null)
+                    {
+                    #region Bounds
+                    var rts = GetColumnBounds(rtColumn, rtScrollContent);
+                        var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
+
+                        var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
+                        var ColWidths = GetColumnsWidths(rtScrollContent);
+                        var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
+                        var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
+                    #endregion
+                    #region Scroll / Touch
+                    if (ScrollMode == ScrollMode.Vertical)
+                        {
+                            vscroll.MouseMove(x, y, rtScrollV);
+                            if (vscroll.TouchMode) vscroll.TouchMove(x, y);
+                        }
+                        else if (ScrollMode == ScrollMode.Horizon)
+                        {
+                            hscroll.MouseMove(x, y, rtScrollH);
+                            if (hscroll.TouchMode) hscroll.TouchMove(x, y);
+                        }
+                        else
+                        {
+                            vscroll.MouseMove(x, y, rtScrollV);
+                            if (vscroll.TouchMode) vscroll.TouchMove(x, y);
+
+                            hscroll.MouseMove(x, y, rtScrollH);
+                            if (hscroll.TouchMode) hscroll.TouchMove(x, y);
+                        }
+                    #endregion
+                }
+                });
+            }
+            catch { }
+
+            Invalidate();
+            base.OnMouseMove(e);
+        }
+        #endregion
+        #region OnMouseUp
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            try
+            {
+                Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
+                {
+                    var x = e.X;
+                    var y = e.Y;
+                    var thm = GetTheme();
+                    if (thm != null)
+                    {
+                        #region Bounds
+                        var rts = GetColumnBounds(rtColumn, rtScrollContent);
+                        var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
+                        var sbw = Convert.ToInt32(SELECTOR_BOX_WIDTH);
+
+                        var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
+                        var ColWidths = GetColumnsWidths(rtScrollContent);
+                        var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
+                        var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
+                        #endregion
+                        #region Scroll / Touch
+                        if (ScrollMode == ScrollMode.Vertical)
+                        {
+                            vscroll.MouseUp(x, y);
+                            if (vscroll.TouchMode) vscroll.TouchUp(x, y);
+                        }
+                        else if (ScrollMode == ScrollMode.Horizon)
+                        {
+                            hscroll.MouseUp(x, y);
+                            if (hscroll.TouchMode) hscroll.TouchUp(x, y);
+                        }
+                        else
+                        {
+                            vscroll.MouseUp(x, y);
+                            if (vscroll.TouchMode) vscroll.TouchUp(x, y);
+
+                            hscroll.MouseUp(x, y);
+                            if (hscroll.TouchMode) hscroll.TouchUp(x, y);
+                        }
+                        #endregion
+                        #region Rows
+                        #region Column Index 
+
                         var rtnm = "rtColumn";
                         var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (RectangleF?)null;
                         int? isnf = null, ienf = null;
@@ -1206,22 +1449,95 @@ namespace Devinno.Forms.Controls
                         }
                         #endregion
 
+                        var SelectedRows = Rows.Where(x => x.Selected).ToList();
+                        var bSelectionChange = false;
+
                         if (!VisibleDropDown)
                         {
                             Loop((i, rtROW, v) =>
                             {
-                                #region Selector
-                                if (SelectionMode == DvDataGridSelectionMode.Selector)
+                                if (MathTool.GetDistance(downPoint, new PointF(x, y)) < 10)
                                 {
-                                    var rt = Util.INT(Util.FromRect(rtROW.Left, rtROW.Top, spw, rtROW.Height));
-                                    var rtSelectorBox = MathTool.MakeRectangle(rt, new SizeF(sbw, sbw));
-                                    if (CollisionTool.Check(rtSelectorBox, x, y))
+                                    #region MultiSelect
+                                    if (SelectionMode == DvDataGridSelectionMode.Multi)
                                     {
-                                        v.Selected = !v.Selected;
-                                        SelectedChanged?.Invoke(this, null);
+                                        if (CollisionTool.Check(rtROW, x, y))
+                                        {
+                                            if ((ModifierKeys & Keys.Control) == Keys.Control)
+                                            {
+                                                #region Control
+                                                if (SelectedRows.Contains(v))
+                                                {
+                                                    SelectedRows.Remove(v);
+                                                    bSelectionChange = true;
+                                                }
+                                                else
+                                                {
+                                                    SelectedRows.Add(v);
+                                                    bSelectionChange = true;
+                                                    first = v;
+                                                }
+                                                #endregion
+                                            }
+                                            else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+                                            {
+                                                #region Shift
+                                                if (first == null)
+                                                {
+                                                    SelectedRows.Add(v);
+                                                    bSelectionChange = true;
+                                                }
+                                                else
+                                                {
+                                                    int idx1 = Rows.IndexOf(first);
+                                                    int idx2 = i;
+                                                    int min = Math.Min(idx1, idx2);
+                                                    int max = Math.Max(idx1, idx2);
+
+                                                    bool b = false;
+                                                    for (int ii = min; ii <= max; ii++)
+                                                    {
+                                                        if (ii >= 0 && ii < Rows.Count)
+                                                            if (!SelectedRows.Contains(Rows[ii]))
+                                                            {
+                                                                SelectedRows.Add(Rows[ii]);
+                                                                b = true;
+                                                            }
+                                                    }
+                                                    if (b) bSelectionChange = true;
+                                                }
+                                                #endregion
+                                            }
+                                            else
+                                            {
+                                                #region Select
+                                                SelectedRows.Clear();
+                                                SelectedRows.Add(v);
+                                                bSelectionChange = true;
+                                                first = v;
+                                                #endregion
+                                            }
+                                        }
                                     }
+                                    #endregion
+                                    #region SingleSelect
+                                    if (SelectionMode == DvDataGridSelectionMode.Single)
+                                    {
+                                        if (CollisionTool.Check(rtROW, x, y))
+                                        {
+                                            SelectedRows.Clear();
+                                            SelectedRows.Add(v);
+                                            bSelectionChange = true;
+                                        }
+                                    }
+                                    #endregion
                                 }
-                                #endregion
+                            });
+
+                            foreach (var v in Rows) v.Selected = SelectedRows.Contains(v);
+
+                            Loop((i, rtROW, v) =>
+                            {
                                 #region !Fixed
                                 if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
                                 {
@@ -1236,7 +1552,7 @@ namespace Devinno.Forms.Controls
 
                                             if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
                                             if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
-                                            cell.MouseDown(Util.INT(rt), x, y);
+                                            cell.MouseUp(Util.INT(rt), x, y);
                                         }
                                     }
                                 }
@@ -1254,322 +1570,21 @@ namespace Devinno.Forms.Controls
                                             var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height);
                                             if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
                                             if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
-                                            cell.MouseDown(Util.INT(rt), x, y);
+                                            cell.MouseUp(Util.INT(rt), x, y);
                                         }
                                     }
                                 }
                                 #endregion
                             });
+
                         }
+                        if (bSelectionChange) SelectedChanged?.Invoke(this, null);
+                        #endregion
                     }
-                    #endregion
-
-                    #region Scroll / Touch
-                    if (ScrollMode == ScrollMode.Vertical)
-                    {
-                        vscroll.MouseDown(x, y, rtScrollV);
-                        if (vscroll.TouchMode && CollisionTool.Check(rtScrollContent, x, y) && !CollisionTool.Check(rtScrollV, x, y)) vscroll.TouchDown(x, y);
-                    }
-                    else if (ScrollMode == ScrollMode.Horizon)
-                    {
-                        hscroll.MouseDown(x, y, rtScrollH);
-                        if (hscroll.TouchMode && CollisionTool.Check(rtScrollContent, x, y) && !CollisionTool.Check(rtScrollH, x, y)) hscroll.TouchDown(x, y);
-                    }
-                    else
-                    {
-                        vscroll.MouseDown(x, y, rtScrollV);
-                        hscroll.MouseDown(x, y, rtScrollH);
-                        if (hscroll.TouchMode && CollisionTool.Check(rtScrollContent, x, y) && !CollisionTool.Check(rtScrollH, x, y)) hscroll.TouchDown(x, y);
-                        if (vscroll.TouchMode && CollisionTool.Check(rtScrollContent, x, y) && !CollisionTool.Check(rtScrollV, x, y)) vscroll.TouchDown(x, y);
-                    }
-                    #endregion
-                }
-            });
-
-            downPoint = e.Location;
-            Invalidate();
-            base.OnMouseDown(e);
-        }
-        #endregion
-        #region OnMouseMove
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
-            {
-                var x = e.X;
-                var y = e.Y;
-                var thm = GetTheme();
-                if (thm != null)
-                {
-                    #region Bounds
-                    var rts = GetColumnBounds(rtColumn, rtScrollContent);
-                    var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
-
-                    var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
-                    var ColWidths = GetColumnsWidths(rtScrollContent);
-                    var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
-                    var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
-                    #endregion
-                    #region Scroll / Touch
-                    if (ScrollMode == ScrollMode.Vertical)
-                    {
-                        vscroll.MouseMove(x, y, rtScrollV);
-                        if (vscroll.TouchMode) vscroll.TouchMove(x, y);
-                    }
-                    else if (ScrollMode == ScrollMode.Horizon)
-                    {
-                        hscroll.MouseMove(x, y, rtScrollH);
-                        if (hscroll.TouchMode) hscroll.TouchMove(x, y);
-                    }
-                    else
-                    {
-                        vscroll.MouseMove(x, y, rtScrollV);
-                        if (vscroll.TouchMode) vscroll.TouchMove(x, y);
-
-                        hscroll.MouseMove(x, y, rtScrollH);
-                        if (hscroll.TouchMode) hscroll.TouchMove(x, y);
-                    }
-                    #endregion
-                }
-            });
-            Invalidate();
-            base.OnMouseMove(e);
-        }
-        #endregion
-        #region OnMouseUp
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
-            {
-                var x = e.X;
-                var y = e.Y;
-                var thm = GetTheme();
-                if (thm != null)
-                {
-                    #region Bounds
-                    var rts = GetColumnBounds(rtColumn, rtScrollContent);
-                    var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
-                    var sbw = Convert.ToInt32(SELECTOR_BOX_WIDTH);
-
-                    var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
-                    var ColWidths = GetColumnsWidths(rtScrollContent);
-                    var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
-                    var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
-                    #endregion
-                    #region Scroll / Touch
-                    if (ScrollMode == ScrollMode.Vertical)
-                    {
-                        vscroll.MouseUp(x, y);
-                        if (vscroll.TouchMode) vscroll.TouchUp(x, y);
-                    }
-                    else if (ScrollMode == ScrollMode.Horizon)
-                    {
-                        hscroll.MouseUp(x, y);
-                        if (hscroll.TouchMode) hscroll.TouchUp(x, y);
-                    }
-                    else
-                    {
-                        vscroll.MouseUp(x, y);
-                        if (vscroll.TouchMode) vscroll.TouchUp(x, y);
-
-                        hscroll.MouseUp(x, y);
-                        if (hscroll.TouchMode) hscroll.TouchUp(x, y);
-                    }
-                    #endregion
-                    #region Rows
-                    #region Column Index 
-
-                    var rtnm = "rtColumn";
-                    var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (RectangleF?)null;
-                    int? isnf = null, ienf = null;
-                    if (vsnf != null && venf != null && rts.ContainsKey(rtnm + vsnf.Name) && rts.ContainsKey(rtnm + venf.Name))
-                    {
-                        var rtsv = rts[rtnm + vsnf.Name];
-                        var rtev = rts[rtnm + venf.Name];
-                        var mrt = Util.FromRect(rtsv.Left, rtColumn.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
-
-                        var vls = lsnf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left + hspos, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                        isnf = Columns.IndexOf(vls.FirstOrDefault());
-                        ienf = Columns.IndexOf(vls.LastOrDefault());
-                        mrtNF = mrt;
-                    }
-
-                    var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (RectangleF?)null;
-                    int? isf = null, ief = null;
-                    if (vsf != null && vef != null && rts.ContainsKey(rtnm + vsf.Name) && rts.ContainsKey(rtnm + vef.Name))
-                    {
-                        var rtsv = rts[rtnm + vsf.Name];
-                        var rtev = rts[rtnm + vef.Name];
-                        var mrt = Util.FromRect(rtsv.Left, rtColumn.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
-
-                        var vls = lsf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                        isf = Columns.IndexOf(vls.FirstOrDefault());
-                        ief = Columns.IndexOf(vls.LastOrDefault());
-                        mrtF = mrt;
-                    }
-
-                    rtnm = "rtColumnGroup";
-                    var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (RectangleF?)null;
-                    int? isgnf = null, iegnf = null;
-                    if (vsgnf != null && vegnf != null && rts.ContainsKey(rtnm + vsgnf.Name) && rts.ContainsKey(rtnm + vegnf.Name))
-                    {
-                        var rtsv = rts[rtnm + vsgnf.Name];
-                        var rtev = rts[rtnm + vegnf.Name];
-                        var mrt = Util.FromRect(rtsv.Left, rtsv.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
-
-                        var vls = lsgnf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left + hspos, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                        isgnf = ColumnGroups.IndexOf(vls.FirstOrDefault());
-                        iegnf = ColumnGroups.IndexOf(vls.LastOrDefault());
-                        mrtGNF = mrt;
-                    }
-
-                    var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (RectangleF?)null;
-                    int? isgf = null, iegf = null;
-                    if (vsgf != null && vegf != null && rts.ContainsKey(rtnm + vsgf.Name) && rts.ContainsKey(rtnm + vegf.Name))
-                    {
-                        var rtsv = rts[rtnm + vsgf.Name];
-                        var rtev = rts[rtnm + vegf.Name];
-                        var mrt = Util.FromRect(rtsv.Left, rtsv.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
-
-                        var vls = lsgf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                        isgf = ColumnGroups.IndexOf(vls.FirstOrDefault());
-                        iegf = ColumnGroups.IndexOf(vls.LastOrDefault());
-                        mrtGF = mrt;
-                    }
-                    #endregion
-
-                    var SelectedRows = Rows.Where(x => x.Selected).ToList();
-                    var bSelectionChange = false;
-
-                    if (!VisibleDropDown)
-                    {
-                        Loop((i, rtROW, v) =>
-                        {
-                            if (MathTool.GetDistance(downPoint, new PointF(x, y)) < 10)
-                            {
-                                #region MultiSelect
-                                if (SelectionMode == DvDataGridSelectionMode.Multi)
-                                {
-                                    if (CollisionTool.Check(rtROW, x, y))
-                                    {
-                                        if ((ModifierKeys & Keys.Control) == Keys.Control)
-                                        {
-                                            #region Control
-                                            if (SelectedRows.Contains(v))
-                                            {
-                                                SelectedRows.Remove(v);
-                                                bSelectionChange = true;
-                                            }
-                                            else
-                                            {
-                                                SelectedRows.Add(v);
-                                                bSelectionChange = true;
-                                                first = v;
-                                            }
-                                            #endregion
-                                        }
-                                        else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
-                                        {
-                                            #region Shift
-                                            if (first == null)
-                                            {
-                                                SelectedRows.Add(v);
-                                                bSelectionChange = true;
-                                            }
-                                            else
-                                            {
-                                                int idx1 = Rows.IndexOf(first);
-                                                int idx2 = i;
-                                                int min = Math.Min(idx1, idx2);
-                                                int max = Math.Max(idx1, idx2);
-
-                                                bool b = false;
-                                                for (int ii = min; ii <= max; ii++)
-                                                {
-                                                    if (!SelectedRows.Contains(Rows[ii]))
-                                                    {
-                                                        SelectedRows.Add(Rows[ii]);
-                                                        b = true;
-                                                    }
-                                                }
-                                                if (b) bSelectionChange = true;
-                                            }
-                                            #endregion
-                                        }
-                                        else
-                                        {
-                                            #region Select
-                                            SelectedRows.Clear();
-                                            SelectedRows.Add(v);
-                                            bSelectionChange = true;
-                                            first = v;
-                                            #endregion
-                                        }
-                                    }
-                                }
-                                #endregion
-                                #region SingleSelect
-                                if (SelectionMode == DvDataGridSelectionMode.Single)
-                                {
-                                    if (CollisionTool.Check(rtROW, x, y))
-                                    {
-                                        SelectedRows.Clear();
-                                        SelectedRows.Add(v);
-                                        bSelectionChange = true;
-                                    }
-                                }
-                                #endregion
-                            }
-                        });
-
-                        foreach (var v in Rows) v.Selected = SelectedRows.Contains(v);
-
-                        Loop((i, rtROW, v) =>
-                        {
-                            #region !Fixed
-                            if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
-                            {
-                                var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
-                                var mrt = Util.FromRect(mrtNF.Value.Left, rtScrollContent.Top, mrtNF.Value.Width, rtScrollContent.Height);
-                                foreach (var cell in vls)
-                                {
-                                    if (cell.Visible)
-                                    {
-                                        var rtCol = rts["rtColumn" + cell.Column.Name];
-                                        var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
-
-                                        if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
-                                        if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
-                                        cell.MouseUp(Util.INT(rt), x, y);
-                                    }
-                                }
-                            }
-                            #endregion
-                            #region Fixed
-                            if (mrtF.HasValue && isf.HasValue && ief.HasValue)
-                            {
-                                var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
-                                var mrt = Util.FromRect(mrtF.Value.Left, rtScrollContent.Top, mrtF.Value.Width + 1, rtScrollContent.Height);
-                                foreach (var cell in vls)
-                                {
-                                    if (cell.Visible)
-                                    {
-                                        var rtCol = rts["rtColumn" + cell.Column.Name];
-                                        var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height);
-                                        if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
-                                        if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
-                                        cell.MouseUp(Util.INT(rt), x, y);
-                                    }
-                                }
-                            }
-                            #endregion
-                        });
-
-                    }
-                    if (bSelectionChange) SelectedChanged?.Invoke(this, null);
-                    #endregion
-                }
-            });
+                });
+            }
+            catch { }
+            
             Invalidate();
             base.OnMouseUp(e);
         }
@@ -1577,172 +1592,180 @@ namespace Devinno.Forms.Controls
         #region OnMouseClick
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
+            try
             {
-                var x = e.X;
-                var y = e.Y;
-                var thm = GetTheme();
-                if (thm != null)
+                Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
                 {
+                    var x = e.X;
+                    var y = e.Y;
+                    var thm = GetTheme();
+                    if (thm != null)
+                    {
                     #region Bounds
                     var rts = GetColumnBounds(rtColumn, rtScrollContent);
-                    var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
-                    var sbw = Convert.ToInt32(SELECTOR_BOX_WIDTH);
+                        var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
+                        var sbw = Convert.ToInt32(SELECTOR_BOX_WIDTH);
 
-                    var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
-                    var ColWidths = GetColumnsWidths(rtScrollContent);
-                    var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
-                    var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
+                        var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
+                        var ColWidths = GetColumnsWidths(rtScrollContent);
+                        var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
+                        var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
                     #endregion
                     #region Filter
                     foreach (var col in Columns)
-                    {
-                        var rtFilter = rts["rtFilter" + col.Name];
-                        if (col.UseFilter && CollisionTool.Check(rtFilter, x, y))
                         {
-                            var ret = DvDialogs.InputBox.ShowString("필터 : " + col.HeaderText, col.FilterText);
-                            if (ret != null)
+                            var rtFilter = rts["rtFilter" + col.Name];
+                            if (col.UseFilter && CollisionTool.Check(rtFilter, x, y))
                             {
-                                col.FilterText = ret;
-                                RefreshRows();
-                                MovingStop();
+                                var ret = DvDialogs.InputBox.ShowString("필터 : " + col.HeaderText, col.FilterText);
+                                if (ret != null)
+                                {
+                                    col.FilterText = ret;
+                                    RefreshRows();
+                                    MovingStop();
+                                }
                             }
                         }
-                    }
                     #endregion
-                    
+
                 }
-            });
+                });
+            }
+            catch { }
             base.OnMouseClick(e);
         }
         #endregion
         #region OnMouseDoubleClick
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
-            Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
+            try
             {
-                var x = e.X;
-                var y = e.Y;
-                var thm = GetTheme();
-                if (thm != null)
+                Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
                 {
+                    var x = e.X;
+                    var y = e.Y;
+                    var thm = GetTheme();
+                    if (thm != null)
+                    {
                     #region Bounds
                     var rts = GetColumnBounds(rtColumn, rtScrollContent);
-                    var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
-                    var sbw = Convert.ToInt32(SELECTOR_BOX_WIDTH);
+                        var spw = Convert.ToInt32(SPECIAL_CELL_WIDTH);
+                        var sbw = Convert.ToInt32(SELECTOR_BOX_WIDTH);
 
-                    var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
-                    var ColWidths = GetColumnsWidths(rtScrollContent);
-                    var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
-                    var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
+                        var rtColumnV = Util.FromRect(rtColumn.Left, rtColumn.Top, rtScrollContent.Width, rtColumn.Height);
+                        var ColWidths = GetColumnsWidths(rtScrollContent);
+                        var vspos = Convert.ToInt32(vscroll.ScrollPositionWithOffset);
+                        var hspos = Convert.ToInt32(hscroll.ScrollPositionWithOffset);
                     #endregion
                     #region Rows
                     #region Column Index 
 
                     var rtnm = "rtColumn";
-                    var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (RectangleF?)null;
-                    int? isnf = null, ienf = null;
-                    if (vsnf != null && venf != null && rts.ContainsKey(rtnm + vsnf.Name) && rts.ContainsKey(rtnm + venf.Name))
-                    {
-                        var rtsv = rts[rtnm + vsnf.Name];
-                        var rtev = rts[rtnm + venf.Name];
-                        var mrt = Util.FromRect(rtsv.Left, rtColumn.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
+                        var lsnf = Columns.Where(x => !x.Fixed).ToList(); var vsnf = lsnf.FirstOrDefault(); var venf = lsnf.LastOrDefault(); var mrtNF = (RectangleF?)null;
+                        int? isnf = null, ienf = null;
+                        if (vsnf != null && venf != null && rts.ContainsKey(rtnm + vsnf.Name) && rts.ContainsKey(rtnm + venf.Name))
+                        {
+                            var rtsv = rts[rtnm + vsnf.Name];
+                            var rtev = rts[rtnm + venf.Name];
+                            var mrt = Util.FromRect(rtsv.Left, rtColumn.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtColumn.Height);
 
-                        var vls = lsnf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left + hspos, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                        isnf = Columns.IndexOf(vls.FirstOrDefault());
-                        ienf = Columns.IndexOf(vls.LastOrDefault());
-                        mrtNF = mrt;
-                    }
+                            var vls = lsnf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left + hspos, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                            isnf = Columns.IndexOf(vls.FirstOrDefault());
+                            ienf = Columns.IndexOf(vls.LastOrDefault());
+                            mrtNF = mrt;
+                        }
 
-                    var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (RectangleF?)null;
-                    int? isf = null, ief = null;
-                    if (vsf != null && vef != null && rts.ContainsKey(rtnm + vsf.Name) && rts.ContainsKey(rtnm + vef.Name))
-                    {
-                        var rtsv = rts[rtnm + vsf.Name];
-                        var rtev = rts[rtnm + vef.Name];
-                        var mrt = Util.FromRect(rtsv.Left, rtColumn.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+                        var lsf = Columns.Where(x => x.Fixed).ToList(); var vsf = lsf.FirstOrDefault(); var vef = lsf.LastOrDefault(); var mrtF = (RectangleF?)null;
+                        int? isf = null, ief = null;
+                        if (vsf != null && vef != null && rts.ContainsKey(rtnm + vsf.Name) && rts.ContainsKey(rtnm + vef.Name))
+                        {
+                            var rtsv = rts[rtnm + vsf.Name];
+                            var rtev = rts[rtnm + vef.Name];
+                            var mrt = Util.FromRect(rtsv.Left, rtColumn.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
 
-                        var vls = lsf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                        isf = Columns.IndexOf(vls.FirstOrDefault());
-                        ief = Columns.IndexOf(vls.LastOrDefault());
-                        mrtF = mrt;
-                    }
+                            var vls = lsf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                            isf = Columns.IndexOf(vls.FirstOrDefault());
+                            ief = Columns.IndexOf(vls.LastOrDefault());
+                            mrtF = mrt;
+                        }
 
-                    rtnm = "rtColumnGroup";
-                    var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (RectangleF?)null;
-                    int? isgnf = null, iegnf = null;
-                    if (vsgnf != null && vegnf != null && rts.ContainsKey(rtnm + vsgnf.Name) && rts.ContainsKey(rtnm + vegnf.Name))
-                    {
-                        var rtsv = rts[rtnm + vsgnf.Name];
-                        var rtev = rts[rtnm + vegnf.Name];
-                        var mrt = Util.FromRect(rtsv.Left, rtsv.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
+                        rtnm = "rtColumnGroup";
+                        var lsgnf = ColumnGroups.Where(x => !x.Fixed).ToList(); var vsgnf = lsgnf.FirstOrDefault(); var vegnf = lsgnf.LastOrDefault(); var mrtGNF = (RectangleF?)null;
+                        int? isgnf = null, iegnf = null;
+                        if (vsgnf != null && vegnf != null && rts.ContainsKey(rtnm + vsgnf.Name) && rts.ContainsKey(rtnm + vegnf.Name))
+                        {
+                            var rtsv = rts[rtnm + vsgnf.Name];
+                            var rtev = rts[rtnm + vegnf.Name];
+                            var mrt = Util.FromRect(rtsv.Left, rtsv.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left, rtsv.Height);
 
-                        var vls = lsgnf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left + hspos, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                        isgnf = ColumnGroups.IndexOf(vls.FirstOrDefault());
-                        iegnf = ColumnGroups.IndexOf(vls.LastOrDefault());
-                        mrtGNF = mrt;
-                    }
+                            var vls = lsgnf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left + hspos, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                            isgnf = ColumnGroups.IndexOf(vls.FirstOrDefault());
+                            iegnf = ColumnGroups.IndexOf(vls.LastOrDefault());
+                            mrtGNF = mrt;
+                        }
 
-                    var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (RectangleF?)null;
-                    int? isgf = null, iegf = null;
-                    if (vsgf != null && vegf != null && rts.ContainsKey(rtnm + vsgf.Name) && rts.ContainsKey(rtnm + vegf.Name))
-                    {
-                        var rtsv = rts[rtnm + vsgf.Name];
-                        var rtev = rts[rtnm + vegf.Name];
-                        var mrt = Util.FromRect(rtsv.Left, rtsv.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
+                        var lsgf = ColumnGroups.Where(x => x.Fixed).ToList(); var vsgf = lsgf.FirstOrDefault(); var vegf = lsgf.LastOrDefault(); var mrtGF = (RectangleF?)null;
+                        int? isgf = null, iegf = null;
+                        if (vsgf != null && vegf != null && rts.ContainsKey(rtnm + vsgf.Name) && rts.ContainsKey(rtnm + vegf.Name))
+                        {
+                            var rtsv = rts[rtnm + vsgf.Name];
+                            var rtev = rts[rtnm + vegf.Name];
+                            var mrt = Util.FromRect(rtsv.Left, rtsv.Top, Math.Min(rtColumnV.Right, rtev.Right) - rtsv.Left + 1, rtColumn.Height);
 
-                        var vls = lsgf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
-                        isgf = ColumnGroups.IndexOf(vls.FirstOrDefault());
-                        iegf = ColumnGroups.IndexOf(vls.LastOrDefault());
-                        mrtGF = mrt;
-                    }
+                            var vls = lsgf.Where(x => CollisionTool.Check(mrt, Util.INT(Util.FromRect(rts[rtnm + x.Name].Left, rts[rtnm + x.Name].Top, rts[rtnm + x.Name].Width, rts[rtnm + x.Name].Height)))).ToList();
+                            isgf = ColumnGroups.IndexOf(vls.FirstOrDefault());
+                            iegf = ColumnGroups.IndexOf(vls.LastOrDefault());
+                            mrtGF = mrt;
+                        }
                     #endregion
 
                     if (!VisibleDropDown)
-                    {
-                        Loop((i, rtROW, v) =>
                         {
+                            Loop((i, rtROW, v) =>
+                            {
                             #region !Fixed
                             if (mrtNF.HasValue && isnf.HasValue && ienf.HasValue)
-                            {
-                                var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
-                                var mrt = Util.FromRect(mrtNF.Value.Left, rtScrollContent.Top, mrtNF.Value.Width, rtScrollContent.Height);
-                                foreach (var cell in vls)
                                 {
-                                    if (cell.Visible)
+                                    var vls = v.Cells.GetRange(isnf.Value, ienf.Value - isnf.Value + 1).ToList();
+                                    var mrt = Util.FromRect(mrtNF.Value.Left, rtScrollContent.Top, mrtNF.Value.Width, rtScrollContent.Height);
+                                    foreach (var cell in vls)
                                     {
-                                        var rtCol = rts["rtColumn" + cell.Column.Name];
-                                        var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
-                                        if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
-                                        if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
-                                        cell.MouseDoubleClick(Util.INT(rt), x, y);
+                                        if (cell.Visible)
+                                        {
+                                            var rtCol = rts["rtColumn" + cell.Column.Name];
+                                            var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height); rt.Offset(hspos, 0);
+                                            if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
+                                            if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
+                                            cell.MouseDoubleClick(Util.INT(rt), x, y);
+                                        }
                                     }
                                 }
-                            }
                             #endregion
                             #region Fixed
                             if (mrtF.HasValue && isf.HasValue && ief.HasValue)
-                            {
-                                var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
-                                var mrt = Util.FromRect(mrtF.Value.Left, rtScrollContent.Top, mrtF.Value.Width + 1, rtScrollContent.Height);
-                                foreach (var cell in vls)
                                 {
-                                    if (cell.Visible)
+                                    var vls = v.Cells.GetRange(isf.Value, ief.Value - isf.Value + 1).ToList();
+                                    var mrt = Util.FromRect(mrtF.Value.Left, rtScrollContent.Top, mrtF.Value.Width + 1, rtScrollContent.Height);
+                                    foreach (var cell in vls)
                                     {
-                                        var rtCol = rts["rtColumn" + cell.Column.Name];
-                                        var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height);
-                                        if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
-                                        if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
-                                        cell.MouseDoubleClick(Util.INT(rt), x, y);
+                                        if (cell.Visible)
+                                        {
+                                            var rtCol = rts["rtColumn" + cell.Column.Name];
+                                            var rt = Util.FromRect(rtCol.Left, rtROW.Top, rtCol.Width, rtROW.Height);
+                                            if (cell.ColSpan > 1 && cell.ColumnIndex + cell.ColSpan <= ColWidths.Count) rt.Width = (int)ColWidths.GetRange(cell.ColumnIndex, cell.ColSpan).Sum();
+                                            if (cell.RowSpan > 1 && cell.RowIndex + cell.RowSpan <= Rows.Count) rt.Height = Rows.GetRange(cell.RowIndex, cell.RowSpan).Sum(x => x.RowHeight);
+                                            cell.MouseDoubleClick(Util.INT(rt), x, y);
+                                        }
                                     }
                                 }
-                            }
                             #endregion
                         });
-                    }
+                        }
                     #endregion
                 }
-            });
+                });
+            }
+            catch { }
             base.OnMouseDoubleClick(e);
         }
         #endregion
@@ -1750,15 +1773,19 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             ClearInput();
-            Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
+            try
             {
-                if (CollisionTool.Check(rtContent, e.Location))
+                Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
                 {
-                    if (ScrollMode == ScrollMode.Vertical || ScrollMode == ScrollMode.Both) vscroll.MouseWheel(e.Delta, rtScrollV);
-                    else hscroll.MouseWheel(e.Delta, rtScrollV);
-                    Invalidate();
-                }
-            });
+                    if (CollisionTool.Check(rtContent, e.Location))
+                    {
+                        if (ScrollMode == ScrollMode.Vertical || ScrollMode == ScrollMode.Both) vscroll.MouseWheel(e.Delta, rtScrollV);
+                        else hscroll.MouseWheel(e.Delta, rtScrollV);
+                        Invalidate();
+                    }
+                });
+            }
+            catch { }
             base.OnMouseWheel(e);
         }
         #endregion
@@ -2360,10 +2387,13 @@ namespace Devinno.Forms.Controls
                 {
                     for (int i = startidx; i <= endidx; i++)
                     {
-                        var v = ls[i];
-                        var y = Convert.ToInt32(rtScrollContent.Top + lsp[i].Sum + vspos);
-                        var rtITM = Util.FromRect(rtScrollContent.Left, y, rtScrollContent.Width, v.RowHeight);
-                        Func(i, rtITM, v);
+                        if (i >= 0 && i < ls.Count && i < lsp.Count)
+                        {
+                            var v = ls[i];
+                            var y = Convert.ToInt32(rtScrollContent.Top + lsp[i].Sum + vspos);
+                            var rtITM = Util.FromRect(rtScrollContent.Left, y, rtScrollContent.Width, v.RowHeight);
+                            Func(i, rtITM, v);
+                        }
                     }
                 }
             });
