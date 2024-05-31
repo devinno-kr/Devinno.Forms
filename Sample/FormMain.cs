@@ -833,22 +833,36 @@ namespace Sample
             DvDialogs.Set(true, FormBorderStyle.FixedSingle);
             #endregion
 
-            knob.Tick = 10;
+            this.Title = "Sample UI";
 
-            dataGrid.SelectionMode = DvDataGridSelectionMode.Multi;
-            dataGrid.SelectedChanged += (o, s) =>
+            //Test Code
+
+            knob.Tick = 10;
+            
+            panel.Buttons.Add(new ButtonInfo("Refresh") { IconString = "fa-rotate-right", Size = new SizeInfo(DvSizeMode.Percent, 34) });
+            panel.Buttons.Add(new ButtonInfo("Add") { IconString = "fa-plus", Size = new SizeInfo(DvSizeMode.Percent, 33) });
+            panel.Buttons.Add(new ButtonInfo("Del") { IconString = "fa-minus", Size = new SizeInfo(DvSizeMode.Percent, 33) });
+            panel.ButtonsWidth = 150;
+            panel.ButtonClick += async (o, s) =>
             {
-                var ls = dataGrid.Rows.Where(X => X.Selected).ToList();
-                System.Diagnostics.Debug.WriteLine(ls.Count);
+                if(s.Button.Name == "Refresh")
+                {
+                    MessageBox.ShowMessageBoxOk("Test", "Test");
+                }
+                else// if (s.Button.Name == "Add")
+                {
+                    s.Button.Enabled = false; panel.Invalidate();
+                    await Task.Delay(3000);
+                    s.Button.Enabled = true; panel.Invalidate();
+                }
             };
 
-            trendGraph.ValueDraw = timeGraph.ValueDraw = true;
-            trendGraph.TimeFormatString = timeGraph.TimeFormatString = "HH:mm:ss.fff";
-            //timeGraph.ValueBoxWidth = trendGraph.ValueBoxWidth = 200;
-
-            txtMultiLine.TextPadding = new Padding(10);
-            this.Title = "Sample UI";
-            TitleIconBoxWidth = 0;
+            btnsType.ButtonClick += async (o, s) =>
+            {
+                s.Button.Enabled = false; btnsType.Invalidate();
+                await Task.Delay(3000);
+                s.Button.Enabled = true; btnsType.Invalidate();
+            };
         }
         #endregion
 
@@ -951,20 +965,6 @@ namespace Sample
 
         #endregion
 
-        private void tpDialog_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dvDateTimePicker1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dvDateTimePicker2_Click(object sender, EventArgs e)
-        {
-
-        }
     }
     #region class : ModbusValue
     public class ModbusValue : TimeGraphData

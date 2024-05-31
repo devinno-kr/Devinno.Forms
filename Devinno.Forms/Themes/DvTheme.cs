@@ -84,7 +84,7 @@ namespace Devinno.Forms.Themes
         public abstract Color MenuSelectedColor { get; }
         public abstract ThemeMenuColorTable MenuColorTable { get; }
 
-        public abstract void DrawBox(Graphics g, RectangleF rect, Color boxColor, Color borderColor, RoundType round, BoxStyle style, int? Corner = null);
+        public abstract void DrawBox(Graphics g, RectangleF rect, Color boxColor, Color borderColor, RoundType round, BoxStyle style, int? Corner = null, bool Enable = true);
         public abstract void DrawText(Graphics g, string text, Font font, Color color, RectangleF rect, DvContentAlignment align = DvContentAlignment.MiddleCenter, bool shadow = true);
         public abstract void DrawTextIcon(Graphics g, DvIcon icon, Color colorIco, string text, Font font, Color colorText, RectangleF bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter, bool shadow = true);
         public abstract void DrawTextIcon(Graphics g, TextIcon texticon, Color colorIco, Color colorText, Font font, RectangleF bounds, DvContentAlignment align = DvContentAlignment.MiddleCenter, bool shadow = true);
@@ -95,7 +95,7 @@ namespace Devinno.Forms.Themes
         public void DrawLamp(Graphics g, RectangleF bounds, Color BackColor, Color OnLampColor, Color OffLampColor, bool OnOff) => DrawLamp(g, bounds, BackColor, OnLampColor, OffLampColor, OnOff, false, null);
 
         public abstract Color GetBorderColor(Color fillColor, Color backColor);
-        public abstract Color GetInBevelColor(Color BaseColor);
+        public abstract Color GetInBevelColor(Color BaseColor, bool Enable = true);
         public abstract void GetSwitchColors(Color Color, out Color c1, out Color c2, out Color c3, out Color c4);
         public abstract void GetLampColors(Color BackColor, Color OnLampColor, Color OffLampColor, bool OnOff,
                                            bool Animation, Animation ani,

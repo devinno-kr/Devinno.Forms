@@ -165,14 +165,15 @@ namespace Devinno.Forms.Containers
             var BorderColor = Theme.GetBorderColor(PanelColor, BackColor);
             var Corner = Theme.Corner;
             var Round = this.Round ?? RoundType.All;
-
             this.BackColor = PanelColor;
 
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             #endregion
             #region Init
-            Pen p = new Pen(Color.Black);
+            var p = new Pen(Color.Black);
+            var br = new SolidBrush(Color.Black);
+
             #endregion
 
             e.Graphics.Clear(BackColor);
@@ -235,14 +236,24 @@ namespace Devinno.Forms.Containers
                                 var cL = Util.FromArgb(Theme.OutBevelAlpha, Color.White);
                                 #endregion
 
+
+                                if (!btn.Button.Enabled)
+                                {
+                                    cF = ColorTool.MixColorAlpha(cF, PanelColor, Theme.DisableAlpha);
+                                    cB = ColorTool.MixColorAlpha(cB, PanelColor, Theme.DisableAlpha);
+                                    cT = ColorTool.MixColorAlpha(cT, PanelColor, Theme.DisableAlpha);
+                                }
+
                                 #region DrawBox
-                                if (!bDown) Theme.DrawBox(e.Graphics, btn.Bounds, cF, cB, rnd, Box.ButtonUp_V(true, ShadowGap), Corner);
-                                else Theme.DrawBox(e.Graphics, btn.Bounds, cF, cB, rnd, Box.ButtonDown(ShadowGap), Corner);
+                                if (!bDown) Theme.DrawBox(e.Graphics, btn.Bounds, cF, cB, rnd, Box.ButtonUp_V(true, ShadowGap), Corner, btn.Button.Enabled);
+                                else Theme.DrawBox(e.Graphics, btn.Bounds, cF, cB, rnd, Box.ButtonDown(ShadowGap), Corner, btn.Button.Enabled);
                                 #endregion
                                 #region DrawText
                                 if (bDown) rtText.Offset(0, 1);
                                 Theme.DrawTextIcon(e.Graphics, btn.Button, Font, cT, rtText, DvContentAlignment.MiddleCenter);
                                 #endregion
+
+                               
                             }
                         });
                     }
@@ -253,6 +264,7 @@ namespace Devinno.Forms.Containers
 
             #region Dispose
             p.Dispose();
+            br.Dispose();
             #endregion
             base.OnThemeDraw(e, Theme);
         }
@@ -269,7 +281,7 @@ namespace Devinno.Forms.Containers
                         var ls = btns.ToList();
                         foreach (var btn in btns)
                         {
-                            if (CollisionTool.Check(btn.Bounds, e.Location)) 
+                            if (CollisionTool.Check(btn.Bounds, e.Location) && btn.Button.Enabled) 
                                 btn.Button.DownState = true;
                         }
                     });
@@ -293,18 +305,20 @@ namespace Devinno.Forms.Containers
                         {
                             if (btn.Button.DownState)
                             {
+                                btn.Button.DownState = false;
+                                Invalidate();
+
                                 if (CollisionTool.Check(btn.Bounds, e.Location))
                                 {
                                     ButtonClick?.Invoke(this, new ButtonsClickventArgs(btn.Button));
                                 }
 
-                                btn.Button.DownState = false;
                             }
                         }
+                        Invalidate();
                     });
                 }
             });
-            Invalidate();
             base.OnMouseUp(e);
         }
         #endregion
@@ -334,7 +348,7 @@ namespace Devinno.Forms.Containers
         {
             var rects = Util.DevideSizeH(rtButtons, Buttons.Select(x => x.Size).ToList());
             var items = Buttons.Select(x => new ItemBTN { Button = x }).ToArray();
-            for (int i = 0; i < Buttons.Count; i++) items[i].Bounds = rects[i];
+            for (int i = 0; i < Buttons.Count; i++) items[i].Bounds = Util.INT(rects[i]);
 
             act(items);
         }

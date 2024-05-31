@@ -321,14 +321,21 @@ namespace Devinno.Forms.Controls
                             #endregion
 
                             #region DrawBox
+                            if (!btn.Button.Enabled)
+                            {
+                                cF = ColorTool.MixColorAlpha(cF, BackColor, Theme.DisableAlpha);
+                                cB = ColorTool.MixColorAlpha(cB, BackColor, Theme.DisableAlpha);
+                                cT = ColorTool.MixColorAlpha(cT, BackColor, Theme.DisableAlpha);
+                            }
+
                             if (BackgroundDraw)
                             {
                                 var c = cF;
 
                                 if (!bDown)
                                 {
-                                    if (Direction == DvDirectionHV.Horizon) Theme.DrawBox(e.Graphics, btn.Bounds, c, cB, rnd, Box.ButtonUp_V(Gradient, ShadowGap), Corner);
-                                    else Theme.DrawBox(e.Graphics, btn.Bounds, c, cB, rnd, Box.ButtonUp_H(Gradient, ShadowGap), Corner);
+                                    if (Direction == DvDirectionHV.Horizon) Theme.DrawBox(e.Graphics, btn.Bounds, c, cB, rnd, Box.ButtonUp_V(Gradient, ShadowGap), Corner, btn.Button.Enabled);
+                                    else Theme.DrawBox(e.Graphics, btn.Bounds, c, cB, rnd, Box.ButtonUp_H(Gradient, ShadowGap), Corner, btn.Button.Enabled);
                                 }
                                 else Theme.DrawBox(e.Graphics, btn.Bounds, c, cB, rnd, Box.ButtonDown(ShadowGap), Corner);
                             }
@@ -443,7 +450,7 @@ namespace Devinno.Forms.Controls
                 var rects = Util.DevideSizeH(rtContent, Buttons.Select(x => x.Size).ToList());
                 var items = Buttons.Select(x => new ItemBTN { Button = x }).ToArray();
                 for (int i = 0; i < Buttons.Count; i++)
-                    items[i].Bounds = rects[i];
+                    items[i].Bounds = Util.INT(rects[i]);
 
                 act(items);
             }
@@ -452,7 +459,7 @@ namespace Devinno.Forms.Controls
                 var rects = Util.DevideSizeV(rtContent, Buttons.Select(x => x.Size).ToList());
                 var items = Buttons.Select(x => new ItemBTN { Button = x }).ToArray();
                 for (int i = 0; i < Buttons.Count; i++)
-                    items[i].Bounds = rects[i];
+                    items[i].Bounds = Util.INT(rects[i]);
 
                 act(items);
             }
@@ -488,6 +495,9 @@ namespace Devinno.Forms.Controls
         #endregion
         #region DownState
         internal bool DownState { get; set; }
+        #endregion
+        #region Enabled
+        public bool Enabled { get; set; } = true;
         #endregion
         #endregion
 

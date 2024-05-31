@@ -76,7 +76,7 @@ namespace Devinno.Forms.Themes
         public override ThemeMenuColorTable MenuColorTable { get; } = new BlackThemeMenuColorTable();
 
         #region DrawBox
-        public override void DrawBox(Graphics g, RectangleF rect, Color boxColor, Color borderColor, RoundType round, BoxStyle style, int? Corner = null)
+        public override void DrawBox(Graphics g, RectangleF rect, Color boxColor, Color borderColor, RoundType round, BoxStyle style, int? Corner = null, bool Enable= true)
         {
             #region Init
             var br = new SolidBrush(Color.Black);
@@ -110,7 +110,7 @@ namespace Devinno.Forms.Themes
             else if ((style & BoxStyle.OutBevel) == BoxStyle.OutBevel)
             {
                 var rtv = new RectangleF(rt.X + 0, rt.Y + 1, rt.Width, rt.Height);
-                br.Color = Util.FromArgb(OutBevelAlpha, Color.White);
+                br.Color = Util.FromArgb(Convert.ToByte(OutBevelAlpha / (Enable ? 1F : 2F)), Color.White);
                 switch (round)
                 {
                     case RoundType.Rect: g.FillRectangle(br, rtv); break;
@@ -190,7 +190,7 @@ namespace Devinno.Forms.Themes
             if ((style & BoxStyle.InBevel) == BoxStyle.InBevel)
             {
                 p.Width = 1;
-                var c1 = GetInBevelColor(boxColor);
+                var c1 = GetInBevelColor(boxColor, Enable);
                 var c2 = Util.FromArgb(0, boxColor);
                 using (var lgbr = new LinearGradientBrush(new RectangleF(rt.X - 1, rt.Y - 1, rt.Width + 2, rt.Height + 2), c1, c2, 90))
                 {
@@ -420,10 +420,10 @@ namespace Devinno.Forms.Themes
         }
         #endregion
         #region GetInBevelColor
-        public override Color GetInBevelColor(Color BaseColor)
+        public override Color GetInBevelColor(Color BaseColor, bool Enable = true)
         {
             var b = BaseColor.ToHSV();
-            var v = Convert.ToByte(MathTool.Constrain(b.V * 255 * 0.6, 0, 255));
+            var v = Convert.ToByte(MathTool.Constrain(b.V * 255 * 0.6 * (Enable ? 1.0 : 0.7), 0, 255));
 
             return Util.FromArgb(v, Color.White);
         }
