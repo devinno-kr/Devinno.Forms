@@ -341,7 +341,9 @@ namespace Devinno.Forms.Dialogs
                                 var val = v.GetValue((object)value);
                                 var itm = c.Items.Where(x => val != null && val.Equals(x.Value)).FirstOrDefault();
                                 if (itm != null) c.SelectedIndex = c.Items.IndexOf(itm);
+                                else c.SelectedIndex = 0;
                             }
+                            else c.SelectedIndex = 0;
                         }
                     }
                     else
@@ -355,7 +357,9 @@ namespace Devinno.Forms.Dialogs
                             var val = v.GetValue((object)value);
                             var itm = c.Items.Where(x => val != null && val.Equals(x.Value)).FirstOrDefault();
                             if (itm != null) c.SelectedIndex = c.Items.IndexOf(itm);
+                            else c.SelectedIndex = 0;
                         }
+                        else c.SelectedIndex = 0;
                     }
                     #endregion
                 }
@@ -417,6 +421,12 @@ namespace Devinno.Forms.Dialogs
                         else if (c is DvValueInputWheel)
                         {
                             var vc = c as DvValueInputWheel;
+                            var vt = vc.Items[vc.SelectedIndex].Value;
+                            p.SetValue(v, vc.Items[vc.SelectedIndex].Value);
+                        }
+                        else if (c is DvValueInputCombo)
+                        {
+                            var vc = c as DvValueInputCombo;
                             var vt = vc.Items[vc.SelectedIndex].Value;
                             p.SetValue(v, vc.Items[vc.SelectedIndex].Value);
                         }
