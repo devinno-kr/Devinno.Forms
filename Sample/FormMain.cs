@@ -189,8 +189,7 @@ namespace Sample
             for (int a = 1; a <= 3; a++)
             {
                 var va = new DvTreeViewLabelNode("Cat " + a);
-                treeView.Nodes.Add(va);
-
+               
                 var ls = Enum.GetValues<DayOfWeek>().Select(x => new TextIcon { Text = x.ToString(), Value = x }).ToList();
 
                 for (int b = 1; b <= 2; b++)
@@ -224,6 +223,8 @@ namespace Sample
                         }
                     }
                 }
+                treeView.Nodes.Add(va);
+
             }
             #endregion
             #region toolBox
@@ -648,6 +649,7 @@ namespace Sample
                 infos.Add("Width", new InputBoxInfo { Title = "너비" });
                 infos.Add("Height", new InputBoxInfo { Title = "높이" });
                 infos.Add("Name", new InputBoxInfo { Title = "이름" });
+                infos.Add("Style", new InputBoxInfo { Title = "형식" });
 
                 var ret = InputBox.ShowInputBox<PageInfo>("새 파일");
 
@@ -1109,11 +1111,13 @@ namespace Sample
     #endregion
 
     #region class : PageInfo
+    public enum PageStyle { Text, Json, CSharp }
     public class PageInfo
     {
         public int Width { get; set; } = 800;
         public int Height { get; set; } = 480;
         public string Name { get; set; } = "";
+        public PageStyle Style { get; set; } = PageStyle.Text;
     }
     #endregion
 

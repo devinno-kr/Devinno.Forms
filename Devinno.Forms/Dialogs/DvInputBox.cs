@@ -13,6 +13,7 @@ using System.Windows.Forms;
 
 namespace Devinno.Forms.Dialogs
 {
+    public enum DvSelectorMode { Combo, Wheel }
     public partial class DvInputBox : DvForm
     {
         #region Properties
@@ -314,15 +315,47 @@ namespace Devinno.Forms.Dialogs
                 else if (v.PropertyType.IsEnum)
                 {
                     #region Enums
-                    var c = new DvValueInputWheel { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
-                    tpnl.Controls.Add(c, col, row);
-                    c.Items.AddRange(Enum.GetValues(v.PropertyType).Cast<object>().Select(x => new TextIcon() { Text = x.ToString(), Value = x }));
-
-                    if (value != null)
+                    if (p != null)
                     {
-                        var val = v.GetValue((object)value);
-                        var itm = c.Items.Where(x => val != null && val.Equals(x.Value)).FirstOrDefault();
-                        if (itm != null) c.SelectedIndex = c.Items.IndexOf(itm);
+                        if (p.SelectorMode == DvSelectorMode.Wheel)
+                        {
+                            var c = new DvValueInputWheel { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
+                            tpnl.Controls.Add(c, col, row);
+                            c.Items.AddRange(Enum.GetValues(v.PropertyType).Cast<object>().Select(x => new TextIcon() { Text = x.ToString(), Value = x }));
+
+                            if (value != null)
+                            {
+                                var val = v.GetValue((object)value);
+                                var itm = c.Items.Where(x => val != null && val.Equals(x.Value)).FirstOrDefault();
+                                if (itm != null) c.SelectedIndex = c.Items.IndexOf(itm);
+                            }
+                        }
+                        else
+                        {
+                            var c = new DvValueInputCombo { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
+                            tpnl.Controls.Add(c, col, row);
+                            c.Items.AddRange(Enum.GetValues(v.PropertyType).Cast<object>().Select(x => new TextIcon() { Text = x.ToString(), Value = x }));
+
+                            if (value != null)
+                            {
+                                var val = v.GetValue((object)value);
+                                var itm = c.Items.Where(x => val != null && val.Equals(x.Value)).FirstOrDefault();
+                                if (itm != null) c.SelectedIndex = c.Items.IndexOf(itm);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var c = new DvValueInputCombo { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
+                        tpnl.Controls.Add(c, col, row);
+                        c.Items.AddRange(Enum.GetValues(v.PropertyType).Cast<object>().Select(x => new TextIcon() { Text = x.ToString(), Value = x }));
+
+                        if (value != null)
+                        {
+                            var val = v.GetValue((object)value);
+                            var itm = c.Items.Where(x => val != null && val.Equals(x.Value)).FirstOrDefault();
+                            if (itm != null) c.SelectedIndex = c.Items.IndexOf(itm);
+                        }
                     }
                     #endregion
                 }
@@ -643,6 +676,7 @@ namespace Devinno.Forms.Dialogs
         public string Title { get; set; }
         public string Unit { get; set; }
         public List<TextIcon> Items { get; set; }
+        public DvSelectorMode SelectorMode { get; set; } = DvSelectorMode.Combo;
     }
     #endregion
     #region class : InputBoxTag
