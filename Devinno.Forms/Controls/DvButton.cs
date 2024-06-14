@@ -140,6 +140,9 @@ namespace Devinno.Forms.Controls
         #region UseKey
         public bool UseKey { get; set; } = false;
         #endregion
+        #region DownState 
+        public bool DownState => bDown;
+        #endregion
         #endregion
 
         #region Member Variable
