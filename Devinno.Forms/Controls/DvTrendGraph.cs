@@ -458,6 +458,21 @@ namespace Devinno.Forms.Controls
             base.OnMouseMove(e);
         }
         #endregion
+        #region OnMouseWheel
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            int x = e.X, y = e.Y;
+
+            Areas((rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks) =>
+            {
+                ((HandledMouseEventArgs)e).Handled = true;
+                scroll.MouseWheel(e.Delta, rtScroll);
+            });
+
+            Invalidate();
+            base.OnMouseWheel(e);
+        }
+        #endregion
         #region OnMouseUp
         protected override void OnMouseUp(MouseEventArgs e)
         {
