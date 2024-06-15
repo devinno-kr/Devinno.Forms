@@ -1773,12 +1773,15 @@ namespace Devinno.Forms.Controls
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             ClearInput();
+
             try
             {
                 Areas((rtContent, rtColumn, rtBox, rtSummary, rtScrollContent, rtScrollArea, rtScrollV, rtScrollH, rtScrollR) =>
                 {
                     if (CollisionTool.Check(rtContent, e.Location))
                     {
+                        ((HandledMouseEventArgs)e).Handled = true;
+
                         if (ScrollMode == ScrollMode.Vertical || ScrollMode == ScrollMode.Both) vscroll.MouseWheel(e.Delta, rtScrollV);
                         else hscroll.MouseWheel(e.Delta, rtScrollV);
                         Invalidate();

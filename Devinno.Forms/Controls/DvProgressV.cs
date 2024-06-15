@@ -202,11 +202,9 @@ namespace Devinno.Forms.Controls
             Areas((rtContent, rtEmpty, rtFill) =>
             {
                 Theme.DrawBox(e.Graphics, rtEmpty, BoxColor, BoxBorderColor, Round, Box.BackBox(ShadowGap));
+                Theme.DrawBox(e.Graphics, rtFill, BarColor, BorderColor, InnerBar ? RoundType.All : Round, Box.ButtonUp_H(true, ShadowGap));
 
-                if (rtFill.Height > 0)
-                    Theme.DrawBox(e.Graphics, rtFill, BarColor, BorderColor, InnerBar ? RoundType.All : Round, Box.ButtonUp_H(true, ShadowGap));
-
-                if (DrawText && rtFill.Height > 0)
+                if (DrawText)
                 {
                     e.Graphics.SetClip(rtFill);
                     var s = string.IsNullOrWhiteSpace(FormatString) ? Value.ToString() : Value.ToString(FormatString);
@@ -218,7 +216,6 @@ namespace Devinno.Forms.Controls
                 }
 
             });
-
             base.OnThemeDraw(e, Theme);
         }
         #endregion

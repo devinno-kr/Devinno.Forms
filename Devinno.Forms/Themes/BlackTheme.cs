@@ -78,194 +78,197 @@ namespace Devinno.Forms.Themes
         #region DrawBox
         public override void DrawBox(Graphics g, RectangleF rect, Color boxColor, Color borderColor, RoundType round, BoxStyle style, int? Corner = null, bool Enable= true)
         {
-            #region Init
-            var br = new SolidBrush(Color.Black);
-            var p = new Pen(Color.Black);
-            #endregion
-         
-            #region Bounds
-            var corner = Corner ?? this.Corner;
-            var rt = Util.FromRect(rect.Left, rect.Top, rect.Width, rect.Height);
-            #endregion
-            #region OutShadow / OutBevel
-            if ((style & BoxStyle.OutShadow) == BoxStyle.OutShadow)
+            if (rect.Width >= 2 && rect.Height >= 2)
             {
-                var rtv = new RectangleF(rt.X + 1, rt.Y + 1, rt.Width, rt.Height);
-                br.Color = Util.FromArgb(OutShadowAlpha, Color.Black);
-                switch (round)
-                {
-                    case RoundType.Rect: g.FillRectangle(br, rtv); break;
-                    case RoundType.All: g.FillRoundRectangle(br, rtv, corner); break;
-                    case RoundType.L: g.FillRoundRectangleL(br, rtv, corner); break;
-                    case RoundType.R: g.FillRoundRectangleR(br, rtv, corner); break;
-                    case RoundType.T: g.FillRoundRectangleT(br, rtv, corner); break;
-                    case RoundType.B: g.FillRoundRectangleB(br, rtv, corner); break;
-                    case RoundType.LT: g.FillRoundRectangleLT(br, rtv, corner); break;
-                    case RoundType.RT: g.FillRoundRectangleRT(br, rtv, corner); break;
-                    case RoundType.LB: g.FillRoundRectangleLB(br, rtv, corner); break;
-                    case RoundType.RB: g.FillRoundRectangleRB(br, rtv, corner); break;
-                    case RoundType.Ellipse: g.FillEllipse(br, rtv); break;
-                }
-            }
-            else if ((style & BoxStyle.OutBevel) == BoxStyle.OutBevel)
-            {
-                var rtv = new RectangleF(rt.X + 0, rt.Y + 1, rt.Width, rt.Height);
-                br.Color = Util.FromArgb(Convert.ToByte(OutBevelAlpha / (Enable ? 1F : 2F)), Color.White);
-                switch (round)
-                {
-                    case RoundType.Rect: g.FillRectangle(br, rtv); break;
-                    case RoundType.All: g.FillRoundRectangle(br, rtv, corner); break;
-                    case RoundType.L: g.FillRoundRectangleL(br, rtv, corner); break;
-                    case RoundType.R: g.FillRoundRectangleR(br, rtv, corner); break;
-                    case RoundType.T: g.FillRoundRectangleT(br, rtv, corner); break;
-                    case RoundType.B: g.FillRoundRectangleB(br, rtv, corner); break;
-                    case RoundType.LT: g.FillRoundRectangleLT(br, rtv, corner); break;
-                    case RoundType.RT: g.FillRoundRectangleRT(br, rtv, corner); break;
-                    case RoundType.LB: g.FillRoundRectangleLB(br, rtv, corner); break;
-                    case RoundType.RB: g.FillRoundRectangleRB(br, rtv, corner); break;
-                    case RoundType.Ellipse: g.FillEllipse(br, rtv); break;
-                }
-            }
-            #endregion
-            #region Fill / Gradient
-            if ((style & BoxStyle.Fill) == BoxStyle.Fill)
-            {
-                br.Color = boxColor;
-                switch (round)
-                {
-                    case RoundType.Rect: g.FillRectangle(br, rt); break;
-                    case RoundType.All: g.FillRoundRectangle(br, rt, corner); break;
-                    case RoundType.L: g.FillRoundRectangleL(br, rt, corner); break;
-                    case RoundType.R: g.FillRoundRectangleR(br, rt, corner); break;
-                    case RoundType.T: g.FillRoundRectangleT(br, rt, corner); break;
-                    case RoundType.B: g.FillRoundRectangleB(br, rt, corner); break;
-                    case RoundType.LT: g.FillRoundRectangleLT(br, rt, corner); break;
-                    case RoundType.RT: g.FillRoundRectangleRT(br, rt, corner); break;
-                    case RoundType.LB: g.FillRoundRectangleLB(br, rt, corner); break;
-                    case RoundType.RB: g.FillRoundRectangleRB(br, rt, corner); break;
-                    case RoundType.Ellipse: g.FillEllipse(br, rt); break;
-                }
-            }
-            else
-            {
-                #region Gradient Angle
-                int? angle = null;
-                var c1 = boxColor.BrightnessTransmit(GradientLight);
-                var c2 = boxColor.BrightnessTransmit(GradientDark);
-                if ((style & BoxStyle.GradientV) == BoxStyle.GradientV) angle = 90;
-                else if ((style & BoxStyle.GradientV_R) == BoxStyle.GradientV_R) angle = 90 + 180;
-                else if ((style & BoxStyle.GradientH) == BoxStyle.GradientH) angle = 0;
-                else if ((style & BoxStyle.GradientH_R) == BoxStyle.GradientH_R) angle = 0 + 180;
-                else if ((style & BoxStyle.GradientLT) == BoxStyle.GradientLT) angle = 45;
-                else if ((style & BoxStyle.GradientLT_R) == BoxStyle.GradientLT_R) angle = 45 + 180;
-                else if ((style & BoxStyle.GradientRT) == BoxStyle.GradientRT) angle = 135;
-                else if ((style & BoxStyle.GradientRT_R) == BoxStyle.GradientRT_R) angle = 135 + 180;
+                #region Init
+                var br = new SolidBrush(Color.Black);
+                var p = new Pen(Color.Black);
                 #endregion
-                #region Gradient Fill
-                if (angle.HasValue)
+
+                #region Bounds
+                var corner = Corner ?? this.Corner;
+                var rt = Util.FromRect(rect.Left, rect.Top, rect.Width, rect.Height);
+                #endregion
+                #region OutShadow / OutBevel
+                if ((style & BoxStyle.OutShadow) == BoxStyle.OutShadow)
                 {
-                    if (rt.Width + 2 > 0 && rt.Height + 2 > 0)
-                        using (var lgbr = new LinearGradientBrush(new RectangleF(rt.X - 1, rt.Y - 1, rt.Width + 2, rt.Height + 2), c1, c2, angle.Value))
+                    var rtv = new RectangleF(rt.X + 1, rt.Y + 1, rt.Width, rt.Height);
+                    br.Color = Util.FromArgb(OutShadowAlpha, Color.Black);
+                    switch (round)
+                    {
+                        case RoundType.Rect: g.FillRectangle(br, rtv); break;
+                        case RoundType.All: g.FillRoundRectangle(br, rtv, corner); break;
+                        case RoundType.L: g.FillRoundRectangleL(br, rtv, corner); break;
+                        case RoundType.R: g.FillRoundRectangleR(br, rtv, corner); break;
+                        case RoundType.T: g.FillRoundRectangleT(br, rtv, corner); break;
+                        case RoundType.B: g.FillRoundRectangleB(br, rtv, corner); break;
+                        case RoundType.LT: g.FillRoundRectangleLT(br, rtv, corner); break;
+                        case RoundType.RT: g.FillRoundRectangleRT(br, rtv, corner); break;
+                        case RoundType.LB: g.FillRoundRectangleLB(br, rtv, corner); break;
+                        case RoundType.RB: g.FillRoundRectangleRB(br, rtv, corner); break;
+                        case RoundType.Ellipse: g.FillEllipse(br, rtv); break;
+                    }
+                }
+                else if ((style & BoxStyle.OutBevel) == BoxStyle.OutBevel)
+                {
+                    var rtv = new RectangleF(rt.X + 0, rt.Y + 1, rt.Width, rt.Height);
+                    br.Color = Util.FromArgb(Convert.ToByte(OutBevelAlpha / (Enable ? 1F : 2F)), Color.White);
+                    switch (round)
+                    {
+                        case RoundType.Rect: g.FillRectangle(br, rtv); break;
+                        case RoundType.All: g.FillRoundRectangle(br, rtv, corner); break;
+                        case RoundType.L: g.FillRoundRectangleL(br, rtv, corner); break;
+                        case RoundType.R: g.FillRoundRectangleR(br, rtv, corner); break;
+                        case RoundType.T: g.FillRoundRectangleT(br, rtv, corner); break;
+                        case RoundType.B: g.FillRoundRectangleB(br, rtv, corner); break;
+                        case RoundType.LT: g.FillRoundRectangleLT(br, rtv, corner); break;
+                        case RoundType.RT: g.FillRoundRectangleRT(br, rtv, corner); break;
+                        case RoundType.LB: g.FillRoundRectangleLB(br, rtv, corner); break;
+                        case RoundType.RB: g.FillRoundRectangleRB(br, rtv, corner); break;
+                        case RoundType.Ellipse: g.FillEllipse(br, rtv); break;
+                    }
+                }
+                #endregion
+                #region Fill / Gradient
+                if ((style & BoxStyle.Fill) == BoxStyle.Fill)
+                {
+                    br.Color = boxColor;
+                    switch (round)
+                    {
+                        case RoundType.Rect: g.FillRectangle(br, rt); break;
+                        case RoundType.All: g.FillRoundRectangle(br, rt, corner); break;
+                        case RoundType.L: g.FillRoundRectangleL(br, rt, corner); break;
+                        case RoundType.R: g.FillRoundRectangleR(br, rt, corner); break;
+                        case RoundType.T: g.FillRoundRectangleT(br, rt, corner); break;
+                        case RoundType.B: g.FillRoundRectangleB(br, rt, corner); break;
+                        case RoundType.LT: g.FillRoundRectangleLT(br, rt, corner); break;
+                        case RoundType.RT: g.FillRoundRectangleRT(br, rt, corner); break;
+                        case RoundType.LB: g.FillRoundRectangleLB(br, rt, corner); break;
+                        case RoundType.RB: g.FillRoundRectangleRB(br, rt, corner); break;
+                        case RoundType.Ellipse: g.FillEllipse(br, rt); break;
+                    }
+                }
+                else
+                {
+                    #region Gradient Angle
+                    int? angle = null;
+                    var c1 = boxColor.BrightnessTransmit(GradientLight);
+                    var c2 = boxColor.BrightnessTransmit(GradientDark);
+                    if ((style & BoxStyle.GradientV) == BoxStyle.GradientV) angle = 90;
+                    else if ((style & BoxStyle.GradientV_R) == BoxStyle.GradientV_R) angle = 90 + 180;
+                    else if ((style & BoxStyle.GradientH) == BoxStyle.GradientH) angle = 0;
+                    else if ((style & BoxStyle.GradientH_R) == BoxStyle.GradientH_R) angle = 0 + 180;
+                    else if ((style & BoxStyle.GradientLT) == BoxStyle.GradientLT) angle = 45;
+                    else if ((style & BoxStyle.GradientLT_R) == BoxStyle.GradientLT_R) angle = 45 + 180;
+                    else if ((style & BoxStyle.GradientRT) == BoxStyle.GradientRT) angle = 135;
+                    else if ((style & BoxStyle.GradientRT_R) == BoxStyle.GradientRT_R) angle = 135 + 180;
+                    #endregion
+                    #region Gradient Fill
+                    if (angle.HasValue)
+                    {
+                        if (rt.Width + 2 > 0 && rt.Height + 2 > 0)
+                            using (var lgbr = new LinearGradientBrush(new RectangleF(rt.X - 1, rt.Y - 1, rt.Width + 2, rt.Height + 2), c1, c2, angle.Value))
+                            {
+                                switch (round)
+                                {
+                                    case RoundType.Rect: g.FillRectangle(lgbr, rt); break;
+                                    case RoundType.All: g.FillRoundRectangle(lgbr, rt, corner); break;
+                                    case RoundType.L: g.FillRoundRectangleL(lgbr, rt, corner); break;
+                                    case RoundType.R: g.FillRoundRectangleR(lgbr, rt, corner); break;
+                                    case RoundType.T: g.FillRoundRectangleT(lgbr, rt, corner); break;
+                                    case RoundType.B: g.FillRoundRectangleB(lgbr, rt, corner); break;
+                                    case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, corner); break;
+                                    case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, corner); break;
+                                    case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, corner); break;
+                                    case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, corner); break;
+                                    case RoundType.Ellipse: g.FillEllipse(lgbr, rt); break;
+                                }
+                            }
+                    }
+                    #endregion
+                }
+                #endregion
+                #region InBevel / InShadow
+                if ((style & BoxStyle.InBevel) == BoxStyle.InBevel)
+                {
+                    p.Width = 1;
+                    var c1 = GetInBevelColor(boxColor, Enable);
+                    var c2 = Util.FromArgb(0, boxColor);
+                    using (var lgbr = new LinearGradientBrush(new RectangleF(rt.X - 1, rt.Y - 1, rt.Width + 2, rt.Height + 2), c1, c2, 90))
+                    {
+                        using (var p2 = new Pen(lgbr, 1))
                         {
+                            var rtv = Util.FromRect(rt);
+                            rtv.Inflate(-1, -1);
+
                             switch (round)
                             {
-                                case RoundType.Rect: g.FillRectangle(lgbr, rt); break;
-                                case RoundType.All: g.FillRoundRectangle(lgbr, rt, corner); break;
-                                case RoundType.L: g.FillRoundRectangleL(lgbr, rt, corner); break;
-                                case RoundType.R: g.FillRoundRectangleR(lgbr, rt, corner); break;
-                                case RoundType.T: g.FillRoundRectangleT(lgbr, rt, corner); break;
-                                case RoundType.B: g.FillRoundRectangleB(lgbr, rt, corner); break;
-                                case RoundType.LT: g.FillRoundRectangleLT(lgbr, rt, corner); break;
-                                case RoundType.RT: g.FillRoundRectangleRT(lgbr, rt, corner); break;
-                                case RoundType.LB: g.FillRoundRectangleLB(lgbr, rt, corner); break;
-                                case RoundType.RB: g.FillRoundRectangleRB(lgbr, rt, corner); break;
-                                case RoundType.Ellipse: g.FillEllipse(lgbr, rt); break;
+                                case RoundType.Rect: g.DrawRectangle(p2, rtv); break;
+                                case RoundType.All: g.DrawRoundRectangle(p2, rtv, corner); break;
+                                case RoundType.L: g.DrawRoundRectangleL(p2, rtv, corner); break;
+                                case RoundType.R: g.DrawRoundRectangleR(p2, rtv, corner); break;
+                                case RoundType.T: g.DrawRoundRectangleT(p2, rtv, corner); break;
+                                case RoundType.B: g.DrawRoundRectangleB(p2, rtv, corner); break;
+                                case RoundType.LT: g.DrawRoundRectangleLT(p2, rtv, corner); break;
+                                case RoundType.RT: g.DrawRoundRectangleRT(p2, rtv, corner); break;
+                                case RoundType.LB: g.DrawRoundRectangleLB(p2, rtv, corner); break;
+                                case RoundType.RB: g.DrawRoundRectangleRB(p2, rtv, corner); break;
+                                case RoundType.Ellipse: g.DrawEllipse(p2, rtv); break;
                             }
-                        }
-                }
-                #endregion
-            }
-            #endregion
-            #region InBevel / InShadow
-            if ((style & BoxStyle.InBevel) == BoxStyle.InBevel)
-            {
-                p.Width = 1;
-                var c1 = GetInBevelColor(boxColor, Enable);
-                var c2 = Util.FromArgb(0, boxColor);
-                using (var lgbr = new LinearGradientBrush(new RectangleF(rt.X - 1, rt.Y - 1, rt.Width + 2, rt.Height + 2), c1, c2, 90))
-                {
-                    using (var p2 = new Pen(lgbr, 1))
-                    {
-                        var rtv = Util.FromRect(rt);
-                        rtv.Inflate(-1, -1);
-
-                        switch (round)
-                        {
-                            case RoundType.Rect: g.DrawRectangle(p2, rtv); break;
-                            case RoundType.All: g.DrawRoundRectangle(p2, rtv, corner); break;
-                            case RoundType.L: g.DrawRoundRectangleL(p2, rtv, corner); break;
-                            case RoundType.R: g.DrawRoundRectangleR(p2, rtv, corner); break;
-                            case RoundType.T: g.DrawRoundRectangleT(p2, rtv, corner); break;
-                            case RoundType.B: g.DrawRoundRectangleB(p2, rtv, corner); break;
-                            case RoundType.LT: g.DrawRoundRectangleLT(p2, rtv, corner); break;
-                            case RoundType.RT: g.DrawRoundRectangleRT(p2, rtv, corner); break;
-                            case RoundType.LB: g.DrawRoundRectangleLB(p2, rtv, corner); break;
-                            case RoundType.RB: g.DrawRoundRectangleRB(p2, rtv, corner); break;
-                            case RoundType.Ellipse: g.DrawEllipse(p2, rtv); break;
                         }
                     }
                 }
-            }
-            else if ((style & BoxStyle.InShadow) == BoxStyle.InShadow)
-            {
-                p.Width = 2;
-                p.Color = Util.FromArgb(InShadowAlpha, Color.Black);
-                var rtv = Util.FromRect(rt);
-                rtv.Inflate(-1F, -1F);
-
-                switch (round)
+                else if ((style & BoxStyle.InShadow) == BoxStyle.InShadow)
                 {
-                    case RoundType.Rect: g.DrawRectangle(p, rtv); break;
-                    case RoundType.All: g.DrawRoundRectangle(p, rtv, corner); break;
-                    case RoundType.L: g.DrawRoundRectangleL(p, rtv, corner); break;
-                    case RoundType.R: g.DrawRoundRectangleR(p, rtv, corner); break;
-                    case RoundType.T: g.DrawRoundRectangleT(p, rtv, corner); break;
-                    case RoundType.B: g.DrawRoundRectangleB(p, rtv, corner); break;
-                    case RoundType.LT: g.DrawRoundRectangleLT(p, rtv, corner); break;
-                    case RoundType.RT: g.DrawRoundRectangleRT(p, rtv, corner); break;
-                    case RoundType.LB: g.DrawRoundRectangleLB(p, rtv, corner); break;
-                    case RoundType.RB: g.DrawRoundRectangleRB(p, rtv, corner); break;
-                    case RoundType.Ellipse: g.DrawEllipse(p, rtv); break;
-                }
-            }
-            #endregion
-            #region Border
-            if ((style & BoxStyle.Border) == BoxStyle.Border)
-            {
-                p.Color = borderColor;
-                p.Width = 1;
+                    p.Width = 2;
+                    p.Color = Util.FromArgb(InShadowAlpha, Color.Black);
+                    var rtv = Util.FromRect(rt);
+                    rtv.Inflate(-1F, -1F);
 
-                switch (round)
+                    switch (round)
+                    {
+                        case RoundType.Rect: g.DrawRectangle(p, rtv); break;
+                        case RoundType.All: g.DrawRoundRectangle(p, rtv, corner); break;
+                        case RoundType.L: g.DrawRoundRectangleL(p, rtv, corner); break;
+                        case RoundType.R: g.DrawRoundRectangleR(p, rtv, corner); break;
+                        case RoundType.T: g.DrawRoundRectangleT(p, rtv, corner); break;
+                        case RoundType.B: g.DrawRoundRectangleB(p, rtv, corner); break;
+                        case RoundType.LT: g.DrawRoundRectangleLT(p, rtv, corner); break;
+                        case RoundType.RT: g.DrawRoundRectangleRT(p, rtv, corner); break;
+                        case RoundType.LB: g.DrawRoundRectangleLB(p, rtv, corner); break;
+                        case RoundType.RB: g.DrawRoundRectangleRB(p, rtv, corner); break;
+                        case RoundType.Ellipse: g.DrawEllipse(p, rtv); break;
+                    }
+                }
+                #endregion
+                #region Border
+                if ((style & BoxStyle.Border) == BoxStyle.Border)
                 {
-                    case RoundType.Rect: g.DrawRectangle(p, rt); break;
-                    case RoundType.All: g.DrawRoundRectangle(p, rt, corner); break;
-                    case RoundType.L: g.DrawRoundRectangleL(p, rt, corner); break;
-                    case RoundType.R: g.DrawRoundRectangleR(p, rt, corner); break;
-                    case RoundType.T: g.DrawRoundRectangleT(p, rt, corner); break;
-                    case RoundType.B: g.DrawRoundRectangleB(p, rt, corner); break;
-                    case RoundType.LT: g.DrawRoundRectangleLT(p, rt, corner); break;
-                    case RoundType.RT: g.DrawRoundRectangleRT(p, rt, corner); break;
-                    case RoundType.LB: g.DrawRoundRectangleLB(p, rt, corner); break;
-                    case RoundType.RB: g.DrawRoundRectangleRB(p, rt, corner); break;
-                    case RoundType.Ellipse: g.DrawEllipse(p, rt); break;
-                }
-            }
-            #endregion
+                    p.Color = borderColor;
+                    p.Width = 1;
 
-            #region Dispose
-            br.Dispose();
-            p.Dispose();
-            #endregion
+                    switch (round)
+                    {
+                        case RoundType.Rect: g.DrawRectangle(p, rt); break;
+                        case RoundType.All: g.DrawRoundRectangle(p, rt, corner); break;
+                        case RoundType.L: g.DrawRoundRectangleL(p, rt, corner); break;
+                        case RoundType.R: g.DrawRoundRectangleR(p, rt, corner); break;
+                        case RoundType.T: g.DrawRoundRectangleT(p, rt, corner); break;
+                        case RoundType.B: g.DrawRoundRectangleB(p, rt, corner); break;
+                        case RoundType.LT: g.DrawRoundRectangleLT(p, rt, corner); break;
+                        case RoundType.RT: g.DrawRoundRectangleRT(p, rt, corner); break;
+                        case RoundType.LB: g.DrawRoundRectangleLB(p, rt, corner); break;
+                        case RoundType.RB: g.DrawRoundRectangleRB(p, rt, corner); break;
+                        case RoundType.Ellipse: g.DrawEllipse(p, rt); break;
+                    }
+                }
+                #endregion
+
+                #region Dispose
+                br.Dispose();
+                p.Dispose();
+                #endregion
+            }
         }
         #endregion
         #region DrawIcon

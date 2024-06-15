@@ -204,6 +204,7 @@ namespace Sample
             listBox = new Devinno.Forms.Controls.DvListBox();
             dvButton2 = new Devinno.Forms.Controls.DvButton();
             dvButton1 = new Devinno.Forms.Controls.DvButton();
+            dgContainer = new Devinno.Forms.Controls.DvDataGrid();
             tab.SuspendLayout();
             tpControl.SuspendLayout();
             tblTriButton.SuspendLayout();
@@ -2720,15 +2721,17 @@ namespace Sample
             dvTableLayoutPanel2.Controls.Add(pnlBox, 1, 1);
             dvTableLayoutPanel2.Controls.Add(borderPanel, 1, 0);
             dvTableLayoutPanel2.Controls.Add(grpBox, 0, 1);
-            dvTableLayoutPanel2.Controls.Add(tab2, 0, 2);
+            dvTableLayoutPanel2.Controls.Add(tab2, 0, 3);
+            dvTableLayoutPanel2.Controls.Add(dgContainer, 0, 2);
             dvTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             dvTableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             dvTableLayoutPanel2.Name = "dvTableLayoutPanel2";
-            dvTableLayoutPanel2.RowCount = 3;
+            dvTableLayoutPanel2.RowCount = 4;
             dvTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             dvTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
-            dvTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            dvTableLayoutPanel2.Size = new System.Drawing.Size(671, 1041);
+            dvTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            dvTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            dvTableLayoutPanel2.Size = new System.Drawing.Size(671, 1405);
             dvTableLayoutPanel2.TabIndex = 1;
             // 
             // panel
@@ -2831,13 +2834,13 @@ namespace Sample
             tab2.Dock = System.Windows.Forms.DockStyle.Fill;
             tab2.DrawBoarder = true;
             tab2.ItemSize = new System.Drawing.Size(40, 120);
-            tab2.Location = new System.Drawing.Point(3, 403);
+            tab2.Location = new System.Drawing.Point(3, 905);
             tab2.Multiline = true;
             tab2.Name = "tab2";
             tab2.PointColor = null;
             tab2.Round = null;
             tab2.SelectedIndex = 0;
-            tab2.Size = new System.Drawing.Size(665, 635);
+            tab2.Size = new System.Drawing.Size(665, 497);
             tab2.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             tab2.TabBackColor = null;
             tab2.TabColor = null;
@@ -2849,7 +2852,7 @@ namespace Sample
             tabPage1.Location = new System.Drawing.Point(124, 4);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new System.Windows.Forms.Padding(10);
-            tabPage1.Size = new System.Drawing.Size(537, 627);
+            tabPage1.Size = new System.Drawing.Size(537, 489);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "테스트 1";
             // 
@@ -2859,7 +2862,7 @@ namespace Sample
             tabPage2.Location = new System.Drawing.Point(124, 4);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            tabPage2.Size = new System.Drawing.Size(537, 627);
+            tabPage2.Size = new System.Drawing.Size(537, 489);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "테스트 2";
             // 
@@ -2868,7 +2871,7 @@ namespace Sample
             tabPage3.BackColor = System.Drawing.Color.FromArgb(60, 60, 60);
             tabPage3.Location = new System.Drawing.Point(124, 4);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new System.Drawing.Size(537, 627);
+            tabPage3.Size = new System.Drawing.Size(537, 489);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "테스트 3";
             // 
@@ -3937,6 +3940,30 @@ namespace Sample
             dvButton1.TextPadding = new System.Windows.Forms.Padding(0);
             dvButton1.UseKey = false;
             // 
+            // dgContainer
+            // 
+            dgContainer.Bevel = true;
+            dgContainer.BoxColor = null;
+            dgContainer.ColumnColor = null;
+            dgContainer.ColumnHeight = 30;
+            dvTableLayoutPanel2.SetColumnSpan(dgContainer, 2);
+            dgContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            dgContainer.HScrollPosition = 0D;
+            dgContainer.InputColor = null;
+            dgContainer.Location = new System.Drawing.Point(3, 403);
+            dgContainer.Name = "dgContainer";
+            dgContainer.RowColor = null;
+            dgContainer.RowHeight = 30;
+            dgContainer.ScrollMode = Devinno.Forms.Utils.ScrollMode.Vertical;
+            dgContainer.SelectedRowColor = null;
+            dgContainer.SelectionMode = Devinno.Forms.Controls.DvDataGridSelectionMode.Single;
+            dgContainer.ShadowGap = 1;
+            dgContainer.Size = new System.Drawing.Size(665, 496);
+            dgContainer.SummaryRowColor = null;
+            dgContainer.TabIndex = 6;
+            dgContainer.Text = "dvDataGrid1";
+            dgContainer.VScrollPosition = 0D;
+            // 
             // FormMain
             // 
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -4163,5 +4190,6 @@ namespace Sample
         private Devinno.Forms.Controls.DvDataGrid dataGrid;
         private Devinno.Forms.Controls.DvDateTimePicker dvDateTimePicker2;
         private Devinno.Forms.Controls.DvDateTimePicker dvDateTimePicker1;
+        private Devinno.Forms.Controls.DvDataGrid dgContainer;
     }
 }

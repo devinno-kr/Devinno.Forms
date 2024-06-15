@@ -443,15 +443,6 @@ namespace Devinno.Forms.Controls
             var rtCursorAch2 = Util.FromRect(rtCursorAch.Left, rtCursorAch.Top + rg + 3F, rtCursorAch.Width, rg);
             var rtCursorAch3 = Util.FromRect(rtCursorAch.Left, rtCursorAch.Top + rg + 3F + rg + 3F, rtCursorAch.Width, rg);
 
-            /*
-            rtBack = Util.INT(rtBack);
-            rtBar = Util.INT(rtBar);
-            rtCursor = Util.INT(rtCursor);
-            rtCursorAch1 = Util.INT(rtCursorAch1);
-            rtCursorAch2 = Util.INT(rtCursorAch2);
-            rtCursorAch3 = Util.INT(rtCursorAch3);
-            */
-
             act(rtContent, rtBack, rtBar, rtCursor, rtCursorAch1, rtCursorAch2, rtCursorAch3);
         }
         #endregion

@@ -212,6 +212,12 @@ namespace Devinno.Forms.Controls
         #region DataH
         private float DataH => GraphMode == DvBarGraphMode.List ? (Series.Count * BarSize) + (BarGap * 2) : BarSize + (BarGap * 2);
         #endregion
+
+        public double ScrollPosition
+        {
+            get => scroll.ScrollPosition;
+            set => scroll.ScrollPosition = value;
+        }
         #endregion
 
         #region Member Variable
@@ -560,6 +566,7 @@ namespace Devinno.Forms.Controls
             {
                 if (Scrollable)
                 {
+                    ((HandledMouseEventArgs)e).Handled = true;
                     scroll.MouseWheel(e.Delta, rtScroll);
                 }
             });

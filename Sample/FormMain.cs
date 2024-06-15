@@ -189,7 +189,7 @@ namespace Sample
             for (int a = 1; a <= 3; a++)
             {
                 var va = new DvTreeViewLabelNode("Cat " + a);
-               
+
                 var ls = Enum.GetValues<DayOfWeek>().Select(x => new TextIcon { Text = x.ToString(), Value = x }).ToList();
 
                 for (int b = 1; b <= 2; b++)
@@ -838,33 +838,40 @@ namespace Sample
             this.Title = "Sample UI";
 
             //Test Code
+            pgsV_T.Value = 4;
 
-            knob.Tick = 10;
-            
-            panel.Buttons.Add(new ButtonInfo("Refresh") { IconString = "fa-rotate-right", Size = new SizeInfo(DvSizeMode.Percent, 34) });
-            panel.Buttons.Add(new ButtonInfo("Add") { IconString = "fa-plus", Size = new SizeInfo(DvSizeMode.Percent, 33) });
-            panel.Buttons.Add(new ButtonInfo("Del") { IconString = "fa-minus", Size = new SizeInfo(DvSizeMode.Percent, 33) });
-            panel.ButtonsWidth = 150;
-            panel.ButtonClick += async (o, s) =>
-            {
-                if(s.Button.Name == "Refresh")
-                {
-                    MessageBox.ShowMessageBoxOk("Test", "Test");
-                }
-                else// if (s.Button.Name == "Add")
-                {
-                    s.Button.Enabled = false; panel.Invalidate();
-                    await Task.Delay(3000);
-                    s.Button.Enabled = true; panel.Invalidate();
-                }
-            };
 
-            btnsType.ButtonClick += async (o, s) =>
+            #region dgContainer
             {
-                s.Button.Enabled = false; btnsType.Invalidate();
-                await Task.Delay(3000);
-                s.Button.Enabled = true; btnsType.Invalidate();
-            };
+                var dg = dgContainer;
+
+
+                dg.RowHeight = 30;
+                dg.Columns.Add(new DvDataGridColumn(dg) { Name = "DeviceName", HeaderText = "장치명", SizeMode = DvSizeMode.Percent, Width = 15M });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Time", HeaderText = "설치일", SizeMode = DvSizeMode.Percent, Width = 15M, Format = "yyyy.MM.dd", UseSort = true });
+                dg.Columns.Add(new DvDataGridTextConverterColumn(dg) { Name = "DOW", HeaderText = "요일", SizeMode = DvSizeMode.Percent, Width = 10M, Converter = GetDOW });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Temperature", HeaderText = "온도", SizeMode = DvSizeMode.Percent, Width = 10M, Format = "0.0 ℃" });
+                dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmT", HeaderText = "온도 알람", SizeMode = DvSizeMode.Percent, Width = 10M });
+                dg.Columns.Add(new DvDataGridTextFormatColumn(dg) { Name = "Humidity", HeaderText = "습도", SizeMode = DvSizeMode.Percent, Width = 10M, Format = "0 '%'" });
+                dg.Columns.Add(new DvDataGridLampColumn(dg) { Name = "AlarmH", HeaderText = "습도 알람", SizeMode = DvSizeMode.Percent, Width = 10M });
+                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Play", HeaderText = "동작", Text = "", IconString = "fa-play", IconSize = 12, SizeMode = DvSizeMode.Percent, Width = 10M });
+                dg.Columns.Add(new DvDataGridButtonColumn(dg) { Name = "Stop", HeaderText = "정지", Text = "", IconString = "fa-stop", IconSize = 12, SizeMode = DvSizeMode.Percent, Width = 10M });
+
+                var Items = new List<GridItem2>();
+                for (int i = 1; i <= 300; i++)
+                {
+                    Items.Add(new GridItem2()
+                    {
+                        DeviceName = "DEV" + i,
+                        Time = DateTime.Now.Date + TimeSpan.FromDays(i),
+                        Humidity = rnd.Next(0, 100),
+                        Temperature = rnd.Next(0, 1000) / 10D,
+                    });
+                }
+                dg.SetDataSource<GridItem2>(Items);
+            }
+            #endregion
+
         }
         #endregion
 
@@ -967,6 +974,7 @@ namespace Sample
 
         #endregion
 
+        
     }
     #region class : ModbusValue
     public class ModbusValue : TimeGraphData

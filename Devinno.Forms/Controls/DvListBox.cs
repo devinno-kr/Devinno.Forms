@@ -154,7 +154,7 @@ namespace Devinno.Forms.Controls
         internal bool IsScrolling => scroll.IsTouchMoving || (scroll.IsTouchScrolling && scroll.TouchOffset != 0);
         internal bool DrawScroll { get; set; } = true;
         internal bool Scrollable => scroll.ScrollView < scroll.ScrollTotal;
-        internal double ScrollPosition
+        public double ScrollPosition
         {
             get => scroll.ScrollPosition;
             set => scroll.ScrollPosition = value;
@@ -492,6 +492,7 @@ namespace Devinno.Forms.Controls
             {
                 if (CollisionTool.Check(rtContent, e.Location))
                 {
+                    ((HandledMouseEventArgs)e).Handled = true;
                     scroll.MouseWheel(e.Delta, rtScroll);
                     Invalidate();
                 }
