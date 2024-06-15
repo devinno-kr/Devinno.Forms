@@ -465,7 +465,7 @@ namespace Devinno.Forms.Controls
 
             Areas((rtContent, rtRemark, rtTimeAxis, rtValueTitle, rtValueAxis, rtGraph, rtScroll, szRemarks) =>
             {
-                ((HandledMouseEventArgs)e).Handled = true;
+                if (scroll.ScrollVisible) ((HandledMouseEventArgs)e).Handled = true;
                 scroll.MouseWheel(e.Delta, rtScroll);
             });
 

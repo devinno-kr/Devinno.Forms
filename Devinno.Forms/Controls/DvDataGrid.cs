@@ -1780,10 +1780,18 @@ namespace Devinno.Forms.Controls
                 {
                     if (CollisionTool.Check(rtContent, e.Location))
                     {
-                        ((HandledMouseEventArgs)e).Handled = true;
 
-                        if (ScrollMode == ScrollMode.Vertical || ScrollMode == ScrollMode.Both) vscroll.MouseWheel(e.Delta, rtScrollV);
-                        else hscroll.MouseWheel(e.Delta, rtScrollV);
+
+                        if (ScrollMode == ScrollMode.Vertical || ScrollMode == ScrollMode.Both)
+                        {
+                            if (vscroll.ScrollVisible) ((HandledMouseEventArgs)e).Handled = true;
+                            vscroll.MouseWheel(e.Delta, rtScrollV);
+                        }
+                        else
+                        {
+                            if (hscroll.ScrollVisible) ((HandledMouseEventArgs)e).Handled = true;
+                            hscroll.MouseWheel(e.Delta, rtScrollV);
+                        }
                         Invalidate();
                     }
                 });

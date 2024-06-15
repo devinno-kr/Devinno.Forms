@@ -492,7 +492,7 @@ namespace Devinno.Forms.Controls
             {
                 if (CollisionTool.Check(rtContent, e.Location))
                 {
-                    ((HandledMouseEventArgs)e).Handled = true;
+                    if (scroll.ScrollVisible) ((HandledMouseEventArgs)e).Handled = true;
                     scroll.MouseWheel(e.Delta, rtScroll);
                     Invalidate();
                 }
