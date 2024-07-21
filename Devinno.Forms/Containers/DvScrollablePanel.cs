@@ -38,8 +38,8 @@ namespace Devinno.Forms.Containers
         {
             if (bFirst)
             {
-                if (Theme.Brightness == ThemeBrightness.Dark) 
-                    SetWindowTheme(Handle, "DarkMode_Explorer", null);
+                if (Theme.Brightness == ThemeBrightness.Dark)
+                    DwmTool.SetDarkMode(Handle, true);
                 
                 bFirst = false;
             }
@@ -50,7 +50,7 @@ namespace Devinno.Forms.Containers
         protected override void OnVisibleChanged(EventArgs e)
         {
             var wnd = FindForm() as DvForm;
-            if (wnd != null) DwmTool.SetTheme(this.Handle, wnd.Theme.Brightness == ThemeBrightness.Dark);
+            if (wnd != null) DwmTool.SetDarkMode(this.Handle, wnd.Theme.Brightness == ThemeBrightness.Dark);
             base.OnVisibleChanged(e);
         }
         #endregion

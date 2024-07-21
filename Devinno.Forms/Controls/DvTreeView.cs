@@ -196,6 +196,7 @@ namespace Devinno.Forms.Controls
         private Point movePoint;
         private DateTime downTime;
         private TextBox OriginalTextBox;
+        private bool bFirst = true;
         #endregion
 
         #region Event
@@ -280,6 +281,12 @@ namespace Devinno.Forms.Controls
             var p = new Pen(Color.Black);
             var br = new SolidBrush(Color.Black);
             #endregion
+
+            if (bFirst)
+            {
+                DwmTool.SetDarkMode(OriginalTextBox.Handle, Theme.Brightness == ThemeBrightness.Dark);
+                bFirst = false;
+            }
 
             scroll.TouchMode = Theme.TouchMode;
 

@@ -430,7 +430,7 @@ namespace Devinno.Forms.Dialogs
         {
             if (BlankForm && FormBorderStyle != FormBorderStyle.None)
             {
-                DwmTool.SetTheme(this, Theme.Brightness == ThemeBrightness.Dark);
+                DwmTool.SetDarkMode(this, Theme.Brightness == ThemeBrightness.Dark);
             }
             base.OnShown(e);
         }
@@ -440,7 +440,7 @@ namespace Devinno.Forms.Dialogs
         {
             if (BlankForm && FormBorderStyle != FormBorderStyle.None)
             {
-                DwmTool.SetTheme(this, Theme.Brightness == ThemeBrightness.Dark);
+                DwmTool.SetDarkMode(this, Theme.Brightness == ThemeBrightness.Dark);
             }
             base.OnVisibleChanged(e);
         }
@@ -449,7 +449,7 @@ namespace Devinno.Forms.Dialogs
         protected override void OnLoad(EventArgs e)
         {
             Loaded = true;
-
+            DwmTool.SetDarkMode(this, Theme.Brightness == ThemeBrightness.Dark);
             Icon = IconTool.GetIcon(new Devinno.Forms.Icons.DvIcon(TitleIconString, 16), Theme.ForeColor);
 
             base.OnLoad(e);

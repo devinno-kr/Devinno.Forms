@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Devinno.Forms.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Devinno.Forms.Tools
 {
@@ -128,6 +130,7 @@ namespace Devinno.Forms.Tools
 
         [DllImport("User32.dll")]
         internal static extern IntPtr GetWindowDC(IntPtr hWnd);
+
         #endregion
 
         #region Method
@@ -149,7 +152,7 @@ namespace Devinno.Forms.Tools
                 }
 
                 int useImmersiveDarkMode = isDarkMode ? 1 : 0;
-                DwmSetWindowAttribute(form.Handle, attribute, ref useImmersiveDarkMode, sizeof(int));
+                DwmSetWindowAttribute(form.Handle, attribute, ref useImmersiveDarkMode, sizeof(int)); 
                 DwmSetWindowAttribute(form.Handle, DWMWA_MICA_EFFECT, ref useImmersiveDarkMode, sizeof(int));
             }
         }
@@ -168,6 +171,17 @@ namespace Devinno.Forms.Tools
                 DwmSetWindowAttribute(handle, attribute, ref useImmersiveDarkMode, sizeof(int));
                 DwmSetWindowAttribute(handle, DWMWA_MICA_EFFECT, ref useImmersiveDarkMode, sizeof(int));
             }
+        }
+        public static void SetDarkMode(Form Wnd, bool isDarkMode)
+        {
+            SetTheme(Wnd, isDarkMode);
+            SetWindowTheme(Wnd.Handle, isDarkMode ? "DarkMode_Explorer" : null, null);
+        }
+
+        public static void SetDarkMode(IntPtr handle, bool isDarkMode)
+        {
+            SetTheme(handle, isDarkMode);
+            SetWindowTheme(handle, isDarkMode ? "DarkMode_Explorer" : null, null);
         }
         #endregion
 

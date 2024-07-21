@@ -1212,7 +1212,6 @@ namespace Sample
             // 
             txtMultiLine.BorderColor = null;
             txtMultiLine.ContentAlignment = Devinno.Forms.DvContentAlignment.TopLeft;
-            txtMultiLine.FullMode = false;
             txtMultiLine.InputType = Devinno.Forms.DvTextBoxType.Text;
             txtMultiLine.Location = new System.Drawing.Point(345, 49);
             txtMultiLine.MaxLength = 32767;
@@ -1235,7 +1234,6 @@ namespace Sample
             // 
             txtNumber.BorderColor = null;
             txtNumber.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
-            txtNumber.FullMode = false;
             txtNumber.InputType = Devinno.Forms.DvTextBoxType.Number;
             txtNumber.Location = new System.Drawing.Point(345, 13);
             txtNumber.MaxLength = 32767;

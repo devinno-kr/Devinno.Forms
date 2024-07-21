@@ -161,14 +161,29 @@ namespace Devinno.Forms.Dialogs
                 if (p != null && p.Items != null && p.Items.Count > 0)
                 {
                     #region Selector
-                    var c = new DvValueInputWheel { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
-                    tpnl.Controls.Add(c, col, row);
-                    c.Items.AddRange(p.Items);
-                    if (value != null)
+                    if (p.SelectorMode == DvSelectorMode.Combo)
                     {
-                        var val = v.GetValue((object)value);
-                        var itm = c.Items.Where(x => val != null && val.Equals(x.Value)).FirstOrDefault();
-                        if (itm != null) c.SelectedIndex = c.Items.IndexOf(itm);
+                        var c = new DvValueInputCombo { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
+                        tpnl.Controls.Add(c, col, row);
+                        c.Items.AddRange(p.Items);
+                        if (value != null)
+                        {
+                            var val = v.GetValue((object)value);
+                            var itm = c.Items.Where(x => val != null && val.Equals(x.Value)).FirstOrDefault();
+                            if (itm != null) c.SelectedIndex = c.Items.IndexOf(itm);
+                        }
+                    }
+                    else
+                    {
+                        var c = new DvValueInputWheel { Name = v.Name, Title = title, TitleWidth = nsz, Tag = new InputBoxTag() { p = v, info = p }, Unit = unit, Dock = DockStyle.Fill };
+                        tpnl.Controls.Add(c, col, row);
+                        c.Items.AddRange(p.Items);
+                        if (value != null)
+                        {
+                            var val = v.GetValue((object)value);
+                            var itm = c.Items.Where(x => val != null && val.Equals(x.Value)).FirstOrDefault();
+                            if (itm != null) c.SelectedIndex = c.Items.IndexOf(itm);
+                        }
                     }
                     #endregion
                 }

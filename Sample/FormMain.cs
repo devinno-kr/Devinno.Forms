@@ -649,9 +649,9 @@ namespace Sample
                 infos.Add("Width", new InputBoxInfo { Title = "너비" });
                 infos.Add("Height", new InputBoxInfo { Title = "높이" });
                 infos.Add("Name", new InputBoxInfo { Title = "이름" });
-                infos.Add("Style", new InputBoxInfo { Title = "형식" });
+                infos.Add("Style", new InputBoxInfo { Title = "형식", Items = Enum.GetValues<PageStyle>().Select(x => new TextIcon { Text = x.ToString(), Value = x }).ToList() , SelectorMode = DvSelectorMode.Combo});
 
-                var ret = InputBox.ShowInputBox<PageInfo>("새 파일");
+                var ret = InputBox.ShowInputBox<PageInfo>("새 파일", infos);
 
                 /*
                 Dictionary<string, InputBoxInfo> infos = new Dictionary<string, InputBoxInfo>();

@@ -1,6 +1,7 @@
 ﻿using Devinno.Forms.Controls;
 using Devinno.Forms.Dialogs;
 using Devinno.Forms.Themes;
+using Devinno.Forms.Tools;
 using Devinno.Forms.Utils;
 using Devinno.Tools;
 using System;
@@ -186,17 +187,25 @@ namespace Devinno.Forms.Controls
         public bool MultiLine
         {
             get => OriginalTextBox.Multiline;
-            set => OriginalTextBox.Multiline = value;
+            set
+            {
+                OriginalTextBox.Multiline = value;
+                if (value)
+                {
+                    OriginalTextBox.ScrollBars = ScrollBars.Vertical;
+                    using (var g = CreateGraphics())
+                        Align(g, FindForm() as DvForm);
+                }
+                else
+                {
+                    OriginalTextBox.ScrollBars = ScrollBars.None;
+                    using (var g = CreateGraphics())
+                        Align(g, FindForm() as DvForm);
+                }
+            }
         }
         #endregion
-        #region FullMode
-        private bool bFullMode = false;
-        public bool FullMode
-        {
-            get => bFullMode;
-            set => bFullMode = value;
-        }
-        #endregion
+ 
 
         #region Unit
         private string strUnit = "";
@@ -232,6 +241,7 @@ namespace Devinno.Forms.Controls
 
         #region Member Variable
         RectangleF bounds = new RectangleF(0, 0, 0, 0);
+        bool bFirst = true;
         #endregion
 
         #region Event
@@ -242,6 +252,7 @@ namespace Devinno.Forms.Controls
         public DvTextBox()
         {
             this.Size = new Size(150, 30);
+            this.Padding = new Padding(10, 10, 10, 10);
 
             #region TextBox
             OriginalTextBox = new TextBox();
@@ -253,8 +264,13 @@ namespace Devinno.Forms.Controls
             OriginalTextBox.TextAlign = HorizontalAlignment.Center;
             Controls.Add(OriginalTextBox);
 
-            OriginalTextBox.TextChanged += (o, s) => TextChange(s);
+            OriginalTextBox.TextChanged += (o, s) =>
+            {
+                TextChange(s);
+                Invalidate();
+            };
             #endregion
+           
         }
         #endregion
 
@@ -285,6 +301,12 @@ namespace Devinno.Forms.Controls
         #region OnThemeDraw
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
+            if (bFirst)
+            {
+                DwmTool.SetDarkMode(OriginalTextBox.Handle, Theme.Brightness == ThemeBrightness.Dark);
+                bFirst = false;
+            }
+            DwmTool.SetDarkMode(OriginalTextBox.Handle, true);
             Areas((rtContent, rtText, rtUnit) =>
             {
                 #region Var
@@ -295,8 +317,10 @@ namespace Devinno.Forms.Controls
                 #region Set
                 var Wnd = this.FindForm() as DvForm;
 
-                if (OriginalTextBox.ForeColor != ForeColor) OriginalTextBox.ForeColor = ForeColor;
-                if (OriginalTextBox.BackColor != TextBoxColor) OriginalTextBox.BackColor = TextBoxColor;
+                if (OriginalTextBox.ForeColor != ForeColor) 
+                    OriginalTextBox.ForeColor = ForeColor;
+                if (OriginalTextBox.BackColor != TextBoxColor) 
+                    OriginalTextBox.BackColor = TextBoxColor;
 
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
@@ -400,77 +424,114 @@ namespace Devinno.Forms.Controls
             var sz2 = TextRenderer.MeasureText("H", Font);
 
             RectangleF rtText;
-            if (FullMode)
+            if (MultiLine)
             {
-                OriginalTextBox.Height = Convert.ToInt32(rtTextArea.Height);
-                rtText = Util.MakeRectangleAlign(rtTextArea, new SizeF(rtTextArea.Width - rtUnit.Width, OriginalTextBox.Height), ContentAlignment);
+                rtText = Util.INT(Util.FromRect(rtContent, TextPadding));
             }
             else
             {
                 OriginalTextBox.Height = Math.Max(Convert.ToInt32(sz2.Height), Convert.ToInt32(sz.Height));
                 rtText = Util.MakeRectangleAlign(rtTextArea, new SizeF(rtTextArea.Width - rtUnit.Width, OriginalTextBox.Height), ContentAlignment);
             }
-
             act(rtContent, rtText, rtUnit);
         }
         #endregion
         #region Align
         private void Align(Graphics g, DvForm Wnd)
         {
-            #region Align
-            switch (ContentAlignment)
+            
+            if (!MultiLine)
             {
-                case DvContentAlignment.TopLeft:
-                case DvContentAlignment.MiddleLeft:
-                case DvContentAlignment.BottomLeft:
-                    if (OriginalTextBox.TextAlign != HorizontalAlignment.Left)
-                        OriginalTextBox.TextAlign = HorizontalAlignment.Left;
-                    break;
-
-                case DvContentAlignment.TopCenter:
-                case DvContentAlignment.MiddleCenter:
-                case DvContentAlignment.BottomCenter:
-                    if (OriginalTextBox.TextAlign != HorizontalAlignment.Center)
-                        OriginalTextBox.TextAlign = HorizontalAlignment.Center;
-                    break;
-
-                case DvContentAlignment.TopRight:
-                case DvContentAlignment.MiddleRight:
-                case DvContentAlignment.BottomRight:
-                    if (OriginalTextBox.TextAlign != HorizontalAlignment.Right)
-                        OriginalTextBox.TextAlign = HorizontalAlignment.Right;
-                    break;
-            }
-            #endregion
-            Areas((rtContent, rtText, rtUnit) =>
-            {
-                #region Font
-                if (DesignMode)
+                #region Align
+                switch (ContentAlignment)
                 {
-                    OriginalTextBox.Font = this.Font;
+                    case DvContentAlignment.TopLeft:
+                    case DvContentAlignment.MiddleLeft:
+                    case DvContentAlignment.BottomLeft:
+                        if (OriginalTextBox.TextAlign != HorizontalAlignment.Left)
+                            OriginalTextBox.TextAlign = HorizontalAlignment.Left;
+                        break;
+
+                    case DvContentAlignment.TopCenter:
+                    case DvContentAlignment.MiddleCenter:
+                    case DvContentAlignment.BottomCenter:
+                        if (OriginalTextBox.TextAlign != HorizontalAlignment.Center)
+                            OriginalTextBox.TextAlign = HorizontalAlignment.Center;
+                        break;
+
+                    case DvContentAlignment.TopRight:
+                    case DvContentAlignment.MiddleRight:
+                    case DvContentAlignment.BottomRight:
+                        if (OriginalTextBox.TextAlign != HorizontalAlignment.Right)
+                            OriginalTextBox.TextAlign = HorizontalAlignment.Right;
+                        break;
                 }
-                else
+                #endregion
+                Areas((rtContent, rtText, rtUnit) =>
                 {
-                    var f = (float)OriginalTextBox.LogicalToDeviceUnits(1000) / 1000F;
-                    var ftsz = this.Font.Size * f;
-                    if (OriginalTextBox.Font.Name != this.Font.Name || OriginalTextBox.Font.Style != this.Font.Style || OriginalTextBox.Font.Size != ftsz)
+                    #region Font
+                    if (DesignMode)
                     {
-                        OriginalTextBox.Font = new Font(this.Font.FontFamily, ftsz, this.Font.Style);
+                        OriginalTextBox.Font = this.Font;
                     }
-                }
-                #endregion
-                #region Set
-                var Theme = GetTheme();
-                bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block)) && (Theme?.KeyboardInput ?? false);
-                if (bv != OriginalTextBox.Visible) OriginalTextBox.Visible = bv;
+                    else
+                    {
+                        var f = (float)OriginalTextBox.LogicalToDeviceUnits(1000) / 1000F;
+                        var ftsz = this.Font.Size * f;
+                        if (OriginalTextBox.Font.Name != this.Font.Name || OriginalTextBox.Font.Style != this.Font.Style || OriginalTextBox.Font.Size != ftsz)
+                        {
+                            OriginalTextBox.Font = new Font(this.Font.FontFamily, ftsz, this.Font.Style);
+                        }
+                    }
+                    #endregion
+                    #region Set
+                    var Theme = GetTheme();
+                    bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block)) && (Theme?.KeyboardInput ?? false);
+                    if (bv != OriginalTextBox.Visible) OriginalTextBox.Visible = bv;
 
-                if (bounds != rtText)
-                {
-                    bounds = rtText;
-                    OriginalTextBox.Bounds = Util.INT(rtText);
-                }
+                    if (bounds != rtText)
+                    {
+                        bounds = rtText;
+                        OriginalTextBox.Bounds = Util.INT(rtText);
+                    }
+                    #endregion
+                });
+            }
+            else
+            {
+                #region Align
+                OriginalTextBox.TextAlign = HorizontalAlignment.Left;
                 #endregion
-            });
+                Areas((rtContent, rtText, rtUnit) =>
+                {
+                    #region Font
+                    if (DesignMode)
+                    {
+                        OriginalTextBox.Font = this.Font;
+                    }
+                    else
+                    {
+                        var f = (float)OriginalTextBox.LogicalToDeviceUnits(1000) / 1000F;
+                        var ftsz = this.Font.Size * f;
+                        if (OriginalTextBox.Font.Name != this.Font.Name || OriginalTextBox.Font.Style != this.Font.Style || OriginalTextBox.Font.Size != ftsz)
+                        {
+                            OriginalTextBox.Font = new Font(this.Font.FontFamily, ftsz, this.Font.Style);
+                        }
+                    }
+                    #endregion
+                    #region Set
+                    var Theme = GetTheme();
+                    bool bv = this.Enabled && (Wnd == null || (Wnd != null && !Wnd.Block)) && (Theme?.KeyboardInput ?? false);
+                    if (bv != OriginalTextBox.Visible) OriginalTextBox.Visible = bv;
+
+                    if (bounds != rtText)
+                    {
+                        bounds = rtText;
+                        OriginalTextBox.Bounds = Util.INT(Util.FromRect(rtContent, TextPadding));
+                    }
+                    #endregion
+                });
+            }
         }
         #endregion
         #region TextChange

@@ -217,6 +217,7 @@ namespace Devinno.Forms.Controls
         Scroll hscroll = new Scroll() { Direction = ScrollDirection.Horizon, Cut = true, TouchMode = true };
         TextBox OriginalTextBox;
 
+        bool bFirst = true;
         bool bNotRaiseEvent = false;
         object objs = null;
         int PrevTotalHeight = -1;
@@ -410,6 +411,7 @@ namespace Devinno.Forms.Controls
             };
 
             #endregion
+
         }
         #endregion
 
@@ -432,6 +434,12 @@ namespace Devinno.Forms.Controls
             var p = new Pen(Color.Black);
             var br = new SolidBrush(Color.Black);
             #endregion
+
+            if (bFirst)
+            {
+                DwmTool.SetDarkMode(OriginalTextBox.Handle, Theme.Brightness == ThemeBrightness.Dark);
+                bFirst = false;
+            }
 
             vscroll.TouchMode = hscroll.TouchMode = Theme.TouchMode;
 

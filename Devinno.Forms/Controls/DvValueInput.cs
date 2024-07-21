@@ -533,6 +533,7 @@ namespace Devinno.Forms.Controls
 
         #region Member Variable
         RectangleF bounds;
+        bool bFirst = true;
         #endregion
 
         #region Event
@@ -561,6 +562,12 @@ namespace Devinno.Forms.Controls
         #region DrawValue
         public override void DrawValue(Graphics g, DvTheme Theme, RectangleF rtValue)
         {
+            if (bFirst)
+            {
+                DwmTool.SetDarkMode(OriginalTextBox.Handle, Theme.Brightness == ThemeBrightness.Dark);
+                bFirst = false;
+            }
+
             #region Set
             var ValueColor = this.ValueColor ?? Theme.InputColor;
 
@@ -1013,6 +1020,7 @@ namespace Devinno.Forms.Controls
         #region Member Variable
         RectangleF bounds;
         T? old;
+        bool bFirst = true;
         #endregion
 
         #region Event
@@ -1057,6 +1065,12 @@ namespace Devinno.Forms.Controls
         #region DrawValue
         public override void DrawValue(Graphics g, DvTheme Theme, RectangleF rtValue)
         {
+            if (bFirst)
+            {
+                DwmTool.SetDarkMode(OriginalTextBox.Handle, Theme.Brightness == ThemeBrightness.Dark);
+                bFirst = false;
+            }
+
             #region Set
             var ValueColor = this.ValueColor ?? Theme.InputColor;
             var ErrorColor = this.ErrorColor ?? Color.FromArgb(220, 0, 0);
