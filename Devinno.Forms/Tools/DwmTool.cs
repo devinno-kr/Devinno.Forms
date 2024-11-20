@@ -1,4 +1,6 @@
-﻿using Devinno.Forms.Dialogs;
+﻿using Devinno.Forms.Controls;
+using Devinno.Forms.Dialogs;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -174,14 +176,20 @@ namespace Devinno.Forms.Tools
         }
         public static void SetDarkMode(Form Wnd, bool isDarkMode)
         {
+            int value = isDarkMode ? 1 : 0;
             SetTheme(Wnd, isDarkMode);
-            SetWindowTheme(Wnd.Handle, isDarkMode ? "DarkMode_Explorer" : null, null);
+            SetWindowTheme(Wnd.Handle, isDarkMode ? "DarkMode_Explorer" : "Explorer", null);
+            DwmSetWindowAttribute(Wnd.Handle, DWMWA_USE_IMMERSIVE_DARK_MODE, ref value, Marshal.SizeOf(typeof(bool)));
+
         }
 
         public static void SetDarkMode(IntPtr handle, bool isDarkMode)
         {
+            int value = isDarkMode ? 1 : 0;
             SetTheme(handle, isDarkMode);
-            SetWindowTheme(handle, isDarkMode ? "DarkMode_Explorer" : null, null);
+            SetWindowTheme(handle, isDarkMode ? "DarkMode_Explorer" : "Explorer", null);
+            DwmSetWindowAttribute(handle, DWMWA_USE_IMMERSIVE_DARK_MODE, ref value, Marshal.SizeOf(typeof(bool)));
+
         }
         #endregion
 

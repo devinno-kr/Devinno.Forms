@@ -241,7 +241,7 @@ namespace Devinno.Forms.Controls
 
         #region Member Variable
         RectangleF bounds = new RectangleF(0, 0, 0, 0);
-        bool bFirst = true;
+        DvTheme? theme = null;
         #endregion
 
         #region Event
@@ -301,12 +301,12 @@ namespace Devinno.Forms.Controls
         #region OnThemeDraw
         protected override void OnThemeDraw(PaintEventArgs e, DvTheme Theme)
         {
-            if (bFirst)
+            if (theme != Theme)
             {
                 DwmTool.SetDarkMode(OriginalTextBox.Handle, Theme.Brightness == ThemeBrightness.Dark);
-                bFirst = false;
+                this.theme = Theme;
             }
-            DwmTool.SetDarkMode(OriginalTextBox.Handle, true);
+
             Areas((rtContent, rtText, rtUnit) =>
             {
                 #region Var

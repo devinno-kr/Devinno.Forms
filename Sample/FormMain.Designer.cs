@@ -32,6 +32,9 @@ namespace Sample
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             tab = new Devinno.Forms.Containers.DvTablessControl();
             tpControl = new System.Windows.Forms.TabPage();
+            dvTabControl1 = new Devinno.Forms.Containers.DvTabControl();
+            tabPage4 = new System.Windows.Forms.TabPage();
+            tabPage5 = new System.Windows.Forms.TabPage();
             inOnOff = new Devinno.Forms.Controls.DvValueInputBool();
             inTemp = new Devinno.Forms.Controls.DvValueInputFloat();
             inPos = new Devinno.Forms.Controls.DvValueInputInt();
@@ -158,6 +161,7 @@ namespace Sample
             tabPage1 = new System.Windows.Forms.TabPage();
             tabPage2 = new System.Windows.Forms.TabPage();
             tabPage3 = new System.Windows.Forms.TabPage();
+            dgContainer = new Devinno.Forms.Controls.DvDataGrid();
             tpDialog = new System.Windows.Forms.TabPage();
             dvDateTimePicker2 = new Devinno.Forms.Controls.DvDateTimePicker();
             dvDateTimePicker1 = new Devinno.Forms.Controls.DvDateTimePicker();
@@ -204,9 +208,11 @@ namespace Sample
             listBox = new Devinno.Forms.Controls.DvListBox();
             dvButton2 = new Devinno.Forms.Controls.DvButton();
             dvButton1 = new Devinno.Forms.Controls.DvButton();
-            dgContainer = new Devinno.Forms.Controls.DvDataGrid();
+            blackTheme1 = new Devinno.Forms.Themes.BlackTheme();
+            whiteTheme1 = new Devinno.Forms.Themes.WhiteTheme();
             tab.SuspendLayout();
             tpControl.SuspendLayout();
+            dvTabControl1.SuspendLayout();
             tblTriButton.SuspendLayout();
             tpGauge.SuspendLayout();
             tblGauge1.SuspendLayout();
@@ -249,13 +255,14 @@ namespace Sample
             tab.Multiline = true;
             tab.Name = "tab";
             tab.SelectedIndex = 0;
-            tab.Size = new System.Drawing.Size(726, 723);
+            tab.Size = new System.Drawing.Size(1174, 723);
             tab.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             tab.TabIndex = 0;
             // 
             // tpControl
             // 
-            tpControl.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpControl.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            tpControl.Controls.Add(dvTabControl1);
             tpControl.Controls.Add(inOnOff);
             tpControl.Controls.Add(inTemp);
             tpControl.Controls.Add(inPos);
@@ -309,9 +316,47 @@ namespace Sample
             tpControl.Location = new System.Drawing.Point(4, 5);
             tpControl.Name = "tpControl";
             tpControl.Padding = new System.Windows.Forms.Padding(10);
-            tpControl.Size = new System.Drawing.Size(718, 714);
+            tpControl.Size = new System.Drawing.Size(1166, 714);
             tpControl.TabIndex = 0;
             tpControl.Text = "tabPage1";
+            // 
+            // dvTabControl1
+            // 
+            dvTabControl1.Controls.Add(tabPage4);
+            dvTabControl1.Controls.Add(tabPage5);
+            dvTabControl1.Dock = System.Windows.Forms.DockStyle.Right;
+            dvTabControl1.DrawBoarder = true;
+            dvTabControl1.ItemSize = new System.Drawing.Size(120, 40);
+            dvTabControl1.Location = new System.Drawing.Point(728, 10);
+            dvTabControl1.Name = "dvTabControl1";
+            dvTabControl1.PointColor = null;
+            dvTabControl1.Round = null;
+            dvTabControl1.SelectedIndex = 0;
+            dvTabControl1.Size = new System.Drawing.Size(428, 694);
+            dvTabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            dvTabControl1.TabBackColor = null;
+            dvTabControl1.TabColor = null;
+            dvTabControl1.TabIndex = 55;
+            // 
+            // tabPage4
+            // 
+            tabPage4.BackColor = System.Drawing.Color.FromArgb(180, 180, 180);
+            tabPage4.Location = new System.Drawing.Point(4, 44);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            tabPage4.Size = new System.Drawing.Size(420, 646);
+            tabPage4.TabIndex = 0;
+            tabPage4.Text = "tabPage4";
+            // 
+            // tabPage5
+            // 
+            tabPage5.BackColor = System.Drawing.Color.FromArgb(180, 180, 180);
+            tabPage5.Location = new System.Drawing.Point(4, 44);
+            tabPage5.Name = "tabPage5";
+            tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            tabPage5.Size = new System.Drawing.Size(420, 646);
+            tabPage5.TabIndex = 1;
+            tabPage5.Text = "tabPage5";
             // 
             // inOnOff
             // 
@@ -772,7 +817,7 @@ namespace Sample
             lmp3.LampSize = 26;
             lmp3.Location = new System.Drawing.Point(345, 313);
             lmp3.Name = "lmp3";
-            lmp3.OffLampColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            lmp3.OffLampColor = null;
             lmp3.OnLampColor = System.Drawing.Color.Blue;
             lmp3.OnOff = false;
             lmp3.ShadowGap = 1;
@@ -790,8 +835,8 @@ namespace Sample
             lmp2.LampSize = 26;
             lmp2.Location = new System.Drawing.Point(345, 277);
             lmp2.Name = "lmp2";
-            lmp2.OffLampColor = System.Drawing.Color.FromArgb(50, 50, 50);
-            lmp2.OnLampColor = System.Drawing.Color.FromArgb(0, 180, 0);
+            lmp2.OffLampColor = null;
+            lmp2.OnLampColor = System.Drawing.Color.Lime;
             lmp2.OnOff = false;
             lmp2.ShadowGap = 1;
             lmp2.Size = new System.Drawing.Size(138, 30);
@@ -808,9 +853,9 @@ namespace Sample
             lmp1.LampSize = 26;
             lmp1.Location = new System.Drawing.Point(345, 241);
             lmp1.Name = "lmp1";
-            lmp1.OffLampColor = System.Drawing.Color.FromArgb(50, 50, 50);
-            lmp1.OnLampColor = System.Drawing.Color.FromArgb(220, 0, 0);
-            lmp1.OnOff = false;
+            lmp1.OffLampColor = null;
+            lmp1.OnLampColor = System.Drawing.Color.Red;
+            lmp1.OnOff = true;
             lmp1.ShadowGap = 1;
             lmp1.Size = new System.Drawing.Size(138, 30);
             lmp1.TabIndex = 34;
@@ -1218,6 +1263,7 @@ namespace Sample
             txtMultiLine.MinusInput = false;
             txtMultiLine.MultiLine = true;
             txtMultiLine.Name = "txtMultiLine";
+            txtMultiLine.Padding = new System.Windows.Forms.Padding(10);
             txtMultiLine.Round = null;
             txtMultiLine.ShadowGap = 1;
             txtMultiLine.Size = new System.Drawing.Size(138, 138);
@@ -1240,6 +1286,7 @@ namespace Sample
             txtNumber.MinusInput = false;
             txtNumber.MultiLine = false;
             txtNumber.Name = "txtNumber";
+            txtNumber.Padding = new System.Windows.Forms.Padding(10);
             txtNumber.Round = null;
             txtNumber.ShadowGap = 1;
             txtNumber.Size = new System.Drawing.Size(138, 30);
@@ -1486,13 +1533,13 @@ namespace Sample
             // 
             // tpGauge
             // 
-            tpGauge.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpGauge.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpGauge.Controls.Add(tblGauge1);
             tpGauge.Controls.Add(tblGauge2);
             tpGauge.Location = new System.Drawing.Point(4, 5);
             tpGauge.Name = "tpGauge";
             tpGauge.Padding = new System.Windows.Forms.Padding(10);
-            tpGauge.Size = new System.Drawing.Size(718, 714);
+            tpGauge.Size = new System.Drawing.Size(1166, 714);
             tpGauge.TabIndex = 1;
             tpGauge.Text = "tabPage2";
             // 
@@ -2379,12 +2426,12 @@ namespace Sample
             // 
             // tpGraph
             // 
-            tpGraph.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpGraph.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpGraph.Controls.Add(dvTableLayoutPanel1);
             tpGraph.Location = new System.Drawing.Point(4, 5);
             tpGraph.Name = "tpGraph";
             tpGraph.Padding = new System.Windows.Forms.Padding(10);
-            tpGraph.Size = new System.Drawing.Size(718, 714);
+            tpGraph.Size = new System.Drawing.Size(1166, 714);
             tpGraph.TabIndex = 2;
             tpGraph.Text = "tabPage3";
             // 
@@ -2404,7 +2451,7 @@ namespace Sample
             dvTableLayoutPanel1.RowCount = 2;
             dvTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             dvTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            dvTableLayoutPanel1.Size = new System.Drawing.Size(698, 694);
+            dvTableLayoutPanel1.Size = new System.Drawing.Size(1146, 694);
             dvTableLayoutPanel1.TabIndex = 1;
             // 
             // btnPause
@@ -2446,23 +2493,24 @@ namespace Sample
             tabGraph.Multiline = true;
             tabGraph.Name = "tabGraph";
             tabGraph.SelectedIndex = 0;
-            tabGraph.Size = new System.Drawing.Size(692, 652);
+            tabGraph.Size = new System.Drawing.Size(1140, 652);
             tabGraph.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             tabGraph.TabIndex = 0;
             // 
             // tpBarGraphH
             // 
-            tpBarGraphH.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpBarGraphH.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpBarGraphH.Controls.Add(barGraphH);
             tpBarGraphH.Location = new System.Drawing.Point(4, 5);
             tpBarGraphH.Name = "tpBarGraphH";
             tpBarGraphH.Padding = new System.Windows.Forms.Padding(3);
-            tpBarGraphH.Size = new System.Drawing.Size(684, 643);
+            tpBarGraphH.Size = new System.Drawing.Size(1132, 643);
             tpBarGraphH.TabIndex = 0;
             tpBarGraphH.Text = "tabPage1";
             // 
             // barGraphH
             // 
+            barGraphH.BackColor = System.Drawing.SystemColors.ActiveBorder;
             barGraphH.BarGap = 8;
             barGraphH.BarSize = 24;
             barGraphH.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2478,25 +2526,27 @@ namespace Sample
             barGraphH.Name = "barGraphH";
             barGraphH.RemarkColor = null;
             barGraphH.Scrollable = true;
+            barGraphH.ScrollPosition = 0D;
             barGraphH.ShadowGap = 1;
-            barGraphH.Size = new System.Drawing.Size(678, 637);
+            barGraphH.Size = new System.Drawing.Size(1126, 637);
             barGraphH.TabIndex = 0;
             barGraphH.Text = "dvBarGraphh1";
             barGraphH.ValueDraw = true;
             // 
             // tpBarGraphV
             // 
-            tpBarGraphV.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpBarGraphV.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpBarGraphV.Controls.Add(barGraphV);
             tpBarGraphV.Location = new System.Drawing.Point(4, 5);
             tpBarGraphV.Name = "tpBarGraphV";
             tpBarGraphV.Padding = new System.Windows.Forms.Padding(3);
-            tpBarGraphV.Size = new System.Drawing.Size(684, 643);
+            tpBarGraphV.Size = new System.Drawing.Size(1132, 643);
             tpBarGraphV.TabIndex = 1;
             tpBarGraphV.Text = "tabPage2";
             // 
             // barGraphV
             // 
+            barGraphV.BackColor = System.Drawing.SystemColors.ActiveBorder;
             barGraphV.BarGap = 8;
             barGraphV.BarSize = 24;
             barGraphV.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2512,20 +2562,21 @@ namespace Sample
             barGraphV.Name = "barGraphV";
             barGraphV.RemarkColor = null;
             barGraphV.Scrollable = true;
+            barGraphV.ScrollPosition = 0D;
             barGraphV.ShadowGap = 1;
-            barGraphV.Size = new System.Drawing.Size(678, 637);
+            barGraphV.Size = new System.Drawing.Size(1126, 637);
             barGraphV.TabIndex = 0;
             barGraphV.Text = "dvBarGraphv1";
             barGraphV.ValueDraw = true;
             // 
             // tpCircleGraph
             // 
-            tpCircleGraph.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpCircleGraph.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpCircleGraph.Controls.Add(circleGraph);
             tpCircleGraph.Location = new System.Drawing.Point(4, 5);
             tpCircleGraph.Name = "tpCircleGraph";
             tpCircleGraph.Padding = new System.Windows.Forms.Padding(3);
-            tpCircleGraph.Size = new System.Drawing.Size(684, 643);
+            tpCircleGraph.Size = new System.Drawing.Size(1132, 643);
             tpCircleGraph.TabIndex = 2;
             tpCircleGraph.Text = "tabPage3";
             // 
@@ -2537,19 +2588,19 @@ namespace Sample
             circleGraph.Location = new System.Drawing.Point(3, 3);
             circleGraph.Name = "circleGraph";
             circleGraph.ShadowGap = 1;
-            circleGraph.Size = new System.Drawing.Size(678, 637);
+            circleGraph.Size = new System.Drawing.Size(1126, 637);
             circleGraph.TabIndex = 0;
             circleGraph.Text = "dvCircleGraph1";
             circleGraph.ValueFont = new System.Drawing.Font("나눔고딕", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             // 
             // tpLineGraph
             // 
-            tpLineGraph.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpLineGraph.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpLineGraph.Controls.Add(lineGraph);
             tpLineGraph.Location = new System.Drawing.Point(4, 5);
             tpLineGraph.Name = "tpLineGraph";
             tpLineGraph.Padding = new System.Windows.Forms.Padding(3);
-            tpLineGraph.Size = new System.Drawing.Size(684, 643);
+            tpLineGraph.Size = new System.Drawing.Size(1132, 643);
             tpLineGraph.TabIndex = 3;
             tpLineGraph.Text = "tabPage4";
             // 
@@ -2567,21 +2618,22 @@ namespace Sample
             lineGraph.PointDraw = true;
             lineGraph.RemarkColor = null;
             lineGraph.Scrollable = true;
+            lineGraph.ScrollPosition = 0D;
             lineGraph.SectionWidth = 80;
             lineGraph.ShadowGap = 1;
-            lineGraph.Size = new System.Drawing.Size(678, 637);
+            lineGraph.Size = new System.Drawing.Size(1126, 637);
             lineGraph.TabIndex = 0;
             lineGraph.Text = "dvLineGraph1";
             lineGraph.ValueDraw = true;
             // 
             // tpTrendGraph
             // 
-            tpTrendGraph.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpTrendGraph.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpTrendGraph.Controls.Add(trendGraph);
             tpTrendGraph.Location = new System.Drawing.Point(4, 5);
             tpTrendGraph.Name = "tpTrendGraph";
             tpTrendGraph.Padding = new System.Windows.Forms.Padding(3);
-            tpTrendGraph.Size = new System.Drawing.Size(684, 643);
+            tpTrendGraph.Size = new System.Drawing.Size(1132, 643);
             tpTrendGraph.TabIndex = 4;
             tpTrendGraph.Text = "tabPage5";
             // 
@@ -2596,7 +2648,7 @@ namespace Sample
             trendGraph.Name = "trendGraph";
             trendGraph.Pause = false;
             trendGraph.ShadowGap = 1;
-            trendGraph.Size = new System.Drawing.Size(678, 637);
+            trendGraph.Size = new System.Drawing.Size(1126, 637);
             trendGraph.TabIndex = 0;
             trendGraph.Text = "dvTrendGraph1";
             trendGraph.TimeFormatString = null;
@@ -2612,12 +2664,12 @@ namespace Sample
             // 
             // tpTimeGraph
             // 
-            tpTimeGraph.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpTimeGraph.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpTimeGraph.Controls.Add(timeGraph);
             tpTimeGraph.Location = new System.Drawing.Point(4, 5);
             tpTimeGraph.Name = "tpTimeGraph";
             tpTimeGraph.Padding = new System.Windows.Forms.Padding(3);
-            tpTimeGraph.Size = new System.Drawing.Size(684, 643);
+            tpTimeGraph.Size = new System.Drawing.Size(1132, 643);
             tpTimeGraph.TabIndex = 5;
             tpTimeGraph.Text = "tabPage6";
             // 
@@ -2629,7 +2681,7 @@ namespace Sample
             timeGraph.Location = new System.Drawing.Point(3, 3);
             timeGraph.Name = "timeGraph";
             timeGraph.ShadowGap = 1;
-            timeGraph.Size = new System.Drawing.Size(678, 637);
+            timeGraph.Size = new System.Drawing.Size(1126, 637);
             timeGraph.TabIndex = 0;
             timeGraph.Text = "dvTimeGraph1";
             timeGraph.TimeFormatString = null;
@@ -2653,7 +2705,7 @@ namespace Sample
             menuGraph.ContentAlignment = Devinno.Forms.DvContentAlignment.MiddleCenter;
             menuGraph.Direction = Devinno.Forms.DvDirectionHV.Horizon;
             menuGraph.Gradient = true;
-            menuGraph.Location = new System.Drawing.Point(104, 661);
+            menuGraph.Location = new System.Drawing.Point(328, 661);
             menuGraph.Name = "menuGraph";
             menuGraph.Round = null;
             menuGraph.SelectionMode = false;
@@ -2675,7 +2727,7 @@ namespace Sample
             btnGraphRefresh.IconImage = null;
             btnGraphRefresh.IconSize = 12F;
             btnGraphRefresh.IconString = "fa-rotate";
-            btnGraphRefresh.Location = new System.Drawing.Point(665, 661);
+            btnGraphRefresh.Location = new System.Drawing.Point(1113, 661);
             btnGraphRefresh.Name = "btnGraphRefresh";
             btnGraphRefresh.Round = null;
             btnGraphRefresh.ShadowGap = 1;
@@ -2687,12 +2739,12 @@ namespace Sample
             // 
             // tpContainer
             // 
-            tpContainer.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpContainer.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpContainer.Controls.Add(dvScrollablePanel1);
             tpContainer.Location = new System.Drawing.Point(4, 5);
             tpContainer.Name = "tpContainer";
             tpContainer.Padding = new System.Windows.Forms.Padding(10);
-            tpContainer.Size = new System.Drawing.Size(718, 714);
+            tpContainer.Size = new System.Drawing.Size(1166, 714);
             tpContainer.TabIndex = 4;
             tpContainer.Text = "tabPage5";
             // 
@@ -2705,7 +2757,7 @@ namespace Sample
             dvScrollablePanel1.Name = "dvScrollablePanel1";
             dvScrollablePanel1.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
             dvScrollablePanel1.ShadowGap = 1;
-            dvScrollablePanel1.Size = new System.Drawing.Size(698, 694);
+            dvScrollablePanel1.Size = new System.Drawing.Size(1146, 694);
             dvScrollablePanel1.TabIndex = 5;
             dvScrollablePanel1.TabStop = false;
             dvScrollablePanel1.Text = "dvScrollablePanel1";
@@ -2729,12 +2781,12 @@ namespace Sample
             dvTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             dvTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             dvTableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            dvTableLayoutPanel2.Size = new System.Drawing.Size(671, 1405);
+            dvTableLayoutPanel2.Size = new System.Drawing.Size(1119, 1405);
             dvTableLayoutPanel2.TabIndex = 1;
             // 
             // panel
             // 
-            panel.BackColor = System.Drawing.Color.FromArgb(60, 60, 60);
+            panel.BackColor = System.Drawing.Color.FromArgb(180, 180, 180);
             panel.ButtonsWidth = null;
             panel.Dock = System.Windows.Forms.DockStyle.Fill;
             panel.DrawTitle = true;
@@ -2749,7 +2801,7 @@ namespace Sample
             panel.PanelColor = null;
             panel.Round = null;
             panel.ShadowGap = 1;
-            panel.Size = new System.Drawing.Size(329, 194);
+            panel.Size = new System.Drawing.Size(553, 194);
             panel.TabIndex = 1;
             panel.TabStop = false;
             panel.Text = "Panel";
@@ -2758,7 +2810,7 @@ namespace Sample
             // 
             // pnlBox
             // 
-            pnlBox.BackColor = System.Drawing.Color.FromArgb(60, 60, 60);
+            pnlBox.BackColor = System.Drawing.Color.FromArgb(180, 180, 180);
             pnlBox.Border = true;
             pnlBox.Corner = null;
             pnlBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2768,12 +2820,12 @@ namespace Sample
             pnlBox.IconImage = null;
             pnlBox.IconSize = 12F;
             pnlBox.IconString = "fa-box";
-            pnlBox.Location = new System.Drawing.Point(338, 203);
+            pnlBox.Location = new System.Drawing.Point(562, 203);
             pnlBox.Name = "pnlBox";
             pnlBox.PanelColor = null;
             pnlBox.Round = null;
             pnlBox.ShadowGap = 1;
-            pnlBox.Size = new System.Drawing.Size(330, 194);
+            pnlBox.Size = new System.Drawing.Size(554, 194);
             pnlBox.TabIndex = 4;
             pnlBox.TabStop = false;
             pnlBox.Text = "Box Panel";
@@ -2781,7 +2833,7 @@ namespace Sample
             // 
             // borderPanel
             // 
-            borderPanel.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            borderPanel.BackColor = System.Drawing.SystemColors.ActiveBorder;
             borderPanel.BorderColor = null;
             borderPanel.BorderWidth = 5;
             borderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2791,11 +2843,11 @@ namespace Sample
             borderPanel.IconImage = null;
             borderPanel.IconSize = 12F;
             borderPanel.IconString = "fa-border-top-left";
-            borderPanel.Location = new System.Drawing.Point(338, 3);
+            borderPanel.Location = new System.Drawing.Point(562, 3);
             borderPanel.Name = "borderPanel";
             borderPanel.Padding = new System.Windows.Forms.Padding(0, 30, 0, 0);
             borderPanel.ShadowGap = 1;
-            borderPanel.Size = new System.Drawing.Size(330, 194);
+            borderPanel.Size = new System.Drawing.Size(554, 194);
             borderPanel.TabIndex = 2;
             borderPanel.TabStop = false;
             borderPanel.Text = "Border Panel";
@@ -2816,7 +2868,7 @@ namespace Sample
             grpBox.Location = new System.Drawing.Point(3, 203);
             grpBox.Name = "grpBox";
             grpBox.ShadowGap = 1;
-            grpBox.Size = new System.Drawing.Size(329, 194);
+            grpBox.Size = new System.Drawing.Size(553, 194);
             grpBox.TabIndex = 3;
             grpBox.TabStop = false;
             grpBox.Text = "GroupBox";
@@ -2838,7 +2890,7 @@ namespace Sample
             tab2.PointColor = null;
             tab2.Round = null;
             tab2.SelectedIndex = 0;
-            tab2.Size = new System.Drawing.Size(665, 497);
+            tab2.Size = new System.Drawing.Size(1113, 497);
             tab2.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             tab2.TabBackColor = null;
             tab2.TabColor = null;
@@ -2850,7 +2902,7 @@ namespace Sample
             tabPage1.Location = new System.Drawing.Point(124, 4);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new System.Windows.Forms.Padding(10);
-            tabPage1.Size = new System.Drawing.Size(537, 489);
+            tabPage1.Size = new System.Drawing.Size(985, 489);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "테스트 1";
             // 
@@ -2860,7 +2912,7 @@ namespace Sample
             tabPage2.Location = new System.Drawing.Point(124, 4);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            tabPage2.Size = new System.Drawing.Size(537, 489);
+            tabPage2.Size = new System.Drawing.Size(985, 489);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "테스트 2";
             // 
@@ -2869,13 +2921,37 @@ namespace Sample
             tabPage3.BackColor = System.Drawing.Color.FromArgb(60, 60, 60);
             tabPage3.Location = new System.Drawing.Point(124, 4);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new System.Drawing.Size(537, 489);
+            tabPage3.Size = new System.Drawing.Size(985, 489);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "테스트 3";
             // 
+            // dgContainer
+            // 
+            dgContainer.Bevel = true;
+            dgContainer.BoxColor = null;
+            dgContainer.ColumnColor = null;
+            dgContainer.ColumnHeight = 30;
+            dvTableLayoutPanel2.SetColumnSpan(dgContainer, 2);
+            dgContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            dgContainer.HScrollPosition = 0D;
+            dgContainer.InputColor = null;
+            dgContainer.Location = new System.Drawing.Point(3, 403);
+            dgContainer.Name = "dgContainer";
+            dgContainer.RowColor = null;
+            dgContainer.RowHeight = 30;
+            dgContainer.ScrollMode = Devinno.Forms.Utils.ScrollMode.Vertical;
+            dgContainer.SelectedRowColor = null;
+            dgContainer.SelectionMode = Devinno.Forms.Controls.DvDataGridSelectionMode.Single;
+            dgContainer.ShadowGap = 1;
+            dgContainer.Size = new System.Drawing.Size(1113, 496);
+            dgContainer.SummaryRowColor = null;
+            dgContainer.TabIndex = 6;
+            dgContainer.Text = "dvDataGrid1";
+            dgContainer.VScrollPosition = 0D;
+            // 
             // tpDialog
             // 
-            tpDialog.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpDialog.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpDialog.Controls.Add(dvDateTimePicker2);
             tpDialog.Controls.Add(dvDateTimePicker1);
             tpDialog.Controls.Add(btnPortSettingSimple);
@@ -2913,7 +2989,7 @@ namespace Sample
             tpDialog.Location = new System.Drawing.Point(4, 5);
             tpDialog.Name = "tpDialog";
             tpDialog.Padding = new System.Windows.Forms.Padding(10);
-            tpDialog.Size = new System.Drawing.Size(718, 714);
+            tpDialog.Size = new System.Drawing.Size(1166, 714);
             tpDialog.TabIndex = 6;
             // 
             // dvDateTimePicker2
@@ -3715,7 +3791,7 @@ namespace Sample
             // 
             // tpTable
             // 
-            tpTable.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
+            tpTable.BackColor = System.Drawing.SystemColors.ActiveBorder;
             tpTable.Controls.Add(dataGrid);
             tpTable.Controls.Add(btnTreeRemove);
             tpTable.Controls.Add(btnTreeAdd);
@@ -3727,7 +3803,7 @@ namespace Sample
             tpTable.Location = new System.Drawing.Point(4, 5);
             tpTable.Name = "tpTable";
             tpTable.Padding = new System.Windows.Forms.Padding(10);
-            tpTable.Size = new System.Drawing.Size(718, 714);
+            tpTable.Size = new System.Drawing.Size(1166, 714);
             tpTable.TabIndex = 7;
             tpTable.Text = "tabPage2";
             // 
@@ -3808,6 +3884,7 @@ namespace Sample
             treeView.RadioColor = null;
             treeView.RadioSize = 16;
             treeView.Round = null;
+            treeView.ScrollPosition = 0D;
             treeView.SelectedColor = null;
             treeView.SelectionMode = Devinno.Forms.ItemSelectionMode.Single;
             treeView.ShadowGap = 1;
@@ -3853,6 +3930,7 @@ namespace Sample
             toolBox.Name = "toolBox";
             toolBox.RadioSize = 16;
             toolBox.Round = null;
+            toolBox.ScrollPosition = 0D;
             toolBox.ShadowGap = 1;
             toolBox.Size = new System.Drawing.Size(200, 263);
             toolBox.TabIndex = 2;
@@ -3887,6 +3965,7 @@ namespace Sample
             listBox.Name = "listBox";
             listBox.Round = null;
             listBox.RowColor = null;
+            listBox.ScrollPosition = 0D;
             listBox.SelectedColor = null;
             listBox.SelectionMode = Devinno.Forms.ItemSelectionMode.Single;
             listBox.ShadowGap = 1;
@@ -3938,36 +4017,41 @@ namespace Sample
             dvButton1.TextPadding = new System.Windows.Forms.Padding(0);
             dvButton1.UseKey = false;
             // 
-            // dgContainer
+            // blackTheme1
             // 
-            dgContainer.Bevel = true;
-            dgContainer.BoxColor = null;
-            dgContainer.ColumnColor = null;
-            dgContainer.ColumnHeight = 30;
-            dvTableLayoutPanel2.SetColumnSpan(dgContainer, 2);
-            dgContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            dgContainer.HScrollPosition = 0D;
-            dgContainer.InputColor = null;
-            dgContainer.Location = new System.Drawing.Point(3, 403);
-            dgContainer.Name = "dgContainer";
-            dgContainer.RowColor = null;
-            dgContainer.RowHeight = 30;
-            dgContainer.ScrollMode = Devinno.Forms.Utils.ScrollMode.Vertical;
-            dgContainer.SelectedRowColor = null;
-            dgContainer.SelectionMode = Devinno.Forms.Controls.DvDataGridSelectionMode.Single;
-            dgContainer.ShadowGap = 1;
-            dgContainer.Size = new System.Drawing.Size(665, 496);
-            dgContainer.SummaryRowColor = null;
-            dgContainer.TabIndex = 6;
-            dgContainer.Text = "dvDataGrid1";
-            dgContainer.VScrollPosition = 0D;
+            blackTheme1.Animation = true;
+            blackTheme1.BorderBrightness = -0.6F;
+            blackTheme1.Corner = 6;
+            blackTheme1.DownBrightness = -0.25F;
+            blackTheme1.GradientDark = -0.2F;
+            blackTheme1.GradientLight = 0.2F;
+            blackTheme1.InShadowAlpha = 80;
+            blackTheme1.KeyboardInput = true;
+            blackTheme1.OutBevelAlpha = 30;
+            blackTheme1.OutShadowAlpha = 80;
+            blackTheme1.TouchMode = true;
+            // 
+            // whiteTheme1
+            // 
+            whiteTheme1.Animation = true;
+            whiteTheme1.BorderBrightness = -0.4F;
+            whiteTheme1.Corner = 6;
+            whiteTheme1.DownBrightness = -0.1F;
+            whiteTheme1.GradientDark = -0.15F;
+            whiteTheme1.GradientLight = 0.15F;
+            whiteTheme1.InShadowAlpha = 20;
+            whiteTheme1.KeyboardInput = true;
+            whiteTheme1.OutBevelAlpha = 60;
+            whiteTheme1.OutShadowAlpha = 20;
+            whiteTheme1.TouchMode = true;
             // 
             // FormMain
             // 
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            ClientSize = new System.Drawing.Size(740, 770);
+            BackColor = System.Drawing.SystemColors.ActiveBorder;
+            ClientSize = new System.Drawing.Size(1188, 770);
             Controls.Add(tab);
-            ForeColor = System.Drawing.Color.White;
+            ForeColor = System.Drawing.Color.Black;
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
@@ -3975,14 +4059,16 @@ namespace Sample
             Name = "FormMain";
             Padding = new System.Windows.Forms.Padding(7, 40, 7, 7);
             Text = "DEVINNO";
+            Theme = whiteTheme1;
             Title = "DEVINNO";
             TitleFont = new System.Drawing.Font("나눔고딕", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            TitleIconBoxColor = System.Drawing.Color.FromArgb(20, 20, 20);
+            TitleIconBoxColor = System.Drawing.Color.White;
             TitleIconImage = Properties.Resources.logo2;
             TitleIconSize = 14F;
             TitleIconString = "fa-image";
             tab.ResumeLayout(false);
             tpControl.ResumeLayout(false);
+            dvTabControl1.ResumeLayout(false);
             tblTriButton.ResumeLayout(false);
             tpGauge.ResumeLayout(false);
             tblGauge1.ResumeLayout(false);
@@ -4189,5 +4275,10 @@ namespace Sample
         private Devinno.Forms.Controls.DvDateTimePicker dvDateTimePicker2;
         private Devinno.Forms.Controls.DvDateTimePicker dvDateTimePicker1;
         private Devinno.Forms.Controls.DvDataGrid dgContainer;
+        private Devinno.Forms.Containers.DvTabControl dvTabControl1;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabPage tabPage5;
+        private Devinno.Forms.Themes.BlackTheme blackTheme1;
+        private Devinno.Forms.Themes.WhiteTheme whiteTheme1;
     }
 }

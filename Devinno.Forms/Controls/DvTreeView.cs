@@ -3128,7 +3128,21 @@ namespace Devinno.Forms.Controls
     public abstract class DvTreeViewNode
     {
         #region Properties
-        public DvTreeView Control { get; internal set; }
+
+        private DvTreeView c;
+        public DvTreeView Control
+        {
+            get => c;
+            internal set
+            {
+                this.c = value;
+                foreach (var v in Nodes)
+                {
+                    v.Parents = this;
+                    v.Control = c;
+                }
+            }
+        }
         public DvTreeViewNode Parents { get; internal set; }
         public DvTreeViewNodeCollection Nodes { get; private set; }
         public bool Expands { get; set; } = true;

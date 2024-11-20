@@ -204,7 +204,7 @@ namespace Devinno.Forms.Controls
         {
             #region Var
             var ButtonColor = this.ButtonColor ?? Theme.ButtonColor;
-            var ButtonBackColor = this.ButtonColor ?? Theme.InputColor;
+            var ButtonBackColor = this.ButtonColor ?? Theme.ConcaveBoxColor;
             var BorderColor = Theme.GetBorderColor(ButtonColor, BackColor);
             var BorderBackColor = Theme.GetBorderColor(ButtonBackColor, BackColor);
 
@@ -235,6 +235,7 @@ namespace Devinno.Forms.Controls
 
                             if (Gradient)
                             {
+                                rtCircle.Inflate(-1, -1);
                                 using (var pth = new GraphicsPath())
                                 {
                                     pth.AddEllipse(rtCircle);

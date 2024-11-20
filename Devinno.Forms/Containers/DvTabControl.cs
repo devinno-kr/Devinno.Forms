@@ -52,7 +52,7 @@ namespace Devinno.Forms.Containers
             get => bDrawBorder;
             set
             {
-                if(bDrawBorder != value)
+                if (bDrawBorder != value)
                 {
                     bDrawBorder = value;
                     Invalidate();
@@ -114,7 +114,6 @@ namespace Devinno.Forms.Containers
         #region OnPaint
         protected override void OnPaint(PaintEventArgs e)
         {
-           
             e.Graphics.Clear(Parent.BackColor);
 
             var Theme = GetTheme();
@@ -126,6 +125,7 @@ namespace Devinno.Forms.Containers
             if (Theme != null) OnThemeBlockDraw(e, Theme);
         }
         #endregion
+
         #region OnEnabledChanged
         protected override void OnEnabledChanged(EventArgs e)
         {
@@ -276,7 +276,7 @@ namespace Devinno.Forms.Containers
                     var tab = TabPages[i];
                     var tabicon = TabIcons.ContainsKey(tab.Name) ? TabIcons[tab.Name] : null;
                     var ti = new TextIcon { Text = tab.Text };
-                    if(tabicon != null)
+                    if (tabicon != null)
                     {
                         ti.IconAlignment = tabicon.Alignment;
                         ti.IconGap = tabicon.Gap;
@@ -354,7 +354,7 @@ namespace Devinno.Forms.Containers
                     }
                 });
 
-                Theme.DrawBox(e.Graphics, rtPage, TabColor, (!DrawBoarder ? TabColor : TabBorderColor), ePage, Box.FlatBox(true,true));
+                Theme.DrawBox(e.Graphics, rtPage, TabColor, (!DrawBoarder ? TabColor : TabBorderColor), ePage, Box.FlatBox(true, true));
 
             });
 
@@ -371,8 +371,10 @@ namespace Devinno.Forms.Containers
             var bgColor = Parent.BackColor;
             if (!Enabled)
             {
+                var mc = ColorTool.MixColorAlpha(TabColor, Parent.BackColor, Theme.DisableAlpha);
+                foreach (var tp in TabPages.Cast<TabPage>())
+                    if (mc != tp.BackColor) tp.BackColor = mc;
 
-                foreach (var tp in TabPages.Cast<TabPage>()) tp.BackColor = ColorTool.MixColorAlpha(TabColor, Parent.BackColor, Theme.DisableAlpha);
                 using (var br = new SolidBrush(Color.FromArgb(Theme.DisableAlpha, bgColor)))
                 {
                     e.Graphics.FillRectangle(br, new Rectangle(-1, -1, this.Width + 2, this.Height + 2));
@@ -380,7 +382,9 @@ namespace Devinno.Forms.Containers
             }
             else
             {
-                foreach (var tp in TabPages.Cast<TabPage>()) tp.BackColor = TabColor;
+                foreach (var tp in TabPages.Cast<TabPage>())
+                    if (tp.BackColor != TabColor)
+                        tp.BackColor = TabColor;
             }
         }
         #endregion
@@ -419,7 +423,6 @@ namespace Devinno.Forms.Containers
                 if (Theme == null) Theme = DvTheme.DefaultTheme;
                 c.BackColor = TabColor ?? Theme.TabPageColor;
             }
-
             base.OnControlAdded(e);
         }
         #endregion
@@ -501,7 +504,7 @@ namespace Devinno.Forms.Containers
         #endregion
 
         #region Areas
-        void Areas(Action<RectangleF, RectangleF, RectangleF > act)
+        void Areas(Action<RectangleF, RectangleF, RectangleF> act)
         {
             var rtContent = Util.FromRect(0, 0, this.Width - 1, this.Height - 1);
             var rtPage = rtContent;

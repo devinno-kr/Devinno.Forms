@@ -39,7 +39,7 @@ namespace Sample
 
         Timer tmr;
         HiResTimer tmrHi;
-      
+
         DvKeypad keypad;
         DvKeyboard keyboard;
         DvMessageBox MessageBox;
@@ -201,7 +201,7 @@ namespace Sample
                     {
                         if (c == 1)
                         {
-                            var vc = new DvTreeViewValueLabelNode("Name") { Value = "Item " + a + "." + b + "." + c, ValueColor = Color.FromArgb(50, 50, 50), TitleWidth = 60, ValueWidth = 120 };
+                            var vc = new DvTreeViewValueLabelNode("Name") { Value = "Item " + a + "." + b + "." + c, TitleWidth = 60, ValueWidth = 120 };
                             vb.Nodes.Add(vc);
                         }
                         else if (c == 2)
@@ -649,7 +649,7 @@ namespace Sample
                 infos.Add("Width", new InputBoxInfo { Title = "너비" });
                 infos.Add("Height", new InputBoxInfo { Title = "높이" });
                 infos.Add("Name", new InputBoxInfo { Title = "이름" });
-                infos.Add("Style", new InputBoxInfo { Title = "형식", Items = Enum.GetValues<PageStyle>().Select(x => new TextIcon { Text = x.ToString(), Value = x }).ToList() , SelectorMode = DvSelectorMode.Combo});
+                infos.Add("Style", new InputBoxInfo { Title = "형식", Items = Enum.GetValues<PageStyle>().Select(x => new TextIcon { Text = x.ToString(), Value = x }).ToList(), SelectorMode = DvSelectorMode.Combo });
 
                 var ret = InputBox.ShowInputBox<PageInfo>("새 파일", infos);
 
@@ -805,7 +805,7 @@ namespace Sample
             #endregion
             #endregion
 
-            SetExComposited();
+            //SetExComposited();
             GraphSet();
             TimeGraphSet();
             trendGraph.Start<Data2>(v);
@@ -916,7 +916,7 @@ namespace Sample
         #region TimeGraphSet
         void TimeGraphSet()
         {
-            
+
             var ls1 = new List<Data2>();
             var java = 70D;
             var cpp = 50D;
@@ -932,7 +932,7 @@ namespace Sample
                 ls1.Add(new Data2() { Time = dt, Cpp = cpp, CSharp = csharp, Java = java });
             }
             timeGraph.SetDataSource<Data2>(ls1);
-            
+
             timeGraph.SetDataSource<Data2>(ls1, DateTime.Now.Date, DateTime.Now.Date + TimeSpan.FromDays(1));
         }
         #endregion
@@ -973,9 +973,8 @@ namespace Sample
         #endregion
 
         #endregion
-
-        
     }
+
     #region class : ModbusValue
     public class ModbusValue : TimeGraphData
     {

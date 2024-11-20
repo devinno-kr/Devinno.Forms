@@ -296,7 +296,7 @@ namespace Devinno.Forms.Controls
                     if (scroll.IsScrolling || scroll.IsTouchMoving) cCur = Theme.ScrollCursorOnColor;
 
                     var rtcur = scroll.GetScrollCursorRect(rtScroll);
-                    if (rtcur.HasValue) Theme.DrawBox(e.Graphics, Util.INT(rtcur.Value), cCur, ScrollBorderColor, RoundType.All, Box.FlatBox(true));
+                    if (rtcur.HasValue) Theme.DrawBox(e.Graphics, Util.INT(rtcur.Value), cCur, ScrollBorderColor, RoundType.All, Box.FlatBox(false));
 
                     e.Graphics.ResetClip();
                 }
